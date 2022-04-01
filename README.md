@@ -1,2 +1,3 @@
 # Epic road trip
 
+Some are too lazy, and some are too busy: a lot of people can’t organize a vacation by themselves...
