@@ -86,7 +86,7 @@ export function Register() {
         />
 
         <Group position="right" mt="sm">
-          <Button onClick={goToLogin} type="submit">Continue</Button>
+          <Button data-attr="register-confirm" onClick={goToLogin} type="submit">Continue</Button>
         </Group>
       </form>
     </Box>

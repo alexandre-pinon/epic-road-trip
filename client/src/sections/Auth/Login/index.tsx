@@ -41,6 +41,7 @@ export function Login() {
         </Center>
 
         <TextInput
+          data-attr="login-email"
           required
           label="Email"
           placeholder="hansohee@gmail.com"
@@ -49,6 +50,7 @@ export function Login() {
         />
 
         <PasswordInput
+          data-attr="login-password"
           placeholder="Password"
           label="Password"
           description="Password must include at least one letter, number and special character"
@@ -59,7 +61,7 @@ export function Login() {
 
         <Group position="right" mt="sm">
           <Button onClick={goToRegister} type="submit">Sign up</Button>
-          <Button onClick={goToHome} type="submit">Sign in</Button>
+          <Button data-attr="login-confirm" onClick={goToHome} type="submit">Sign in</Button>
         </Group>
       </form>
     </Box>
