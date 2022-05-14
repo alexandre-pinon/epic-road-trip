@@ -1,7 +1,10 @@
-import { NumberInput, TextInput, Checkbox, Button, Group, Box, PasswordInput, Avatar, Center } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
+import { TextInput, Button, Group, Box, PasswordInput, Avatar, Center } from '@mantine/core';
 import { useForm } from '@mantine/form';
 
 export function Login() {
+  const navigate = useNavigate();
+
   const form = useForm({
     initialValues: {
       email: '',
@@ -12,6 +15,15 @@ export function Login() {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
     },
   });
+
+  const goToHome = async () => {
+    console.log("Dummy login!")
+    navigate('/');
+  };
+
+  const goToRegister = async () => {
+    navigate('/register');
+  };
 
   return (
     <Box sx={{ maxWidth: 300 }} mx="auto">
@@ -30,20 +42,6 @@ export function Login() {
 
         <TextInput
           required
-          label="Firstname"
-          placeholder="Han"
-          mt="sm"
-        />
-
-        <TextInput
-          required
-          label="Lastname"
-          placeholder="SoHee"
-          mt="sm"
-        />
-
-        <TextInput
-          required
           label="Email"
           placeholder="hansohee@gmail.com"
           {...form.getInputProps('email')}
@@ -59,22 +57,9 @@ export function Login() {
 
         />
 
-        <NumberInput
-          required
-          label="Phone"
-          hideControls
-          placeholder="Your phone number"
-          mt="sm"
-        />
-
-        <Checkbox
-          mt="sm"
-          label="I agree to sell my soul"
-          {...form.getInputProps('termsOfService', { type: 'checkbox' })}
-        />
-
         <Group position="right" mt="sm">
-          <Button type="submit">Submit</Button>
+          <Button onClick={goToRegister} type="submit">Sign up</Button>
+          <Button onClick={goToHome} type="submit">Sign in</Button>
         </Group>
       </form>
     </Box>

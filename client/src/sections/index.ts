@@ -1,2 +1,5 @@
 export * from "./Listings";
-export { Login } from "./Login";
+
+// Authentification components
+export { Register } from "./Auth/Register";
+export { Login } from "./Auth/Login";
