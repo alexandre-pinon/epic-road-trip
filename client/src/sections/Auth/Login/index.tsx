@@ -60,10 +60,12 @@ export function Login() {
         />
 
         <Group position="right" mt="sm">
-          <Button onClick={goToRegister} type="submit">Sign up</Button>
-          <Button data-attr="login-confirm" onClick={goToHome} type="submit">Sign in</Button>
+          <Button variant="default" radius="xl" size="sm" compact onClick={goToRegister} type="submit">Sign up</Button>
+          <Button variant="default" radius="xl" size="sm" compact data-attr="login-confirm" onClick={goToHome} type="submit">Sign in</Button>
         </Group>
       </form>
     </Box>
   );
 }
+
+

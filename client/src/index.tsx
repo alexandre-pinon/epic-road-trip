@@ -2,14 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MantineProvider } from '@mantine/core';
-import { Listings, Register, Login } from "./sections";
+import { Register, Login, AppHeader, Home } from "./sections";
 import reportWebVitals from './reportWebVitals';
 
 function App() {
 
   return (
     <BrowserRouter>
+      <AppHeader />
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         {/* <Route path="/login" element={<Login />} /> */}
@@ -24,9 +26,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     {/* <Listings title="EPI Listings" /> */}
-    <MantineProvider theme={{ colorScheme: 'dark' }} withGlobalStyles withNormalizeCSS>
-      <App />
-    </MantineProvider>
+    {/* <MantineProvider theme={{ colorScheme: 'dark' }} withGlobalStyles withNormalizeCSS> */}
+    <App />
+    {/* </MantineProvider> */}
   </React.StrictMode>
 );
 
