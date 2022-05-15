@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MantineProvider } from '@mantine/core';
-import { Register, Login, AppHeader, Home } from "./sections";
+import { Register, Login, AppHeader, Home } from "./components/organizationComponent";
 import reportWebVitals from './reportWebVitals';
 
 function App() {
