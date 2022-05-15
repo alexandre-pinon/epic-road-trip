@@ -1,0 +1,12 @@
+{
+    "firstname" : "Zoro",
+    "lastname" : "Roronoa",
+    "email" : "zoro.roronoa@epitech.eu",
+    "mobile" : "+33102030405",
+    "password" : "One Piece 2022",
+
+    "fakeName_128" : "8EfgNkeUjkJsM76Lme9e5ve5vx5jGuwy9euQFteIJwRmWvP3nrlP20s2FM7km59FgUDYDbpGq1ZFF1rc1AtRE0qfpRU1y10yxOgx9Lsj1AjdU1M8gUi7GmpmxO6PPJsv",
+    "fakeEmail" : "zoro.roronoa",
+    "fakePhone" : "+33aze030405",
+    "otherPassword" : "OP-97",
+}
