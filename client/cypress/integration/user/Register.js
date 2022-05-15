@@ -19,9 +19,9 @@ describe('The Register page', () => {
         cy.wait(500)
         //click on register button for confirm the creation of the account
         cy.get('#registerButton').click()
-        cy.wait(500)
+        cy.wait(1000)
         //check if we are redirected to the home page
-        cy.url().should('eq', 'http://localhost:3000')
+        cy.location('pathname').should('eq', '/')
         cy.log('à voir si sa suffit de voir si on est redirigé pour savoir si on est connecté')
     })
 
@@ -57,11 +57,6 @@ describe('The Register page', () => {
 
             cy.wait(1000)
             cy.get('#registerButton').should('not.be.disabled') //all input are good
-
-            //check if clear a input
-            cy.get('#firstname').clear()
-            cy.wait(1000)
-            cy.get('#registerButton').should('be.disabled')
         })
     })
 
@@ -93,6 +88,8 @@ describe('The Register page', () => {
         cy.wait(500)
         cy.fixture('userInformations').then((userInformationsForRegister) => {
             cy.get('#email').type(userInformationsForRegister.fakeEmail)
+            cy.wait(500)
+            cy.get('#password').type("password")
         })
         cy.wait(1000)
         cy.get('#errorMessageIncorrectEmail').contains('The email is not valid')

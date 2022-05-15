@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a780555c-f58b-418a-aed2-efd139473504" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/cypress/fixtures/userInformations.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cypress/integration/test.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cypress/integration/user/Register.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cypress/integration/user/Login.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cypress/integration/user/LoginRegister.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cypress/fixtures/userInformations.json" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/fixtures/userInformations.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cypress/integration/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/integration/test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cypress/integration/user/Register.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/integration/user/Register.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +68,7 @@
       <updated>1652605290817</updated>
       <workItem from="1652605294778" duration="952000" />
       <workItem from="1652612950267" duration="382000" />
-      <workItem from="1652613342032" duration="10490000" />
+      <workItem from="1652613342032" duration="17162000" />
     </task>
     <servers />
   </component>
