@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import { createStyles, Container, Image, Grid, UnstyledButton, Text, Card, Group, SimpleGrid, Button, Overlay, Title, Space, Input, Center } from '@mantine/core';
 
 import {
@@ -13,6 +14,7 @@ import {
   ManualGearbox,
   Users,
   Badge,
+  UserSearch,
 } from 'tabler-icons-react';
 
 const mockdata = [
@@ -120,7 +122,9 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export function Home() {
+  const [username, setUsername] = useState('keajs')
   const { classes, theme, cx } = useStyles();
+
 
   const items = mockdata.map((item) => (
     <UnstyledButton key={item.title} className={classes.item}>
@@ -167,7 +171,7 @@ export function Home() {
       <Space h="xl" />
       <Space h="xl" />
 
-      <Title order={3}>Top experiences on Epic Road Trip</Title>
+      {/* <Title order={3}>Top experiences on Epic Road Trip</Title> */}
 
       {/* [START] Card with icon features */}
       {/* <Card withBorder radius="md" className={classes.card}>
@@ -213,6 +217,21 @@ export function Home() {
         </Card.Section>
       </Card> */}
       {/* [END] Card with icon features*/}
+
+      <div>
+        <div>
+          <Title style={{ color: "#616161 " }} order={4}>Search for a GitHub user</Title>
+          <Input
+            icon={<UserSearch size={16} />}
+            placeholder="Search user"
+            value={username}
+            type="text"
+            onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setUsername(e.target.value)}
+          />
+        </div>
+        <Text color="dimmed">Repos will come here for user <strong>{username}</strong></Text>
+      </div>
     </Container>
   );
 }
+
