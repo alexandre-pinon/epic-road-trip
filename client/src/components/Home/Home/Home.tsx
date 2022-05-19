@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { createStyles, Container, Image, Grid, UnstyledButton, Text, Card, Group, SimpleGrid, Button, Overlay, Title, Space, Input, Center } from '@mantine/core';
+import { kea, actions, path, reducers, useActions, useValues, listeners } from 'kea';
+import { createStyles, Container, Image, Grid, UnstyledButton, Text, Card, Group, SimpleGrid, Button, Overlay, Title, Space, Input, Center, Loader } from '@mantine/core';
 
 import {
   HotelService,
@@ -16,6 +17,65 @@ import {
   Badge,
   UserSearch,
 } from 'tabler-icons-react';
+
+import type { logicType } from "./HomeType";
+
+const API_URL = 'https://api.github.com'
+
+const logic = kea<logicType>([
+  path(["src\\components\\Home\\Home\\Home"]),
+  actions({
+    setUsername: (username) => ({ username }),
+    setRepositories: (repositories) => ({ repositories }),
+    setFetchError: (error) => ({ error }),
+  }),
+
+  reducers({
+    username: [
+      'keajs',
+      {
+        setUsername: (_, { username }) => username,
+      },
+    ],
+    repositories: [
+      [],
+      {
+        setUsername: () => [],
+        setRepositories: (_, { repositories }) => repositories,
+      },
+    ],
+    isLoading: [
+      false,
+      {
+        setUsername: () => true,
+        setRepositories: () => false,
+        setFetchError: () => false,
+      },
+    ],
+    error: [
+      null,
+      {
+        setUsername: () => null,
+        setFetchError: (_, { error }) => error,
+      },
+    ],
+  }),
+
+  listeners(({ actions }) => ({
+    setUsername: async ({ username }, breakpoint) => {
+      const url = `${API_URL}/users/${username}/repos?per_page=250`
+
+      const response = await window.fetch(url)
+      const json = await response.json()
+
+      if (response.status === 200) {
+        actions.setRepositories(json)
+      } else {
+        actions.setFetchError(json.message)
+      }
+    },
+  })),
+])
 
 const mockdata = [
   { title: 'Hotels', icon: HotelService, color: 'dark' },
@@ -122,7 +182,9 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export function Home() {
-  const [username, setUsername] = useState('keajs')
+  // const [username, setUsername] = useState('keajs')
+  const { username, isLoading, repositories, error } = useValues(logic)
+  const { setUsername } = useActions(logic)
   const { classes, theme, cx } = useStyles();
 
 
@@ -229,6 +291,9 @@ export function Home() {
             onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setUsername(e.target.value)}
           />
         </div>
+        {isLoading ? (
+          <Loader size="sm" variant="dots" />
+        ) : repositories.length > 0}
         <Text color="dimmed">Repos will come here for user <strong>{username}</strong></Text>
       </div>
     </Container>
