@@ -1,4 +1,4 @@
-package db
+package config
 
 import (
 	"context"
@@ -10,15 +10,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-func New(uri, dbName string) *mongo.Database {
-	if uri == "" || dbName == "" {
-		log.Fatal("You must set your 'MONGODB_URI' and 'DB_NAME' environmental variable")
-	}
-
+func ConnectDB(config *Config) *mongo.Database {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(config.Database.Uri))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -27,12 +23,12 @@ func New(uri, dbName string) *mongo.Database {
 		log.Fatal(err)
 	}
 
-	log.Printf("Connected to MongoDB using %s database", dbName)
+	log.Printf("Connected to MongoDB using %s database", config.Database.DbName)
 
-	return client.Database(dbName)
+	return client.Database(config.Database.DbName)
 }
 
-func Disconnect(client *mongo.Client) {
+func DisconnectDB(client *mongo.Client) {
 	if client == nil {
 		return
 	}
