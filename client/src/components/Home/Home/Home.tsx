@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { kea, actions, path, reducers, useActions, useValues, listeners } from 'kea';
-import { createStyles, Container, Image, Grid, UnstyledButton, Text, Card, Group, SimpleGrid, Button, Overlay, Title, Space, Input, Center, Loader } from '@mantine/core';
+import React from 'react'
+import { kea, actions, path, reducers, useActions, useValues, listeners, afterMount, selectors } from 'kea';
+import { createStyles, Container, UnstyledButton, Text, Card, SimpleGrid, Overlay, Title, Space, Input, Center, Loader, List, ThemeIcon } from '@mantine/core';
 
 import {
   HotelService,
@@ -14,8 +14,8 @@ import {
   Gauge,
   ManualGearbox,
   Users,
-  Badge,
   UserSearch,
+  ArrowNarrowRight,
 } from 'tabler-icons-react';
 
 import type { logicType } from "./HomeType";
@@ -61,11 +61,31 @@ const logic = kea<logicType>([
     ],
   }),
 
+  selectors({
+    sortedRepositories: [
+      (selectors) => [selectors.repositories],
+      (repositories) => {
+        return [...repositories].sort((a, b) => b.stargazers_count - a.stargazers_count)
+      },
+    ],
+  }),
+
   listeners(({ actions }) => ({
     setUsername: async ({ username }, breakpoint) => {
+      await breakpoint(300)
+
       const url = `${API_URL}/users/${username}/repos?per_page=250`
 
-      const response = await window.fetch(url)
+      let response
+      try {
+        response = await window.fetch(url)
+      } catch (error) {
+        actions.setFetchError(error)
+        return
+      }
+
+      breakpoint()
+
       const json = await response.json()
 
       if (response.status === 200) {
@@ -75,6 +95,10 @@ const logic = kea<logicType>([
       }
     },
   })),
+
+  afterMount(({ actions, values }) => {
+    actions.setUsername(values.username)
+  }),
 ])
 
 const mockdata = [
@@ -183,7 +207,7 @@ const useStyles = createStyles((theme) => ({
 
 export function Home() {
   // const [username, setUsername] = useState('keajs')
-  const { username, isLoading, repositories, error } = useValues(logic)
+  const { username, isLoading, sortedRepositories, error } = useValues(logic)
   const { setUsername } = useActions(logic)
   const { classes, theme, cx } = useStyles();
 
@@ -291,10 +315,37 @@ export function Home() {
             onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setUsername(e.target.value)}
           />
         </div>
+
         {isLoading ? (
           <Loader size="sm" variant="dots" />
-        ) : repositories.length > 0}
-        <Text color="dimmed">Repos will come here for user <strong>{username}</strong></Text>
+        ) : sortedRepositories.length > 0 ? (
+          <Text color="dimmed">
+            Found {sortedRepositories.length} repositories for user {username}!
+            {sortedRepositories.map((repo) => (
+              <List
+                spacing="xs"
+                size="sm"
+                center
+                icon={
+                  <ThemeIcon color="gray" size={18} radius="xl">
+                    <ArrowNarrowRight size={16} />
+                  </ThemeIcon>
+                }
+                key={repo.id}>
+                <Space h="xs" />
+                <List.Item>
+                  <a href={repo.html_url} target="_blank" rel="noreferrer">
+                    {repo.full_name}
+                  </a>
+                  {' - '}
+                  {repo.stargazers_count} stars, {repo.forks} forks.
+                </List.Item>
+              </List>
+            ))}
+          </Text>
+        ) : (
+          <div>{error ? `Error: ${error}` : 'No repositories found'}</div>
+        )}
       </div>
     </Container>
   );
