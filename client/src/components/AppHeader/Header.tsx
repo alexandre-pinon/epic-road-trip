@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { createStyles, AppShell, Button, Container, Group, Header, Title, ActionIcon, Image, Grid, Text } from '@mantine/core';
 import { BrandGithub, BrandInstagram, BrandYoutube } from 'tabler-icons-react';
-import logo from "../assets/one_piece_wiki_logo.png";
+import logo from "./assets/one_piece_wiki_logo.png";
 
 const useStyles = createStyles((theme) => ({
   button: {
