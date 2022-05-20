@@ -70,11 +70,13 @@ describe('The Register page', () => {
         cy.fixture('userInformations').then((userInformationsForRegister) => {
             cy.get('#firstname').type(userInformationsForRegister.fakeName_128)
             cy.wait(1000)
+            cy.get('#bodyOfThePage').click()
             cy.get('#errorMessageLengthFirstName').contains('Le prénom est trop long')
 
             cy.wait(1000)
             cy.get('#lastname').type(userInformationsForRegister.fakeName_128)
             cy.wait(1000)
+            cy.get('#bodyOfThePage').click()
             cy.get('#errorMessageLengthLastName').contains('Le nom est trop long')
         })
     })
@@ -106,6 +108,7 @@ describe('The Register page', () => {
             cy.get('#mobile').type(userInformationsForRegister.fakePhone)
         })
         cy.wait(1000)
+        cy.get('#bodyOfThePage').click()
         cy.get('#errorMessageIncorrectMobile').contains('The mobile is not valid')
     })
 
@@ -120,6 +123,7 @@ describe('The Register page', () => {
             cy.get('#password').type(userInformationsForRegister.password)
             cy.get('#passwordCheck').type(userInformationsForRegister.otherPassword)
             cy.wait(1000)
+            cy.get('#bodyOfThePage').click()
             cy.get('#errorMessageIncorrectMobile').contains('The password is not the same for the inputs')
         })
     })
@@ -134,6 +138,7 @@ describe('The Register page', () => {
         cy.fixture('userInformations').then((userInformationsForRegister) => {
             cy.get('#password').type(userInformationsForRegister.otherPassword)
             cy.wait(1000)
+            cy.get('#bodyOfThePage').click()
             cy.get('#errorMessageIncorrectMobile').contains('the password must be at least 8 characters long')
         })
     })

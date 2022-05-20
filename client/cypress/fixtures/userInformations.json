@@ -10,4 +10,10 @@
     "fakePhone" : "+33aze030405",
     "otherPassword" : "OP-97",
     "wrongPassword" : "One Piece 1997"
+
+    "newFirstname" : "All Might",
+    "newLastname" : "Might",
+    "newEmail" : "all.might@epitech.eu",
+    "newMobile" : "+33504030201",
+    "newPassword" : "My Hero Academia 2022"
 }
