@@ -2,11 +2,24 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
 
+	"github.com/alexandre-pinon/epic-road-trip/db"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
+func init() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+}
+
 func main() {
+	_ = db.New(os.Getenv("MONGO_URI"), os.Getenv("DB_NAME"))
+
 	server := gin.Default()
 
 	routes := server.Group("/api")
@@ -38,5 +51,5 @@ func main() {
 		}
 	}
 
-	server.Run(":8080")
+	server.Run()
 }
