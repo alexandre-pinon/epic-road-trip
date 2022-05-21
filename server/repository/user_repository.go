@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"errors"
 
 	"github.com/alexandre-pinon/epic-road-trip/model"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -23,7 +22,19 @@ func NewUserRepository(db *mongo.Database) UserRepository {
 }
 
 func (repo *userRepository) GetAllUsers() (*[]model.User, error) {
-	return &[]model.User{}, errors.New("TODO: implement GetAllUsers")
+	ctx := context.Background()
+
+	cursor, err := repo.coll.Find(ctx, struct{}{})
+	if err != nil {
+		return nil, err
+	}
+
+	var results []model.User
+	if err := cursor.All(ctx, &results); err != nil {
+		return nil, err
+	}
+
+	return &results, err
 }
 
 func (repo *userRepository) CreateUser(user *model.User) error {
