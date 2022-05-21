@@ -17,9 +17,9 @@ func InitApp() {
 
 	log.Print("Initializing app...")
 
-	configs := config.GetConfig(config.Env(env))
-	db := config.ConnectDB(configs)
-	defer config.DisconnectDB(db.Client())
+	cfg := config.GetConfig(config.Env(env))
+	db := config.ConnectDB(cfg)
+	defer config.DisconnectDB(cfg, db.Client())
 
 	// repos := SetupRepositories(db)
 	services := Services{}

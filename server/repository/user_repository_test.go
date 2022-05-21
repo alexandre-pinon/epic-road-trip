@@ -11,13 +11,13 @@ import (
 
 type userRepositorySuite struct {
 	suite.Suite
+	cfg             config.Config
 	repository      UserRepository
 	cleanupExecutor utils.DropCollectionExecutor
 }
 
 func (suite *userRepositorySuite) SetupTest() {
-	configs := config.GetConfig(config.Test)
-	db := config.ConnectDB(configs)
+	db := config.ConnectDB(&suite.cfg)
 	repository := NewUserRepository(db)
 
 	suite.repository = repository
@@ -26,7 +26,7 @@ func (suite *userRepositorySuite) SetupTest() {
 }
 
 func (suite *userRepositorySuite) TearDownTest() {
-	defer config.DisconnectDB(suite.cleanupExecutor.DB.Client())
+	defer config.DisconnectDB(&suite.cfg, suite.cleanupExecutor.DB.Client())
 	defer suite.cleanupExecutor.DropCollection([]string{"user"})
 }
 
@@ -85,5 +85,6 @@ func (suite *userRepositorySuite) TestCreateUser_EmptyFields_Positive() {
 }
 
 func TestUserRepository(t *testing.T) {
-	suite.Run(t, new(userRepositorySuite))
+	cfg := config.GetConfig(config.Test)
+	suite.Run(t, &userRepositorySuite{cfg: *cfg})
 }

@@ -10,11 +10,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-func ConnectDB(config *Config) *mongo.Database {
+func ConnectDB(cfg *Config) *mongo.Database {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(config.Database.Uri))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(cfg.Database.Uri))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -23,12 +23,14 @@ func ConnectDB(config *Config) *mongo.Database {
 		log.Fatal(err)
 	}
 
-	log.Printf("Connected to MongoDB using %s database", config.Database.DbName)
+	if cfg.Env != Test {
+		log.Printf("Connected to MongoDB using %s database", cfg.Database.DbName)
+	}
 
-	return client.Database(config.Database.DbName)
+	return client.Database(cfg.Database.DbName)
 }
 
-func DisconnectDB(client *mongo.Client) {
+func DisconnectDB(cfg *Config, client *mongo.Client) {
 	if client == nil {
 		return
 	}
@@ -38,5 +40,7 @@ func DisconnectDB(client *mongo.Client) {
 		log.Fatal(err)
 	}
 
-	log.Print("Connection to MongoDB closed.")
+	if cfg.Env != Test {
+		log.Print("Connection to MongoDB closed.")
+	}
 }

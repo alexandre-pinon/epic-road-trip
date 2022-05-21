@@ -9,6 +9,7 @@ import (
 )
 
 type Config struct {
+	Env       Env
 	Database  DatabaseConfig
 	SecretKey string
 }
@@ -34,7 +35,8 @@ func GetConfig(env Env) *Config {
 		log.Fatal("Error while reading the env file", err)
 	}
 
-	config := &Config{
+	cfg := &Config{
+		Env: env,
 		Database: DatabaseConfig{
 			Uri:    os.Getenv("DB_URI"),
 			DbName: os.Getenv("DB_NAME"),
@@ -42,5 +44,5 @@ func GetConfig(env Env) *Config {
 		SecretKey: os.Getenv("SECRET_KEY"),
 	}
 
-	return config
+	return cfg
 }
