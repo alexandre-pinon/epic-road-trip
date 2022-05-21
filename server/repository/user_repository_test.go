@@ -30,6 +30,35 @@ func (suite *userRepositorySuite) TearDownTest() {
 	defer suite.cleanupExecutor.DropCollection([]string{"user"})
 }
 
+func (suite *userRepositorySuite) TestGetAllUsers_EmptySlice_Positive() {
+	users, err := suite.repository.GetAllUsers()
+	suite.NoError(err, "no error when get all users when the table is empty")
+	suite.Equal(len(*users), 0, "length of users should be 0, since it is empty slice")
+	suite.Equal(*users, []model.User(nil), "users is an empty slice")
+}
+
+func (suite *userRepositorySuite) TestGetAllUsers_FilledRecords_Positive() {
+	user := model.User{
+		Firstname: "yoimiya",
+		Lastname:  "naganohara",
+		Email:     "yoimiya.naganohara@gmail.com",
+		Password:  "12345678",
+		Phone:     "+33612345678",
+		Trips:     []*model.RoadTrip{},
+	}
+
+	err := suite.repository.CreateUser(&user)
+	suite.NoError(err, "no error when create user with valid input")
+	err = suite.repository.CreateUser(&user)
+	suite.NoError(err, "no error when create user with valid input")
+	err = suite.repository.CreateUser(&user)
+	suite.NoError(err, "no error when create user with valid input")
+
+	users, err := suite.repository.GetAllUsers()
+	suite.NoError(err, "no error when get all users when the table is empty")
+	suite.Equal(len(*users), 3, "insert 3 records before the all data, so it should contain three users")
+}
+
 func (suite *userRepositorySuite) TestCreateUser_Positive() {
 	user := model.User{
 		Firstname: "yoimiya",
