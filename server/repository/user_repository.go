@@ -1,14 +1,15 @@
 package repository
 
 import (
-	"errors"
+	"context"
 
 	"github.com/alexandre-pinon/epic-road-trip/model"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type userRepository struct {
-	db *mongo.Database
+	db   *mongo.Database
+	coll *mongo.Collection
 }
 
 type UserRepository interface {
@@ -16,9 +17,10 @@ type UserRepository interface {
 }
 
 func NewUserRepository(db *mongo.Database) UserRepository {
-	return &userRepository{db}
+	return &userRepository{db, db.Collection("user")}
 }
 
-func (repository *userRepository) CreateUser(user *model.User) error {
-	return errors.New("TODO: implement create user")
+func (repo *userRepository) CreateUser(user *model.User) error {
+	_, err := repo.coll.InsertOne(context.Background(), user)
+	return err
 }
