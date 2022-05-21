@@ -9,6 +9,22 @@ import (
 
 type appController func(ctx *gin.Context) (*controller.AppResult, error)
 
+func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
+	router.GET("/", serveHTTP(controllers.RootController.Ok))
+
+	// apiRoutes := router.Group("/api")
+	// {
+	// 	userRoutes := apiRoutes.Group("/user")
+	// 	{
+	// 		userRoutes.GET("/")
+	// 		userRoutes.GET("/:id")
+	// 		userRoutes.POST("/")
+	// 		userRoutes.PUT("/:id")
+	// 		userRoutes.DELETE("/:id")
+	// 	}
+	// }
+}
+
 func serveHTTP(c appController) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		result, err := c(ctx)
@@ -37,20 +53,4 @@ func serveHTTP(c appController) gin.HandlerFunc {
 			Data:    result.Data,
 		})
 	}
-}
-
-func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
-	router.GET("/", serveHTTP(controllers.RootController.Ok))
-
-	// apiRoutes := router.Group("/api")
-	// {
-	// 	userRoutes := apiRoutes.Group("/user")
-	// 	{
-	// 		userRoutes.GET("/")
-	// 		userRoutes.GET("/:id")
-	// 		userRoutes.POST("/")
-	// 		userRoutes.PUT("/:id")
-	// 		userRoutes.DELETE("/:id")
-	// 	}
-	// }
 }

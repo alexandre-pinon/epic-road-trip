@@ -3,6 +3,7 @@ package config
 import (
 	"log"
 	"os"
+	"regexp"
 
 	"github.com/joho/godotenv"
 )
@@ -17,16 +18,20 @@ type DatabaseConfig struct {
 	DbName string
 }
 
-func GetConfig() *Config {
-	_, err := os.Stat(".env")
+func GetConfig(env Env) *Config {
+	projectName := regexp.MustCompile(`^(.*server)`)
+	currentWorkDirectory, _ := os.Getwd()
+	rootPath := projectName.Find([]byte(currentWorkDirectory))
+	envPath := string(rootPath) + "/" + env.GetFileName()
 
-	if !os.IsNotExist(err) {
-		err := godotenv.Load(".env")
+	_, err := os.Stat(envPath)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-		if err != nil {
-			log.Println("Error while reading the env file", err)
-			panic(err)
-		}
+	err = godotenv.Load(envPath)
+	if err != nil {
+		log.Fatal("Error while reading the env file", err)
 	}
 
 	config := &Config{
