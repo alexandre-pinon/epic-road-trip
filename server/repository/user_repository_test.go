@@ -44,6 +44,17 @@ func (suite *userRepositorySuite) TestCreateUser_Positive() {
 	suite.NoError(err, "no error when create user with valid input")
 }
 
+func (suite *userRepositorySuite) TestCreateUser_NilPointer_Negative() {
+	err := suite.repository.CreateUser(nil)
+	suite.Error(err, "create error with nil input returns error")
+}
+
+func (suite *userRepositorySuite) TestCreateUser_EmptyFields_Positive() {
+	var user model.User
+	err := suite.repository.CreateUser(&user)
+	suite.NoError(err, "no error when create user with empty fields")
+}
+
 func TestUserRepository(t *testing.T) {
 	suite.Run(t, new(userRepositorySuite))
 }
