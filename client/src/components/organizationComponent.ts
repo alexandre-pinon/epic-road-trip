@@ -10,3 +10,7 @@ export { Home } from "./Home/Home"
 
 // Trip components
 export { Trip } from "./Trip/Trip"
+
+// Mock-Service-Worker components
+export { MockTest } from "./MockTest/MockTest"
+
