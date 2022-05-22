@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MantineProvider } from '@mantine/core';
-import { Register, Login, AppHeader, Home } from "./components/organizationComponent";
+import { Register, Login, AppHeader, Home, Trip } from "./components/organizationComponent";
 import reportWebVitals from './reportWebVitals';
 
 function App() {
@@ -14,6 +14,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/trip" element={<Trip />} />
         {/* <Route path="/login" element={<Login />} /> */}
       </Routes>
     </BrowserRouter>

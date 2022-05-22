@@ -7,3 +7,6 @@ export { AppHeader } from "./AppHeader/Header"
 
 // Home components
 export { Home } from "./Home/Home"
+
+// Trip components
+export { Trip } from "./Trip/Trip"
