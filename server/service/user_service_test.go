@@ -7,6 +7,7 @@ import (
 	"github.com/alexandre-pinon/epic-road-trip/mocks"
 	"github.com/alexandre-pinon/epic-road-trip/model"
 	"github.com/stretchr/testify/suite"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type userServiceSuite struct {
@@ -66,6 +67,7 @@ func (suite *userServiceSuite) TestGetAllUsers_FilledSlice_Positive() {
 }
 
 func (suite *userServiceSuite) TestCreateUser_Positive() {
+	id := &mongo.InsertOneResult{}
 	user := model.User{
 		Firstname: "yoimiya",
 		Lastname:  "naganohara",
@@ -75,7 +77,7 @@ func (suite *userServiceSuite) TestCreateUser_Positive() {
 		Trips:     []*model.RoadTrip{},
 	}
 
-	suite.repo.On("CreateUser", &user).Return(nil)
+	suite.repo.On("CreateUser", &user).Return(id, nil)
 
 	err := suite.svc.CreateUser(&user)
 	suite.NoError(err, "no error when create user with valid input")

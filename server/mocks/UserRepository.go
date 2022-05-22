@@ -5,6 +5,9 @@ package mocks
 import (
 	model "github.com/alexandre-pinon/epic-road-trip/model"
 	mock "github.com/stretchr/testify/mock"
+	mongo "go.mongodb.org/mongo-driver/mongo"
+
+	primitive "go.mongodb.org/mongo-driver/bson/primitive"
 
 	testing "testing"
 )
@@ -15,17 +18,26 @@ type UserRepository struct {
 }
 
 // CreateUser provides a mock function with given fields: user
-func (_m *UserRepository) CreateUser(user *model.User) error {
+func (_m *UserRepository) CreateUser(user *model.User) (*mongo.InsertOneResult, error) {
 	ret := _m.Called(user)
 
-	var r0 error
-	if rf, ok := ret.Get(0).(func(*model.User) error); ok {
+	var r0 *mongo.InsertOneResult
+	if rf, ok := ret.Get(0).(func(*model.User) *mongo.InsertOneResult); ok {
 		r0 = rf(user)
 	} else {
-		r0 = ret.Error(0)
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*mongo.InsertOneResult)
+		}
 	}
 
-	return r0
+	var r1 error
+	if rf, ok := ret.Get(1).(func(*model.User) error); ok {
+		r1 = rf(user)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // GetAllUsers provides a mock function with given fields:
@@ -44,6 +56,29 @@ func (_m *UserRepository) GetAllUsers() (*[]model.User, error) {
 	var r1 error
 	if rf, ok := ret.Get(1).(func() error); ok {
 		r1 = rf()
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetUserByID provides a mock function with given fields: id
+func (_m *UserRepository) GetUserByID(id primitive.ObjectID) (*model.User, error) {
+	ret := _m.Called(id)
+
+	var r0 *model.User
+	if rf, ok := ret.Get(0).(func(primitive.ObjectID) *model.User); ok {
+		r0 = rf(id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.User)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(primitive.ObjectID) error); ok {
+		r1 = rf(id)
 	} else {
 		r1 = ret.Error(1)
 	}
