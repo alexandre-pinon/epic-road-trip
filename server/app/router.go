@@ -1,16 +1,12 @@
 package app
 
 import (
-	"net/http"
-
-	"github.com/alexandre-pinon/epic-road-trip/model"
+	"github.com/alexandre-pinon/epic-road-trip/utils"
 	"github.com/gin-gonic/gin"
 )
 
-type appController func(ctx *gin.Context) (*model.AppResult, error)
-
 func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
-	router.GET("/", serveHTTP(controllers.RootController.Ok))
+	router.GET("/", utils.ServeHTTP(controllers.RootController.Ok))
 
 	// apiRoutes := router.Group("/api")
 	// {
@@ -23,34 +19,4 @@ func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
 	// 		userRoutes.DELETE("/:id")
 	// 	}
 	// }
-}
-
-func serveHTTP(c appController) gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		result, err := c(ctx)
-
-		if result == nil {
-			ctx.JSON(http.StatusInternalServerError, model.Response{
-				Success: false,
-				Message: http.StatusText(http.StatusInternalServerError),
-				Data:    nil,
-			})
-			return
-		}
-
-		if err != nil {
-			ctx.JSON(result.StatusCode, model.Response{
-				Success: false,
-				Message: err.Error(),
-				Data:    result.Data,
-			})
-			return
-		}
-
-		ctx.JSON(result.StatusCode, model.Response{
-			Success: true,
-			Message: result.Message,
-			Data:    result.Data,
-		})
-	}
 }

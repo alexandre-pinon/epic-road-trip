@@ -9,14 +9,14 @@ type rootController struct {
 }
 
 type RootController interface {
-	Ok(ctx *gin.Context) (*model.AppResult, error)
+	Ok(ctx *gin.Context) (*model.AppResult, *model.AppError)
 }
 
 func NewRootController() RootController {
 	return &rootController{}
 }
 
-func (controller *rootController) Ok(ctx *gin.Context) (*model.AppResult, error) {
+func (controller *rootController) Ok(ctx *gin.Context) (*model.AppResult, *model.AppError) {
 	return &model.AppResult{
 		Data:       struct{}{},
 		Message:    "Ok",
