@@ -77,7 +77,7 @@ func (ctrl *userController) CreateUser(ctx *gin.Context) (*model.AppResult, *mod
 
 	if err := ctx.ShouldBindJSON(&user); err != nil {
 		return nil, &model.AppError{
-			Err:        err,
+			Err:        errors.New("invalid json request body"),
 			StatusCode: http.StatusBadRequest,
 		}
 	}

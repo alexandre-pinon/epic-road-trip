@@ -3,6 +3,7 @@ package controller
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -48,7 +49,25 @@ func (suite *userControllerSuite) TearDownTest() {
 	defer suite.testServer.Close()
 }
 
-func (suite *userControllerSuite) TestGetAllUsers_Positive() {
+func (suite *userControllerSuite) TestGetAllUsers_EmptySlice_Positive() {
+	emptyUsers := []model.User(nil)
+
+	suite.svc.On("GetAllUsers").Return(&emptyUsers, nil)
+
+	response, err := http.Get(fmt.Sprintf("%s/api/user", suite.testServer.URL))
+	suite.NoError(err, "no error when calling this endpoint")
+	defer response.Body.Close()
+
+	responseBody := model.Response{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusOK, response.StatusCode)
+	suite.Equal("Users retrieved successfully", responseBody.Message)
+	suite.Empty(responseBody.Data, "no users should be retrieved")
+	suite.svc.AssertExpectations(suite.T())
+}
+
+func (suite *userControllerSuite) TestGetAllUsers_FilledSlice_Positive() {
 	users := []model.User{
 		{
 			Firstname: "yoimiya",
@@ -87,10 +106,11 @@ func (suite *userControllerSuite) TestGetAllUsers_Positive() {
 
 	suite.Equal(http.StatusOK, response.StatusCode)
 	suite.Equal("Users retrieved successfully", responseBody.Message)
+	suite.NotEmpty(responseBody.Data, "users should be retrieved")
 	suite.svc.AssertExpectations(suite.T())
 }
 
-func (suite *userControllerSuite) TestGetUserByID_Positive() {
+func (suite *userControllerSuite) TestGetUserByID_Exists_Positive() {
 	id := primitive.NewObjectID()
 	user := model.User{
 		Firstname: "yoimiya",
@@ -111,6 +131,23 @@ func (suite *userControllerSuite) TestGetUserByID_Positive() {
 
 	suite.Equal(http.StatusOK, response.StatusCode)
 	suite.Equal(fmt.Sprintf("User %s retrieved successfully", id.Hex()), responseBody.Message)
+	suite.NotEmpty(responseBody.Data, "user should be retrieved")
+	suite.svc.AssertExpectations(suite.T())
+}
+
+func (suite *userControllerSuite) TestGetUserByID_InvalidID_Negative() {
+	id := primitive.NewObjectID()
+
+	response, err := http.Get(fmt.Sprintf("%s/api/user/%s", suite.testServer.URL, id.Hex()+"bad"))
+	suite.NoError(err, "no error when calling this endpoint")
+	defer response.Body.Close()
+
+	responseBody := model.Response{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusBadRequest, response.StatusCode)
+	suite.Equal("invalid id", responseBody.Message)
+	suite.Empty(responseBody.Data, "user should not be retrieved")
 	suite.svc.AssertExpectations(suite.T())
 }
 
@@ -142,6 +179,54 @@ func (suite *userControllerSuite) TestCreateUser_Positive() {
 
 	suite.Equal(http.StatusCreated, response.StatusCode)
 	suite.Equal("User created successfully", responseBody.Message)
+	suite.svc.AssertExpectations(suite.T())
+}
+
+func (suite *userControllerSuite) TestCreateUser_NilBody_Negative() {
+	var user model.User
+	appErr := &model.AppError{
+		Err:        errors.New("user is nil pointer"),
+		StatusCode: http.StatusInternalServerError,
+	}
+
+	suite.svc.On("CreateUser", &user).Return(appErr)
+
+	requestBody, err := json.Marshal(&user)
+	suite.NoError(err, "can not marshal struct to json")
+
+	response, err := http.Post(
+		fmt.Sprintf("%s/api/user", suite.testServer.URL),
+		"application/json",
+		bytes.NewBuffer(requestBody),
+	)
+	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
+
+	responseBody := model.Response{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusInternalServerError, response.StatusCode)
+	suite.Equal("user is nil pointer", responseBody.Message)
+	suite.Empty(responseBody.Data)
+	suite.svc.AssertExpectations(suite.T())
+}
+
+func (suite *userControllerSuite) TestCreateUser_InvalidJSON_Negative() {
+	requestBody := []byte("InvalidJSON")
+	response, err := http.Post(
+		fmt.Sprintf("%s/api/user", suite.testServer.URL),
+		"application/json",
+		bytes.NewBuffer(requestBody),
+	)
+	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
+
+	responseBody := model.Response{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusBadRequest, response.StatusCode)
+	suite.Equal("invalid json request body", responseBody.Message)
+	suite.Empty(responseBody.Data)
 	suite.svc.AssertExpectations(suite.T())
 }
 

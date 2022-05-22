@@ -76,6 +76,7 @@ func (suite *userServiceSuite) TestGetUserByID_NotFound_Negative() {
 	suite.Nil(result, "error is returned so result has to be nil")
 	suite.Error(err, "error not found")
 	suite.Equal("user not found", err.Error())
+	suite.Equal(http.StatusNotFound, err.(*model.AppError).StatusCode)
 	suite.repo.AssertExpectations(suite.T())
 }
 
