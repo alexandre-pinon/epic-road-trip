@@ -2,8 +2,10 @@ package repository
 
 import (
 	"context"
+	"errors"
 
 	"github.com/alexandre-pinon/epic-road-trip/model"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -14,6 +16,7 @@ type userRepository struct {
 
 type UserRepository interface {
 	GetAllUsers() (*[]model.User, error)
+	GetUserByID(id primitive.ObjectID) (*model.User, error)
 	CreateUser(user *model.User) error
 }
 
@@ -35,6 +38,10 @@ func (repo *userRepository) GetAllUsers() (*[]model.User, error) {
 	}
 
 	return &results, err
+}
+
+func (repo *userRepository) GetUserByID(id primitive.ObjectID) (*model.User, error) {
+	return &model.User{}, errors.New("TODO: implement GetUserByID")
 }
 
 func (repo *userRepository) CreateUser(user *model.User) error {
