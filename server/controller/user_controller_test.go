@@ -13,6 +13,7 @@ import (
 	"github.com/alexandre-pinon/epic-road-trip/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/suite"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type userControllerSuite struct {
@@ -32,6 +33,7 @@ func (suite *userControllerSuite) SetupTest() {
 		userRoutes := apiRoutes.Group("/user")
 		{
 			userRoutes.GET("/", utils.ServeHTTP(ctrl.GetAllUsers))
+			userRoutes.GET("/:id", utils.ServeHTTP(ctrl.GetUserByID))
 			userRoutes.POST("/", utils.ServeHTTP(ctrl.CreateUser))
 		}
 	}
@@ -84,7 +86,31 @@ func (suite *userControllerSuite) TestGetAllUsers_Positive() {
 	json.NewDecoder(response.Body).Decode(&responseBody)
 
 	suite.Equal(http.StatusOK, response.StatusCode)
-	suite.Equal(responseBody.Message, "Users retrieved successfully")
+	suite.Equal("Users retrieved successfully", responseBody.Message)
+	suite.svc.AssertExpectations(suite.T())
+}
+
+func (suite *userControllerSuite) TestGetUserByID_Positive() {
+	id := primitive.NewObjectID()
+	user := model.User{
+		Firstname: "yoimiya",
+		Lastname:  "naganohara",
+		Email:     "yoimiya.naganohara@gmail.com",
+		Password:  "12345678",
+		Phone:     "+33612345678",
+		Trips:     []*model.RoadTrip{},
+	}
+
+	suite.svc.On("GetUserByID", id).Return(&user, nil)
+	response, err := http.Get(fmt.Sprintf("%s/api/user/%s", suite.testServer.URL, id.Hex()))
+	suite.NoError(err, "no error when calling this endpoint")
+	defer response.Body.Close()
+
+	responseBody := model.Response{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusOK, response.StatusCode)
+	suite.Equal(fmt.Sprintf("User %s retrieved successfully", id.Hex()), responseBody.Message)
 	suite.svc.AssertExpectations(suite.T())
 }
 

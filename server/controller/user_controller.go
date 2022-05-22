@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/alexandre-pinon/epic-road-trip/model"
@@ -14,6 +15,7 @@ type userController struct {
 
 type UserController interface {
 	GetAllUsers(ctx *gin.Context) (*model.AppResult, *model.AppError)
+	GetUserByID(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	CreateUser(ctx *gin.Context) (*model.AppResult, *model.AppError)
 }
 
@@ -42,6 +44,13 @@ func (ctrl *userController) GetAllUsers(ctx *gin.Context) (*model.AppResult, *mo
 		Message:    "Users retrieved successfully",
 		StatusCode: http.StatusOK,
 	}, nil
+}
+
+func (ctrl *userController) GetUserByID(ctx *gin.Context) (*model.AppResult, *model.AppError) {
+	return &model.AppResult{}, &model.AppError{
+		Err:        errors.New("TODO: implement GetUserByID"),
+		StatusCode: http.StatusNotImplemented,
+	}
 }
 
 func (ctrl *userController) CreateUser(ctx *gin.Context) (*model.AppResult, *model.AppError) {
