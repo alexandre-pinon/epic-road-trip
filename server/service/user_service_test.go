@@ -42,7 +42,7 @@ func (suite *userServiceSuite) TestCreateUser_Positive() {
 
 func (suite *userServiceSuite) TestCreateUser_NilPointer_Negative() {
 	err := suite.svc.CreateUser(nil)
-	suite.Error(err.(*model.AppError).Err, "error when create tweet with nil pointer")
+	suite.Error(err.(*model.AppError).Err, "error when create user with nil pointer")
 	suite.Assertions.Equal(http.StatusInternalServerError, err.(*model.AppError).StatusCode)
 	suite.repo.AssertExpectations(suite.T())
 }

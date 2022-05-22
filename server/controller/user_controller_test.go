@@ -32,6 +32,7 @@ func (suite *userControllerSuite) SetupTest() {
 		userRoutes := apiRoutes.Group("/user")
 		{
 			userRoutes.POST("/", utils.ServeHTTP(ctrl.CreateUser))
+			userRoutes.GET("/", utils.ServeHTTP(ctrl.GetAllUsers))
 		}
 	}
 	testServer := httptest.NewServer(router)
@@ -76,6 +77,48 @@ func (suite *userControllerSuite) TestCreateUser_Positive() {
 	suite.svc.AssertExpectations(suite.T())
 }
 
-func TestUserHandler(t *testing.T) {
+func (suite *userControllerSuite) TestGetAllUsers_Positive() {
+	users := []model.User{
+		{
+			Firstname: "yoimiya",
+			Lastname:  "naganohara",
+			Email:     "yoimiya.naganohara@gmail.com",
+			Password:  "12345678",
+			Phone:     "+33612345678",
+			Trips:     []*model.RoadTrip{},
+		},
+		{
+			Firstname: "hu",
+			Lastname:  "tao",
+			Email:     "hu.tao@gmail.com",
+			Password:  "23456789",
+			Phone:     "+33623456789",
+			Trips:     []*model.RoadTrip{},
+		},
+		{
+			Firstname: "kokomi",
+			Lastname:  "sangonomiya",
+			Email:     "kokomi.sangonomiya@gmail.com",
+			Password:  "87654321",
+			Phone:     "+33687654321",
+			Trips:     []*model.RoadTrip{},
+		},
+	}
+
+	suite.svc.On("GetAllUsers").Return(&users, nil)
+
+	response, err := http.Get(fmt.Sprintf("%s/api/user", suite.testServer.URL))
+	suite.NoError(err, "no error when calling this endpoint")
+	defer response.Body.Close()
+
+	responseBody := model.Response{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusOK, response.StatusCode)
+	suite.Equal(responseBody.Message, "Users retrieved successfully")
+	suite.svc.AssertExpectations(suite.T())
+}
+
+func TestUserController(t *testing.T) {
 	suite.Run(t, new(userControllerSuite))
 }
