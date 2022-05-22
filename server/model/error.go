@@ -20,11 +20,11 @@ func GetValErrorMsg(fe validator.FieldError) string {
 	case "e164":
 		return "Invalid phone format"
 	case "min":
-		return fmt.Sprintf("Should be at least %s characters long", fe.Param())
+		return fmt.Sprintf("Should be at least %s characters", fe.Param())
 	case "max":
 		return fmt.Sprintf("Should be less than %s characters", fe.Param())
 	case "len":
-		return fmt.Sprintf("Should be exactly %s characters long", fe.Param())
+		return fmt.Sprintf("Should be exactly %s characters", fe.Param())
 	}
 	return "Unknown error"
 }

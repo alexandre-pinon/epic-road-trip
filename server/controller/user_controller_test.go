@@ -3,7 +3,6 @@ package controller
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -183,13 +182,32 @@ func (suite *userControllerSuite) TestCreateUser_Positive() {
 }
 
 func (suite *userControllerSuite) TestCreateUser_NilBody_Negative() {
-	var user model.User
-	appErr := &model.AppError{
-		StatusCode: http.StatusInternalServerError,
-		Err:        errors.New("user is nil pointer"),
-	}
+	response, err := http.Post(
+		fmt.Sprintf("%s/api/user", suite.testServer.URL),
+		"application/json",
+		bytes.NewBuffer(nil),
+	)
+	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
 
-	suite.svc.On("CreateUser", &user).Return(appErr)
+	responseBody := model.AppResponse{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusBadRequest, response.StatusCode)
+	suite.Equal("EOF", responseBody.Message)
+	suite.Empty(responseBody.Data)
+	suite.Empty(responseBody.ValErrors)
+	suite.svc.AssertExpectations(suite.T())
+}
+
+func (suite *userControllerSuite) TestCreateUser_InvalidJSON_Negative() {
+	user := model.User{
+		Firstname: "y",
+		Lastname:  "naganoharanaganoharanaganoharanaganoharanaganoharanaganoharanaganoharanaganoharanaganohara",
+		Email:     "bademail.com",
+		Password:  "root",
+		Phone:     "-336123456789",
+	}
 
 	requestBody, err := json.Marshal(&user)
 	suite.NoError(err, "can not marshal struct to json")
@@ -205,28 +223,15 @@ func (suite *userControllerSuite) TestCreateUser_NilBody_Negative() {
 	responseBody := model.AppResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
 
-	suite.Equal(http.StatusInternalServerError, response.StatusCode)
-	suite.Equal("user is nil pointer", responseBody.Message)
-	suite.Empty(responseBody.Data)
-	suite.svc.AssertExpectations(suite.T())
-}
-
-func (suite *userControllerSuite) TestCreateUser_InvalidJSON_Negative() {
-	requestBody := []byte("InvalidJSON")
-	response, err := http.Post(
-		fmt.Sprintf("%s/api/user", suite.testServer.URL),
-		"application/json",
-		bytes.NewBuffer(requestBody),
-	)
-	suite.NoError(err, "no error when calling the endpoint")
-	defer response.Body.Close()
-
-	responseBody := model.AppResponse{}
-	json.NewDecoder(response.Body).Decode(&responseBody)
-
 	suite.Equal(http.StatusBadRequest, response.StatusCode)
 	suite.Equal("invalid json request body", responseBody.Message)
 	suite.Empty(responseBody.Data)
+	suite.Equal("Should be at least 2 characters", responseBody.ValErrors[0].Message)
+	suite.Equal("Should be less than 50 characters", responseBody.ValErrors[1].Message)
+	suite.Equal("Invalid email format", responseBody.ValErrors[2].Message)
+	suite.Equal("Should be at least 8 characters", responseBody.ValErrors[3].Message)
+	suite.Equal("Invalid phone format", responseBody.ValErrors[4].Message)
+	suite.Equal("This field is required", responseBody.ValErrors[5].Message)
 	suite.svc.AssertExpectations(suite.T())
 }
 
