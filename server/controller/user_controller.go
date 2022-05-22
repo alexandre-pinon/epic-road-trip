@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/alexandre-pinon/epic-road-trip/model"
@@ -46,8 +45,17 @@ func (ctrl *userController) CreateUser(ctx *gin.Context) (*model.AppResult, *mod
 }
 
 func (ctrl *userController) GetAllUsers(ctx *gin.Context) (*model.AppResult, *model.AppError) {
-	return &model.AppResult{}, &model.AppError{
-		Err:        errors.New("TODO: implement GetAllUsers"),
-		StatusCode: http.StatusNotImplemented,
+	users, err := ctrl.userService.GetAllUsers()
+	if err != nil {
+		return nil, &model.AppError{
+			Err:        err,
+			StatusCode: http.StatusInternalServerError,
+		}
 	}
+
+	return &model.AppResult{
+		Data:       users,
+		Message:    "Users retrieved successfully",
+		StatusCode: http.StatusOK,
+	}, nil
 }
