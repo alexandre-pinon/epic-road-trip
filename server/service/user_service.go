@@ -33,7 +33,7 @@ func (svc *userService) CreateUser(user *model.User) error {
 		}
 	}
 
-	if err := svc.userRepository.CreateUser(user); err != nil {
+	if _, err := svc.userRepository.CreateUser(user); err != nil {
 		return &model.AppError{
 			Err:        err,
 			StatusCode: http.StatusInternalServerError,

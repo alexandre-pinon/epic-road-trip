@@ -49,11 +49,11 @@ func (suite *userRepositorySuite) TestGetAllUsers_FilledRecords_Positive() {
 		Trips:     []*model.RoadTrip{},
 	}
 
-	err := suite.repo.CreateUser(&user)
+	_, err := suite.repo.CreateUser(&user)
 	suite.NoError(err, "no error when create user with valid input")
-	err = suite.repo.CreateUser(&user)
+	_, err = suite.repo.CreateUser(&user)
 	suite.NoError(err, "no error when create user with valid input")
-	err = suite.repo.CreateUser(&user)
+	_, err = suite.repo.CreateUser(&user)
 	suite.NoError(err, "no error when create user with valid input")
 
 	users, err := suite.repo.GetAllUsers()
@@ -70,7 +70,6 @@ func (suite *userRepositorySuite) TestGetUserByID_NotFound_Negative() {
 }
 
 func (suite *userRepositorySuite) TestGetUserByID_Exists_Positive() {
-	id := primitive.NewObjectID()
 	user := model.User{
 		Firstname: "yoimiya",
 		Lastname:  "naganohara",
@@ -80,10 +79,10 @@ func (suite *userRepositorySuite) TestGetUserByID_Exists_Positive() {
 		Trips:     []*model.RoadTrip{},
 	}
 
-	err := suite.repo.CreateUser(&user)
+	id, err := suite.repo.CreateUser(&user)
 	suite.NoError(err, "no error when create user with valid input")
 
-	result, err := suite.repo.GetUserByID(id)
+	result, err := suite.repo.GetUserByID(id.InsertedID.(primitive.ObjectID))
 	suite.NoError(err, "no error because user is found")
 	suite.Equal(user.Firstname, (*result).Firstname, "should be equal between result and user")
 	suite.Equal(user.Email, (*result).Email, "should be equal between result and user")
@@ -99,18 +98,18 @@ func (suite *userRepositorySuite) TestCreateUser_Positive() {
 		Trips:     []*model.RoadTrip{},
 	}
 
-	err := suite.repo.CreateUser(&user)
+	_, err := suite.repo.CreateUser(&user)
 	suite.NoError(err, "no error when create user with valid input")
 }
 
 func (suite *userRepositorySuite) TestCreateUser_NilPointer_Negative() {
-	err := suite.repo.CreateUser(nil)
+	_, err := suite.repo.CreateUser(nil)
 	suite.Error(err, "create error with nil input returns error")
 }
 
 func (suite *userRepositorySuite) TestCreateUser_EmptyFields_Positive() {
 	var user model.User
-	err := suite.repo.CreateUser(&user)
+	_, err := suite.repo.CreateUser(&user)
 	suite.NoError(err, "no error when create user with empty fields")
 }
 

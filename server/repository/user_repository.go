@@ -2,9 +2,9 @@ package repository
 
 import (
 	"context"
-	"errors"
 
 	"github.com/alexandre-pinon/epic-road-trip/model"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -17,7 +17,7 @@ type userRepository struct {
 type UserRepository interface {
 	GetAllUsers() (*[]model.User, error)
 	GetUserByID(id primitive.ObjectID) (*model.User, error)
-	CreateUser(user *model.User) error
+	CreateUser(user *model.User) (*mongo.InsertOneResult, error)
 }
 
 func NewUserRepository(db *mongo.Database) UserRepository {
@@ -41,10 +41,15 @@ func (repo *userRepository) GetAllUsers() (*[]model.User, error) {
 }
 
 func (repo *userRepository) GetUserByID(id primitive.ObjectID) (*model.User, error) {
-	return &model.User{}, errors.New("TODO: implement GetUserByID")
+	filter := bson.D{{Key: "_id", Value: id}}
+	result := repo.coll.FindOne(context.Background(), filter)
+
+	var user *model.User
+	err := result.Decode(&user)
+
+	return user, err
 }
 
-func (repo *userRepository) CreateUser(user *model.User) error {
-	_, err := repo.coll.InsertOne(context.Background(), user)
-	return err
+func (repo *userRepository) CreateUser(user *model.User) (*mongo.InsertOneResult, error) {
+	return repo.coll.InsertOne(context.Background(), user)
 }
