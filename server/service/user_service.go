@@ -14,6 +14,7 @@ type userService struct {
 
 type UserService interface {
 	CreateUser(user *model.User) error
+	GetAllUsers() (*[]model.User, error)
 }
 
 func NewUserService(repo repository.UserRepository) UserService {
@@ -36,4 +37,11 @@ func (svc *userService) CreateUser(user *model.User) error {
 	}
 
 	return nil
+}
+
+func (svc *userService) GetAllUsers() (*[]model.User, error) {
+	return &[]model.User{}, &model.AppError{
+		Err:        errors.New("TODO: implement GetAllUsers"),
+		StatusCode: http.StatusInternalServerError,
+	}
 }

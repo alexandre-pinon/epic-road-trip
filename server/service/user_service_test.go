@@ -47,6 +47,48 @@ func (suite *userServiceSuite) TestCreateUser_NilPointer_Negative() {
 	suite.repo.AssertExpectations(suite.T())
 }
 
+func (suite *userServiceSuite) TestGetAllUsers_EmptySlice_Positive() {
+	emptyUsers := []model.User(nil)
+	suite.repo.On("GetAllUsers").Return(&emptyUsers, nil)
+	users, err := suite.svc.GetAllUsers()
+	suite.NoError(err, "no error when get all users")
+	suite.Equal(len(*users), 0, "users is a empty slice object")
+}
+
+func (suite *userServiceSuite) TestGetAllUsers_FilledSlice_Positive() {
+	users := []model.User{
+		{
+			Firstname: "yoimiya",
+			Lastname:  "naganohara",
+			Email:     "yoimiya.naganohara@gmail.com",
+			Password:  "12345678",
+			Phone:     "+33612345678",
+			Trips:     []*model.RoadTrip{},
+		},
+		{
+			Firstname: "hu",
+			Lastname:  "tao",
+			Email:     "hu.tao@gmail.com",
+			Password:  "23456789",
+			Phone:     "+33623456789",
+			Trips:     []*model.RoadTrip{},
+		},
+		{
+			Firstname: "kokomi",
+			Lastname:  "sangonomiya",
+			Email:     "kokomi.sangonomiya@gmail.com",
+			Password:  "87654321",
+			Phone:     "+33687654321",
+			Trips:     []*model.RoadTrip{},
+		},
+	}
+	suite.repo.On("GetAllUsers").Return(&users, nil)
+	result, err := suite.svc.GetAllUsers()
+	suite.NoError(err, "no error when get all users")
+	suite.Equal(len(*result), len(users), "users and result should have the same length")
+	suite.Equal(*result, users, "result and users are the same")
+}
+
 func TestUserService(t *testing.T) {
 	suite.Run(t, new(userServiceSuite))
 }
