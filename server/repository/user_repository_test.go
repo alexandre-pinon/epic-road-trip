@@ -12,15 +12,15 @@ import (
 type userRepositorySuite struct {
 	suite.Suite
 	cfg             config.Config
-	repository      UserRepository
+	repo            UserRepository
 	cleanupExecutor utils.DropCollectionExecutor
 }
 
 func (suite *userRepositorySuite) SetupTest() {
 	db := config.ConnectDB(&suite.cfg)
-	repository := NewUserRepository(db)
+	repo := NewUserRepository(db)
 
-	suite.repository = repository
+	suite.repo = repo
 
 	suite.cleanupExecutor = utils.NewDropCollectionExecutor(db)
 }
@@ -31,7 +31,7 @@ func (suite *userRepositorySuite) TearDownTest() {
 }
 
 func (suite *userRepositorySuite) TestGetAllUsers_EmptySlice_Positive() {
-	users, err := suite.repository.GetAllUsers()
+	users, err := suite.repo.GetAllUsers()
 	suite.NoError(err, "no error when get all users when the table is empty")
 	suite.Equal(len(*users), 0, "length of users should be 0, since it is empty slice")
 	suite.Equal(*users, []model.User(nil), "users is an empty slice")
@@ -47,14 +47,14 @@ func (suite *userRepositorySuite) TestGetAllUsers_FilledRecords_Positive() {
 		Trips:     []*model.RoadTrip{},
 	}
 
-	err := suite.repository.CreateUser(&user)
+	err := suite.repo.CreateUser(&user)
 	suite.NoError(err, "no error when create user with valid input")
-	err = suite.repository.CreateUser(&user)
+	err = suite.repo.CreateUser(&user)
 	suite.NoError(err, "no error when create user with valid input")
-	err = suite.repository.CreateUser(&user)
+	err = suite.repo.CreateUser(&user)
 	suite.NoError(err, "no error when create user with valid input")
 
-	users, err := suite.repository.GetAllUsers()
+	users, err := suite.repo.GetAllUsers()
 	suite.NoError(err, "no error when get all users when the table is empty")
 	suite.Equal(len(*users), 3, "insert 3 records before the all data, so it should contain three users")
 }
@@ -69,18 +69,18 @@ func (suite *userRepositorySuite) TestCreateUser_Positive() {
 		Trips:     []*model.RoadTrip{},
 	}
 
-	err := suite.repository.CreateUser(&user)
+	err := suite.repo.CreateUser(&user)
 	suite.NoError(err, "no error when create user with valid input")
 }
 
 func (suite *userRepositorySuite) TestCreateUser_NilPointer_Negative() {
-	err := suite.repository.CreateUser(nil)
+	err := suite.repo.CreateUser(nil)
 	suite.Error(err, "create error with nil input returns error")
 }
 
 func (suite *userRepositorySuite) TestCreateUser_EmptyFields_Positive() {
 	var user model.User
-	err := suite.repository.CreateUser(&user)
+	err := suite.repo.CreateUser(&user)
 	suite.NoError(err, "no error when create user with empty fields")
 }
 

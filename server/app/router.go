@@ -3,11 +3,11 @@ package app
 import (
 	"net/http"
 
-	"github.com/alexandre-pinon/epic-road-trip/controller"
+	"github.com/alexandre-pinon/epic-road-trip/model"
 	"github.com/gin-gonic/gin"
 )
 
-type appController func(ctx *gin.Context) (*controller.AppResult, error)
+type appController func(ctx *gin.Context) (*model.AppResult, error)
 
 func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
 	router.GET("/", serveHTTP(controllers.RootController.Ok))
@@ -30,7 +30,7 @@ func serveHTTP(c appController) gin.HandlerFunc {
 		result, err := c(ctx)
 
 		if result == nil {
-			ctx.JSON(http.StatusInternalServerError, controller.Response{
+			ctx.JSON(http.StatusInternalServerError, model.Response{
 				Success: false,
 				Message: http.StatusText(http.StatusInternalServerError),
 				Data:    nil,
@@ -39,7 +39,7 @@ func serveHTTP(c appController) gin.HandlerFunc {
 		}
 
 		if err != nil {
-			ctx.JSON(result.StatusCode, controller.Response{
+			ctx.JSON(result.StatusCode, model.Response{
 				Success: false,
 				Message: err.Error(),
 				Data:    result.Data,
@@ -47,7 +47,7 @@ func serveHTTP(c appController) gin.HandlerFunc {
 			return
 		}
 
-		ctx.JSON(result.StatusCode, controller.Response{
+		ctx.JSON(result.StatusCode, model.Response{
 			Success: true,
 			Message: result.Message,
 			Data:    result.Data,

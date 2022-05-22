@@ -1,32 +1,23 @@
 package controller
 
-import "github.com/gin-gonic/gin"
-
-type Response struct {
-	Success bool        `json:"success"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
-}
-
-type AppResult struct {
-	Data       interface{}
-	Message    string
-	StatusCode int
-}
+import (
+	"github.com/alexandre-pinon/epic-road-trip/model"
+	"github.com/gin-gonic/gin"
+)
 
 type rootController struct {
 }
 
 type RootController interface {
-	Ok(ctx *gin.Context) (*AppResult, error)
+	Ok(ctx *gin.Context) (*model.AppResult, error)
 }
 
 func NewRootController() RootController {
 	return &rootController{}
 }
 
-func (controller *rootController) Ok(ctx *gin.Context) (*AppResult, error) {
-	return &AppResult{
+func (controller *rootController) Ok(ctx *gin.Context) (*model.AppResult, error) {
+	return &model.AppResult{
 		Data:       struct{}{},
 		Message:    "Ok",
 		StatusCode: 200,
