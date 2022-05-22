@@ -40,8 +40,5 @@ func (svc *userService) CreateUser(user *model.User) error {
 }
 
 func (svc *userService) GetAllUsers() (*[]model.User, error) {
-	return &[]model.User{}, &model.AppError{
-		Err:        errors.New("TODO: implement GetAllUsers"),
-		StatusCode: http.StatusInternalServerError,
-	}
+	return svc.userRepository.GetAllUsers()
 }

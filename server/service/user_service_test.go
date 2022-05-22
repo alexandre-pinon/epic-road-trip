@@ -36,7 +36,7 @@ func (suite *userServiceSuite) TestCreateUser_Positive() {
 	suite.repo.On("CreateUser", &user).Return(nil)
 
 	err := suite.svc.CreateUser(&user)
-	suite.Nil(err, "err is a nil pointer so no error in this process")
+	suite.NoError(err, "no error when create user with valid input")
 	suite.repo.AssertExpectations(suite.T())
 }
 
