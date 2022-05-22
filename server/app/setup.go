@@ -21,9 +21,9 @@ func InitApp() {
 	db := config.ConnectDB(cfg)
 	defer config.DisconnectDB(cfg, db.Client())
 
-	// repos := SetupRepositories(db)
-	services := Services{}
-	controllers := SetupControllers(&services)
+	repositories := SetupRepositories(db)
+	services := SetupServices(repositories)
+	controllers := SetupControllers(services)
 
 	router := gin.Default()
 

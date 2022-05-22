@@ -53,8 +53,15 @@ func (ctrl *userController) GetAllUsers(ctx *gin.Context) (*model.AppResult, *mo
 		}
 	}
 
+	var data *[]model.User
+	if len(*users) != 0 {
+		data = users
+	} else {
+		data = &[]model.User{}
+	}
+
 	return &model.AppResult{
-		Data:       users,
+		Data:       data,
 		Message:    "Users retrieved successfully",
 		StatusCode: http.StatusOK,
 	}, nil

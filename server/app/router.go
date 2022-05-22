@@ -8,15 +8,12 @@ import (
 func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
 	router.GET("/", utils.ServeHTTP(controllers.RootController.Ok))
 
-	// apiRoutes := router.Group("/api")
-	// {
-	// 	userRoutes := apiRoutes.Group("/user")
-	// 	{
-	// 		userRoutes.GET("/")
-	// 		userRoutes.GET("/:id")
-	// 		userRoutes.POST("/")
-	// 		userRoutes.PUT("/:id")
-	// 		userRoutes.DELETE("/:id")
-	// 	}
-	// }
+	apiRoutes := router.Group("/api")
+	{
+		userRoutes := apiRoutes.Group("/user")
+		{
+			userRoutes.GET("/", utils.ServeHTTP(controllers.UserController.GetAllUsers))
+			userRoutes.POST("/", utils.ServeHTTP(controllers.UserController.CreateUser))
+		}
+	}
 }
