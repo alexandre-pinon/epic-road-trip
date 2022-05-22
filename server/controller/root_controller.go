@@ -18,8 +18,8 @@ func NewRootController() RootController {
 
 func (controller *rootController) Ok(ctx *gin.Context) (*model.AppResult, *model.AppError) {
 	return &model.AppResult{
-		Data:       struct{}{},
-		Message:    "Ok",
 		StatusCode: 200,
+		Message:    "Ok",
+		Data:       struct{}{},
 	}, nil
 }

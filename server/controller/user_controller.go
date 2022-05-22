@@ -29,8 +29,8 @@ func (ctrl *userController) GetAllUsers(ctx *gin.Context) (*model.AppResult, *mo
 	users, err := ctrl.userService.GetAllUsers()
 	if err != nil {
 		return nil, &model.AppError{
-			Err:        err,
 			StatusCode: http.StatusInternalServerError,
+			Err:        err,
 		}
 	}
 
@@ -42,9 +42,9 @@ func (ctrl *userController) GetAllUsers(ctx *gin.Context) (*model.AppResult, *mo
 	}
 
 	return &model.AppResult{
-		Data:       data,
-		Message:    "Users retrieved successfully",
 		StatusCode: http.StatusOK,
+		Message:    "Users retrieved successfully",
+		Data:       data,
 	}, nil
 }
 
@@ -52,23 +52,23 @@ func (ctrl *userController) GetUserByID(ctx *gin.Context) (*model.AppResult, *mo
 	id, err := primitive.ObjectIDFromHex(ctx.Param("id"))
 	if err != nil {
 		return nil, &model.AppError{
-			Err:        errors.New("invalid id"),
 			StatusCode: http.StatusBadRequest,
+			Err:        errors.New("invalid id"),
 		}
 	}
 
 	user, err := ctrl.userService.GetUserByID(id)
 	if err != nil {
 		return nil, &model.AppError{
-			Err:        err,
 			StatusCode: err.(*model.AppError).StatusCode,
+			Err:        err,
 		}
 	}
 
 	return &model.AppResult{
-		Data:       user,
-		Message:    fmt.Sprintf("User %s retrieved successfully", id.Hex()),
 		StatusCode: http.StatusOK,
+		Message:    fmt.Sprintf("User %s retrieved successfully", id.Hex()),
+		Data:       user,
 	}, nil
 }
 
@@ -77,21 +77,21 @@ func (ctrl *userController) CreateUser(ctx *gin.Context) (*model.AppResult, *mod
 
 	if err := ctx.ShouldBindJSON(&user); err != nil {
 		return nil, &model.AppError{
-			Err:        errors.New("invalid json request body"),
 			StatusCode: http.StatusBadRequest,
+			Err:        err,
 		}
 	}
 
 	if err := ctrl.userService.CreateUser(&user); err != nil {
 		return nil, &model.AppError{
-			Err:        err,
 			StatusCode: err.(*model.AppError).StatusCode,
+			Err:        err,
 		}
 	}
 
 	return &model.AppResult{
-		Data:       struct{}{},
-		Message:    "User created successfully",
 		StatusCode: http.StatusCreated,
+		Message:    "User created successfully",
+		Data:       struct{}{},
 	}, nil
 }

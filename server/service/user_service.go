@@ -31,8 +31,8 @@ func (svc *userService) GetUserByID(id primitive.ObjectID) (*model.User, error) 
 	user, _ := svc.userRepository.GetUserByID(id)
 	if user == nil {
 		return nil, &model.AppError{
-			Err:        errors.New("user not found"),
 			StatusCode: http.StatusNotFound,
+			Err:        errors.New("user not found"),
 		}
 	}
 
@@ -42,15 +42,15 @@ func (svc *userService) GetUserByID(id primitive.ObjectID) (*model.User, error) 
 func (svc *userService) CreateUser(user *model.User) error {
 	if user == nil {
 		return &model.AppError{
-			Err:        errors.New("user is nil pointer"),
 			StatusCode: http.StatusInternalServerError,
+			Err:        errors.New("user is nil pointer"),
 		}
 	}
 
 	if _, err := svc.userRepository.CreateUser(user); err != nil {
 		return &model.AppError{
-			Err:        err,
 			StatusCode: http.StatusInternalServerError,
+			Err:        err,
 		}
 	}
 

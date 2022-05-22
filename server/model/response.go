@@ -1,22 +1,14 @@
 package model
 
-type Response struct {
-	Data    interface{} `json:"data"`
-	Message string      `json:"message"`
-	Success bool        `json:"success"`
+type AppResponse struct {
+	Success   bool        `json:"success"`
+	Message   string      `json:"message"`
+	Data      interface{} `json:"data"`
+	ValErrors []ValError  `json:"valErrors"`
 }
 
 type AppResult struct {
-	Data       interface{}
+	StatusCode int
 	Message    string
-	StatusCode int
-}
-
-type AppError struct {
-	Err error
-	StatusCode int
-}
-
-func (appError *AppError) Error() string {
-	return appError.Err.Error()
+	Data       interface{}
 }

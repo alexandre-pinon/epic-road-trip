@@ -58,7 +58,7 @@ func (suite *userControllerSuite) TestGetAllUsers_EmptySlice_Positive() {
 	suite.NoError(err, "no error when calling this endpoint")
 	defer response.Body.Close()
 
-	responseBody := model.Response{}
+	responseBody := model.AppResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
 
 	suite.Equal(http.StatusOK, response.StatusCode)
@@ -101,7 +101,7 @@ func (suite *userControllerSuite) TestGetAllUsers_FilledSlice_Positive() {
 	suite.NoError(err, "no error when calling this endpoint")
 	defer response.Body.Close()
 
-	responseBody := model.Response{}
+	responseBody := model.AppResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
 
 	suite.Equal(http.StatusOK, response.StatusCode)
@@ -126,7 +126,7 @@ func (suite *userControllerSuite) TestGetUserByID_Exists_Positive() {
 	suite.NoError(err, "no error when calling this endpoint")
 	defer response.Body.Close()
 
-	responseBody := model.Response{}
+	responseBody := model.AppResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
 
 	suite.Equal(http.StatusOK, response.StatusCode)
@@ -142,7 +142,7 @@ func (suite *userControllerSuite) TestGetUserByID_InvalidID_Negative() {
 	suite.NoError(err, "no error when calling this endpoint")
 	defer response.Body.Close()
 
-	responseBody := model.Response{}
+	responseBody := model.AppResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
 
 	suite.Equal(http.StatusBadRequest, response.StatusCode)
@@ -174,7 +174,7 @@ func (suite *userControllerSuite) TestCreateUser_Positive() {
 	suite.NoError(err, "no error when calling the endpoint")
 	defer response.Body.Close()
 
-	responseBody := model.Response{}
+	responseBody := model.AppResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
 
 	suite.Equal(http.StatusCreated, response.StatusCode)
@@ -185,8 +185,8 @@ func (suite *userControllerSuite) TestCreateUser_Positive() {
 func (suite *userControllerSuite) TestCreateUser_NilBody_Negative() {
 	var user model.User
 	appErr := &model.AppError{
-		Err:        errors.New("user is nil pointer"),
 		StatusCode: http.StatusInternalServerError,
+		Err:        errors.New("user is nil pointer"),
 	}
 
 	suite.svc.On("CreateUser", &user).Return(appErr)
@@ -202,7 +202,7 @@ func (suite *userControllerSuite) TestCreateUser_NilBody_Negative() {
 	suite.NoError(err, "no error when calling the endpoint")
 	defer response.Body.Close()
 
-	responseBody := model.Response{}
+	responseBody := model.AppResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
 
 	suite.Equal(http.StatusInternalServerError, response.StatusCode)
@@ -221,7 +221,7 @@ func (suite *userControllerSuite) TestCreateUser_InvalidJSON_Negative() {
 	suite.NoError(err, "no error when calling the endpoint")
 	defer response.Body.Close()
 
-	responseBody := model.Response{}
+	responseBody := model.AppResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
 
 	suite.Equal(http.StatusBadRequest, response.StatusCode)
