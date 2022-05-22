@@ -1,6 +1,7 @@
-import React from 'react'
-import { kea, actions, path, reducers, useActions, useValues, listeners, afterMount, selectors } from 'kea';
-import { createStyles, Container, UnstyledButton, Text, Card, SimpleGrid, Overlay, Title, Space, Input, Center, Loader, List, ThemeIcon } from '@mantine/core';
+import React, { useState } from 'react'
+import { kea, actions, path, reducers, useActions, useValues, listeners, afterMount, selectors, props } from 'kea';
+import { createStyles, Container, UnstyledButton, Text, Card, SimpleGrid, Overlay, Space, Input, Center, TextInput, ActionIcon, Modal, Button } from '@mantine/core';
+import { Calendar } from '@mantine/dates';
 
 import {
   HotelService,
@@ -14,8 +15,8 @@ import {
   Gauge,
   ManualGearbox,
   Users,
-  UserSearch,
-  ArrowNarrowRight,
+  CalendarEvent,
+  BuildingSkyscraper,
 } from 'tabler-icons-react';
 
 import type { logicType } from "./HomeType";
@@ -108,9 +109,6 @@ const mockdata = [
   { title: 'Restaurants', icon: BrandTripadvisor, color: 'dark' },
   { title: 'Travel Forums', icon: BrandBooking, color: 'dark' },
   { title: 'More ...', icon: Plus, color: 'dark' },
-  // { title: 'Reports', icon: Report, color: 'pink' },
-  // { title: 'Payments', icon: Coin, color: 'red' },
-  // { title: 'Cashback', icon: CashBanknote, color: 'orange' },
 ];
 
 const mockdata2 = [
@@ -210,7 +208,10 @@ export function Home() {
   const { username, isLoading, sortedRepositories, error } = useValues(logic)
   const { setUsername } = useActions(logic)
   const { classes, theme, cx } = useStyles();
-
+  const [startCalendar, setStartCalendar] = useState(false);
+  const [endCalendar, setEndCalendar] = useState(false);
+  const [startDateValue, setStartDate] = React.useState<Date | null>(new Date());
+  const [endDateValue, setEndDate] = React.useState<Date | null>(new Date());
 
   const items = mockdata.map((item) => (
     <UnstyledButton key={item.title} className={classes.item}>
@@ -257,54 +258,75 @@ export function Home() {
       <Space h="xl" />
       <Space h="xl" />
 
+      <Container size={540}>
+        {/* Ville de départ */}
+        <TextInput
+          icon={<BuildingSkyscraper size={18} />}
+          radius="xl"
+          size="md"
+          rightSection={
+            <ActionIcon size={32} radius="xl" color={theme.primaryColor} variant="hover">
+              <Modal
+                centered
+                overlayColor={theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[2]}
+                overlayOpacity={0.55}
+                overlayBlur={3}
+                opened={startCalendar}
+                onClose={() => setStartCalendar(false)}
+                withCloseButton={false}
+              >
+                <Calendar value={startDateValue} onChange={setStartDate} />;
+              </Modal>
+              <CalendarEvent size={18} onClick={() => setStartCalendar(true)} />
+            </ActionIcon>
+          }
+          placeholder="Ville de départ"
+          rightSectionWidth={42}
+          {...props}
+        />
+
+        <Space h="xl" />
+
+        {/* Ville d'arrivée */}
+        <TextInput
+          icon={<BuildingSkyscraper size={18} />}
+          radius="xl"
+          size="md"
+          rightSection={
+            <ActionIcon size={32} radius="xl" color={theme.primaryColor} variant="hover">
+              <Modal
+                centered
+                overlayColor={theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[2]}
+                overlayOpacity={0.55}
+                overlayBlur={3}
+                opened={endCalendar}
+                onClose={() => setEndCalendar(false)}
+                withCloseButton={false}
+              >
+                <Calendar value={endDateValue} onChange={setEndDate} />;
+              </Modal>
+              <CalendarEvent size={18} onClick={() => setEndCalendar(true)} />
+            </ActionIcon>
+          }
+          placeholder="Ville d'arrivée"
+          rightSectionWidth={42}
+          {...props}
+        />
+
+        <Space h="xl" />
+
+        <Center>
+          <Button rightIcon={<Search size={18} />} variant="light" radius="xl">
+            Rechercher
+          </Button>
+        </Center>
+
+      </Container>
+
       {/* <Title order={3}>Top experiences on Epic Road Trip</Title> */}
 
-      {/* [START] Card with icon features */}
-      {/* <Card withBorder radius="md" className={classes.card}>
-        <Card.Section className={classes.imageSection}>
-          <Image src="https://i.imgur.com/ZL52Q2D.png" alt="Tesla Model S" />
-        </Card.Section>
-
-        <Group position="apart" mt="md">
-          <div>
-            <Text weight={500}>Tesla Model S</Text>
-            <Text size="xs" color="dimmed">
-              Free recharge at any station
-            </Text>
-          </div>
-          <Badge>25% off</Badge>
-        </Group>
-
-        <Card.Section className={classes.section} mt="md">
-          <Text size="sm" color="dimmed" className={classes.label}>
-            Basic configuration
-          </Text>
-
-          <Group spacing={8} mb={-8}>
-            {features}
-          </Group>
-        </Card.Section>
-
-        <Card.Section className={classes.section}>
-          <Group spacing={30}>
-            <div>
-              <Text size="xl" weight={700} sx={{ lineHeight: 1 }}>
-                $168.00
-              </Text>
-              <Text size="sm" color="dimmed" weight={500} sx={{ lineHeight: 1 }} mt={3}>
-                per day
-              </Text>
-            </div>
-
-            <Button radius="xl" style={{ flex: 1 }}>
-              Rent now
-            </Button>
-          </Group>
-        </Card.Section>
-      </Card> */}
-      {/* [END] Card with icon features*/}
-
-      <div>
+      {/* GitHub API Test*/}
+      {/* <div>
         <div>
           <Title style={{ color: "#616161 " }} order={4}>Search for a GitHub user</Title>
           <Input
@@ -346,7 +368,7 @@ export function Home() {
         ) : (
           <div>{error ? `Error: ${error}` : 'No repositories found'}</div>
         )}
-      </div>
+      </div> */}
     </Container>
   );
 }
