@@ -37,17 +37,19 @@ func (repo *userRepository) GetAllUsers() (*[]model.User, error) {
 		return nil, err
 	}
 
-	return &results, err
+	return &results, nil
 }
 
 func (repo *userRepository) GetUserByID(id primitive.ObjectID) (*model.User, error) {
 	filter := bson.D{{Key: "_id", Value: id}}
 	result := repo.coll.FindOne(context.Background(), filter)
 
-	var user *model.User
-	err := result.Decode(&user)
+	var user model.User
+	if err := result.Decode(&user); err != nil {
+		return nil, err
+	}
 
-	return user, err
+	return &user, nil
 }
 
 func (repo *userRepository) CreateUser(user *model.User) (*mongo.InsertOneResult, error) {

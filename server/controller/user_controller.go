@@ -65,15 +65,8 @@ func (ctrl *userController) GetUserByID(ctx *gin.Context) (*model.AppResult, *mo
 		}
 	}
 
-	var data *model.User
-	if user != nil {
-		data = user
-	} else {
-		data = &model.User{}
-	}
-
 	return &model.AppResult{
-		Data:       data,
+		Data:       user,
 		Message:    fmt.Sprintf("User %s retrieved successfully", id.Hex()),
 		StatusCode: http.StatusOK,
 	}, nil
@@ -97,6 +90,7 @@ func (ctrl *userController) CreateUser(ctx *gin.Context) (*model.AppResult, *mod
 	}
 
 	return &model.AppResult{
+		Data:       struct{}{},
 		Message:    "User created successfully",
 		StatusCode: http.StatusCreated,
 	}, nil
