@@ -7,6 +7,7 @@ import (
 	"github.com/alexandre-pinon/epic-road-trip/mocks"
 	"github.com/alexandre-pinon/epic-road-trip/model"
 	"github.com/stretchr/testify/suite"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -64,6 +65,36 @@ func (suite *userServiceSuite) TestGetAllUsers_FilledSlice_Positive() {
 	suite.NoError(err, "no error when get all users")
 	suite.Equal(len(users), len(*result), "users and result should have the same length")
 	suite.Equal(users, *result, "result and users are the same")
+}
+
+func (suite *userServiceSuite) TestGetUserByID_NotFound_Negative() {
+	id := primitive.NewObjectID()
+
+	suite.repo.On("GetUserByID", id).Return(nil, mongo.ErrNoDocuments)
+
+	result, err := suite.svc.GetUserByID(id)
+	suite.Nil(result, "error is returned so result has to be nil")
+	suite.Error(err, "error not found")
+	suite.Equal("mongo: no documents in result", err.Error())
+	suite.repo.AssertExpectations(suite.T())
+}
+
+func (suite *userServiceSuite) TestGetUserByID_Exists_Positive() {
+	id := primitive.NewObjectID()
+	user := model.User{
+		Firstname: "yoimiya",
+		Lastname:  "naganohara",
+		Email:     "yoimiya.naganohara@gmail.com",
+		Password:  "12345678",
+		Phone:     "+33612345678",
+		Trips:     []*model.RoadTrip{},
+	}
+
+	suite.repo.On("GetUserByID", id).Return(&user, nil)
+
+	result, err := suite.svc.GetUserByID(id)
+	suite.Nil(err, "no error when return the user")
+	suite.Equal(user, *result, "result and user should be equal")
 }
 
 func (suite *userServiceSuite) TestCreateUser_Positive() {
