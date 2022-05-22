@@ -1,8 +1,6 @@
 package utils
 
 import (
-	"net/http"
-
 	"github.com/alexandre-pinon/epic-road-trip/model"
 	"github.com/gin-gonic/gin"
 )
@@ -13,20 +11,18 @@ func ServeHTTP(f controllerFunc) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		result, err := f(ctx)
 
-		if result == nil {
-			ctx.JSON(http.StatusInternalServerError, model.Response{
-				Success: false,
-				Message: http.StatusText(http.StatusInternalServerError),
-				Data:    nil,
-			})
-			return
+		var data interface{}
+		if result != nil {
+			data = result.Data
+		} else {
+			data = struct{}{}
 		}
 
 		if err != nil {
 			ctx.JSON(err.StatusCode, model.Response{
 				Success: false,
 				Message: err.Error(),
-				Data:    result.Data,
+				Data:    data,
 			})
 			return
 		}
@@ -34,7 +30,7 @@ func ServeHTTP(f controllerFunc) gin.HandlerFunc {
 		ctx.JSON(result.StatusCode, model.Response{
 			Success: true,
 			Message: result.Message,
-			Data:    result.Data,
+			Data:    data,
 		})
 	}
 }

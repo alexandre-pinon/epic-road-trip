@@ -13,6 +13,7 @@ func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
 		userRoutes := apiRoutes.Group("/user")
 		{
 			userRoutes.GET("/", utils.ServeHTTP(controllers.UserController.GetAllUsers))
+			userRoutes.GET("/:id", utils.ServeHTTP(controllers.UserController.GetUserByID))
 			userRoutes.POST("/", utils.ServeHTTP(controllers.UserController.CreateUser))
 		}
 	}

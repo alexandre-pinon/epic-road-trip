@@ -2,11 +2,13 @@ package controller
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/alexandre-pinon/epic-road-trip/model"
 	"github.com/alexandre-pinon/epic-road-trip/service"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type userController struct {
@@ -47,10 +49,34 @@ func (ctrl *userController) GetAllUsers(ctx *gin.Context) (*model.AppResult, *mo
 }
 
 func (ctrl *userController) GetUserByID(ctx *gin.Context) (*model.AppResult, *model.AppError) {
-	return &model.AppResult{}, &model.AppError{
-		Err:        errors.New("TODO: implement GetUserByID"),
-		StatusCode: http.StatusNotImplemented,
+	id, err := primitive.ObjectIDFromHex(ctx.Param("id"))
+	if err != nil {
+		return nil, &model.AppError{
+			Err:        errors.New("invalid id"),
+			StatusCode: http.StatusBadRequest,
+		}
 	}
+
+	user, err := ctrl.userService.GetUserByID(id)
+	if err != nil {
+		return nil, &model.AppError{
+			Err:        err,
+			StatusCode: err.(*model.AppError).StatusCode,
+		}
+	}
+
+	var data *model.User
+	if user != nil {
+		data = user
+	} else {
+		data = &model.User{}
+	}
+
+	return &model.AppResult{
+		Data:       data,
+		Message:    fmt.Sprintf("User %s retrieved successfully", id.Hex()),
+		StatusCode: http.StatusOK,
+	}, nil
 }
 
 func (ctrl *userController) CreateUser(ctx *gin.Context) (*model.AppResult, *model.AppError) {
