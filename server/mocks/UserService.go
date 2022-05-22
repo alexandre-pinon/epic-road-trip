@@ -5,6 +5,7 @@ package mocks
 import (
 	model "github.com/alexandre-pinon/epic-road-trip/model"
 	mock "github.com/stretchr/testify/mock"
+	primitive "go.mongodb.org/mongo-driver/bson/primitive"
 
 	testing "testing"
 )
@@ -44,6 +45,29 @@ func (_m *UserService) GetAllUsers() (*[]model.User, error) {
 	var r1 error
 	if rf, ok := ret.Get(1).(func() error); ok {
 		r1 = rf()
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetUserByID provides a mock function with given fields: id
+func (_m *UserService) GetUserByID(id primitive.ObjectID) (*model.User, error) {
+	ret := _m.Called(id)
+
+	var r0 *model.User
+	if rf, ok := ret.Get(0).(func(primitive.ObjectID) *model.User); ok {
+		r0 = rf(id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.User)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(primitive.ObjectID) error); ok {
+		r1 = rf(id)
 	} else {
 		r1 = ret.Error(1)
 	}

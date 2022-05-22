@@ -75,7 +75,7 @@ func (suite *userServiceSuite) TestGetUserByID_NotFound_Negative() {
 	result, err := suite.svc.GetUserByID(id)
 	suite.Nil(result, "error is returned so result has to be nil")
 	suite.Error(err, "error not found")
-	suite.Equal("mongo: no documents in result", err.Error())
+	suite.Equal("user not found", err.Error())
 	suite.repo.AssertExpectations(suite.T())
 }
 

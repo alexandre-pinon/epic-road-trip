@@ -28,7 +28,15 @@ func (svc *userService) GetAllUsers() (*[]model.User, error) {
 }
 
 func (svc *userService) GetUserByID(id primitive.ObjectID) (*model.User, error) {
-	return &model.User{}, errors.New("TODO: implement GetUserByID")
+	user, _ := svc.userRepository.GetUserByID(id)
+	if user == nil {
+		return nil, &model.AppError{
+			Err:        errors.New("user not found"),
+			StatusCode: http.StatusNotFound,
+		}
+	}
+
+	return user, nil
 }
 
 func (svc *userService) CreateUser(user *model.User) error {
