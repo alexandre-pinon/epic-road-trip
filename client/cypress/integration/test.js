@@ -6,18 +6,12 @@ describe('The Register page', () => {
 
     it('test Twitter', () => {
         cy.visit('https://app2.abtasty.com/login?return_to=%2Fexperiments')
-        cy.get('#email').type('hehooo')
         cy.wait(3000)
-        cy.get('#email').clear()
+        cy.get(':nth-child(2) > [data-testid="inputWrapper"] > .Input__labelTop___30ZNZ').contains('mail')
+        cy.get('#email').type('tharick.khudoos@abtasty.com')
+        cy.get('#email').should('have.value', 'abtasty')
 
-        cy.get('.Layout__leftColumn___2R6OU').click()
-        //cy.get('[data-testid="password"] > .Input__label___1E1EQ').type('test')
-
-        //cy.get('.Input__errorMessage___k6Dtz').should('have.text', 'Please enter a valid email')
-
-        //cy.get('#email').clear().should('have.value', '');
-        cy.get('.FormButtonRow__buttonRow___3k8xJ > .Button__button___1rotk').should('be.disabled')
-
+        cy.get('.FormButtonRow__buttonRow___3k8xJ > .Button__button___1rotk').click()
     })
 
 

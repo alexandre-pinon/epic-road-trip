@@ -89,6 +89,10 @@ describe('The profile page', () => {
         })
     })
 
+
+
+
+
     it('new firstname and new lastname new email new mobile values are good', () => {
         cy.visit('http://localhost:3000/profile') // change URL to match your dev URL
         cy.wait(500)
@@ -119,9 +123,4 @@ describe('The profile page', () => {
             cy.get('#errorMessageLengthNewFirstName').contains('The mobile is not valid')
         })
     })
-
-
-
-
-
 })

@@ -1,6 +1,5 @@
 describe('The Register page', () => {
 
-
     it('check creation of a account', () => {
         cy.visit('http://localhost:3000/register') // change URL to match your dev URL
         cy.wait(500)
