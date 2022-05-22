@@ -20,9 +20,20 @@ func NewUserService(repo repository.UserRepository) UserService {
 	return &userService{repo}
 }
 
-func (service *userService) CreateUser(user *model.User) error {
-	return &model.AppError{
-		Err:        errors.New("TODO: implement CreateUser"),
-		StatusCode: http.StatusNotImplemented,
+func (svc *userService) CreateUser(user *model.User) error {
+	if user == nil {
+		return &model.AppError{
+			Err:        errors.New("user is nil pointer"),
+			StatusCode: http.StatusInternalServerError,
+		}
 	}
+
+	if err := svc.userRepository.CreateUser(user); err != nil {
+		return &model.AppError{
+			Err:        err,
+			StatusCode: http.StatusInternalServerError,
+		}
+	}
+
+	return nil
 }

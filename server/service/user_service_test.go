@@ -11,16 +11,16 @@ import (
 
 type userServiceSuite struct {
 	suite.Suite
-	repo    *mocks.UserRepository
-	service UserService
+	repo *mocks.UserRepository
+	svc  UserService
 }
 
 func (suite *userServiceSuite) SetupTest() {
 	repo := new(mocks.UserRepository)
-	service := NewUserService(repo)
+	svc := NewUserService(repo)
 
 	suite.repo = repo
-	suite.service = service
+	suite.svc = svc
 }
 
 func (suite *userServiceSuite) TestCreateUser_Positive() {
@@ -35,13 +35,13 @@ func (suite *userServiceSuite) TestCreateUser_Positive() {
 
 	suite.repo.On("CreateUser", &user).Return(nil)
 
-	err := suite.service.CreateUser(&user)
+	err := suite.svc.CreateUser(&user)
 	suite.Nil(err, "err is a nil pointer so no error in this process")
 	suite.repo.AssertExpectations(suite.T())
 }
 
 func (suite *userServiceSuite) TestCreateUser_NilPointer_Negative() {
-	err := suite.service.CreateUser(nil)
+	err := suite.svc.CreateUser(nil)
 	suite.Error(err.(*model.AppError).Err, "error when create tweet with nil pointer")
 	suite.Assertions.Equal(err.(*model.AppError).StatusCode, http.StatusInternalServerError)
 	suite.repo.AssertExpectations(suite.T())
