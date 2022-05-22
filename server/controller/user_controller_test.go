@@ -31,8 +31,8 @@ func (suite *userControllerSuite) SetupTest() {
 	{
 		userRoutes := apiRoutes.Group("/user")
 		{
-			userRoutes.POST("/", utils.ServeHTTP(ctrl.CreateUser))
 			userRoutes.GET("/", utils.ServeHTTP(ctrl.GetAllUsers))
+			userRoutes.POST("/", utils.ServeHTTP(ctrl.CreateUser))
 		}
 	}
 	testServer := httptest.NewServer(router)
@@ -44,37 +44,6 @@ func (suite *userControllerSuite) SetupTest() {
 
 func (suite *userControllerSuite) TearDownTest() {
 	defer suite.testServer.Close()
-}
-
-func (suite *userControllerSuite) TestCreateUser_Positive() {
-	user := model.User{
-		Firstname: "yoimiya",
-		Lastname:  "naganohara",
-		Email:     "yoimiya.naganohara@gmail.com",
-		Password:  "12345678",
-		Phone:     "+33612345678",
-		Trips:     []*model.RoadTrip{},
-	}
-
-	suite.svc.On("CreateUser", &user).Return(nil)
-
-	requestBody, err := json.Marshal(&user)
-	suite.NoError(err, "can not marshal struct to json")
-
-	response, err := http.Post(
-		fmt.Sprintf("%s/api/user", suite.testServer.URL),
-		"application/json",
-		bytes.NewBuffer(requestBody),
-	)
-	suite.NoError(err, "no error when calling the endpoint")
-	defer response.Body.Close()
-
-	responseBody := model.Response{}
-	json.NewDecoder(response.Body).Decode(&responseBody)
-
-	suite.Equal(http.StatusCreated, response.StatusCode)
-	suite.Equal("User created successfully", responseBody.Message)
-	suite.svc.AssertExpectations(suite.T())
 }
 
 func (suite *userControllerSuite) TestGetAllUsers_Positive() {
@@ -116,6 +85,37 @@ func (suite *userControllerSuite) TestGetAllUsers_Positive() {
 
 	suite.Equal(http.StatusOK, response.StatusCode)
 	suite.Equal(responseBody.Message, "Users retrieved successfully")
+	suite.svc.AssertExpectations(suite.T())
+}
+
+func (suite *userControllerSuite) TestCreateUser_Positive() {
+	user := model.User{
+		Firstname: "yoimiya",
+		Lastname:  "naganohara",
+		Email:     "yoimiya.naganohara@gmail.com",
+		Password:  "12345678",
+		Phone:     "+33612345678",
+		Trips:     []*model.RoadTrip{},
+	}
+
+	suite.svc.On("CreateUser", &user).Return(nil)
+
+	requestBody, err := json.Marshal(&user)
+	suite.NoError(err, "can not marshal struct to json")
+
+	response, err := http.Post(
+		fmt.Sprintf("%s/api/user", suite.testServer.URL),
+		"application/json",
+		bytes.NewBuffer(requestBody),
+	)
+	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
+
+	responseBody := model.Response{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusCreated, response.StatusCode)
+	suite.Equal("User created successfully", responseBody.Message)
 	suite.svc.AssertExpectations(suite.T())
 }
 

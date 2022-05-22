@@ -13,12 +13,16 @@ type userService struct {
 }
 
 type UserService interface {
-	CreateUser(user *model.User) error
 	GetAllUsers() (*[]model.User, error)
+	CreateUser(user *model.User) error
 }
 
 func NewUserService(repo repository.UserRepository) UserService {
 	return &userService{repo}
+}
+
+func (svc *userService) GetAllUsers() (*[]model.User, error) {
+	return svc.userRepository.GetAllUsers()
 }
 
 func (svc *userService) CreateUser(user *model.User) error {
@@ -37,8 +41,4 @@ func (svc *userService) CreateUser(user *model.User) error {
 	}
 
 	return nil
-}
-
-func (svc *userService) GetAllUsers() (*[]model.User, error) {
-	return svc.userRepository.GetAllUsers()
 }

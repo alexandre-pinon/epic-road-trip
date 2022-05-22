@@ -23,30 +23,6 @@ func (suite *userServiceSuite) SetupTest() {
 	suite.svc = svc
 }
 
-func (suite *userServiceSuite) TestCreateUser_Positive() {
-	user := model.User{
-		Firstname: "yoimiya",
-		Lastname:  "naganohara",
-		Email:     "yoimiya.naganohara@gmail.com",
-		Password:  "12345678",
-		Phone:     "+33612345678",
-		Trips:     []*model.RoadTrip{},
-	}
-
-	suite.repo.On("CreateUser", &user).Return(nil)
-
-	err := suite.svc.CreateUser(&user)
-	suite.NoError(err, "no error when create user with valid input")
-	suite.repo.AssertExpectations(suite.T())
-}
-
-func (suite *userServiceSuite) TestCreateUser_NilPointer_Negative() {
-	err := suite.svc.CreateUser(nil)
-	suite.Error(err.(*model.AppError).Err, "error when create user with nil pointer")
-	suite.Assertions.Equal(http.StatusInternalServerError, err.(*model.AppError).StatusCode)
-	suite.repo.AssertExpectations(suite.T())
-}
-
 func (suite *userServiceSuite) TestGetAllUsers_EmptySlice_Positive() {
 	emptyUsers := []model.User(nil)
 	suite.repo.On("GetAllUsers").Return(&emptyUsers, nil)
@@ -87,6 +63,30 @@ func (suite *userServiceSuite) TestGetAllUsers_FilledSlice_Positive() {
 	suite.NoError(err, "no error when get all users")
 	suite.Equal(len(users), len(*result), "users and result should have the same length")
 	suite.Equal(users, *result, "result and users are the same")
+}
+
+func (suite *userServiceSuite) TestCreateUser_Positive() {
+	user := model.User{
+		Firstname: "yoimiya",
+		Lastname:  "naganohara",
+		Email:     "yoimiya.naganohara@gmail.com",
+		Password:  "12345678",
+		Phone:     "+33612345678",
+		Trips:     []*model.RoadTrip{},
+	}
+
+	suite.repo.On("CreateUser", &user).Return(nil)
+
+	err := suite.svc.CreateUser(&user)
+	suite.NoError(err, "no error when create user with valid input")
+	suite.repo.AssertExpectations(suite.T())
+}
+
+func (suite *userServiceSuite) TestCreateUser_NilPointer_Negative() {
+	err := suite.svc.CreateUser(nil)
+	suite.Error(err.(*model.AppError).Err, "error when create user with nil pointer")
+	suite.Assertions.Equal(http.StatusInternalServerError, err.(*model.AppError).StatusCode)
+	suite.repo.AssertExpectations(suite.T())
 }
 
 func TestUserService(t *testing.T) {
