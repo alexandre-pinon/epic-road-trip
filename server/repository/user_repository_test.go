@@ -33,8 +33,8 @@ func (suite *userRepositorySuite) TearDownTest() {
 func (suite *userRepositorySuite) TestGetAllUsers_EmptySlice_Positive() {
 	users, err := suite.repo.GetAllUsers()
 	suite.NoError(err, "no error when get all users when the table is empty")
-	suite.Equal(len(*users), 0, "length of users should be 0, since it is empty slice")
-	suite.Equal(*users, []model.User(nil), "users is an empty slice")
+	suite.Equal(0, len(*users), "length of users should be 0, since it is empty slice")
+	suite.Equal([]model.User(nil), *users, "users is an empty slice")
 }
 
 func (suite *userRepositorySuite) TestGetAllUsers_FilledRecords_Positive() {
@@ -56,7 +56,7 @@ func (suite *userRepositorySuite) TestGetAllUsers_FilledRecords_Positive() {
 
 	users, err := suite.repo.GetAllUsers()
 	suite.NoError(err, "no error when get all users when the table is empty")
-	suite.Equal(len(*users), 3, "insert 3 records before the all data, so it should contain three users")
+	suite.Equal(3, len(*users), "insert 3 records before the all data, so it should contain three users")
 }
 
 func (suite *userRepositorySuite) TestCreateUser_Positive() {

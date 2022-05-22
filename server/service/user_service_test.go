@@ -43,7 +43,7 @@ func (suite *userServiceSuite) TestCreateUser_Positive() {
 func (suite *userServiceSuite) TestCreateUser_NilPointer_Negative() {
 	err := suite.svc.CreateUser(nil)
 	suite.Error(err.(*model.AppError).Err, "error when create tweet with nil pointer")
-	suite.Assertions.Equal(err.(*model.AppError).StatusCode, http.StatusInternalServerError)
+	suite.Assertions.Equal(http.StatusInternalServerError, err.(*model.AppError).StatusCode)
 	suite.repo.AssertExpectations(suite.T())
 }
 
@@ -52,7 +52,7 @@ func (suite *userServiceSuite) TestGetAllUsers_EmptySlice_Positive() {
 	suite.repo.On("GetAllUsers").Return(&emptyUsers, nil)
 	users, err := suite.svc.GetAllUsers()
 	suite.NoError(err, "no error when get all users")
-	suite.Equal(len(*users), 0, "users is a empty slice object")
+	suite.Equal(0, len(*users), "users is a empty slice object")
 }
 
 func (suite *userServiceSuite) TestGetAllUsers_FilledSlice_Positive() {
@@ -85,8 +85,8 @@ func (suite *userServiceSuite) TestGetAllUsers_FilledSlice_Positive() {
 	suite.repo.On("GetAllUsers").Return(&users, nil)
 	result, err := suite.svc.GetAllUsers()
 	suite.NoError(err, "no error when get all users")
-	suite.Equal(len(*result), len(users), "users and result should have the same length")
-	suite.Equal(*result, users, "result and users are the same")
+	suite.Equal(len(users), len(*result), "users and result should have the same length")
+	suite.Equal(users, *result, "result and users are the same")
 }
 
 func TestUserService(t *testing.T) {
