@@ -40,21 +40,37 @@ func (suite *userRepositorySuite) TestGetAllUsers_EmptySlice_Positive() {
 }
 
 func (suite *userRepositorySuite) TestGetAllUsers_FilledRecords_Positive() {
-	user := model.User{
-		Firstname: "yoimiya",
-		Lastname:  "naganohara",
-		Email:     "yoimiya.naganohara@gmail.com",
-		Password:  "12345678",
-		Phone:     "+33612345678",
-		Trips:     []*model.RoadTrip{},
+	insertUsers := []model.User{
+		{
+			Firstname: "yoimiya",
+			Lastname:  "naganohara",
+			Email:     "yoimiya.naganohara@gmail.com",
+			Password:  "12345678",
+			Phone:     "+33612345678",
+			Trips:     []*model.RoadTrip{},
+		},
+		{
+			Firstname: "hu",
+			Lastname:  "tao",
+			Email:     "hu.tao@gmail.com",
+			Password:  "23456789",
+			Phone:     "+33623456789",
+			Trips:     []*model.RoadTrip{},
+		},
+		{
+			Firstname: "kokomi",
+			Lastname:  "sangonomiya",
+			Email:     "kokomi.sangonomiya@gmail.com",
+			Password:  "87654321",
+			Phone:     "+33687654321",
+			Trips:     []*model.RoadTrip{},
+		},
 	}
 
-	_, err := suite.repo.CreateUser(&user)
-	suite.NoError(err, "no error when create user with valid input")
-	_, err = suite.repo.CreateUser(&user)
-	suite.NoError(err, "no error when create user with valid input")
-	_, err = suite.repo.CreateUser(&user)
-	suite.NoError(err, "no error when create user with valid input")
+	for _, user := range insertUsers {
+		_, err := suite.repo.CreateUser(&user)
+		suite.NoError(err, "no error when create user with valid input")
+	}
 
 	users, err := suite.repo.GetAllUsers()
 	suite.NoError(err, "no error when get all users when the table is empty")

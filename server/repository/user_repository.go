@@ -4,9 +4,11 @@ import (
 	"context"
 
 	"github.com/alexandre-pinon/epic-road-trip/model"
+	"github.com/alexandre-pinon/epic-road-trip/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type userRepository struct {
@@ -21,7 +23,18 @@ type UserRepository interface {
 }
 
 func NewUserRepository(db *mongo.Database) UserRepository {
-	return &userRepository{db, db.Collection("user")}
+	coll := db.Collection("user")
+	indexes := []mongo.IndexModel{{
+		Keys:    bson.D{{Key: "email", Value: 1}},
+		Options: options.Index().SetUnique(true),
+	}, {
+		Keys:    bson.D{{Key: "phone", Value: 1}},
+		Options: options.Index().SetUnique(true),
+	}}
+
+	utils.AddIndexes(coll, indexes)
+
+	return &userRepository{db, coll}
 }
 
 func (repo *userRepository) GetAllUsers() (*[]model.User, error) {
