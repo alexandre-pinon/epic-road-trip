@@ -14,6 +14,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/suite"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type userControllerSuite struct {
@@ -231,6 +232,47 @@ func (suite *userControllerSuite) TestCreateUser_InvalidJSON_Negative() {
 	suite.Equal("Invalid email format", responseBody.ValErrors[2].Message)
 	suite.Equal("Should be at least 8 characters", responseBody.ValErrors[3].Message)
 	suite.Equal("Invalid phone format", responseBody.ValErrors[4].Message)
+	suite.svc.AssertExpectations(suite.T())
+}
+
+func (suite *userControllerSuite) TestCreateUser_DupKey_Negative() {
+	user := model.User{
+		Firstname: "yoimiya",
+		Lastname:  "naganohara",
+		Email:     "yoimiya.naganohara@gmail.com",
+		Password:  "12345678",
+		Phone:     "+33612345678",
+		Trips:     []*model.RoadTrip{},
+	}
+
+	suite.svc.On("CreateUser", &user).Return(&model.AppError{
+		StatusCode: http.StatusInternalServerError,
+		Err: mongo.WriteException{
+			WriteErrors: mongo.WriteErrors{{
+				Code:    11000,
+				Message: "E11000 duplicate key error collection: dev-epic-road-trip-db.user index: email_1 dup key: { email: \"yoimiya.naganohara@gmail.com\" }"},
+			},
+		},
+	})
+
+	requestBody, err := json.Marshal(&user)
+	suite.NoError(err, "can not marshal struct to json")
+
+	response, err := http.Post(
+		fmt.Sprintf("%s/api/user", suite.testServer.URL),
+		"application/json",
+		bytes.NewBuffer(requestBody),
+	)
+	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
+
+	responseBody := model.AppResponse{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusBadRequest, response.StatusCode)
+	suite.Equal("invalid json request body", responseBody.Message)
+	suite.Empty(responseBody.Data)
+	suite.Equal("Email is already taken", responseBody.ValErrors[0].Message)
 	suite.svc.AssertExpectations(suite.T())
 }
 
