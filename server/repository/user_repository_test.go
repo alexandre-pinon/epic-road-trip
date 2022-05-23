@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type userRepositorySuite struct {
@@ -86,11 +87,12 @@ func (suite *userRepositorySuite) TestGetUserByID_NotFound_Negative() {
 }
 
 func (suite *userRepositorySuite) TestGetUserByID_Exists_Positive() {
+	password := "12345678"
 	user := model.User{
 		Firstname: "yoimiya",
 		Lastname:  "naganohara",
 		Email:     "yoimiya.naganohara@gmail.com",
-		Password:  "12345678",
+		Password:  password,
 		Phone:     "+33612345678",
 		Trips:     []*model.RoadTrip{},
 	}
@@ -102,6 +104,8 @@ func (suite *userRepositorySuite) TestGetUserByID_Exists_Positive() {
 	suite.NoError(err, "no error because user is found")
 	suite.Equal(user.Firstname, (*result).Firstname, "should be equal between result and user")
 	suite.Equal(user.Email, (*result).Email, "should be equal between result and user")
+	suite.NotEqual(password, (*result).Password, "password should be hashed")
+	suite.Nil(bcrypt.CompareHashAndPassword([]byte((*result).Password), []byte(password)))
 }
 
 func (suite *userRepositorySuite) TestCreateUser_Positive() {
@@ -116,11 +120,6 @@ func (suite *userRepositorySuite) TestCreateUser_Positive() {
 
 	_, err := suite.repo.CreateUser(&user)
 	suite.NoError(err, "no error when create user with valid input")
-}
-
-func (suite *userRepositorySuite) TestCreateUser_NilPointer_Negative() {
-	_, err := suite.repo.CreateUser(nil)
-	suite.Error(err, "create error with nil input returns error")
 }
 
 func (suite *userRepositorySuite) TestCreateUser_EmptyFields_Positive() {
