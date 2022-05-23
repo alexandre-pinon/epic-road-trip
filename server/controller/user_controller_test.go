@@ -231,7 +231,6 @@ func (suite *userControllerSuite) TestCreateUser_InvalidJSON_Negative() {
 	suite.Equal("Invalid email format", responseBody.ValErrors[2].Message)
 	suite.Equal("Should be at least 8 characters", responseBody.ValErrors[3].Message)
 	suite.Equal("Invalid phone format", responseBody.ValErrors[4].Message)
-	suite.Equal("This field is required", responseBody.ValErrors[5].Message)
 	suite.svc.AssertExpectations(suite.T())
 }
 

@@ -59,10 +59,7 @@ func (ctrl *userController) GetUserByID(ctx *gin.Context) (*model.AppResult, *mo
 
 	user, err := ctrl.userService.GetUserByID(id)
 	if err != nil {
-		return nil, &model.AppError{
-			StatusCode: err.(*model.AppError).StatusCode,
-			Err:        err,
-		}
+		return nil, err.(*model.AppError)
 	}
 
 	return &model.AppResult{
@@ -83,10 +80,7 @@ func (ctrl *userController) CreateUser(ctx *gin.Context) (*model.AppResult, *mod
 	}
 
 	if err := ctrl.userService.CreateUser(&user); err != nil {
-		return nil, &model.AppError{
-			StatusCode: err.(*model.AppError).StatusCode,
-			Err:        err,
-		}
+		return nil, err.(*model.AppError)
 	}
 
 	return &model.AppResult{
