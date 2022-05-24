@@ -128,6 +128,34 @@ func (suite *userRepositorySuite) TestCreateUser_EmptyFields_Positive() {
 	suite.NoError(err, "no error when create user with empty fields")
 }
 
+func (suite *userRepositorySuite) TestUpdateUser_Positive() {
+	user := model.User{
+		Firstname: "yoimiya",
+		Lastname:  "naganohara",
+		Email:     "yoimiya.naganohara@gmail.com",
+		Password:  "12345678",
+		Phone:     "+33612345678",
+		Trips:     []*model.RoadTrip{},
+	}
+
+	createResult, err := suite.repo.CreateUser(&user)
+	suite.NoError(err, "no error when create user with valid input")
+
+	id := createResult.InsertedID.(primitive.ObjectID)
+	user.Firstname = "yoiyoiyoimiya"
+	user.Phone = "+33712345678"
+
+	updateResult, err := suite.repo.UpdateUser(id, &user)
+	suite.Require().NoError(err, "no error when update user with valid input")
+
+	suite.Equal(1, updateResult.ModifiedCount)
+
+	userResult, err := suite.repo.GetUserByID(id)
+	suite.NoError(err, "no error because user is found")
+	suite.Equal("yoiyoiyoimiya", (*userResult).Firstname, "should be equal between result and user")
+	suite.Equal("+33712345678", (*userResult).Phone, "should be equal between result and user")
+}
+
 func TestUserRepository(t *testing.T) {
 	cfg := config.GetConfig(config.Test)
 	suite.Run(t, &userRepositorySuite{cfg: *cfg})

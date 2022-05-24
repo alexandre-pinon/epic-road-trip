@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"errors"
 
 	"github.com/alexandre-pinon/epic-road-trip/model"
 	"github.com/alexandre-pinon/epic-road-trip/utils"
@@ -21,6 +22,7 @@ type UserRepository interface {
 	GetAllUsers() (*[]model.User, error)
 	GetUserByID(id primitive.ObjectID) (*model.User, error)
 	CreateUser(user *model.User) (*mongo.InsertOneResult, error)
+	UpdateUser(id primitive.ObjectID, user *model.User) (*mongo.UpdateResult, error)
 }
 
 func NewUserRepository(db *mongo.Database) UserRepository {
@@ -74,4 +76,8 @@ func (repo *userRepository) CreateUser(user *model.User) (*mongo.InsertOneResult
 
 	user.Password = string(hashed)
 	return repo.coll.InsertOne(context.Background(), user)
+}
+
+func (repo *userRepository) UpdateUser(id primitive.ObjectID, user *model.User) (*mongo.UpdateResult, error) {
+	return nil, errors.New("TODO: implement UpdateUser")
 }
