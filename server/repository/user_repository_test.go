@@ -142,9 +142,9 @@ func (suite *userRepositorySuite) TestUpdateUser_Positive() {
 	user.Phone = "+33712345678"
 
 	updateResult, err := suite.repo.UpdateUser(id, &user)
-	suite.Require().Equal(err, "no error when update user with valid input")
+	suite.Require().NoError(err, "no error when update user with valid input")
 
-	suite.Equal(1, updateResult.ModifiedCount)
+	suite.Equal(int64(1), updateResult.ModifiedCount)
 
 	userResult, err := suite.repo.GetUserByID(id)
 	suite.NoError(err, "no error because user is found")

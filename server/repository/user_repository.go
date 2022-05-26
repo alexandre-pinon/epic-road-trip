@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"errors"
 
 	"github.com/alexandre-pinon/epic-road-trip/model"
 	"github.com/alexandre-pinon/epic-road-trip/utils"
@@ -72,5 +71,7 @@ func (repo *userRepository) CreateUser(user *model.User) (*mongo.InsertOneResult
 }
 
 func (repo *userRepository) UpdateUser(id primitive.ObjectID, user *model.User) (*mongo.UpdateResult, error) {
-	return nil, errors.New("TODO: implement UpdateUser")
+	update := bson.D{{Key: "$set", Value: user}}
+
+	return repo.coll.UpdateByID(context.Background(), id, update)
 }
