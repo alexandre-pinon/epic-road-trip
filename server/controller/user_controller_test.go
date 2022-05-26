@@ -73,7 +73,6 @@ func (suite *userControllerSuite) TestGetAllUsers_FilledSlice_Positive() {
 			Firstname: "yoimiya",
 			Lastname:  "naganohara",
 			Email:     "yoimiya.naganohara@gmail.com",
-			Password:  "12345678",
 			Phone:     "+33612345678",
 			Trips:     []*model.RoadTrip{},
 		},
@@ -81,7 +80,6 @@ func (suite *userControllerSuite) TestGetAllUsers_FilledSlice_Positive() {
 			Firstname: "hu",
 			Lastname:  "tao",
 			Email:     "hu.tao@gmail.com",
-			Password:  "23456789",
 			Phone:     "+33623456789",
 			Trips:     []*model.RoadTrip{},
 		},
@@ -89,7 +87,6 @@ func (suite *userControllerSuite) TestGetAllUsers_FilledSlice_Positive() {
 			Firstname: "kokomi",
 			Lastname:  "sangonomiya",
 			Email:     "kokomi.sangonomiya@gmail.com",
-			Password:  "87654321",
 			Phone:     "+33687654321",
 			Trips:     []*model.RoadTrip{},
 		},
@@ -116,7 +113,6 @@ func (suite *userControllerSuite) TestGetUserByID_Exists_Positive() {
 		Firstname: "yoimiya",
 		Lastname:  "naganohara",
 		Email:     "yoimiya.naganohara@gmail.com",
-		Password:  "12345678",
 		Phone:     "+33612345678",
 		Trips:     []*model.RoadTrip{},
 	}
@@ -152,18 +148,21 @@ func (suite *userControllerSuite) TestGetUserByID_InvalidID_Negative() {
 }
 
 func (suite *userControllerSuite) TestCreateUser_Positive() {
-	user := model.User{
-		Firstname: "yoimiya",
-		Lastname:  "naganohara",
-		Email:     "yoimiya.naganohara@gmail.com",
-		Password:  "12345678",
-		Phone:     "+33612345678",
-		Trips:     []*model.RoadTrip{},
+	userFormData := model.UserFormData{
+		User: model.User{
+			Firstname: "yoimiya",
+			Lastname:  "naganohara",
+			Email:     "yoimiya.naganohara@gmail.com",
+			Phone:     "+33612345678",
+			Trips:     []*model.RoadTrip{},
+		},
+		Password: "12345678",
 	}
 
-	suite.svc.On("CreateUser", &user).Return(nil)
+	suite.svc.On("HashPassword", &userFormData).Return(nil)
+	suite.svc.On("CreateUser", &userFormData.User).Return(nil)
 
-	requestBody, err := json.Marshal(&user)
+	requestBody, err := json.Marshal(&userFormData)
 	suite.NoError(err, "can not marshal struct to json")
 
 	response, err := http.Post(
@@ -202,15 +201,18 @@ func (suite *userControllerSuite) TestCreateUser_NilBody_Negative() {
 }
 
 func (suite *userControllerSuite) TestCreateUser_InvalidJSON_Negative() {
-	user := model.User{
-		Firstname: "y",
-		Lastname:  "naganoharanaganoharanaganoharanaganoharanaganoharanaganoharanaganoharanaganoharanaganohara",
-		Email:     "bademail.com",
-		Password:  "root",
-		Phone:     "-336123456789",
+	userFormData := model.UserFormData{
+		User: model.User{
+			Firstname: "y",
+			Lastname:  "naganoharanaganoharanaganoharanaganoharanaganoharanaganoharanaganoharanaganoharanaganohara",
+			Email:     "bademail.com",
+			Phone:     "-336123456789",
+			Trips:     []*model.RoadTrip{},
+		},
+		Password: "root",
 	}
 
-	requestBody, err := json.Marshal(&user)
+	requestBody, err := json.Marshal(&userFormData)
 	suite.NoError(err, "can not marshal struct to json")
 
 	response, err := http.Post(
@@ -227,25 +229,33 @@ func (suite *userControllerSuite) TestCreateUser_InvalidJSON_Negative() {
 	suite.Equal(http.StatusBadRequest, response.StatusCode)
 	suite.Equal("invalid json request body", responseBody.Message)
 	suite.Empty(responseBody.Data)
+	suite.Equal("Firstname", responseBody.ValErrors[0].Field)
 	suite.Equal("Should be at least 2 characters", responseBody.ValErrors[0].Message)
+	suite.Equal("Lastname", responseBody.ValErrors[1].Field)
 	suite.Equal("Should be less than 50 characters", responseBody.ValErrors[1].Message)
+	suite.Equal("Email", responseBody.ValErrors[2].Field)
 	suite.Equal("Invalid email format", responseBody.ValErrors[2].Message)
-	suite.Equal("Should be at least 8 characters", responseBody.ValErrors[3].Message)
-	suite.Equal("Invalid phone format", responseBody.ValErrors[4].Message)
+	suite.Equal("Phone", responseBody.ValErrors[3].Field)
+	suite.Equal("Invalid phone format", responseBody.ValErrors[3].Message)
+	suite.Equal("Password", responseBody.ValErrors[4].Field)
+	suite.Equal("Should be at least 8 characters", responseBody.ValErrors[4].Message)
 	suite.svc.AssertExpectations(suite.T())
 }
 
 func (suite *userControllerSuite) TestCreateUser_DupKey_Negative() {
-	user := model.User{
-		Firstname: "yoimiya",
-		Lastname:  "naganohara",
-		Email:     "yoimiya.naganohara@gmail.com",
-		Password:  "12345678",
-		Phone:     "+33612345678",
-		Trips:     []*model.RoadTrip{},
+	userFormData := model.UserFormData{
+		User: model.User{
+			Firstname: "yoimiya",
+			Lastname:  "naganohara",
+			Email:     "yoimiya.naganohara@gmail.com",
+			Phone:     "+33612345678",
+			Trips:     []*model.RoadTrip{},
+		},
+		Password: "12345678",
 	}
 
-	suite.svc.On("CreateUser", &user).Return(&model.AppError{
+	suite.svc.On("HashPassword", &userFormData).Return(nil)
+	suite.svc.On("CreateUser", &userFormData.User).Return(&model.AppError{
 		StatusCode: http.StatusInternalServerError,
 		Err: mongo.WriteException{
 			WriteErrors: mongo.WriteErrors{{
@@ -255,7 +265,7 @@ func (suite *userControllerSuite) TestCreateUser_DupKey_Negative() {
 		},
 	})
 
-	requestBody, err := json.Marshal(&user)
+	requestBody, err := json.Marshal(&userFormData)
 	suite.NoError(err, "can not marshal struct to json")
 
 	response, err := http.Post(

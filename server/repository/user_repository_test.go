@@ -9,7 +9,6 @@ import (
 	"github.com/stretchr/testify/suite"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type userRepositorySuite struct {
@@ -43,28 +42,28 @@ func (suite *userRepositorySuite) TestGetAllUsers_EmptySlice_Positive() {
 func (suite *userRepositorySuite) TestGetAllUsers_FilledRecords_Positive() {
 	insertUsers := []model.User{
 		{
-			Firstname: "yoimiya",
-			Lastname:  "naganohara",
-			Email:     "yoimiya.naganohara@gmail.com",
-			Password:  "12345678",
-			Phone:     "+33612345678",
-			Trips:     []*model.RoadTrip{},
+			Firstname:      "yoimiya",
+			Lastname:       "naganohara",
+			Email:          "yoimiya.naganohara@gmail.com",
+			HashedPassword: "12345678",
+			Phone:          "+33612345678",
+			Trips:          []*model.RoadTrip{},
 		},
 		{
-			Firstname: "hu",
-			Lastname:  "tao",
-			Email:     "hu.tao@gmail.com",
-			Password:  "23456789",
-			Phone:     "+33623456789",
-			Trips:     []*model.RoadTrip{},
+			Firstname:      "hu",
+			Lastname:       "tao",
+			Email:          "hu.tao@gmail.com",
+			HashedPassword: "23456789",
+			Phone:          "+33623456789",
+			Trips:          []*model.RoadTrip{},
 		},
 		{
-			Firstname: "kokomi",
-			Lastname:  "sangonomiya",
-			Email:     "kokomi.sangonomiya@gmail.com",
-			Password:  "87654321",
-			Phone:     "+33687654321",
-			Trips:     []*model.RoadTrip{},
+			Firstname:      "kokomi",
+			Lastname:       "sangonomiya",
+			Email:          "kokomi.sangonomiya@gmail.com",
+			HashedPassword: "87654321",
+			Phone:          "+33687654321",
+			Trips:          []*model.RoadTrip{},
 		},
 	}
 
@@ -87,14 +86,13 @@ func (suite *userRepositorySuite) TestGetUserByID_NotFound_Negative() {
 }
 
 func (suite *userRepositorySuite) TestGetUserByID_Exists_Positive() {
-	password := "12345678"
 	user := model.User{
-		Firstname: "yoimiya",
-		Lastname:  "naganohara",
-		Email:     "yoimiya.naganohara@gmail.com",
-		Password:  password,
-		Phone:     "+33612345678",
-		Trips:     []*model.RoadTrip{},
+		Firstname:      "yoimiya",
+		Lastname:       "naganohara",
+		Email:          "yoimiya.naganohara@gmail.com",
+		HashedPassword: "12345678",
+		Phone:          "+33612345678",
+		Trips:          []*model.RoadTrip{},
 	}
 
 	id, err := suite.repo.CreateUser(&user)
@@ -104,18 +102,16 @@ func (suite *userRepositorySuite) TestGetUserByID_Exists_Positive() {
 	suite.NoError(err, "no error because user is found")
 	suite.Equal(user.Firstname, (*result).Firstname, "should be equal between result and user")
 	suite.Equal(user.Email, (*result).Email, "should be equal between result and user")
-	suite.NotEqual(password, (*result).Password, "password should be hashed")
-	suite.Nil(bcrypt.CompareHashAndPassword([]byte((*result).Password), []byte(password)))
 }
 
 func (suite *userRepositorySuite) TestCreateUser_Positive() {
 	user := model.User{
-		Firstname: "yoimiya",
-		Lastname:  "naganohara",
-		Email:     "yoimiya.naganohara@gmail.com",
-		Password:  "12345678",
-		Phone:     "+33612345678",
-		Trips:     []*model.RoadTrip{},
+		Firstname:      "yoimiya",
+		Lastname:       "naganohara",
+		Email:          "yoimiya.naganohara@gmail.com",
+		HashedPassword: "12345678",
+		Phone:          "+33612345678",
+		Trips:          []*model.RoadTrip{},
 	}
 
 	_, err := suite.repo.CreateUser(&user)
@@ -130,12 +126,12 @@ func (suite *userRepositorySuite) TestCreateUser_EmptyFields_Positive() {
 
 func (suite *userRepositorySuite) TestUpdateUser_Positive() {
 	user := model.User{
-		Firstname: "yoimiya",
-		Lastname:  "naganohara",
-		Email:     "yoimiya.naganohara@gmail.com",
-		Password:  "12345678",
-		Phone:     "+33612345678",
-		Trips:     []*model.RoadTrip{},
+		Firstname:      "yoimiya",
+		Lastname:       "naganohara",
+		Email:          "yoimiya.naganohara@gmail.com",
+		HashedPassword: "12345678",
+		Phone:          "+33612345678",
+		Trips:          []*model.RoadTrip{},
 	}
 
 	createResult, err := suite.repo.CreateUser(&user)
@@ -146,7 +142,7 @@ func (suite *userRepositorySuite) TestUpdateUser_Positive() {
 	user.Phone = "+33712345678"
 
 	updateResult, err := suite.repo.UpdateUser(id, &user)
-	suite.Require().NoError(err, "no error when update user with valid input")
+	suite.Require().Equal(err, "no error when update user with valid input")
 
 	suite.Equal(1, updateResult.ModifiedCount)
 

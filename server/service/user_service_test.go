@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type userServiceSuite struct {
@@ -36,28 +37,28 @@ func (suite *userServiceSuite) TestGetAllUsers_EmptySlice_Positive() {
 func (suite *userServiceSuite) TestGetAllUsers_FilledSlice_Positive() {
 	users := []model.User{
 		{
-			Firstname: "yoimiya",
-			Lastname:  "naganohara",
-			Email:     "yoimiya.naganohara@gmail.com",
-			Password:  "12345678",
-			Phone:     "+33612345678",
-			Trips:     []*model.RoadTrip{},
+			Firstname:      "yoimiya",
+			Lastname:       "naganohara",
+			Email:          "yoimiya.naganohara@gmail.com",
+			HashedPassword: "12345678",
+			Phone:          "+33612345678",
+			Trips:          []*model.RoadTrip{},
 		},
 		{
-			Firstname: "hu",
-			Lastname:  "tao",
-			Email:     "hu.tao@gmail.com",
-			Password:  "23456789",
-			Phone:     "+33623456789",
-			Trips:     []*model.RoadTrip{},
+			Firstname:      "hu",
+			Lastname:       "tao",
+			Email:          "hu.tao@gmail.com",
+			HashedPassword: "23456789",
+			Phone:          "+33623456789",
+			Trips:          []*model.RoadTrip{},
 		},
 		{
-			Firstname: "kokomi",
-			Lastname:  "sangonomiya",
-			Email:     "kokomi.sangonomiya@gmail.com",
-			Password:  "87654321",
-			Phone:     "+33687654321",
-			Trips:     []*model.RoadTrip{},
+			Firstname:      "kokomi",
+			Lastname:       "sangonomiya",
+			Email:          "kokomi.sangonomiya@gmail.com",
+			HashedPassword: "87654321",
+			Phone:          "+33687654321",
+			Trips:          []*model.RoadTrip{},
 		},
 	}
 	suite.repo.On("GetAllUsers").Return(&users, nil)
@@ -83,12 +84,12 @@ func (suite *userServiceSuite) TestGetUserByID_NotFound_Negative() {
 func (suite *userServiceSuite) TestGetUserByID_Exists_Positive() {
 	id := primitive.NewObjectID()
 	user := model.User{
-		Firstname: "yoimiya",
-		Lastname:  "naganohara",
-		Email:     "yoimiya.naganohara@gmail.com",
-		Password:  "12345678",
-		Phone:     "+33612345678",
-		Trips:     []*model.RoadTrip{},
+		Firstname:      "yoimiya",
+		Lastname:       "naganohara",
+		Email:          "yoimiya.naganohara@gmail.com",
+		HashedPassword: "12345678",
+		Phone:          "+33612345678",
+		Trips:          []*model.RoadTrip{},
 	}
 
 	suite.repo.On("GetUserByID", id).Return(&user, nil)
@@ -101,12 +102,12 @@ func (suite *userServiceSuite) TestGetUserByID_Exists_Positive() {
 func (suite *userServiceSuite) TestCreateUser_Positive() {
 	id := &mongo.InsertOneResult{}
 	user := model.User{
-		Firstname: "yoimiya",
-		Lastname:  "naganohara",
-		Email:     "yoimiya.naganohara@gmail.com",
-		Password:  "12345678",
-		Phone:     "+33612345678",
-		Trips:     []*model.RoadTrip{},
+		Firstname:      "yoimiya",
+		Lastname:       "naganohara",
+		Email:          "yoimiya.naganohara@gmail.com",
+		HashedPassword: "12345678",
+		Phone:          "+33612345678",
+		Trips:          []*model.RoadTrip{},
 	}
 
 	suite.repo.On("CreateUser", &user).Return(id, nil)
@@ -121,6 +122,19 @@ func (suite *userServiceSuite) TestCreateUser_NilPointer_Negative() {
 	suite.Error(err.(*model.AppError).Err, "error when create user with nil pointer")
 	suite.Assertions.Equal(http.StatusInternalServerError, err.(*model.AppError).StatusCode)
 	suite.repo.AssertExpectations(suite.T())
+}
+
+func (suite *userServiceSuite) TestHashPassword_Positive() {
+	userFormData := model.UserFormData{
+		Password: "12345678",
+	}
+
+	suite.Empty(userFormData.HashedPassword, "Intial hashed password should be empty")
+
+	err := suite.svc.HashPassword(&userFormData)
+	suite.NoError(err, "no error when hashing password with valid input")
+	suite.NotEmpty(userFormData.HashedPassword, "Field hashed password should be filled")
+	suite.Nil(bcrypt.CompareHashAndPassword([]byte(userFormData.HashedPassword), []byte(userFormData.Password)))
 }
 
 func TestUserService(t *testing.T) {
