@@ -10,7 +10,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type userRepository struct {
@@ -69,12 +68,6 @@ func (repo *userRepository) GetUserByID(id primitive.ObjectID) (*model.User, err
 }
 
 func (repo *userRepository) CreateUser(user *model.User) (*mongo.InsertOneResult, error) {
-	hashed, err := bcrypt.GenerateFromPassword([]byte(user.Password), 8)
-	if err != nil {
-		return nil, err
-	}
-
-	user.Password = string(hashed)
 	return repo.coll.InsertOne(context.Background(), user)
 }
 

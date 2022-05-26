@@ -70,16 +70,23 @@ func (ctrl *userController) GetUserByID(ctx *gin.Context) (*model.AppResult, *mo
 }
 
 func (ctrl *userController) CreateUser(ctx *gin.Context) (*model.AppResult, *model.AppError) {
-	var user model.User
+	var userFormData model.UserFormData
 
-	if err := ctx.ShouldBindJSON(&user); err != nil {
+	if err := ctx.ShouldBindJSON(&userFormData); err != nil {
 		return nil, &model.AppError{
 			StatusCode: http.StatusBadRequest,
 			Err:        err,
 		}
 	}
 
-	if err := ctrl.userService.CreateUser(&user); err != nil {
+	if err := ctrl.userService.HashPassword(&userFormData); err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+		}
+	}
+
+	if err := ctrl.userService.CreateUser(&userFormData.User); err != nil {
 		return nil, err.(*model.AppError)
 	}
 

@@ -75,6 +75,20 @@ func (_m *UserService) GetUserByID(id primitive.ObjectID) (*model.User, error) {
 	return r0, r1
 }
 
+// HashPassword provides a mock function with given fields: user
+func (_m *UserService) HashPassword(user *model.UserFormData) error {
+	ret := _m.Called(user)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(*model.UserFormData) error); ok {
+		r0 = rf(user)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // NewUserService creates a new instance of UserService. It also registers the testing.TB interface on the mock and a cleanup function to assert the mocks expectations.
 func NewUserService(t testing.TB) *UserService {
 	mock := &UserService{}

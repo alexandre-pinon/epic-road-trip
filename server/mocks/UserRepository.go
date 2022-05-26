@@ -86,6 +86,29 @@ func (_m *UserRepository) GetUserByID(id primitive.ObjectID) (*model.User, error
 	return r0, r1
 }
 
+// UpdateUser provides a mock function with given fields: id, user
+func (_m *UserRepository) UpdateUser(id primitive.ObjectID, user *model.User) (*mongo.UpdateResult, error) {
+	ret := _m.Called(id, user)
+
+	var r0 *mongo.UpdateResult
+	if rf, ok := ret.Get(0).(func(primitive.ObjectID, *model.User) *mongo.UpdateResult); ok {
+		r0 = rf(id, user)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*mongo.UpdateResult)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(primitive.ObjectID, *model.User) error); ok {
+		r1 = rf(id, user)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // NewUserRepository creates a new instance of UserRepository. It also registers the testing.TB interface on the mock and a cleanup function to assert the mocks expectations.
 func NewUserRepository(t testing.TB) *UserRepository {
 	mock := &UserRepository{}

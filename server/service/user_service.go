@@ -7,6 +7,7 @@ import (
 	"github.com/alexandre-pinon/epic-road-trip/model"
 	"github.com/alexandre-pinon/epic-road-trip/repository"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type userService struct {
@@ -17,6 +18,7 @@ type UserService interface {
 	GetAllUsers() (*[]model.User, error)
 	GetUserByID(id primitive.ObjectID) (*model.User, error)
 	CreateUser(user *model.User) error
+	HashPassword(user *model.UserFormData) error
 }
 
 func NewUserService(repo repository.UserRepository) UserService {
@@ -54,5 +56,15 @@ func (svc *userService) CreateUser(user *model.User) error {
 		}
 	}
 
+	return nil
+}
+
+func (svc *userService) HashPassword(user *model.UserFormData) error {
+	hashed, err := bcrypt.GenerateFromPassword([]byte(user.Password), 8)
+	if err != nil {
+		return err
+	}
+
+	user.HashedPassword = string(hashed)
 	return nil
 }
