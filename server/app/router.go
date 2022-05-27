@@ -16,6 +16,7 @@ func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
 			userRoutes.GET("/:id", utils.ServeHTTP(controllers.UserController.GetUserByID))
 			userRoutes.POST("/", utils.ServeHTTP(controllers.UserController.CreateUser))
 			userRoutes.PUT("/:id", utils.ServeHTTP(controllers.UserController.UpdateUser))
+			userRoutes.DELETE("/:id", utils.ServeHTTP(controllers.UserController.DeleteUser))
 		}
 	}
 }

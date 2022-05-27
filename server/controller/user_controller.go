@@ -129,8 +129,21 @@ func (ctrl *userController) UpdateUser(ctx *gin.Context) (*model.AppResult, *mod
 }
 
 func (ctrl *userController) DeleteUser(ctx *gin.Context) (*model.AppResult, *model.AppError) {
-	return &model.AppResult{}, &model.AppError{
-		StatusCode: http.StatusNotImplemented,
-		Err:        errors.New("TODO: implement DeleteUser"),
+	id, err := primitive.ObjectIDFromHex(ctx.Param("id"))
+	if err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        errors.New("invalid id"),
+		}
 	}
+
+	if err := ctrl.userService.DeleteUser(id); err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	return &model.AppResult{
+		StatusCode: http.StatusOK,
+		Message:    "User deleted successfully",
+		Data:       struct{}{},
+	}, nil
 }
