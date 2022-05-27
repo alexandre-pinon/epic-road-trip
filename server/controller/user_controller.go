@@ -99,8 +99,30 @@ func (ctrl *userController) CreateUser(ctx *gin.Context) (*model.AppResult, *mod
 }
 
 func (ctrl *userController) UpdateUser(ctx *gin.Context) (*model.AppResult, *model.AppError) {
-	return &model.AppResult{}, &model.AppError{
-		StatusCode: http.StatusNotImplemented,
-		Err:        errors.New("TODO: implement UpdateUser"),
+	var user model.User
+
+	id, err := primitive.ObjectIDFromHex(ctx.Param("id"))
+	if err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        errors.New("invalid id"),
+		}
 	}
+
+	if err := ctx.ShouldBindJSON(&user); err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+	}
+
+	if err := ctrl.userService.UpdateUser(id, &user); err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	return &model.AppResult{
+		StatusCode: http.StatusOK,
+		Message:    "User updated successfully",
+		Data:       struct{}{},
+	}, nil
 }

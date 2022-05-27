@@ -290,7 +290,9 @@ func (suite *userControllerSuite) TestUpdateUser_Positive() {
 	id := primitive.NewObjectID()
 	user := model.User{
 		Firstname: "yoiyoi",
+		Lastname:  "miya",
 		Email:     "yoiyoi.miya@gmail.com",
+		Phone:     "+33612345678",
 	}
 
 	suite.svc.On("UpdateUser", id, &user).Return(nil)
@@ -319,13 +321,19 @@ func (suite *userControllerSuite) TestUpdateUser_Positive() {
 
 func (suite *userControllerSuite) TestUpdateUser_InvalidID_Negative() {
 	id := primitive.NewObjectID()
+	user := model.User{
+		Firstname: "yoiyoi",
+		Lastname:  "miya",
+		Email:     "yoiyoi.miya@gmail.com",
+		Phone:     "+33612345678",
+	}
 
-	requestBody, err := json.Marshal(&model.User{})
+	requestBody, err := json.Marshal(&user)
 	suite.NoError(err, "can not marshal struct to json")
 
 	request, err := http.NewRequest(
 		http.MethodPut,
-		fmt.Sprintf("%s/api/user/%s", suite.testServer.URL, id.Hex()),
+		fmt.Sprintf("%s/api/user/%s", suite.testServer.URL, id.Hex()+"bad"),
 		bytes.NewBuffer(requestBody),
 	)
 	suite.NoError(err, "no error when creating the request")
