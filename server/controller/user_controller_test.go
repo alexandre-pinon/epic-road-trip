@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/alexandre-pinon/epic-road-trip/middleware"
 	"github.com/alexandre-pinon/epic-road-trip/mocks"
 	"github.com/alexandre-pinon/epic-road-trip/model"
 	"github.com/alexandre-pinon/epic-road-trip/utils"
@@ -35,10 +36,10 @@ func (suite *userControllerSuite) SetupTest() {
 		userRoutes := apiRoutes.Group("/user")
 		{
 			userRoutes.GET("/", utils.ServeHTTP(ctrl.GetAllUsers))
-			userRoutes.GET("/:id", utils.ServeHTTP(ctrl.GetUserByID))
+			userRoutes.GET("/:id", middleware.CheckID(), utils.ServeHTTP(ctrl.GetUserByID))
 			userRoutes.POST("/", utils.ServeHTTP(ctrl.CreateUser))
-			userRoutes.PUT("/:id", utils.ServeHTTP(ctrl.UpdateUser))
-			userRoutes.DELETE("/:id", utils.ServeHTTP(ctrl.DeleteUser))
+			userRoutes.PUT("/:id", middleware.CheckID(), utils.ServeHTTP(ctrl.UpdateUser))
+			userRoutes.DELETE("/:id", middleware.CheckID(), utils.ServeHTTP(ctrl.DeleteUser))
 		}
 	}
 	testServer := httptest.NewServer(router)
@@ -169,7 +170,7 @@ func (suite *userControllerSuite) TestCreateUser_Positive() {
 
 	response, err := http.Post(
 		fmt.Sprintf("%s/api/user", suite.testServer.URL),
-		"application/json",
+		gin.MIMEJSON,
 		bytes.NewBuffer(requestBody),
 	)
 	suite.NoError(err, "no error when calling the endpoint")
@@ -186,7 +187,7 @@ func (suite *userControllerSuite) TestCreateUser_Positive() {
 func (suite *userControllerSuite) TestCreateUser_NilBody_Negative() {
 	response, err := http.Post(
 		fmt.Sprintf("%s/api/user", suite.testServer.URL),
-		"application/json",
+		gin.MIMEJSON,
 		bytes.NewBuffer(nil),
 	)
 	suite.NoError(err, "no error when calling the endpoint")
@@ -219,7 +220,7 @@ func (suite *userControllerSuite) TestCreateUser_InvalidJSON_Negative() {
 
 	response, err := http.Post(
 		fmt.Sprintf("%s/api/user", suite.testServer.URL),
-		"application/json",
+		gin.MIMEJSON,
 		bytes.NewBuffer(requestBody),
 	)
 	suite.NoError(err, "no error when calling the endpoint")
@@ -271,7 +272,7 @@ func (suite *userControllerSuite) TestCreateUser_DupKey_Negative() {
 
 	response, err := http.Post(
 		fmt.Sprintf("%s/api/user", suite.testServer.URL),
-		"application/json",
+		gin.MIMEJSON,
 		bytes.NewBuffer(requestBody),
 	)
 	suite.NoError(err, "no error when calling the endpoint")
@@ -307,7 +308,7 @@ func (suite *userControllerSuite) TestUpdateUser_Positive() {
 		bytes.NewBuffer(requestBody),
 	)
 	suite.NoError(err, "no error when creating the request")
-	request.Header.Add("Content-type", "application/json")
+	request.Header.Add("Content-type", gin.MIMEJSON)
 
 	response, err := http.DefaultClient.Do(request)
 	suite.NoError(err, "no error when calling the endpoint")
@@ -338,7 +339,7 @@ func (suite *userControllerSuite) TestUpdateUser_InvalidID_Negative() {
 		bytes.NewBuffer(requestBody),
 	)
 	suite.NoError(err, "no error when creating the request")
-	request.Header.Add("Content-type", "application/json")
+	request.Header.Add("Content-type", gin.MIMEJSON)
 
 	response, err := http.DefaultClient.Do(request)
 	suite.NoError(err, "no error when calling the endpoint")
@@ -370,7 +371,7 @@ func (suite *userControllerSuite) TestUpdateUser_InvalidJSON_Negative() {
 		bytes.NewBuffer(requestBody),
 	)
 	suite.NoError(err, "no error when creating the request")
-	request.Header.Add("Content-type", "application/json")
+	request.Header.Add("Content-type", gin.MIMEJSON)
 
 	response, err := http.DefaultClient.Do(request)
 	suite.NoError(err, "no error when calling the endpoint")

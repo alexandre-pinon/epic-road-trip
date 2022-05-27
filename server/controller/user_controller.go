@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 
@@ -51,22 +50,15 @@ func (ctrl *userController) GetAllUsers(ctx *gin.Context) (*model.AppResult, *mo
 }
 
 func (ctrl *userController) GetUserByID(ctx *gin.Context) (*model.AppResult, *model.AppError) {
-	id, err := primitive.ObjectIDFromHex(ctx.Param("id"))
-	if err != nil {
-		return nil, &model.AppError{
-			StatusCode: http.StatusBadRequest,
-			Err:        errors.New("invalid id"),
-		}
-	}
-
-	user, err := ctrl.userService.GetUserByID(id)
+	id, _ := ctx.Get("id")
+	user, err := ctrl.userService.GetUserByID(id.(primitive.ObjectID))
 	if err != nil {
 		return nil, err.(*model.AppError)
 	}
 
 	return &model.AppResult{
 		StatusCode: http.StatusOK,
-		Message:    fmt.Sprintf("User %s retrieved successfully", id.Hex()),
+		Message:    fmt.Sprintf("User %s retrieved successfully", id.(primitive.ObjectID).Hex()),
 		Data:       user,
 	}, nil
 }
@@ -102,14 +94,7 @@ func (ctrl *userController) CreateUser(ctx *gin.Context) (*model.AppResult, *mod
 func (ctrl *userController) UpdateUser(ctx *gin.Context) (*model.AppResult, *model.AppError) {
 	var user model.User
 
-	id, err := primitive.ObjectIDFromHex(ctx.Param("id"))
-	if err != nil {
-		return nil, &model.AppError{
-			StatusCode: http.StatusBadRequest,
-			Err:        errors.New("invalid id"),
-		}
-	}
-
+	id, _ := ctx.Get("id")
 	if err := ctx.ShouldBindJSON(&user); err != nil {
 		return nil, &model.AppError{
 			StatusCode: http.StatusBadRequest,
@@ -117,7 +102,7 @@ func (ctrl *userController) UpdateUser(ctx *gin.Context) (*model.AppResult, *mod
 		}
 	}
 
-	if err := ctrl.userService.UpdateUser(id, &user); err != nil {
+	if err := ctrl.userService.UpdateUser(id.(primitive.ObjectID), &user); err != nil {
 		return nil, err.(*model.AppError)
 	}
 
@@ -129,15 +114,8 @@ func (ctrl *userController) UpdateUser(ctx *gin.Context) (*model.AppResult, *mod
 }
 
 func (ctrl *userController) DeleteUser(ctx *gin.Context) (*model.AppResult, *model.AppError) {
-	id, err := primitive.ObjectIDFromHex(ctx.Param("id"))
-	if err != nil {
-		return nil, &model.AppError{
-			StatusCode: http.StatusBadRequest,
-			Err:        errors.New("invalid id"),
-		}
-	}
-
-	if err := ctrl.userService.DeleteUser(id); err != nil {
+	id, _ := ctx.Get("id")
+	if err := ctrl.userService.DeleteUser(id.(primitive.ObjectID)); err != nil {
 		return nil, err.(*model.AppError)
 	}
 
