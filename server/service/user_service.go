@@ -88,10 +88,22 @@ func (svc *userService) UpdateUser(id primitive.ObjectID, user *model.User) erro
 }
 
 func (svc *userService) DeleteUser(id primitive.ObjectID) error {
-	return &model.AppError{
-		StatusCode: http.StatusNotImplemented,
-		Err:        errors.New("TODO: implement DeleteUser"),
+	deleteResult, err := svc.userRepository.DeleteUser(id)
+	if err != nil {
+		return &model.AppError{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+		}
 	}
+
+	if deleteResult.DeletedCount == 0 {
+		return &model.AppError{
+			StatusCode: http.StatusNotFound,
+			Err:        errors.New("user not found"),
+		}
+	}
+
+	return nil
 }
 
 func (svc *userService) HashPassword(user *model.UserFormData) error {
