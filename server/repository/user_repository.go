@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"errors"
 
 	"github.com/alexandre-pinon/epic-road-trip/model"
 	"github.com/alexandre-pinon/epic-road-trip/utils"
@@ -79,5 +78,7 @@ func (repo *userRepository) UpdateUser(id primitive.ObjectID, user *model.User) 
 }
 
 func (repo *userRepository) DeleteUser(id primitive.ObjectID) (*mongo.DeleteResult, error) {
-	return nil, errors.New("TODO: implement DeleteUser")
+	filter := bson.D{{Key: "_id", Value: id}}
+
+	return repo.coll.DeleteOne(context.Background(), filter)
 }
