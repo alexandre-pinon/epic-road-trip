@@ -40,6 +40,29 @@ func (_m *UserRepository) CreateUser(user *model.User) (*mongo.InsertOneResult, 
 	return r0, r1
 }
 
+// DeleteUser provides a mock function with given fields: id
+func (_m *UserRepository) DeleteUser(id primitive.ObjectID) (*mongo.DeleteResult, error) {
+	ret := _m.Called(id)
+
+	var r0 *mongo.DeleteResult
+	if rf, ok := ret.Get(0).(func(primitive.ObjectID) *mongo.DeleteResult); ok {
+		r0 = rf(id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*mongo.DeleteResult)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(primitive.ObjectID) error); ok {
+		r1 = rf(id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetAllUsers provides a mock function with given fields:
 func (_m *UserRepository) GetAllUsers() (*[]model.User, error) {
 	ret := _m.Called()

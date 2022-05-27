@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"errors"
 
 	"github.com/alexandre-pinon/epic-road-trip/model"
 	"github.com/alexandre-pinon/epic-road-trip/utils"
@@ -21,6 +22,7 @@ type UserRepository interface {
 	GetUserByID(id primitive.ObjectID) (*model.User, error)
 	CreateUser(user *model.User) (*mongo.InsertOneResult, error)
 	UpdateUser(id primitive.ObjectID, user *model.User) (*mongo.UpdateResult, error)
+	DeleteUser(id primitive.ObjectID) (*mongo.DeleteResult, error)
 }
 
 func NewUserRepository(db *mongo.Database) UserRepository {
@@ -74,4 +76,8 @@ func (repo *userRepository) UpdateUser(id primitive.ObjectID, user *model.User) 
 	update := bson.D{{Key: "$set", Value: user}}
 
 	return repo.coll.UpdateByID(context.Background(), id, update)
+}
+
+func (repo *userRepository) DeleteUser(id primitive.ObjectID) (*mongo.DeleteResult, error) {
+	return nil, errors.New("TODO: implement DeleteUser")
 }

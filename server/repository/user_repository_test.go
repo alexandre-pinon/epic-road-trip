@@ -152,6 +152,25 @@ func (suite *userRepositorySuite) TestUpdateUser_Positive() {
 	suite.Equal("+33712345678", (*userResult).Phone, "should be equal between result and user")
 }
 
+func (suite *userRepositorySuite) TestDeleteUser_Positive() {
+	user := model.User{
+		Firstname:      "yoimiya",
+		Lastname:       "naganohara",
+		Email:          "yoimiya.naganohara@gmail.com",
+		HashedPassword: "12345678",
+		Phone:          "+33612345678",
+		Trips:          []*model.RoadTrip{},
+	}
+
+	id, err := suite.repo.CreateUser(&user)
+	suite.NoError(err, "no error when create user with valid input")
+
+	result, err := suite.repo.DeleteUser(id.InsertedID.(primitive.ObjectID))
+	suite.NoError(err, "no error because user is found")
+	suite.Require().NotNil(result)
+	suite.Equal(int64(1), result.DeletedCount)
+}
+
 func TestUserRepository(t *testing.T) {
 	cfg := config.GetConfig(config.Test)
 	suite.Run(t, &userRepositorySuite{cfg: *cfg})
