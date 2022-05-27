@@ -20,6 +20,7 @@ type UserController interface {
 	GetUserByID(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	CreateUser(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	UpdateUser(ctx *gin.Context) (*model.AppResult, *model.AppError)
+	DeleteUser(ctx *gin.Context) (*model.AppResult, *model.AppError)
 }
 
 func NewUserController(svc service.UserService) UserController {
@@ -125,4 +126,11 @@ func (ctrl *userController) UpdateUser(ctx *gin.Context) (*model.AppResult, *mod
 		Message:    "User updated successfully",
 		Data:       struct{}{},
 	}, nil
+}
+
+func (ctrl *userController) DeleteUser(ctx *gin.Context) (*model.AppResult, *model.AppError) {
+	return &model.AppResult{}, &model.AppError{
+		StatusCode: http.StatusNotImplemented,
+		Err:        errors.New("TODO: implement DeleteUser"),
+	}
 }

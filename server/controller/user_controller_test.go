@@ -38,6 +38,7 @@ func (suite *userControllerSuite) SetupTest() {
 			userRoutes.GET("/:id", utils.ServeHTTP(ctrl.GetUserByID))
 			userRoutes.POST("/", utils.ServeHTTP(ctrl.CreateUser))
 			userRoutes.PUT("/:id", utils.ServeHTTP(ctrl.UpdateUser))
+			userRoutes.DELETE("/:id", utils.ServeHTTP(ctrl.DeleteUser))
 		}
 	}
 	testServer := httptest.NewServer(router)
@@ -389,6 +390,51 @@ func (suite *userControllerSuite) TestUpdateUser_InvalidJSON_Negative() {
 	suite.Equal("Invalid email format", responseBody.ValErrors[2].Message)
 	suite.Equal("Phone", responseBody.ValErrors[3].Field)
 	suite.Equal("Invalid phone format", responseBody.ValErrors[3].Message)
+	suite.svc.AssertExpectations(suite.T())
+}
+
+func (suite *userControllerSuite) TestDeleteUser_Positive() {
+	id := primitive.NewObjectID()
+
+	suite.svc.On("DeleteUser", id).Return(nil)
+
+	request, err := http.NewRequest(
+		http.MethodDelete,
+		fmt.Sprintf("%s/api/user/%s", suite.testServer.URL, id.Hex()),
+		bytes.NewBuffer(nil),
+	)
+	suite.NoError(err, "no error when creating the request")
+
+	response, err := http.DefaultClient.Do(request)
+	suite.NoError(err, "no error when calling the endpoint")
+
+	responseBody := model.AppResponse{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusOK, response.StatusCode)
+	suite.Equal("User deleted successfully", responseBody.Message)
+	suite.svc.AssertExpectations(suite.T())
+}
+
+func (suite *userControllerSuite) TestDeleteUser_InvalidID_Negative() {
+	id := primitive.NewObjectID()
+
+	request, err := http.NewRequest(
+		http.MethodDelete,
+		fmt.Sprintf("%s/api/user/%s", suite.testServer.URL, id.Hex()+"bad"),
+		bytes.NewBuffer(nil),
+	)
+	suite.NoError(err, "no error when creating the request")
+
+	response, err := http.DefaultClient.Do(request)
+	suite.NoError(err, "no error when calling the endpoint")
+
+	responseBody := model.AppResponse{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusBadRequest, response.StatusCode)
+	suite.Equal("invalid id", responseBody.Message)
+	suite.Empty(responseBody.Data, "user should not be retrieved")
 	suite.svc.AssertExpectations(suite.T())
 }
 
