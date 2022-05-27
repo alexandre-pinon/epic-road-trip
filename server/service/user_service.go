@@ -78,10 +78,18 @@ func (svc *userService) UpdateUser(id primitive.ObjectID, user *model.User) erro
 		}
 	}
 
-	if _, err := svc.userRepository.UpdateUser(id, user); err != nil {
+	updatedResult, err := svc.userRepository.UpdateUser(id, user)
+	if err != nil {
 		return &model.AppError{
 			StatusCode: http.StatusInternalServerError,
 			Err:        err,
+		}
+	}
+
+	if updatedResult.MatchedCount == 0 {
+		return &model.AppError{
+			StatusCode: http.StatusNotFound,
+			Err:        errors.New("user not found"),
 		}
 	}
 

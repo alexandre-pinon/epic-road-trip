@@ -139,7 +139,12 @@ func (suite *userServiceSuite) TestHashPassword_Positive() {
 
 func (suite *userServiceSuite) TestUpdateUser_Positive() {
 	id := primitive.NewObjectID()
-	updateResult := &mongo.UpdateResult{}
+	updateResult := &mongo.UpdateResult{
+		MatchedCount:  1,
+		ModifiedCount: 1,
+		UpsertedCount: 0,
+		UpsertedID:    nil,
+	}
 	user := model.User{
 		Firstname: "yoiyoi",
 		Email:     "yoiyoi.miya@gmail.com",
@@ -157,6 +162,25 @@ func (suite *userServiceSuite) TestUpdateUser_NilPointer_Negative() {
 	err := suite.svc.UpdateUser(id, nil)
 	suite.Error(err.(*model.AppError).Err, "error when create user with nil pointer")
 	suite.Assertions.Equal(http.StatusInternalServerError, err.(*model.AppError).StatusCode)
+	suite.repo.AssertExpectations(suite.T())
+}
+
+func (suite *userServiceSuite) TestUpdateUser_NotFound_Negative() {
+	id := primitive.NewObjectID()
+	updateResult := &mongo.UpdateResult{
+		MatchedCount:  0,
+		ModifiedCount: 0,
+		UpsertedCount: 0,
+		UpsertedID:    nil,
+	}
+	user := model.User{}
+
+	suite.repo.On("UpdateUser", id, &user).Return(updateResult, nil)
+
+	err := suite.svc.UpdateUser(id, &user)
+	suite.Error(err, "error not found")
+	suite.Equal("user not found", err.Error())
+	suite.Equal(http.StatusNotFound, err.(*model.AppError).StatusCode)
 	suite.repo.AssertExpectations(suite.T())
 }
 
