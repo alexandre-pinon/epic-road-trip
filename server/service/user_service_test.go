@@ -137,6 +137,29 @@ func (suite *userServiceSuite) TestHashPassword_Positive() {
 	suite.Nil(bcrypt.CompareHashAndPassword([]byte(userFormData.HashedPassword), []byte(userFormData.Password)))
 }
 
+func (suite *userServiceSuite) TestUpdateUser_Positive() {
+	id := primitive.NewObjectID()
+	updateResult := &mongo.UpdateResult{}
+	user := model.User{
+		Firstname: "yoiyoi",
+		Email:     "yoiyoi.miya@gmail.com",
+	}
+
+	suite.repo.On("UpdateUser", id, &user).Return(updateResult, nil)
+
+	err := suite.svc.UpdateUser(id, &user)
+	suite.NoError(err, "no error when create user with valid input")
+	suite.repo.AssertExpectations(suite.T())
+}
+
+func (suite *userServiceSuite) TestUpdateUser_NilPointer_Negative() {
+	id := primitive.NewObjectID()
+	err := suite.svc.UpdateUser(id, nil)
+	suite.Error(err.(*model.AppError).Err, "error when create user with nil pointer")
+	suite.Assertions.Equal(http.StatusInternalServerError, err.(*model.AppError).StatusCode)
+	suite.repo.AssertExpectations(suite.T())
+}
+
 func TestUserService(t *testing.T) {
 	suite.Run(t, new(userServiceSuite))
 }

@@ -19,6 +19,7 @@ type UserService interface {
 	GetUserByID(id primitive.ObjectID) (*model.User, error)
 	CreateUser(user *model.User) error
 	HashPassword(user *model.UserFormData) error
+	UpdateUser(id primitive.ObjectID, user *model.User) error
 }
 
 func NewUserService(repo repository.UserRepository) UserService {
@@ -67,4 +68,11 @@ func (svc *userService) HashPassword(user *model.UserFormData) error {
 
 	user.HashedPassword = string(hashed)
 	return nil
+}
+
+func (svc *userService) UpdateUser(id primitive.ObjectID, user *model.User) error {
+	return &model.AppError{
+		StatusCode: http.StatusNotImplemented,
+		Err:        errors.New("TODO: implement UpdateUser"),
+	}
 }
