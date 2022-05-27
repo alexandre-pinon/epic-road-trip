@@ -29,6 +29,20 @@ func (_m *UserService) CreateUser(user *model.User) error {
 	return r0
 }
 
+// DeleteUser provides a mock function with given fields: id
+func (_m *UserService) DeleteUser(id primitive.ObjectID) error {
+	ret := _m.Called(id)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(primitive.ObjectID) error); ok {
+		r0 = rf(id)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // GetAllUsers provides a mock function with given fields:
 func (_m *UserService) GetAllUsers() (*[]model.User, error) {
 	ret := _m.Called()

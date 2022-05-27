@@ -18,8 +18,9 @@ type UserService interface {
 	GetAllUsers() (*[]model.User, error)
 	GetUserByID(id primitive.ObjectID) (*model.User, error)
 	CreateUser(user *model.User) error
-	HashPassword(user *model.UserFormData) error
 	UpdateUser(id primitive.ObjectID, user *model.User) error
+	DeleteUser(id primitive.ObjectID) error
+	HashPassword(user *model.UserFormData) error
 }
 
 func NewUserService(repo repository.UserRepository) UserService {
@@ -60,16 +61,6 @@ func (svc *userService) CreateUser(user *model.User) error {
 	return nil
 }
 
-func (svc *userService) HashPassword(user *model.UserFormData) error {
-	hashed, err := bcrypt.GenerateFromPassword([]byte(user.Password), 8)
-	if err != nil {
-		return err
-	}
-
-	user.HashedPassword = string(hashed)
-	return nil
-}
-
 func (svc *userService) UpdateUser(id primitive.ObjectID, user *model.User) error {
 	if user == nil {
 		return &model.AppError{
@@ -93,5 +84,22 @@ func (svc *userService) UpdateUser(id primitive.ObjectID, user *model.User) erro
 		}
 	}
 
+	return nil
+}
+
+func (svc *userService) DeleteUser(id primitive.ObjectID) error {
+	return &model.AppError{
+		StatusCode: http.StatusNotImplemented,
+		Err:        errors.New("TODO: implement DeleteUser"),
+	}
+}
+
+func (svc *userService) HashPassword(user *model.UserFormData) error {
+	hashed, err := bcrypt.GenerateFromPassword([]byte(user.Password), 8)
+	if err != nil {
+		return err
+	}
+
+	user.HashedPassword = string(hashed)
 	return nil
 }

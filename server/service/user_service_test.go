@@ -124,19 +124,6 @@ func (suite *userServiceSuite) TestCreateUser_NilPointer_Negative() {
 	suite.repo.AssertExpectations(suite.T())
 }
 
-func (suite *userServiceSuite) TestHashPassword_Positive() {
-	userFormData := model.UserFormData{
-		Password: "12345678",
-	}
-
-	suite.Empty(userFormData.HashedPassword, "Intial hashed password should be empty")
-
-	err := suite.svc.HashPassword(&userFormData)
-	suite.NoError(err, "no error when hashing password with valid input")
-	suite.NotEmpty(userFormData.HashedPassword, "Field hashed password should be filled")
-	suite.Nil(bcrypt.CompareHashAndPassword([]byte(userFormData.HashedPassword), []byte(userFormData.Password)))
-}
-
 func (suite *userServiceSuite) TestUpdateUser_Positive() {
 	id := primitive.NewObjectID()
 	updateResult := &mongo.UpdateResult{
@@ -182,6 +169,47 @@ func (suite *userServiceSuite) TestUpdateUser_NotFound_Negative() {
 	suite.Equal("user not found", err.Error())
 	suite.Equal(http.StatusNotFound, err.(*model.AppError).StatusCode)
 	suite.repo.AssertExpectations(suite.T())
+}
+
+func (suite *userServiceSuite) TestDeleteUser_Positive() {
+	id := primitive.NewObjectID()
+	deleteResult := &mongo.DeleteResult{
+		DeletedCount: 1,
+	}
+
+	suite.repo.On("DeleteUser", id).Return(deleteResult, nil)
+
+	err := suite.svc.DeleteUser(id)
+	suite.NoError(err, "no error when create user with valid input")
+	suite.repo.AssertExpectations(suite.T())
+}
+
+func (suite *userServiceSuite) TestDeleteUser_NotFound_Negative() {
+	id := primitive.NewObjectID()
+	deletedResult := &mongo.DeleteResult{
+		DeletedCount: 0,
+	}
+
+	suite.repo.On("DeleteUser", id).Return(deletedResult, nil)
+
+	err := suite.svc.DeleteUser(id)
+	suite.Error(err, "error not found")
+	suite.Equal("user not found", err.Error())
+	suite.Equal(http.StatusNotFound, err.(*model.AppError).StatusCode)
+	suite.repo.AssertExpectations(suite.T())
+}
+
+func (suite *userServiceSuite) TestHashPassword_Positive() {
+	userFormData := model.UserFormData{
+		Password: "12345678",
+	}
+
+	suite.Empty(userFormData.HashedPassword, "Intial hashed password should be empty")
+
+	err := suite.svc.HashPassword(&userFormData)
+	suite.NoError(err, "no error when hashing password with valid input")
+	suite.NotEmpty(userFormData.HashedPassword, "Field hashed password should be filled")
+	suite.Nil(bcrypt.CompareHashAndPassword([]byte(userFormData.HashedPassword), []byte(userFormData.Password)))
 }
 
 func TestUserService(t *testing.T) {
