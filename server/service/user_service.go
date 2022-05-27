@@ -71,8 +71,19 @@ func (svc *userService) HashPassword(user *model.UserFormData) error {
 }
 
 func (svc *userService) UpdateUser(id primitive.ObjectID, user *model.User) error {
-	return &model.AppError{
-		StatusCode: http.StatusNotImplemented,
-		Err:        errors.New("TODO: implement UpdateUser"),
+	if user == nil {
+		return &model.AppError{
+			StatusCode: http.StatusInternalServerError,
+			Err:        errors.New("user is nil pointer"),
+		}
 	}
+
+	if _, err := svc.userRepository.UpdateUser(id, user); err != nil {
+		return &model.AppError{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+		}
+	}
+
+	return nil
 }

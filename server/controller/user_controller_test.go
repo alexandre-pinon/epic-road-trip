@@ -154,7 +154,6 @@ func (suite *userControllerSuite) TestCreateUser_Positive() {
 			Lastname:  "naganohara",
 			Email:     "yoimiya.naganohara@gmail.com",
 			Phone:     "+33612345678",
-			Trips:     []*model.RoadTrip{},
 		},
 		Password: "12345678",
 	}
@@ -249,7 +248,6 @@ func (suite *userControllerSuite) TestCreateUser_DupKey_Negative() {
 			Lastname:  "naganohara",
 			Email:     "yoimiya.naganohara@gmail.com",
 			Phone:     "+33612345678",
-			Trips:     []*model.RoadTrip{},
 		},
 		Password: "12345678",
 	}

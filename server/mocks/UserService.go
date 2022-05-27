@@ -89,6 +89,20 @@ func (_m *UserService) HashPassword(user *model.UserFormData) error {
 	return r0
 }
 
+// UpdateUser provides a mock function with given fields: id, user
+func (_m *UserService) UpdateUser(id primitive.ObjectID, user *model.User) error {
+	ret := _m.Called(id, user)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(primitive.ObjectID, *model.User) error); ok {
+		r0 = rf(id, user)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // NewUserService creates a new instance of UserService. It also registers the testing.TB interface on the mock and a cleanup function to assert the mocks expectations.
 func NewUserService(t testing.TB) *UserService {
 	mock := &UserService{}
