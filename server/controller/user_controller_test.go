@@ -28,7 +28,8 @@ func (suite *userControllerSuite) SetupTest() {
 	svc := new(mocks.UserService)
 	ctrl := NewUserController(svc)
 
-	router := gin.Default()
+	gin.SetMode(gin.ReleaseMode)
+	router := gin.New()
 	apiRoutes := router.Group("/api")
 	{
 		userRoutes := apiRoutes.Group("/user")
@@ -36,6 +37,7 @@ func (suite *userControllerSuite) SetupTest() {
 			userRoutes.GET("/", utils.ServeHTTP(ctrl.GetAllUsers))
 			userRoutes.GET("/:id", utils.ServeHTTP(ctrl.GetUserByID))
 			userRoutes.POST("/", utils.ServeHTTP(ctrl.CreateUser))
+			userRoutes.PUT("/:id", utils.ServeHTTP(ctrl.UpdateUser))
 		}
 	}
 	testServer := httptest.NewServer(router)
@@ -281,6 +283,104 @@ func (suite *userControllerSuite) TestCreateUser_DupKey_Negative() {
 	suite.Equal("invalid json request body", responseBody.Message)
 	suite.Empty(responseBody.Data)
 	suite.Equal("Email is already taken", responseBody.ValErrors[0].Message)
+	suite.svc.AssertExpectations(suite.T())
+}
+
+func (suite *userControllerSuite) TestUpdateUser_Positive() {
+	id := primitive.NewObjectID()
+	user := model.User{
+		Firstname: "yoiyoi",
+		Email:     "yoiyoi.miya@gmail.com",
+	}
+
+	suite.svc.On("UpdateUser", id, &user).Return(nil)
+
+	requestBody, err := json.Marshal(&user)
+	suite.NoError(err, "can not marshal struct to json")
+
+	request, err := http.NewRequest(
+		http.MethodPut,
+		fmt.Sprintf("%s/api/user/%s", suite.testServer.URL, id.Hex()),
+		bytes.NewBuffer(requestBody),
+	)
+	suite.NoError(err, "no error when creating the request")
+	request.Header.Add("Content-type", "application/json")
+
+	response, err := http.DefaultClient.Do(request)
+	suite.NoError(err, "no error when calling the endpoint")
+
+	responseBody := model.AppResponse{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusOK, response.StatusCode)
+	suite.Equal("User updated successfully", responseBody.Message)
+	suite.svc.AssertExpectations(suite.T())
+}
+
+func (suite *userControllerSuite) TestUpdateUser_InvalidID_Negative() {
+	id := primitive.NewObjectID()
+
+	requestBody, err := json.Marshal(&model.User{})
+	suite.NoError(err, "can not marshal struct to json")
+
+	request, err := http.NewRequest(
+		http.MethodPut,
+		fmt.Sprintf("%s/api/user/%s", suite.testServer.URL, id.Hex()),
+		bytes.NewBuffer(requestBody),
+	)
+	suite.NoError(err, "no error when creating the request")
+	request.Header.Add("Content-type", "application/json")
+
+	response, err := http.DefaultClient.Do(request)
+	suite.NoError(err, "no error when calling the endpoint")
+
+	responseBody := model.AppResponse{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusBadRequest, response.StatusCode)
+	suite.Equal("invalid id", responseBody.Message)
+	suite.Empty(responseBody.Data, "user should not be retrieved")
+	suite.svc.AssertExpectations(suite.T())
+}
+
+func (suite *userControllerSuite) TestUpdateUser_InvalidJSON_Negative() {
+	id := primitive.NewObjectID()
+	user := model.User{
+		Firstname: "y",
+		Lastname:  "naganoharanaganoharanaganoharanaganoharanaganoharanaganoharanaganoharanaganoharanaganohara",
+		Email:     "bademail.com",
+		Phone:     "-336123456789",
+	}
+
+	requestBody, err := json.Marshal(&user)
+	suite.NoError(err, "can not marshal struct to json")
+
+	request, err := http.NewRequest(
+		http.MethodPut,
+		fmt.Sprintf("%s/api/user/%s", suite.testServer.URL, id.Hex()),
+		bytes.NewBuffer(requestBody),
+	)
+	suite.NoError(err, "no error when creating the request")
+	request.Header.Add("Content-type", "application/json")
+
+	response, err := http.DefaultClient.Do(request)
+	suite.NoError(err, "no error when calling the endpoint")
+
+	responseBody := model.AppResponse{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusBadRequest, response.StatusCode)
+	suite.Equal("invalid json request body", responseBody.Message)
+	suite.Empty(responseBody.Data)
+	suite.Require().NotEmpty(responseBody.ValErrors)
+	suite.Equal("Firstname", responseBody.ValErrors[0].Field)
+	suite.Equal("Should be at least 2 characters", responseBody.ValErrors[0].Message)
+	suite.Equal("Lastname", responseBody.ValErrors[1].Field)
+	suite.Equal("Should be less than 50 characters", responseBody.ValErrors[1].Message)
+	suite.Equal("Email", responseBody.ValErrors[2].Field)
+	suite.Equal("Invalid email format", responseBody.ValErrors[2].Message)
+	suite.Equal("Phone", responseBody.ValErrors[3].Field)
+	suite.Equal("Invalid phone format", responseBody.ValErrors[3].Message)
 	suite.svc.AssertExpectations(suite.T())
 }
 

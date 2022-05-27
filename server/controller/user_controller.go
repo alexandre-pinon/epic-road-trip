@@ -19,6 +19,7 @@ type UserController interface {
 	GetAllUsers(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	GetUserByID(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	CreateUser(ctx *gin.Context) (*model.AppResult, *model.AppError)
+	UpdateUser(ctx *gin.Context) (*model.AppResult, *model.AppError)
 }
 
 func NewUserController(svc service.UserService) UserController {
@@ -95,4 +96,11 @@ func (ctrl *userController) CreateUser(ctx *gin.Context) (*model.AppResult, *mod
 		Message:    "User created successfully",
 		Data:       struct{}{},
 	}, nil
+}
+
+func (ctrl *userController) UpdateUser(ctx *gin.Context) (*model.AppResult, *model.AppError) {
+	return &model.AppResult{}, &model.AppError{
+		StatusCode: http.StatusNotImplemented,
+		Err:        errors.New("TODO: implement UpdateUser"),
+	}
 }
