@@ -24,10 +24,10 @@ func ConnectDB(cfg *Config) *mongo.Database {
 	}
 
 	if cfg.Env != Test {
-		log.Printf("Connected to MongoDB using %s database", cfg.Database.DbName)
+		log.Printf("Connected to MongoDB using %s database", cfg.Database.Name)
 	}
 
-	return client.Database(cfg.Database.DbName)
+	return client.Database(cfg.Database.Name)
 }
 
 func DisconnectDB(cfg *Config, client *mongo.Client) {
