@@ -7,23 +7,25 @@ env:
   DB_NAME: ${{secrets.DB_NAME}}
 
 jobs:
-  build:
+  server:
+    name: Build & Test server application 🌐
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout branch ☁️
+        uses: actions/checkout@v3
 
-      - name: Set up Go
+      - name: Set up Go ⚙️
         uses: actions/setup-go@v3
         with:
           go-version: 1.18
 
-      - name: Build
+      - name: Build application 🔨
         run: go build -v ./...
         working-directory: ./server
         env:
           GO_MODE: PROD
 
-      - name: Test
+      - name: Launch all tests 🧪
         run: go test -race -covermode=atomic -v ./...
         working-directory: ./server
         env:
