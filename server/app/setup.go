@@ -3,16 +3,16 @@ package app
 import (
 	"log"
 	"os"
-	"strconv"
 
 	"github.com/alexandre-pinon/epic-road-trip/config"
 	"github.com/gin-gonic/gin"
 )
 
 func InitApp() {
-	env, err := strconv.Atoi(os.Getenv("GO_MODE"))
-	if err != nil {
-		log.Fatalf("Invalid GO_MODE env variable, please specify either:\n0 -> Dev\n1 -> Prod\n2 -> Test")
+	env := os.Getenv("GO_MODE")
+
+	if err := config.Env(env).IsValid(); err != nil {
+		log.Fatal(err)
 	}
 
 	log.Print("Initializing app...")

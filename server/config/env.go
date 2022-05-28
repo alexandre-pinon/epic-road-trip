@@ -1,28 +1,24 @@
 package config
 
-import "log"
-
-type Env int
-
-const (
-	Dev Env = iota
-	Prod
-	Test
+import (
+	"fmt"
 )
 
-func (env *Env) GetFileName() string {
-	var envFile string
+type Env string
 
-	switch *env {
-	case Dev:
-		envFile = ".env"
-	case Prod:
-		envFile = ".env.prod"
-	case Test:
-		envFile = ".env.test"
-	default:
-		log.Fatal("Invalid env")
+const (
+	Dev  Env = "DEV"
+	Prod Env = "PROD"
+	Test Env = "TEST"
+)
+
+func (env Env) IsValid() error {
+	switch env {
+	case Dev, Prod, Test:
+		return nil
 	}
-
-	return envFile
+	return fmt.Errorf("invalid GO_MODE env variable, please specify either:\n- GO_MODE=%s\n- GO_MODE=%s\n- GO_MODE=%s",
+		Dev,
+		Prod,
+		Test)
 }
