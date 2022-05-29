@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/alexandre-pinon/epic-road-trip/model"
 	"github.com/alexandre-pinon/epic-road-trip/repository"
 	jwt "github.com/appleboy/gin-jwt/v2"
 )
@@ -18,5 +19,10 @@ func NewAuthService(repo repository.UserRepository) AuthService {
 }
 
 func (svc *authService) PayloadFunc(data interface{}) jwt.MapClaims {
-	return nil
+	if user, ok := data.(*model.User); ok {
+		return jwt.MapClaims{
+			jwt.IdentityKey: user.ID,
+		}
+	}
+	return jwt.MapClaims{}
 }
