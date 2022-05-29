@@ -5,6 +5,7 @@ import (
 	"github.com/alexandre-pinon/epic-road-trip/repository"
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type authService struct {
@@ -30,5 +31,16 @@ func (svc *authService) PayloadFunc(data interface{}) jwt.MapClaims {
 }
 
 func (svc *authService) IdentityHandler(ctx *gin.Context) interface{} {
-	return &struct{}{}
+	claims := jwt.ExtractClaims(ctx)
+	ID, ok := claims[jwt.IdentityKey].(primitive.ObjectID)
+	if !ok {
+		return nil
+	}
+
+	user, err := svc.userRepository.GetUserByID(ID)
+	if err != nil {
+		return nil
+	}
+
+	return user
 }
