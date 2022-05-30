@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type userRepositorySuite struct {
@@ -102,6 +103,40 @@ func (suite *userRepositorySuite) TestGetUserByID_Exists_Positive() {
 	suite.NoError(err, "no error because user is found")
 	suite.Equal(user.Firstname, (*result).Firstname, "should be equal between result and user")
 	suite.Equal(user.Email, (*result).Email, "should be equal between result and user")
+}
+
+func (suite *userRepositorySuite) TestGetUserByLogin_NotFound_Negative() {
+	_, err := suite.repo.GetUserByLogin(&model.UserLogin{})
+	suite.Error(err, "error not found")
+	suite.Equal(mongo.ErrNoDocuments, err)
+}
+
+func (suite *userRepositorySuite) TestGetUserByLogin_Exists_Positive() {
+	password := "12345678"
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 8)
+	suite.NoError(err, "no error when hashing password")
+
+	user := model.User{
+		Firstname:      "yoimiya",
+		Lastname:       "naganohara",
+		Email:          "yoimiya.naganohara@gmail.com",
+		HashedPassword: string(hashedPassword),
+		Phone:          "+33612345678",
+		Trips:          []*model.RoadTrip{},
+	}
+
+	_, err = suite.repo.CreateUser(&user)
+	suite.NoError(err, "no error when create user with valid input")
+
+	login := model.UserLogin{
+		Email:    "yoimiya.naganohara@gmail.com",
+		Password: password,
+	}
+
+	result, err := suite.repo.GetUserByLogin(&login)
+	suite.NoError(err, "no error because user is found")
+	suite.Equal(user.Phone, (*result).Phone, "should be equal between result and user")
+	suite.Equal(user.Lastname, (*result).Lastname, "should be equal between result and user")
 }
 
 func (suite *userRepositorySuite) TestCreateUser_Positive() {
