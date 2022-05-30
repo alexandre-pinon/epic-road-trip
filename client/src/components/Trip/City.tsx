@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { createStyles, Container, UnstyledButton, Text, Card, SimpleGrid, Space, Title } from '@mantine/core';
+import { createStyles, Container, UnstyledButton, Text, Card, SimpleGrid, Space, Title, Grid, Button, Center } from '@mantine/core';
 
 import {
   HotelService,
@@ -8,10 +8,6 @@ import {
   BrandTripadvisor,
   BrandBooking,
   Plus,
-  GasStation,
-  Gauge,
-  ManualGearbox,
-  Users,
 } from 'tabler-icons-react';
 
 const mockdata = [
@@ -21,13 +17,6 @@ const mockdata = [
   { title: 'Restaurants', icon: BrandTripadvisor, color: 'dark' },
   { title: 'Travel Forums', icon: BrandBooking, color: 'dark' },
   { title: 'More ...', icon: Plus, color: 'dark' },
-];
-
-const mockdata2 = [
-  { label: '4 passengers', icon: Users },
-  { label: '100 km/h in 4 seconds', icon: Gauge },
-  { label: 'Automatic gearbox', icon: ManualGearbox },
-  { label: 'Electric', icon: GasStation },
 ];
 
 const useStyles = createStyles((theme) => ({
@@ -130,6 +119,7 @@ export function City() {
   return (
     <Container>
       <Title order={2}>Explorez "Ville de départ"</Title>
+
       <Space h="md" />
 
       <Card withBorder radius="md" className={classes.card}>
@@ -137,8 +127,95 @@ export function City() {
           {items}
         </SimpleGrid>
       </Card>
+
       <Space h="xl" />
-    </Container>
+      <Space h="xl" />
+      <Space h="xl" />
+
+      <Title order={2}>Suggestions</Title>
+
+      <Space h="xl" />
+      <Space h="xl" />
+
+      <Grid>
+        <Grid.Col md={6} lg={3}>
+          <Title order={5}>Se divertir</Title>
+        </Grid.Col>
+        <Grid.Col md={6} lg={3}>
+          <Button variant="light" color="blue">
+            Activité 1
+          </Button>
+        </Grid.Col>
+        <Grid.Col md={6} lg={3}>
+          <Button variant="light" color="blue">
+            Activité 2
+          </Button>
+        </Grid.Col>
+        <Grid.Col md={6} lg={3}>
+          <Button variant="light" color="blue">
+            Activité 3
+          </Button>
+        </Grid.Col>
+      </Grid>
+
+      <Space h="xl" />
+      <Space h="xl" />
+
+      <Grid>
+        <Grid.Col md={6} lg={3}>
+          <Title order={5}>Se reposer</Title>
+        </Grid.Col>
+        <Grid.Col md={6} lg={3}>
+          <Button variant="light" color="blue">
+            Hôtel 1
+          </Button>
+        </Grid.Col>
+        <Grid.Col md={6} lg={3}>
+          <Button variant="light" color="blue">
+            Hôtel 2
+          </Button>
+        </Grid.Col>
+        <Grid.Col md={6} lg={3}>
+          <Button variant="light" color="blue">
+            Hôtel 3
+          </Button>
+        </Grid.Col>
+      </Grid>
+
+      <Space h="xl" />
+      <Space h="xl" />
+
+      <Grid>
+        <Grid.Col md={6} lg={3}>
+          <Title order={5}>Se restaurer</Title>
+        </Grid.Col>
+        <Grid.Col md={6} lg={3}>
+          <Button variant="light" color="blue">
+            Restaurant 1
+          </Button>
+        </Grid.Col>
+        <Grid.Col md={6} lg={3}>
+          <Button variant="light" color="blue">
+            Restaurant 2
+          </Button>
+        </Grid.Col>
+        <Grid.Col md={6} lg={3}>
+          <Button variant="light" color="blue">
+            Restaurant 3
+          </Button>
+        </Grid.Col>
+      </Grid>
+
+      <Space h="xl" />
+      <Space h="xl" />
+
+      <Center>
+        <Button variant="light" radius="xl">
+          Retour
+        </Button>
+      </Center>
+
+    </Container >
   );
 
 }
