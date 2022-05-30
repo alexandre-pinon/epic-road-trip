@@ -9,6 +9,7 @@ import {
   BrandBooking,
   Plus,
 } from 'tabler-icons-react';
+import { useNavigate } from 'react-router-dom';
 
 const mockdata = [
   { title: 'Hotels', icon: HotelService, color: 'dark' },
@@ -106,6 +107,12 @@ const useStyles = createStyles((theme) => ({
 
 export function City() {
   const { classes, theme, cx } = useStyles();
+  const navigate = useNavigate();
+
+  const goToHome = async () => {
+    console.log("Going back home!")
+    navigate('/');
+  };
 
   const items = mockdata.map((item) => (
     <UnstyledButton key={item.title} className={classes.item}>
@@ -210,7 +217,7 @@ export function City() {
       <Space h="xl" />
 
       <Center>
-        <Button variant="light" radius="xl">
+        <Button onClick={goToHome} variant="light" radius="xl">
           Retour
         </Button>
       </Center>
