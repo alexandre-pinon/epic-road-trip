@@ -17,6 +17,7 @@ type authController struct {
 
 type AuthController interface {
 	HandleLogin(ctx *gin.Context)
+	JWTMiddleware() gin.HandlerFunc
 }
 
 func NewAuthController(cfg *config.Config, svc service.AuthService) AuthController {
@@ -41,4 +42,8 @@ func NewAuthController(cfg *config.Config, svc service.AuthService) AuthControll
 
 func (ctrl *authController) HandleLogin(ctx *gin.Context) {
 	ctrl.authMiddleware.LoginHandler(ctx)
+}
+
+func (ctrl *authController) JWTMiddleware() gin.HandlerFunc {
+	return ctrl.authMiddleware.MiddlewareFunc()
 }
