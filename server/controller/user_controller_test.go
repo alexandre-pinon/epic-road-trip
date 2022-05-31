@@ -148,7 +148,6 @@ func (suite *userControllerSuite) TestGetUserByID_InvalidID_Negative() {
 	suite.Equal(http.StatusBadRequest, response.StatusCode)
 	suite.Equal("invalid id", responseBody.Message)
 	suite.Empty(responseBody.Data, "user should not be retrieved")
-	suite.svc.AssertExpectations(suite.T())
 }
 
 func (suite *userControllerSuite) TestCreateUser_Positive() {
@@ -200,7 +199,6 @@ func (suite *userControllerSuite) TestCreateUser_NilBody_Negative() {
 	suite.Equal("EOF", responseBody.Message)
 	suite.Empty(responseBody.Data)
 	suite.Empty(responseBody.ValErrors)
-	suite.svc.AssertExpectations(suite.T())
 }
 
 func (suite *userControllerSuite) TestCreateUser_InvalidJSON_Negative() {
@@ -242,7 +240,6 @@ func (suite *userControllerSuite) TestCreateUser_InvalidJSON_Negative() {
 	suite.Equal("Invalid phone format", responseBody.ValErrors[3].Message)
 	suite.Equal("Password", responseBody.ValErrors[4].Field)
 	suite.Equal("Should be at least 8 characters", responseBody.ValErrors[4].Message)
-	suite.svc.AssertExpectations(suite.T())
 }
 
 func (suite *userControllerSuite) TestCreateUser_DupKey_Negative() {
@@ -350,7 +347,6 @@ func (suite *userControllerSuite) TestUpdateUser_InvalidID_Negative() {
 	suite.Equal(http.StatusBadRequest, response.StatusCode)
 	suite.Equal("invalid id", responseBody.Message)
 	suite.Empty(responseBody.Data, "user should not be retrieved")
-	suite.svc.AssertExpectations(suite.T())
 }
 
 func (suite *userControllerSuite) TestUpdateUser_InvalidJSON_Negative() {
@@ -391,7 +387,6 @@ func (suite *userControllerSuite) TestUpdateUser_InvalidJSON_Negative() {
 	suite.Equal("Invalid email format", responseBody.ValErrors[2].Message)
 	suite.Equal("Phone", responseBody.ValErrors[3].Field)
 	suite.Equal("Invalid phone format", responseBody.ValErrors[3].Message)
-	suite.svc.AssertExpectations(suite.T())
 }
 
 func (suite *userControllerSuite) TestDeleteUser_Positive() {
@@ -436,7 +431,6 @@ func (suite *userControllerSuite) TestDeleteUser_InvalidID_Negative() {
 	suite.Equal(http.StatusBadRequest, response.StatusCode)
 	suite.Equal("invalid id", responseBody.Message)
 	suite.Empty(responseBody.Data, "user should not be retrieved")
-	suite.svc.AssertExpectations(suite.T())
 }
 
 func TestUserController(t *testing.T) {
