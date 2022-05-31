@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"errors"
 
 	"github.com/alexandre-pinon/epic-road-trip/model"
 	"github.com/alexandre-pinon/epic-road-trip/utils"
@@ -20,7 +19,7 @@ type userRepository struct {
 type UserRepository interface {
 	GetAllUsers() (*[]model.User, error)
 	GetUserByID(id primitive.ObjectID) (*model.User, error)
-	GetUserByLogin(login *model.UserLogin) (*model.User, error)
+	GetUserByEmail(email string) (*model.User, error)
 	CreateUser(user *model.User) (*mongo.InsertOneResult, error)
 	UpdateUser(id primitive.ObjectID, user *model.User) (*mongo.UpdateResult, error)
 	DeleteUser(id primitive.ObjectID) (*mongo.DeleteResult, error)
@@ -69,8 +68,16 @@ func (repo *userRepository) GetUserByID(id primitive.ObjectID) (*model.User, err
 	return &user, nil
 }
 
-func (repo *userRepository) GetUserByLogin(login *model.UserLogin) (*model.User, error) {
-	return &model.User{}, errors.New("TODO: implement GetUserByLogin")
+func (repo *userRepository) GetUserByEmail(email string) (*model.User, error) {
+	filter := bson.D{{Key: "email", Value: email}}
+	result := repo.coll.FindOne(context.Background(), filter)
+
+	var user model.User
+	if err := result.Decode(&user); err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }
 
 func (repo *userRepository) CreateUser(user *model.User) (*mongo.InsertOneResult, error) {
