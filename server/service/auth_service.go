@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"time"
 
 	"github.com/alexandre-pinon/epic-road-trip/model"
 	"github.com/alexandre-pinon/epic-road-trip/repository"
@@ -19,6 +20,8 @@ type AuthService interface {
 	PayloadFunc(data interface{}) jwt.MapClaims
 	IdentityHandler(ctx *gin.Context) interface{}
 	Authenticator(c *gin.Context) (interface{}, error)
+	Unauthorized(c *gin.Context, code int, message string)
+	LoginResponse(c *gin.Context, code int, token string, expire time.Time)
 }
 
 func NewAuthService(repo repository.UserRepository) AuthService {
@@ -65,4 +68,25 @@ func (svc *authService) Authenticator(c *gin.Context) (interface{}, error) {
 	}
 
 	return user, nil
+}
+
+func (svc *authService) Unauthorized(ctx *gin.Context, code int, message string) {
+	ctx.JSON(code, &model.AppResponse{
+		Success:   false,
+		Message:   message,
+		Data:      struct{}{},
+		ValErrors: []model.ValError{},
+	})
+}
+
+func (svc *authService) LoginResponse(c *gin.Context, code int, token string, expire time.Time) {
+	c.JSON(code, &model.AppResponse{
+		Success: false,
+		Message: "Login successfully",
+		Data: &model.LoginResponseData{
+			Token:  token,
+			Expire: expire,
+		},
+		ValErrors: []model.ValError{},
+	})
 }
