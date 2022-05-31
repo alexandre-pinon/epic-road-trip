@@ -1,6 +1,8 @@
 package service
 
 import (
+	"errors"
+
 	"github.com/alexandre-pinon/epic-road-trip/model"
 	"github.com/alexandre-pinon/epic-road-trip/repository"
 	jwt "github.com/appleboy/gin-jwt/v2"
@@ -15,6 +17,7 @@ type authService struct {
 type AuthService interface {
 	PayloadFunc(data interface{}) jwt.MapClaims
 	IdentityHandler(ctx *gin.Context) interface{}
+	Authenticator(c *gin.Context) (interface{}, error)
 }
 
 func NewAuthService(repo repository.UserRepository) AuthService {
@@ -43,4 +46,8 @@ func (svc *authService) IdentityHandler(ctx *gin.Context) interface{} {
 	}
 
 	return user
+}
+
+func (svc *authService) Authenticator(c *gin.Context) (interface{}, error) {
+	return nil, errors.New("TODO: implement Authenticator")
 }
