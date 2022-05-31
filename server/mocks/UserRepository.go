@@ -86,6 +86,29 @@ func (_m *UserRepository) GetAllUsers() (*[]model.User, error) {
 	return r0, r1
 }
 
+// GetUserByEmail provides a mock function with given fields: email
+func (_m *UserRepository) GetUserByEmail(email string) (*model.User, error) {
+	ret := _m.Called(email)
+
+	var r0 *model.User
+	if rf, ok := ret.Get(0).(func(string) *model.User); ok {
+		r0 = rf(email)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.User)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(email)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetUserByID provides a mock function with given fields: id
 func (_m *UserRepository) GetUserByID(id primitive.ObjectID) (*model.User, error) {
 	ret := _m.Called(id)
