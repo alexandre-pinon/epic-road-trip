@@ -8,6 +8,7 @@ import (
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type authService struct {
@@ -49,5 +50,19 @@ func (svc *authService) IdentityHandler(ctx *gin.Context) interface{} {
 }
 
 func (svc *authService) Authenticator(c *gin.Context) (interface{}, error) {
-	return nil, errors.New("TODO: implement Authenticator")
+	var userLogin model.UserLogin
+	if err := c.ShouldBindJSON(&userLogin); err != nil {
+		return nil, errors.New("missing email or password")
+	}
+
+	user, err := svc.userRepository.GetUserByEmail(userLogin.Email)
+	if err != nil {
+		return nil, errors.New("incorrect email or password")
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.HashedPassword), []byte(userLogin.Password)); err != nil {
+		return nil, errors.New("incorrect email or password")
+	}
+
+	return user, nil
 }
