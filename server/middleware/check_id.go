@@ -21,5 +21,6 @@ func CheckID() gin.HandlerFunc {
 			})
 		}
 		ctx.Set("id", id)
+		ctx.Next()
 	}
 }

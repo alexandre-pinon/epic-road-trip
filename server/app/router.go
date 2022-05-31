@@ -19,6 +19,9 @@ func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
 		{
 			userRoutes.GET("/", utils.ServeHTTP(controllers.UserController.GetAllUsers))
 			userRoutes.GET("/:id", middleware.CheckID(), utils.ServeHTTP(controllers.UserController.GetUserByID))
+
+			userRoutes.Use(controllers.AuthController.JWTMiddleware())
+
 			userRoutes.POST("/", utils.ServeHTTP(controllers.UserController.CreateUser))
 			userRoutes.PUT("/:id", middleware.CheckID(), utils.ServeHTTP(controllers.UserController.UpdateUser))
 			userRoutes.DELETE("/:id", middleware.CheckID(), utils.ServeHTTP(controllers.UserController.DeleteUser))
