@@ -32,6 +32,7 @@ func (suite *userServiceSuite) TestGetAllUsers_EmptySlice_Positive() {
 	users, err := suite.svc.GetAllUsers()
 	suite.NoError(err, "no error when get all users")
 	suite.Equal(0, len(*users), "users is a empty slice object")
+	suite.repo.AssertExpectations(suite.T())
 }
 
 func (suite *userServiceSuite) TestGetAllUsers_FilledSlice_Positive() {
@@ -66,6 +67,7 @@ func (suite *userServiceSuite) TestGetAllUsers_FilledSlice_Positive() {
 	suite.NoError(err, "no error when get all users")
 	suite.Equal(len(users), len(*result), "users and result should have the same length")
 	suite.Equal(users, *result, "result and users are the same")
+	suite.repo.AssertExpectations(suite.T())
 }
 
 func (suite *userServiceSuite) TestGetUserByID_NotFound_Negative() {
@@ -97,6 +99,7 @@ func (suite *userServiceSuite) TestGetUserByID_Exists_Positive() {
 	result, err := suite.svc.GetUserByID(id)
 	suite.Nil(err, "no error when return the user")
 	suite.Equal(user, *result, "result and user should be equal")
+	suite.repo.AssertExpectations(suite.T())
 }
 
 func (suite *userServiceSuite) TestCreateUser_Positive() {
@@ -121,7 +124,6 @@ func (suite *userServiceSuite) TestCreateUser_NilPointer_Negative() {
 	err := suite.svc.CreateUser(nil)
 	suite.Error(err.(*model.AppError).Err, "error when create user with nil pointer")
 	suite.Assertions.Equal(http.StatusInternalServerError, err.(*model.AppError).StatusCode)
-	suite.repo.AssertExpectations(suite.T())
 }
 
 func (suite *userServiceSuite) TestUpdateUser_Positive() {
@@ -149,7 +151,6 @@ func (suite *userServiceSuite) TestUpdateUser_NilPointer_Negative() {
 	err := suite.svc.UpdateUser(id, nil)
 	suite.Error(err.(*model.AppError).Err, "error when create user with nil pointer")
 	suite.Assertions.Equal(http.StatusInternalServerError, err.(*model.AppError).StatusCode)
-	suite.repo.AssertExpectations(suite.T())
 }
 
 func (suite *userServiceSuite) TestUpdateUser_NotFound_Negative() {
