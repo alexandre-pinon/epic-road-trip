@@ -23,7 +23,7 @@ func InitApp() {
 
 	repositories := SetupRepositories(db)
 	services := SetupServices(repositories)
-	controllers := SetupControllers(services)
+	controllers := SetupControllers(cfg, services)
 
 	router := gin.Default()
 

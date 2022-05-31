@@ -11,6 +11,10 @@ func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
 
 	apiRoutes := router.Group("/api")
 	{
+		authRoutes := apiRoutes.Group("/auth")
+		{
+			authRoutes.POST("/login", controllers.AuthController.HandleLogin)
+		}
 		userRoutes := apiRoutes.Group("/user")
 		{
 			userRoutes.GET("/", utils.ServeHTTP(controllers.UserController.GetAllUsers))

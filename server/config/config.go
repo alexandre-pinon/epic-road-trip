@@ -11,8 +11,9 @@ import (
 )
 
 type Config struct {
-	Env       Env
+	AppName   string
 	Database  DatabaseConfig
+	Env       Env
 	SecretKey string
 }
 
@@ -37,23 +38,27 @@ func GetConfig(env Env) *Config {
 		}
 	}
 
+	appName := os.Getenv("APP_NAME")
 	dbUri := os.Getenv("DB_URI")
-	if dbUri == "" {
-		log.Fatal("DB_URI is not set")
-	}
 	dbName := os.Getenv("DB_NAME")
-	if dbName == "" {
-		log.Fatal("DB_NAME is not set")
+	secretKey := os.Getenv("SECRET_KEY")
+
+	for _, s := range []string{appName, dbUri, dbName, secretKey} {
+		if s == "" {
+			log.Fatalf("%s is not set", s)
+		}
 	}
 
 	dbName = fmt.Sprintf("%s-%s", strings.ToLower(string(env)), dbName)
 
 	cfg := &Config{
-		Env: env,
+		AppName: appName,
 		Database: DatabaseConfig{
 			Uri:  dbUri,
 			Name: dbName,
 		},
+		Env:       env,
+		SecretKey: secretKey,
 	}
 
 	return cfg
