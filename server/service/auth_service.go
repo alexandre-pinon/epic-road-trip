@@ -23,6 +23,7 @@ type AuthService interface {
 	Unauthorized(ctx *gin.Context, code int, message string)
 	LoginResponse(ctx *gin.Context, code int, token string, expire time.Time)
 	LogoutResponse(ctx *gin.Context, code int)
+	RefreshResponse(ctx *gin.Context, code int, message string, time time.Time)
 }
 
 func NewAuthService(repo repository.UserRepository) AuthService {
@@ -93,6 +94,15 @@ func (svc *authService) LogoutResponse(ctx *gin.Context, code int) {
 	ctx.JSON(code, &model.AppResponse{
 		Success:   true,
 		Message:   "Logout successfully",
+		Data:      struct{}{},
+		ValErrors: []model.ValError{},
+	})
+}
+
+func (svc *authService) RefreshResponse(ctx *gin.Context, code int, message string, time time.Time) {
+	ctx.JSON(code, &model.AppResponse{
+		Success:   true,
+		Message:   "Token refreshed successfully",
 		Data:      struct{}{},
 		ValErrors: []model.ValError{},
 	})

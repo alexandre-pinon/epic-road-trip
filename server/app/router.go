@@ -18,6 +18,7 @@ func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
 			authRoutes.POST("/register", utils.ServeHTTP(controllers.UserController.CreateUser))
 			authRoutes.POST("/login", controllers.AuthController.HandleLogin)
 			authRoutes.POST("/logout", authMiddleware, controllers.AuthController.HandleLogout)
+			authRoutes.POST("/refresh_token", controllers.AuthController.HandleRefresh)
 		}
 		userRoutes := apiRoutes.Group("/user")
 		{
