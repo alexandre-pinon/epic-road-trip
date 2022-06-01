@@ -81,12 +81,9 @@ func (svc *authService) Unauthorized(ctx *gin.Context, code int, message string)
 
 func (svc *authService) LoginResponse(c *gin.Context, code int, token string, expire time.Time) {
 	c.JSON(code, &model.AppResponse{
-		Success: false,
-		Message: "Login successfully",
-		Data: &model.LoginResponseData{
-			Token:  token,
-			Expire: expire,
-		},
+		Success:   false,
+		Message:   "Login successfully",
+		Data:      struct{}{},
 		ValErrors: []model.ValError{},
 	})
 }
