@@ -19,9 +19,10 @@ type authService struct {
 type AuthService interface {
 	PayloadFunc(data interface{}) jwt.MapClaims
 	IdentityHandler(ctx *gin.Context) interface{}
-	Authenticator(c *gin.Context) (interface{}, error)
-	Unauthorized(c *gin.Context, code int, message string)
-	LoginResponse(c *gin.Context, code int, token string, expire time.Time)
+	Authenticator(ctx *gin.Context) (interface{}, error)
+	Unauthorized(ctx *gin.Context, code int, message string)
+	LoginResponse(ctx *gin.Context, code int, token string, expire time.Time)
+	LogoutResponse(ctx *gin.Context, code int)
 }
 
 func NewAuthService(repo repository.UserRepository) AuthService {
@@ -79,10 +80,19 @@ func (svc *authService) Unauthorized(ctx *gin.Context, code int, message string)
 	})
 }
 
-func (svc *authService) LoginResponse(c *gin.Context, code int, token string, expire time.Time) {
-	c.JSON(code, &model.AppResponse{
-		Success:   false,
+func (svc *authService) LoginResponse(ctx *gin.Context, code int, token string, expire time.Time) {
+	ctx.JSON(code, &model.AppResponse{
+		Success:   true,
 		Message:   "Login successfully",
+		Data:      struct{}{},
+		ValErrors: []model.ValError{},
+	})
+}
+
+func (svc *authService) LogoutResponse(ctx *gin.Context, code int) {
+	ctx.JSON(code, &model.AppResponse{
+		Success:   true,
+		Message:   "Logout successfully",
 		Data:      struct{}{},
 		ValErrors: []model.ValError{},
 	})

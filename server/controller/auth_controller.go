@@ -18,6 +18,7 @@ type authController struct {
 type AuthController interface {
 	HandleLogin(ctx *gin.Context)
 	JWTMiddleware() gin.HandlerFunc
+	HandleLogout(ctx *gin.Context)
 }
 
 func NewAuthController(cfg *config.Config, svc service.AuthService) AuthController {
@@ -32,6 +33,7 @@ func NewAuthController(cfg *config.Config, svc service.AuthService) AuthControll
 		Authenticator:   svc.Authenticator,
 		Unauthorized:    svc.Unauthorized,
 		LoginResponse:   svc.LoginResponse,
+		LogoutResponse:  svc.LogoutResponse,
 		TokenLookup:     "cookie:jwt",
 		SendCookie:      true,
 		CookieHTTPOnly:  true,
@@ -49,4 +51,8 @@ func (ctrl *authController) HandleLogin(ctx *gin.Context) {
 
 func (ctrl *authController) JWTMiddleware() gin.HandlerFunc {
 	return ctrl.authMiddleware.MiddlewareFunc()
+}
+
+func (ctrl *authController) HandleLogout(ctx *gin.Context) {
+	ctrl.authMiddleware.LogoutHandler(ctx)
 }

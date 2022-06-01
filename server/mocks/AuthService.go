@@ -18,13 +18,13 @@ type AuthService struct {
 	mock.Mock
 }
 
-// Authenticator provides a mock function with given fields: c
-func (_m *AuthService) Authenticator(c *gin.Context) (interface{}, error) {
-	ret := _m.Called(c)
+// Authenticator provides a mock function with given fields: ctx
+func (_m *AuthService) Authenticator(ctx *gin.Context) (interface{}, error) {
+	ret := _m.Called(ctx)
 
 	var r0 interface{}
 	if rf, ok := ret.Get(0).(func(*gin.Context) interface{}); ok {
-		r0 = rf(c)
+		r0 = rf(ctx)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(interface{})
@@ -33,7 +33,7 @@ func (_m *AuthService) Authenticator(c *gin.Context) (interface{}, error) {
 
 	var r1 error
 	if rf, ok := ret.Get(1).(func(*gin.Context) error); ok {
-		r1 = rf(c)
+		r1 = rf(ctx)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -57,9 +57,14 @@ func (_m *AuthService) IdentityHandler(ctx *gin.Context) interface{} {
 	return r0
 }
 
-// LoginResponse provides a mock function with given fields: c, code, token, expire
-func (_m *AuthService) LoginResponse(c *gin.Context, code int, token string, expire time.Time) {
-	_m.Called(c, code, token, expire)
+// LoginResponse provides a mock function with given fields: ctx, code, token, expire
+func (_m *AuthService) LoginResponse(ctx *gin.Context, code int, token string, expire time.Time) {
+	_m.Called(ctx, code, token, expire)
+}
+
+// LogoutResponse provides a mock function with given fields: ctx, code
+func (_m *AuthService) LogoutResponse(ctx *gin.Context, code int) {
+	_m.Called(ctx, code)
 }
 
 // PayloadFunc provides a mock function with given fields: data
@@ -78,9 +83,9 @@ func (_m *AuthService) PayloadFunc(data interface{}) jwt.MapClaims {
 	return r0
 }
 
-// Unauthorized provides a mock function with given fields: c, code, message
-func (_m *AuthService) Unauthorized(c *gin.Context, code int, message string) {
-	_m.Called(c, code, message)
+// Unauthorized provides a mock function with given fields: ctx, code, message
+func (_m *AuthService) Unauthorized(ctx *gin.Context, code int, message string) {
+	_m.Called(ctx, code, message)
 }
 
 // NewAuthService creates a new instance of AuthService. It also registers the testing.TB interface on the mock and a cleanup function to assert the mocks expectations.
