@@ -32,6 +32,9 @@ func NewAuthController(cfg *config.Config, svc service.AuthService) AuthControll
 		Authenticator:   svc.Authenticator,
 		Unauthorized:    svc.Unauthorized,
 		LoginResponse:   svc.LoginResponse,
+		TokenLookup:     "cookie:jwt",
+		SendCookie:      true,
+		CookieHTTPOnly:  true,
 	})
 	if err != nil {
 		log.Fatal("Error initializing auth")
