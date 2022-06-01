@@ -22,6 +22,13 @@ type DatabaseConfig struct {
 	Name string
 }
 
+const (
+	APP_NAME   = "APP_NAME"
+	DB_URI     = "DB_URI"
+	DB_NAME    = "DB_NAME"
+	SECRET_KEY = "SECRET_KEY"
+)
+
 func GetConfig(env Env) *Config {
 	projectName := regexp.MustCompile(`^(.*server)`)
 	currentWorkDirectory, _ := os.Getwd()
@@ -38,27 +45,29 @@ func GetConfig(env Env) *Config {
 		}
 	}
 
-	appName := os.Getenv("APP_NAME")
-	dbUri := os.Getenv("DB_URI")
-	dbName := os.Getenv("DB_NAME")
-	secretKey := os.Getenv("SECRET_KEY")
+	envVariables := map[string]string{
+		APP_NAME:   os.Getenv("APP_NAME"),
+		DB_URI:     os.Getenv("DB_URI"),
+		DB_NAME:    os.Getenv("DB_NAME"),
+		SECRET_KEY: os.Getenv("SECRET_KEY"),
+	}
 
-	for _, s := range []string{appName, dbUri, dbName, secretKey} {
-		if s == "" {
-			log.Fatalf("%s is not set", s)
+	for k, v := range envVariables {
+		if v == "" {
+			log.Fatalf("%s is not set", k)
 		}
 	}
 
-	dbName = fmt.Sprintf("%s-%s", strings.ToLower(string(env)), dbName)
+	dbName := fmt.Sprintf("%s-%s", strings.ToLower(string(env)), envVariables[APP_NAME])
 
 	cfg := &Config{
-		AppName: appName,
+		AppName: envVariables[APP_NAME],
 		Database: DatabaseConfig{
-			Uri:  dbUri,
+			Uri:  envVariables[DB_URI],
 			Name: dbName,
 		},
 		Env:       env,
-		SecretKey: secretKey,
+		SecretKey: envVariables[SECRET_KEY],
 	}
 
 	return cfg
