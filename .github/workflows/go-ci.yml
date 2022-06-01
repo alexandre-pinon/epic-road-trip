@@ -3,8 +3,10 @@ name: Go
 on: pull_request
 
 env:
+  APP_NAME: ${{secrets.APP_NAME}}
   DB_URI: ${{secrets.DB_URI}}
   DB_NAME: ${{secrets.DB_NAME}}
+  SECRET_KEY: ${{secrets.SECRET_KEY}}
 
 jobs:
   server:
