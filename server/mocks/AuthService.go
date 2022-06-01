@@ -83,6 +83,11 @@ func (_m *AuthService) PayloadFunc(data interface{}) jwt.MapClaims {
 	return r0
 }
 
+// RefreshResponse provides a mock function with given fields: ctx, code, message, _a3
+func (_m *AuthService) RefreshResponse(ctx *gin.Context, code int, message string, _a3 time.Time) {
+	_m.Called(ctx, code, message, _a3)
+}
+
 // Unauthorized provides a mock function with given fields: ctx, code, message
 func (_m *AuthService) Unauthorized(ctx *gin.Context, code int, message string) {
 	_m.Called(ctx, code, message)
