@@ -18,7 +18,6 @@ func NewRootController() RootController {
 
 // Healthcheck godoc
 // @Summary healthcheck
-// @Schemes
 // @Description allows healthcheck
 // @Tags healthcheck
 // @Accept json

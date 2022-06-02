@@ -37,6 +37,8 @@ func InitApp() {
 	docs.SwaggerInfo.Schemes = []string{"http"}
 
 	router := gin.Default()
+	router.StaticFile("/docs/swagger.json", "docs/swagger.json")
+	router.StaticFile("/docs/swagger.html", "docs/swagger.html")
 
 	RegisterRoutes(router, controllers)
 
