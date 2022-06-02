@@ -1,0 +1,39 @@
+definitions:
+  model.AppResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+      success:
+        type: boolean
+      valErrors:
+        items:
+          $ref: '#/definitions/model.ValError'
+        type: array
+    type: object
+  model.ValError:
+    properties:
+      field:
+        type: string
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /:
+    get:
+      consumes:
+      - application/json
+      description: allows healthcheck
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.AppResponse'
+      summary: healthcheck
+      tags:
+      - healthcheck
+swagger: "2.0"

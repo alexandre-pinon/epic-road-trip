@@ -58,7 +58,7 @@ func GetConfig(env Env) *Config {
 		}
 	}
 
-	dbName := fmt.Sprintf("%s-%s", strings.ToLower(string(env)), envVariables[APP_NAME])
+	dbName := fmt.Sprintf("%s-%s", strings.ToLower(string(env)), envVariables[DB_NAME])
 
 	cfg := &Config{
 		AppName: envVariables[APP_NAME],

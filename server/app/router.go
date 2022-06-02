@@ -4,12 +4,15 @@ import (
 	"github.com/alexandre-pinon/epic-road-trip/middleware"
 	"github.com/alexandre-pinon/epic-road-trip/utils"
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
 	authMiddleware := controllers.AuthController.JWTMiddleware()
 
-	router.GET("/", utils.ServeHTTP(controllers.RootController.Ok))
+	router.GET("/", utils.ServeHTTP(controllers.RootController.Healthcheck))
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	apiRoutes := router.Group("/api")
 	{
