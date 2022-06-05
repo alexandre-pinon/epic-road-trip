@@ -25,13 +25,10 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "tags": [
-                    "healthcheck"
-                ],
                 "summary": "healthcheck",
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Success",
                         "schema": {
                             "$ref": "#/definitions/model.AppResponse"
                         }
@@ -49,7 +46,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Auth"
                 ],
                 "summary": "Login",
                 "parameters": [
@@ -65,7 +62,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful login",
+                        "description": "Success",
                         "schema": {
                             "$ref": "#/definitions/model.LoginSuccess"
                         }
@@ -74,6 +71,12 @@ const docTemplate = `{
                         "description": "Missing/Incorrect credentials",
                         "schema": {
                             "$ref": "#/definitions/model.LoginFailureCredentials"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/model.InternalServerError"
                         }
                     }
                 }
@@ -89,12 +92,12 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Auth"
                 ],
                 "summary": "Logout",
                 "responses": {
                     "200": {
-                        "description": "Successful register",
+                        "description": "Success",
                         "schema": {
                             "$ref": "#/definitions/model.LogoutSuccess"
                         }
@@ -102,7 +105,13 @@ const docTemplate = `{
                     "401": {
                         "description": "Missing/Expired token",
                         "schema": {
-                            "$ref": "#/definitions/model.LogoutFailure"
+                            "$ref": "#/definitions/model.Unauthorized"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/model.InternalServerError"
                         }
                     }
                 }
@@ -118,12 +127,12 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Auth"
                 ],
                 "summary": "Refresh",
                 "responses": {
                     "200": {
-                        "description": "Token refreshed successfully",
+                        "description": "Success",
                         "schema": {
                             "$ref": "#/definitions/model.RefreshSuccess"
                         }
@@ -131,7 +140,13 @@ const docTemplate = `{
                     "401": {
                         "description": "Missing/Expired token",
                         "schema": {
-                            "$ref": "#/definitions/model.RefreshFailure"
+                            "$ref": "#/definitions/model.Unauthorized"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/model.InternalServerError"
                         }
                     }
                 }
@@ -147,7 +162,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Auth"
                 ],
                 "summary": "Register",
                 "parameters": [
@@ -163,7 +178,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful register",
+                        "description": "Success",
                         "schema": {
                             "$ref": "#/definitions/model.RegisterSuccess"
                         }
@@ -171,7 +186,259 @@ const docTemplate = `{
                     "400": {
                         "description": "Invalid request body",
                         "schema": {
-                            "$ref": "#/definitions/model.RegisterFailureInvalid"
+                            "$ref": "#/definitions/model.InvalidJsonBody"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/model.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "description": "Get all users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get all users",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/model.GetAllUserSuccess"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/model.InternalServerError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create user user given valid firstname, lastname, email (unique), password, phone (unique)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Create user",
+                "parameters": [
+                    {
+                        "description": "firstname, lastname, email, password, phone",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.RegisterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/model.RegisterSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body",
+                        "schema": {
+                            "$ref": "#/definitions/model.InvalidJsonBody"
+                        }
+                    },
+                    "401": {
+                        "description": "Missing/Expired token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Unauthorized"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/model.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/:id": {
+            "get": {
+                "description": "Get user given a valid ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/model.GetUserByIDSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/model.InvalidID"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/model.UserNotFound"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/model.InternalServerError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update user user given valid ID, firstname, lastname, email (unique), phone (unique)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "firstname, lastname, email, phone",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateUserSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID/body",
+                        "schema": {
+                            "$ref": "#/definitions/model.InvalidJsonBody"
+                        }
+                    },
+                    "401": {
+                        "description": "Missing/Expired token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Unauthorized"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/model.UserNotFound"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/model.InternalServerError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete user user given valid ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Delete user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/model.DeleteUserSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID",
+                        "schema": {
+                            "$ref": "#/definitions/model.InvalidID"
+                        }
+                    },
+                    "401": {
+                        "description": "Missing/Expired token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Unauthorized"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/model.UserNotFound"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/model.InternalServerError"
                         }
                     }
                 }
@@ -188,6 +455,143 @@ const docTemplate = `{
                 },
                 "success": {
                     "type": "boolean"
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.ValError"
+                    }
+                }
+            }
+        },
+        "model.DeleteUserSuccess": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.User"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "User deleted successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.GetAllUserSuccess": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.User"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Users retrieved successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.GetUserByIDSuccess": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.User"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "User \u003cid\u003e retrieved successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.InternalServerError": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.InvalidID": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "invalid id"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.InvalidJsonBody": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "invalid json request body"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
                 },
                 "valErrors": {
                     "type": "array",
@@ -258,28 +662,6 @@ const docTemplate = `{
                 }
             }
         },
-        "model.LogoutFailure": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "object"
-                },
-                "message": {
-                    "type": "string",
-                    "example": "cookie token is empty / Token is expired"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "valErrors": {
-                    "type": "array",
-                    "items": {
-                        "type": "object"
-                    }
-                }
-            }
-        },
         "model.LogoutSuccess": {
             "type": "object",
             "properties": {
@@ -293,28 +675,6 @@ const docTemplate = `{
                 "success": {
                     "type": "boolean",
                     "example": true
-                },
-                "valErrors": {
-                    "type": "array",
-                    "items": {
-                        "type": "object"
-                    }
-                }
-            }
-        },
-        "model.RefreshFailure": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "object"
-                },
-                "message": {
-                    "type": "string",
-                    "example": "cookie token is empty / Token is expired"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
                 },
                 "valErrors": {
                     "type": "array",
@@ -342,28 +702,6 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "type": "object"
-                    }
-                }
-            }
-        },
-        "model.RegisterFailureInvalid": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "object"
-                },
-                "message": {
-                    "type": "string",
-                    "example": "invalid json request body"
-                },
-                "success": {
-                    "type": "boolean",
-                    "example": false
-                },
-                "valErrors": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.ValError"
                     }
                 }
             }
@@ -419,6 +757,162 @@ const docTemplate = `{
                 "success": {
                     "type": "boolean",
                     "example": true
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.RoadTrip": {
+            "type": "object",
+            "properties": {
+                "enddate": {
+                    "type": "string"
+                },
+                "locations": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "startdate": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Unauthorized": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "cookie token is empty / Token is expired"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.UpdateUserRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "firstname",
+                "lastname",
+                "phone"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "yoimiya.naganohara@gmail.com"
+                },
+                "firstname": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 2,
+                    "example": "yoimiya"
+                },
+                "lastname": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 2,
+                    "example": "naganohara"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "+33612345678"
+                }
+            }
+        },
+        "model.UpdateUserSuccess": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.User"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "User updated successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.User": {
+            "type": "object",
+            "required": [
+                "email",
+                "firstname",
+                "lastname",
+                "phone"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "firstname": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 2
+                },
+                "id": {
+                    "type": "string"
+                },
+                "lastname": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 2
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "roadTrip": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.RoadTrip"
+                    }
+                }
+            }
+        },
+        "model.UserNotFound": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "user not found"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
                 },
                 "valErrors": {
                     "type": "array",

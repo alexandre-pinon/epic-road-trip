@@ -19,10 +19,9 @@ func NewRootController() RootController {
 // Healthcheck godoc
 // @Summary healthcheck
 // @Description allows healthcheck
-// @Tags healthcheck
 // @Accept json
 // @Produce json
-// @Success 200 {object} model.AppResponse
+// @Success 200 {object} model.AppResponse "Success"
 // @Router / [get]
 func (controller *rootController) Healthcheck(ctx *gin.Context) (*model.AppResult, *model.AppError) {
 	return &model.AppResult{

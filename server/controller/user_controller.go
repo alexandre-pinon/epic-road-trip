@@ -26,6 +26,15 @@ func NewUserController(svc service.UserService) UserController {
 	return &userController{svc}
 }
 
+// Get all users godoc
+// @Summary Get all users
+// @Description Get all users
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.GetAllUserSuccess "Success"
+// @Failure 500 {object} model.InternalServerError "Internal server error"
+// @Router /user [get]
 func (ctrl *userController) GetAllUsers(ctx *gin.Context) (*model.AppResult, *model.AppError) {
 	users, err := ctrl.userService.GetAllUsers()
 	if err != nil {
@@ -49,6 +58,18 @@ func (ctrl *userController) GetAllUsers(ctx *gin.Context) (*model.AppResult, *mo
 	}, nil
 }
 
+// Get user by ID godoc
+// @Summary Get user by ID
+// @Description Get user given a valid ID
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param id path string true "User ID"
+// @Success 200 {object} model.GetUserByIDSuccess "Success"
+// @Failure 400 {object} model.InvalidID "Invalid ID"
+// @Failure 404 {object} model.UserNotFound "User not found"
+// @Failure 500 {object} model.InternalServerError "Internal server error"
+// @Router /user/:id [get]
 func (ctrl *userController) GetUserByID(ctx *gin.Context) (*model.AppResult, *model.AppError) {
 	id, _ := ctx.Get("id")
 	user, err := ctrl.userService.GetUserByID(id.(primitive.ObjectID))
@@ -63,6 +84,18 @@ func (ctrl *userController) GetUserByID(ctx *gin.Context) (*model.AppResult, *mo
 	}, nil
 }
 
+// Create user godoc
+// @Summary Create user
+// @Description Create user user given valid firstname, lastname, email (unique), password, phone (unique)
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param user body model.RegisterRequest true "firstname, lastname, email, password, phone"
+// @Success 200 {object} model.RegisterSuccess "Success"
+// @Failure 400 {object} model.InvalidJsonBody "Invalid request body"
+// @Failure 401 {object} model.Unauthorized "Missing/Expired token"
+// @Failure 500 {object} model.InternalServerError "Internal server error"
+// @Router /user [post]
 func (ctrl *userController) CreateUser(ctx *gin.Context) (*model.AppResult, *model.AppError) {
 	var userFormData model.UserFormData
 
@@ -91,6 +124,20 @@ func (ctrl *userController) CreateUser(ctx *gin.Context) (*model.AppResult, *mod
 	}, nil
 }
 
+// Update user godoc
+// @Summary Update user
+// @Description Update user user given valid ID, firstname, lastname, email (unique), phone (unique)
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param id path string true "User ID"
+// @Param user body model.UpdateUserRequest true "firstname, lastname, email, phone"
+// @Success 200 {object} model.UpdateUserSuccess "Success"
+// @Failure 400 {object} model.InvalidJsonBody "Invalid ID/body"
+// @Failure 401 {object} model.Unauthorized "Missing/Expired token"
+// @Failure 404 {object} model.UserNotFound "User not found"
+// @Failure 500 {object} model.InternalServerError "Internal server error"
+// @Router /user/:id [put]
 func (ctrl *userController) UpdateUser(ctx *gin.Context) (*model.AppResult, *model.AppError) {
 	var user model.User
 
@@ -113,6 +160,19 @@ func (ctrl *userController) UpdateUser(ctx *gin.Context) (*model.AppResult, *mod
 	}, nil
 }
 
+// Delete user godoc
+// @Summary Delete user
+// @Description Delete user user given valid ID
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param id path string true "User ID"
+// @Success 200 {object} model.DeleteUserSuccess "Success"
+// @Failure 400 {object} model.InvalidID "Invalid ID"
+// @Failure 401 {object} model.Unauthorized "Missing/Expired token"
+// @Failure 404 {object} model.UserNotFound "User not found"
+// @Failure 500 {object} model.InternalServerError "Internal server error"
+// @Router /user/:id [delete]
 func (ctrl *userController) DeleteUser(ctx *gin.Context) (*model.AppResult, *model.AppError) {
 	id, _ := ctx.Get("id")
 	if err := ctrl.userService.DeleteUser(id.(primitive.ObjectID)); err != nil {

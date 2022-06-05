@@ -14,7 +14,6 @@ func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	apiRoutes := router.Group("/api/v1")
-	apiRoutes.GET("/", utils.ServeHTTP(controllers.RootController.Healthcheck))
 	{
 		authRoutes := apiRoutes.Group("/auth")
 		{
@@ -34,5 +33,6 @@ func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
 			userRoutes.PUT("/:id", middleware.CheckID(), utils.ServeHTTP(controllers.UserController.UpdateUser))
 			userRoutes.DELETE("/:id", middleware.CheckID(), utils.ServeHTTP(controllers.UserController.DeleteUser))
 		}
+		apiRoutes.GET("/", utils.ServeHTTP(controllers.RootController.Healthcheck))
 	}
 }
