@@ -11,10 +11,10 @@ import (
 func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
 	authMiddleware := controllers.AuthController.JWTMiddleware()
 
-	router.GET("/", utils.ServeHTTP(controllers.RootController.Healthcheck))
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
-	apiRoutes := router.Group("/api")
+	apiRoutes := router.Group("/api/v1")
+	apiRoutes.GET("/", utils.ServeHTTP(controllers.RootController.Healthcheck))
 	{
 		authRoutes := apiRoutes.Group("/auth")
 		{

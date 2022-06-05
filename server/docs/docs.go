@@ -38,6 +38,144 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/auth/login": {
+            "post": {
+                "description": "Login user given valid email and password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login",
+                "parameters": [
+                    {
+                        "description": "email \u0026 password",
+                        "name": "userLogin",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful login",
+                        "schema": {
+                            "$ref": "#/definitions/model.LoginSuccess"
+                        }
+                    },
+                    "401": {
+                        "description": "Missing/Incorrect credentials",
+                        "schema": {
+                            "$ref": "#/definitions/model.LoginFailureCredentials"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "description": "Logout user by removing jwt cookie",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Logout",
+                "responses": {
+                    "200": {
+                        "description": "Successful register",
+                        "schema": {
+                            "$ref": "#/definitions/model.LogoutSuccess"
+                        }
+                    },
+                    "401": {
+                        "description": "Missing/Expired token",
+                        "schema": {
+                            "$ref": "#/definitions/model.LogoutFailure"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/refresh_token": {
+            "post": {
+                "description": "Refresh user's access token given valid refresh token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Refresh",
+                "responses": {
+                    "200": {
+                        "description": "Token refreshed successfully",
+                        "schema": {
+                            "$ref": "#/definitions/model.RefreshSuccess"
+                        }
+                    },
+                    "401": {
+                        "description": "Missing/Expired token",
+                        "schema": {
+                            "$ref": "#/definitions/model.RefreshFailure"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "description": "Register user given valid firstname, lastname, email (unique), password, phone (unique)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Register",
+                "parameters": [
+                    {
+                        "description": "firstname, lastname, email, password, phone",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.RegisterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful register",
+                        "schema": {
+                            "$ref": "#/definitions/model.RegisterSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body",
+                        "schema": {
+                            "$ref": "#/definitions/model.RegisterFailureInvalid"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -55,6 +193,237 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/model.ValError"
+                    }
+                }
+            }
+        },
+        "model.LoginFailureCredentials": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "incorrect/missing email or password"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.LoginRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "yoimiya.naganohara@gmail.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "12345678"
+                }
+            }
+        },
+        "model.LoginSuccess": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Login successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.LogoutFailure": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "cookie token is empty / Token is expired"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.LogoutSuccess": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Logout successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.RefreshFailure": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "cookie token is empty / Token is expired"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.RefreshSuccess": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Token refreshed successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.RegisterFailureInvalid": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "invalid json request body"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.ValError"
+                    }
+                }
+            }
+        },
+        "model.RegisterRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "firstname",
+                "lastname",
+                "password",
+                "phone"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "yoimiya.naganohara@gmail.com"
+                },
+                "firstname": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 2,
+                    "example": "yoimiya"
+                },
+                "lastname": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 2,
+                    "example": "naganohara"
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 8,
+                    "example": "12345678"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "+33612345678"
+                }
+            }
+        },
+        "model.RegisterSuccess": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "User created successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
                     }
                 }
             }

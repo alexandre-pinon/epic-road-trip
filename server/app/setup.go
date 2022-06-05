@@ -28,19 +28,19 @@ func InitApp() {
 
 	log.Print("Initializing swagger...")
 
-	// programmatically set swagger info
-	docs.SwaggerInfo.Title = "Epic Road Trip API"
-	docs.SwaggerInfo.Description = "This is the API of the BEST road trip planner of the market."
-	docs.SwaggerInfo.Version = "1.0"
-	docs.SwaggerInfo.Host = "localhost:8000"
-	docs.SwaggerInfo.BasePath = "/"
-	docs.SwaggerInfo.Schemes = []string{"http"}
-
 	router := gin.Default()
-	router.StaticFile("/docs/swagger.json", "docs/swagger.json")
-	router.StaticFile("/docs/swagger.html", "docs/swagger.html")
+	router.StaticFile("/docs.html", "docs/index.html")
 
 	RegisterRoutes(router, controllers)
 
 	router.Run()
+}
+
+func InitDocs() {
+	docs.SwaggerInfo.Title = "Epic Road Trip API"
+	docs.SwaggerInfo.Description = "This is the API of the BEST road trip planner of the market."
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.Host = "localhost:8000"
+	docs.SwaggerInfo.BasePath = "/api/v1"
+	docs.SwaggerInfo.Schemes = []string{"http"}
 }

@@ -11,6 +11,168 @@ definitions:
           $ref: '#/definitions/model.ValError'
         type: array
     type: object
+  model.LoginFailureCredentials:
+    properties:
+      data:
+        type: object
+      message:
+        example: incorrect/missing email or password
+        type: string
+      success:
+        example: false
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.LoginRequest:
+    properties:
+      email:
+        example: yoimiya.naganohara@gmail.com
+        type: string
+      password:
+        example: "12345678"
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  model.LoginSuccess:
+    properties:
+      data:
+        type: object
+      message:
+        example: Login successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.LogoutFailure:
+    properties:
+      data:
+        type: object
+      message:
+        example: cookie token is empty / Token is expired
+        type: string
+      success:
+        example: false
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.LogoutSuccess:
+    properties:
+      data:
+        type: object
+      message:
+        example: Logout successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.RefreshFailure:
+    properties:
+      data:
+        type: object
+      message:
+        example: cookie token is empty / Token is expired
+        type: string
+      success:
+        example: false
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.RefreshSuccess:
+    properties:
+      data:
+        type: object
+      message:
+        example: Token refreshed successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.RegisterFailureInvalid:
+    properties:
+      data:
+        type: object
+      message:
+        example: invalid json request body
+        type: string
+      success:
+        example: false
+        type: boolean
+      valErrors:
+        items:
+          $ref: '#/definitions/model.ValError'
+        type: array
+    type: object
+  model.RegisterRequest:
+    properties:
+      email:
+        example: yoimiya.naganohara@gmail.com
+        type: string
+      firstname:
+        example: yoimiya
+        maxLength: 50
+        minLength: 2
+        type: string
+      lastname:
+        example: naganohara
+        maxLength: 50
+        minLength: 2
+        type: string
+      password:
+        example: "12345678"
+        maxLength: 100
+        minLength: 8
+        type: string
+      phone:
+        example: "+33612345678"
+        type: string
+    required:
+    - email
+    - firstname
+    - lastname
+    - password
+    - phone
+    type: object
+  model.RegisterSuccess:
+    properties:
+      data:
+        type: object
+      message:
+        example: User created successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
   model.ValError:
     properties:
       field:
@@ -36,4 +198,95 @@ paths:
       summary: healthcheck
       tags:
       - healthcheck
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login user given valid email and password
+      parameters:
+      - description: email & password
+        in: body
+        name: userLogin
+        required: true
+        schema:
+          $ref: '#/definitions/model.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful login
+          schema:
+            $ref: '#/definitions/model.LoginSuccess'
+        "401":
+          description: Missing/Incorrect credentials
+          schema:
+            $ref: '#/definitions/model.LoginFailureCredentials'
+      summary: Login
+      tags:
+      - auth
+  /auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout user by removing jwt cookie
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful register
+          schema:
+            $ref: '#/definitions/model.LogoutSuccess'
+        "401":
+          description: Missing/Expired token
+          schema:
+            $ref: '#/definitions/model.LogoutFailure'
+      summary: Logout
+      tags:
+      - auth
+  /auth/refresh_token:
+    post:
+      consumes:
+      - application/json
+      description: Refresh user's access token given valid refresh token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Token refreshed successfully
+          schema:
+            $ref: '#/definitions/model.RefreshSuccess'
+        "401":
+          description: Missing/Expired token
+          schema:
+            $ref: '#/definitions/model.RefreshFailure'
+      summary: Refresh
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register user given valid firstname, lastname, email (unique),
+        password, phone (unique)
+      parameters:
+      - description: firstname, lastname, email, password, phone
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful register
+          schema:
+            $ref: '#/definitions/model.RegisterSuccess'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/model.RegisterFailureInvalid'
+      summary: Register
+      tags:
+      - auth
 swagger: "2.0"
