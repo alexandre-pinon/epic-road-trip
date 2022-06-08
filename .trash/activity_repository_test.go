@@ -19,13 +19,13 @@ type activityRepositorySuite struct {
 func (suite *activityRepositorySuite) EnjoyTest() {
 	insertActivities := []model.Activity{
 		{
-			Name:      "yoimiya"
+			Name:      "yoimiya",
 		},
 		{
-			Name:      "hu"
+			Name:      "hu",
 		},
 		{
-			Name:      "kokomi"
+			Name:      "kokomi",
 		}
 	}
 

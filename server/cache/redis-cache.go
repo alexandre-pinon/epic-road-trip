@@ -14,7 +14,7 @@ type redisCache struct {
 	expires time.Duration
 }
 
-func NewRedisCache (host string, db int , exp time.Duration) UserCache {
+func NewRedisCache (host string, db int , exp time.Duration) ActivityCache {
 	return &redisCache{
 		host :		host,
 		db:			db,
@@ -26,11 +26,11 @@ func (cache *redisCache) getClient() *redis.Client{
 	return redis.NewClient(&redis.Options{
 		Addr: cache.host,
 		Password: "",
-		DB: cache.db
+		DB: cache.db,
 	})
 }
 
-func (cache * redisCache) Set(key string , value *model.User){
+func (cache * redisCache) Set(key string , value *model.Activity){
 	client := cache.getClient()
 
 	json, err := json.Marshal(value)
@@ -40,7 +40,7 @@ func (cache * redisCache) Set(key string , value *model.User){
 	client.Set(key, json, cache.expires*time.Second)
 }
 
-func (cache *redisCache) Get(key string) *model.User {
+func (cache *redisCache) Get(key string) *model.Activity {
 	client := cache.getClient()
 
 	val, err :=  client.Get(key).Result()
@@ -48,11 +48,11 @@ func (cache *redisCache) Get(key string) *model.User {
 		return nil
 	}
 
-	user := model.User{}
-	err = json.Unmarshal([]byte(val), &user)
+	activity := model.Activity{}
+	err = json.Unmarshal([]byte(val), &activity)
 	if err != nil {
 		panic(err)
 	}
 
-	return &user
+	return &activity
 }
