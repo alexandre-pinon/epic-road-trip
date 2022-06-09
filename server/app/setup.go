@@ -2,7 +2,6 @@ package app
 
 import (
 	"log"
-	"os"
 
 	"github.com/alexandre-pinon/epic-road-trip/config"
 	"github.com/alexandre-pinon/epic-road-trip/docs"
@@ -10,15 +9,9 @@ import (
 )
 
 func InitApp() {
-	env := os.Getenv("GO_MODE")
-
-	if err := config.Env(env).IsValid(); err != nil {
-		log.Fatal(err)
-	}
-
 	log.Print("Initializing app...")
 
-	cfg := config.GetConfig(config.Env(env))
+	cfg := config.GetConfig()
 	db := config.ConnectDB(cfg)
 	defer config.DisconnectDB(cfg, db.Client())
 
