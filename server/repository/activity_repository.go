@@ -2,6 +2,6 @@ package repository
 
 import "github.com/alexandre-pinon/epic-road-trip/model"
 
-type ActivityRepository interface {
+type GoogleRepository interface {
 	Enjoy(position string) ([]*model.Activity , error)
 }

@@ -6,7 +6,10 @@ import (
 	
 )
 
-type activityRepositorySuite struct {
+
+type googleRepositorySuite struct {
 	suite.Suite 
-	repo ActivityRepository
+	cfg	cache.ActivityCache
+	repo GoogleRepository
+	
 }
