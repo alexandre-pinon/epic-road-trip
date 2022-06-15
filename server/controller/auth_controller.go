@@ -22,6 +22,17 @@ type AuthController interface {
 	HandleLogout(ctx *gin.Context)
 }
 
+// Register godoc
+// @Summary Register
+// @Description Register user given valid firstname, lastname, email (unique), password, phone (unique)
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param user body model.RegisterRequest true "firstname, lastname, email, password, phone"
+// @Success 200 {object} model.RegisterSuccess "Success"
+// @Failure 400 {object} model.InvalidJsonBody "Invalid request body"
+// @Failure 500 {object} model.InternalServerError "Internal server error"
+// @Router /auth/register [post]
 func NewAuthController(cfg *config.Config, svc service.AuthService) AuthController {
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:           cfg.AppName,
@@ -47,6 +58,17 @@ func NewAuthController(cfg *config.Config, svc service.AuthService) AuthControll
 	return &authController{svc, *authMiddleware}
 }
 
+// Login godoc
+// @Summary Login
+// @Description Login user given valid email and password
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param userLogin body model.LoginRequest true "email & password"
+// @Success 200 {object} model.LoginSuccess "Success"
+// @Failure 401 {object} model.LoginFailureCredentials "Missing/Incorrect credentials"
+// @Failure 500 {object} model.InternalServerError "Internal server error"
+// @Router /auth/login [post]
 func (ctrl *authController) HandleLogin(ctx *gin.Context) {
 	ctrl.authMiddleware.LoginHandler(ctx)
 }
@@ -55,10 +77,30 @@ func (ctrl *authController) JWTMiddleware() gin.HandlerFunc {
 	return ctrl.authMiddleware.MiddlewareFunc()
 }
 
+// Refresh godoc
+// @Summary Refresh
+// @Description Refresh user's access token given valid refresh token
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.RefreshSuccess "Success"
+// @Failure 401 {object} model.Unauthorized "Missing/Expired token"
+// @Failure 500 {object} model.InternalServerError "Internal server error"
+// @Router /auth/refresh_token [post]
 func (ctrl *authController) HandleRefresh(ctx *gin.Context) {
 	ctrl.authMiddleware.RefreshHandler(ctx)
 }
 
+// Logout godoc
+// @Summary Logout
+// @Description Logout user by removing jwt cookie
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.LogoutSuccess "Success"
+// @Failure 401 {object} model.Unauthorized "Missing/Expired token"
+// @Failure 500 {object} model.InternalServerError "Internal server error"
+// @Router /auth/logout [post]
 func (ctrl *authController) HandleLogout(ctx *gin.Context) {
 	ctrl.authMiddleware.LogoutHandler(ctx)
 }

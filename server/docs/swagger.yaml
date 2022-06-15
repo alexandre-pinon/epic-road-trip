@@ -1,0 +1,629 @@
+definitions:
+  model.AppResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+      success:
+        type: boolean
+      valErrors:
+        items:
+          $ref: '#/definitions/model.ValError'
+        type: array
+    type: object
+  model.DeleteUserSuccess:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.User'
+        type: array
+      message:
+        example: User deleted successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.GetAllUserSuccess:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.User'
+        type: array
+      message:
+        example: Users retrieved successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.GetUserByIDSuccess:
+    properties:
+      data:
+        $ref: '#/definitions/model.User'
+      message:
+        example: User <id> retrieved successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.InternalServerError:
+    properties:
+      data:
+        type: object
+      message:
+        type: string
+      success:
+        example: false
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.InvalidID:
+    properties:
+      data:
+        type: object
+      message:
+        example: invalid id
+        type: string
+      success:
+        example: false
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.InvalidJsonBody:
+    properties:
+      data:
+        type: object
+      message:
+        example: invalid json request body
+        type: string
+      success:
+        example: false
+        type: boolean
+      valErrors:
+        items:
+          $ref: '#/definitions/model.ValError'
+        type: array
+    type: object
+  model.LoginFailureCredentials:
+    properties:
+      data:
+        type: object
+      message:
+        example: incorrect/missing email or password
+        type: string
+      success:
+        example: false
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.LoginRequest:
+    properties:
+      email:
+        example: yoimiya.naganohara@gmail.com
+        type: string
+      password:
+        example: "12345678"
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  model.LoginSuccess:
+    properties:
+      data:
+        type: object
+      message:
+        example: Login successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.LogoutSuccess:
+    properties:
+      data:
+        type: object
+      message:
+        example: Logout successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.RefreshSuccess:
+    properties:
+      data:
+        type: object
+      message:
+        example: Token refreshed successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.RegisterRequest:
+    properties:
+      email:
+        example: yoimiya.naganohara@gmail.com
+        type: string
+      firstname:
+        example: yoimiya
+        maxLength: 50
+        minLength: 2
+        type: string
+      lastname:
+        example: naganohara
+        maxLength: 50
+        minLength: 2
+        type: string
+      password:
+        example: "12345678"
+        maxLength: 100
+        minLength: 8
+        type: string
+      phone:
+        example: "+33612345678"
+        type: string
+    required:
+    - email
+    - firstname
+    - lastname
+    - password
+    - phone
+    type: object
+  model.RegisterSuccess:
+    properties:
+      data:
+        type: object
+      message:
+        example: User created successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.RoadTrip:
+    properties:
+      enddate:
+        type: string
+      locations:
+        items:
+          type: integer
+        type: array
+      name:
+        type: string
+      startdate:
+        type: string
+    type: object
+  model.Unauthorized:
+    properties:
+      data:
+        type: object
+      message:
+        example: cookie token is empty / Token is expired
+        type: string
+      success:
+        example: false
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.UpdateUserRequest:
+    properties:
+      email:
+        example: yoimiya.naganohara@gmail.com
+        type: string
+      firstname:
+        example: yoimiya
+        maxLength: 50
+        minLength: 2
+        type: string
+      lastname:
+        example: naganohara
+        maxLength: 50
+        minLength: 2
+        type: string
+      phone:
+        example: "+33612345678"
+        type: string
+    required:
+    - email
+    - firstname
+    - lastname
+    - phone
+    type: object
+  model.UpdateUserSuccess:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.User'
+        type: array
+      message:
+        example: User updated successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.User:
+    properties:
+      email:
+        type: string
+      firstname:
+        maxLength: 50
+        minLength: 2
+        type: string
+      id:
+        type: string
+      lastname:
+        maxLength: 50
+        minLength: 2
+        type: string
+      phone:
+        type: string
+      roadTrip:
+        items:
+          $ref: '#/definitions/model.RoadTrip'
+        type: array
+    required:
+    - email
+    - firstname
+    - lastname
+    - phone
+    type: object
+  model.UserNotFound:
+    properties:
+      data:
+        type: object
+      message:
+        example: user not found
+        type: string
+      success:
+        example: false
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.ValError:
+    properties:
+      field:
+        type: string
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /:
+    get:
+      consumes:
+      - application/json
+      description: allows healthcheck
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/model.AppResponse'
+      summary: healthcheck
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login user given valid email and password
+      parameters:
+      - description: email & password
+        in: body
+        name: userLogin
+        required: true
+        schema:
+          $ref: '#/definitions/model.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/model.LoginSuccess'
+        "401":
+          description: Missing/Incorrect credentials
+          schema:
+            $ref: '#/definitions/model.LoginFailureCredentials'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.InternalServerError'
+      summary: Login
+      tags:
+      - Auth
+  /auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout user by removing jwt cookie
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/model.LogoutSuccess'
+        "401":
+          description: Missing/Expired token
+          schema:
+            $ref: '#/definitions/model.Unauthorized'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.InternalServerError'
+      summary: Logout
+      tags:
+      - Auth
+  /auth/refresh_token:
+    post:
+      consumes:
+      - application/json
+      description: Refresh user's access token given valid refresh token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/model.RefreshSuccess'
+        "401":
+          description: Missing/Expired token
+          schema:
+            $ref: '#/definitions/model.Unauthorized'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.InternalServerError'
+      summary: Refresh
+      tags:
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register user given valid firstname, lastname, email (unique),
+        password, phone (unique)
+      parameters:
+      - description: firstname, lastname, email, password, phone
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/model.RegisterSuccess'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/model.InvalidJsonBody'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.InternalServerError'
+      summary: Register
+      tags:
+      - Auth
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: Get all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/model.GetAllUserSuccess'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.InternalServerError'
+      summary: Get all users
+      tags:
+      - User
+    post:
+      consumes:
+      - application/json
+      description: Create user user given valid firstname, lastname, email (unique),
+        password, phone (unique)
+      parameters:
+      - description: firstname, lastname, email, password, phone
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/model.RegisterSuccess'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/model.InvalidJsonBody'
+        "401":
+          description: Missing/Expired token
+          schema:
+            $ref: '#/definitions/model.Unauthorized'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.InternalServerError'
+      summary: Create user
+      tags:
+      - User
+  /user/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user user given valid ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/model.DeleteUserSuccess'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/model.InvalidID'
+        "401":
+          description: Missing/Expired token
+          schema:
+            $ref: '#/definitions/model.Unauthorized'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/model.UserNotFound'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.InternalServerError'
+      summary: Delete user
+      tags:
+      - User
+    get:
+      consumes:
+      - application/json
+      description: Get user given a valid ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/model.GetUserByIDSuccess'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/model.InvalidID'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/model.UserNotFound'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.InternalServerError'
+      summary: Get user by ID
+      tags:
+      - User
+    put:
+      consumes:
+      - application/json
+      description: Update user user given valid ID, firstname, lastname, email (unique),
+        phone (unique)
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: firstname, lastname, email, phone
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/model.UpdateUserSuccess'
+        "400":
+          description: Invalid ID/body
+          schema:
+            $ref: '#/definitions/model.InvalidJsonBody'
+        "401":
+          description: Missing/Expired token
+          schema:
+            $ref: '#/definitions/model.Unauthorized'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/model.UserNotFound'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.InternalServerError'
+      summary: Update user
+      tags:
+      - User
+swagger: "2.0"

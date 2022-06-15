@@ -4,14 +4,16 @@ import (
 	"github.com/alexandre-pinon/epic-road-trip/middleware"
 	"github.com/alexandre-pinon/epic-road-trip/utils"
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
 	authMiddleware := controllers.AuthController.JWTMiddleware()
 
-	router.GET("/", utils.ServeHTTP(controllers.RootController.Ok))
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
-	apiRoutes := router.Group("/api")
+	apiRoutes := router.Group("/api/v1")
 	{
 		authRoutes := apiRoutes.Group("/auth")
 		{
@@ -31,5 +33,6 @@ func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
 			userRoutes.PUT("/:id", middleware.CheckID(), utils.ServeHTTP(controllers.UserController.UpdateUser))
 			userRoutes.DELETE("/:id", middleware.CheckID(), utils.ServeHTTP(controllers.UserController.DeleteUser))
 		}
+		apiRoutes.GET("/", utils.ServeHTTP(controllers.RootController.Healthcheck))
 	}
 }

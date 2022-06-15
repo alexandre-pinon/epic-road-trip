@@ -26,10 +26,11 @@ const (
 	APP_NAME   = "APP_NAME"
 	DB_URI     = "DB_URI"
 	DB_NAME    = "DB_NAME"
+	GO_MODE    = "GO_MODE"
 	SECRET_KEY = "SECRET_KEY"
 )
 
-func GetConfig(env Env) *Config {
+func GetConfig() *Config {
 	projectName := regexp.MustCompile(`^(.*server)`)
 	currentWorkDirectory, _ := os.Getwd()
 	rootPath := projectName.Find([]byte(currentWorkDirectory))
@@ -49,6 +50,7 @@ func GetConfig(env Env) *Config {
 		APP_NAME:   os.Getenv("APP_NAME"),
 		DB_URI:     os.Getenv("DB_URI"),
 		DB_NAME:    os.Getenv("DB_NAME"),
+		GO_MODE:    os.Getenv("GO_MODE"),
 		SECRET_KEY: os.Getenv("SECRET_KEY"),
 	}
 
@@ -58,7 +60,11 @@ func GetConfig(env Env) *Config {
 		}
 	}
 
-	dbName := fmt.Sprintf("%s-%s", strings.ToLower(string(env)), envVariables[APP_NAME])
+	if err := Env(envVariables[GO_MODE]).IsValid(); err != nil {
+		log.Fatal(err)
+	}
+
+	dbName := fmt.Sprintf("%s-%s", strings.ToLower(envVariables[GO_MODE]), envVariables[DB_NAME])
 
 	cfg := &Config{
 		AppName: envVariables[APP_NAME],
@@ -66,7 +72,7 @@ func GetConfig(env Env) *Config {
 			Uri:  envVariables[DB_URI],
 			Name: dbName,
 		},
-		Env:       env,
+		Env:       Env(envVariables[GO_MODE]),
 		SecretKey: envVariables[SECRET_KEY],
 	}
 

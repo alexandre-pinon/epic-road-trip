@@ -9,14 +9,21 @@ type rootController struct {
 }
 
 type RootController interface {
-	Ok(ctx *gin.Context) (*model.AppResult, *model.AppError)
+	Healthcheck(ctx *gin.Context) (*model.AppResult, *model.AppError)
 }
 
 func NewRootController() RootController {
 	return &rootController{}
 }
 
-func (controller *rootController) Ok(ctx *gin.Context) (*model.AppResult, *model.AppError) {
+// Healthcheck godoc
+// @Summary healthcheck
+// @Description allows healthcheck
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.AppResponse "Success"
+// @Router / [get]
+func (controller *rootController) Healthcheck(ctx *gin.Context) (*model.AppResult, *model.AppError) {
 	return &model.AppResult{
 		StatusCode: 200,
 		Message:    "Ok",

@@ -43,6 +43,7 @@ func (suite *authControllerSuite) TearDownTest() {
 }
 
 func TestAuthController(t *testing.T) {
-	cfg := config.GetConfig(config.Test)
+	cfg := config.GetConfig()
+	cfg.Env = config.Test
 	suite.Run(t, &authControllerSuite{cfg: *cfg})
 }
