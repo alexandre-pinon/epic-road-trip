@@ -15,6 +15,8 @@ type Config struct {
 	Database  DatabaseConfig
 	Env       Env
 	SecretKey string
+	GoogleKey string
+	BaseUrlGoogle string
 }
 
 type DatabaseConfig struct {
@@ -28,6 +30,8 @@ const (
 	DB_NAME    = "DB_NAME"
 	GO_MODE    = "GO_MODE"
 	SECRET_KEY = "SECRET_KEY"
+	GOOGLE_KEY = "GOOGLE_KEY"
+	BASE_URL_GOOGLE = "BASE_URL_GOOGLE"
 )
 
 func GetConfig() *Config {
@@ -52,6 +56,8 @@ func GetConfig() *Config {
 		DB_NAME:    os.Getenv("DB_NAME"),
 		GO_MODE:    os.Getenv("GO_MODE"),
 		SECRET_KEY: os.Getenv("SECRET_KEY"),
+		GOOGLE_KEY: os.Getenv("GOOGLE_KEY"),
+		BASE_URL_GOOGLE: os.Getenv("BASE_URL_GOOGLE"),
 	}
 
 	for k, v := range envVariables {
@@ -74,6 +80,8 @@ func GetConfig() *Config {
 		},
 		Env:       Env(envVariables[GO_MODE]),
 		SecretKey: envVariables[SECRET_KEY],
+		GoogleKey: envVariables[GOOGLE_KEY],
+		BaseUrlGoogle: envVariables[BASE_URL_GOOGLE],
 	}
 
 	return cfg
