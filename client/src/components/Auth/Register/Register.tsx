@@ -40,6 +40,7 @@ export function Register() {
 
         <TextInput
           required
+          data-attr="firstname"
           label="Firstname"
           placeholder="Han"
           mt="sm"
@@ -48,6 +49,7 @@ export function Register() {
 
         <TextInput
           required
+          data-attr="lastname"
           label="Lastname"
           placeholder="SoHee"
           mt="sm"
@@ -56,27 +58,38 @@ export function Register() {
 
         <TextInput
           required
+          data-attr="email"
           label="Email"
           placeholder="hansohee@gmail.com"
           {...form.getInputProps('email')}
           mt="sm"
         />
 
+        <NumberInput
+            required
+            data-attr="Phone"
+            label="Phone"
+            hideControls
+            placeholder="Your phone number"
+            mt="sm"
+        />
+
         <PasswordInput
+          required
+          data-attr="password"
           placeholder="Password"
           label="Password"
           description="Password must include at least one letter, number and special character"
-          required
           mt="sm"
-
         />
 
-        <NumberInput
-          required
-          label="Phone"
-          hideControls
-          placeholder="Your phone number"
-          mt="sm"
+        <PasswordInput
+            required
+            data-attr="passwordCheck"
+            placeholder="Password Verif"
+            label="Password Verif"
+            description="Password Verif"
+            mt="sm"
         />
 
         <Checkbox
