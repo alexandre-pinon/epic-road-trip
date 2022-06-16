@@ -5,23 +5,22 @@ describe('The Register page', () => {
         cy.wait(500)
         //enter the information in the inputs
         cy.fixture('userInformations').then((userInformationsForRegister) => {
-            cy.get('#firstname').type(userInformationsForRegister.firstname)
-            cy.get('#lastname').type(userInformationsForRegister.lastname)
-            cy.get('#email').type(userInformationsForRegister.email)
-            cy.get('#mobile').type(userInformationsForRegister.mobile)
-            cy.get('#password').type(userInformationsForRegister.password)
+            cy.get('input[data-attr="firstname"]').type(userInformationsForRegister.firstname)
+            cy.get('input[data-attr="lastname"]').type(userInformationsForRegister.lastname)
+            cy.get('input[data-attr="email"]').type(userInformationsForRegister.email)
+            cy.get('input[data-attr="Phone"]').type(userInformationsForRegister.mobile)
+            cy.get('input[data-attr="password"]').type(userInformationsForRegister.password)
             // test if it's the same password
-            cy.get('#passwordCheck').type(userInformationsForRegister.password)
+            cy.get('input[data-attr="passwordCheck"]').type(userInformationsForRegister.password)
 
             cy.log(userInformationsForRegister.firstname)
         })
         cy.wait(500)
         //click on register button for confirm the creation of the account
-        cy.get('#registerButton').click()
+        cy.get('button[data-attr="register-confirm"]').click()
         cy.wait(1000)
         //check if we are redirected to the home page
-        cy.location('pathname').should('eq', '/')
-        cy.log('à voir si sa suffit de voir si on est redirigé pour savoir si on est connecté')
+        cy.location('pathname').should('eq', '/login')
     })
 
 
