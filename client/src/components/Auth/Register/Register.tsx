@@ -66,12 +66,12 @@ export function Register() {
         />
 
         <NumberInput
-            required
-            data-attr="Phone"
-            label="Phone"
-            hideControls
-            placeholder="Your phone number"
-            mt="sm"
+          required
+          data-attr="Phone"
+          label="Phone"
+          hideControls
+          placeholder="Your phone number"
+          mt="sm"
         />
 
         <PasswordInput
@@ -84,12 +84,12 @@ export function Register() {
         />
 
         <PasswordInput
-            required
-            data-attr="passwordCheck"
-            placeholder="Password Verif"
-            label="Password Verif"
-            description="Password Verif"
-            mt="sm"
+          required
+          data-attr="passwordCheck"
+          placeholder="Confirm Password"
+          label="Confirm Password"
+          description="Confirm your password"
+          mt="sm"
         />
 
         <Checkbox
