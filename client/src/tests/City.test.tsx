@@ -23,4 +23,31 @@ test("checks city activities text", () => {
   const retour = screen.getByText(/Retour/i);
   expect(retour).toBeInTheDocument();
 
+  const activityOne = screen.getByText(/Activity 1/i);
+  expect(activityOne).toBeInTheDocument();
+
+  const activityTwo = screen.getByText(/Activity 2/i);
+  expect(activityTwo).toBeInTheDocument();
+
+  const activityThree = screen.getByText(/Activity 3/i);
+  expect(activityThree).toBeInTheDocument();
+
+  const hotelOne = screen.getByText(/Hôtel 1/i);
+  expect(hotelOne).toBeInTheDocument();
+
+  const hotelTwo = screen.getByText(/Hôtel 2/i);
+  expect(hotelTwo).toBeInTheDocument();
+
+  const hotelThree = screen.getByText(/Hôtel 3/i);
+  expect(hotelThree).toBeInTheDocument();
+
+  const restaurantOne = screen.getByText(/Restaurant 1/i);
+  expect(restaurantOne).toBeInTheDocument();
+
+  const restaurantTwo = screen.getByText(/Restaurant 2/i);
+  expect(restaurantTwo).toBeInTheDocument();
+
+  const restaurantThree = screen.getByText(/Restaurant 3/i);
+  expect(restaurantThree).toBeInTheDocument();
+
 });
