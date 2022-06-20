@@ -33,6 +33,10 @@ func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
 			userRoutes.PUT("/:id", middleware.CheckID(), utils.ServeHTTP(controllers.UserController.UpdateUser))
 			userRoutes.DELETE("/:id", middleware.CheckID(), utils.ServeHTTP(controllers.UserController.DeleteUser))
 		}
+		googleRoutes := apiRoutes.Group("/roadtrip")
+		{
+			googleRoutes.POST("/enjoy", utils.ServeHTTP(controllers.RoadtripController.Enjoy))
+		}
 		apiRoutes.GET("/", utils.ServeHTTP(controllers.RootController.Healthcheck))
 	}
 }

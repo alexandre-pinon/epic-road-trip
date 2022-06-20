@@ -1,42 +1,48 @@
 package model
 
-/* import "go.mongodb.org/mongo-driver/bson/primitive" */
-
-type Open struct {
-	Open_day		int `json:"open_day""`
-	Open_time 	string `json:"open_time""`
+type Activity struct {
+	HTMLAttributions []interface{} `json:"html_attributions"`
+	Results          []ActivityResult       `json:"results"`
+	Status           string        `json:"status"`
 }
 
-type Close struct {
-	Close_day		int `json:"close_day""`
-	Close_time	string `json:"close_time""`
+type ActivityResult struct {
+	BusinessStatus      string           `json:"business_status"`
+	Geometry            GeometryActivity `json:"geometry"`
+	Icon                string           `json:"icon"`
+	IconBackgroundColor string           `json:"icon_background_color"`
+	IconMaskBaseURI     string           `json:"icon_mask_base_uri"`
+	Name                string           `json:"name"`
+	OpeningHours        OpeningHours     `json:"opening_hours,omitempty"`
+	Photos              []Photos           `json:"photos"`
+	PlaceID             string           `json:"place_id"`
+	PlusCode            PlusCode         `json:"plus_code"`
+	PriceLevel          int              `json:"price_level,omitempty"`
+	Rating              float64          `json:"rating"`
+	Reference           string           `json:"reference"`
+	Scope               string           `json:"scope"`
+	Types               []string         `json:"types"`
+	UserRatingsTotal    int              `json:"user_ratings_total"`
+	Vicinity            string           `json:"vicinity"`
 }
 
-type Periods struct {
-	Close_periods	[]*Close 	`json:"close," bson:"close,"`
-	Open_periods	[]*Open 	`json:"open," bson:"open,"`
+type GeometryActivity struct {
+	Location Location 	`json:"location"`
+	Viewport Bounds		`json:"viewport"`
 }
 
-
-type Opening_hours struct {
-	Open_now bool 		`json:"open_now" binding:"required"`
-	Periods  []*Periods	`json:"periods," bson:"periods,"`
+type OpeningHours struct {
+	OpenNow bool `json:"open_now"`
 }
 
 type Photos struct {
-	Height			int
-	Width			int
-	Photo_reference	string
+	Height           int      `json:"height"`
+	HTMLAttributions []string `json:"html_attributions"`
+	PhotoReference   string   `json:"photo_reference"`
+	Width            int      `json:"width"`
 }
 
-type Activity  struct {
-	/* ID		primitive.ObjectID `json:"id," bson:"_id,"` */
-	Place_id 			string 			`json:"place_id" binding:"required"`
-	Name				string 			`json:"name" binding:"required,min=2,max=50"`
-	Opening_hours		[]*Opening_hours `json:"opening_hours," bson:"opening,"`
-	Address 			string 			`json:"address" binding:"required`
-	Types 				string  		`json:"types" binding:"required`
-	User_ratings_total	int 			`json:"user_ratings_total" binding:"required`
-	Price_level			int 			`json:"price_level" binding:"required`
-	Rating				float64 		`json:"rating" binding:"required`
+type PlusCode struct {
+	CompoundCode string `json:"compound_code"`
+	GlobalCode   string `json:"global_code"`
 }

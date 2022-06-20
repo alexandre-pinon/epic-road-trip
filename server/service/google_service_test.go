@@ -27,142 +27,114 @@ func (suite *googleServiceSuite) SetupTest() {
 	suite.svc = svc
 }
 
-// func (suite *googleServiceSuite) TestEnjoyWithZeroResult() {
-// 	activities := &model.GoogleZeroResult{
-// 			Result: []interface{}{},
-// 			Status: errors.New("ZERO RESULTS"),
-// 	}
+func (suite *googleServiceSuite) TestEnjoyWithZeroResult() {
+	noResult := model.Activity{
+		HTMLAttributions: []interface{}{},
+		Results:          []model.ActivityResult{},
+		Status:           "ZERO_RESULTS",
+	}
 
-// 	result, err := suite.svc.Enjoy("test")
-// 	suite.NoError(err, "no crashed")
-// 	suite.Equal(activities, *result, "result and error are the same")
-// 	suite.repo.AssertExpectations(suite.T())
-// }
+	router := gin.Default()
+	router.GET("/place/nearbysearch/json", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, &noResult)
+	})
+	server := httptest.NewServer(router)
 
-// func (suite *googleServiceSuite) TestEnjoyWithGoodAnswer() {
+	result, err := suite.svc.Enjoy(server.URL, model.Location{Lat: 48.856614, Lng: 2.3522219})
+	suite.Error(err, "error: no results")
+	suite.Equal(http.StatusNotFound, err.(*model.AppError).StatusCode)
+	suite.Equal(noResult.Status, err.Error())
+	suite.Nil(result)
+}
 
-// 	activities := []model.Activity{
-// 		{
-// 			Place_id: "CHIJyoimiya",
-// 			Name:     "yoimiya",
-// 			Opening_hours: []*model.Opening_hours{
-// 				{
-// 					Open_now: true,
-// 					Periods: []*model.Periods{
-// 						{
-// 							Open_periods: []*model.Open{
-// 								{
-// 									Open_day:  0,
-// 									Open_time: "2020",
-// 								},
-// 								{
-// 									Open_day:  0,
-// 									Open_time: "2020",
-// 								},
-// 							},
-// 							Close_periods: []*model.Close{
-// 								{
-// 									Close_day:  0,
-// 									Close_time: "2020",
-// 								},
-// 								{
-// 									Close_day:  0,
-// 									Close_time: "2020",
-// 								},
-// 							},
-// 						},
-// 					},
-// 				},
-// 			},
-// 			Address:            "8 rue de ta mère c'est la catin du coin",
-// 			Types:              "solide froid boite",
-// 			User_ratings_total: 2,
-// 			Price_level:        2,
-// 			Rating:             4.2,
-// 		},
-// 		{
-// 			Place_id: "CHIJyoimiya",
-// 			Name:     "yoimiya",
-// 			Opening_hours: []*model.Opening_hours{
-// 				{
-// 					Open_now: true,
-// 					Periods: []*model.Periods{
-// 						{
-// 							Open_periods: []*model.Open{
-// 								{
-// 									Open_day:  0,
-// 									Open_time: "2020",
-// 								},
-// 								{
-// 									Open_day:  0,
-// 									Open_time: "2020",
-// 								},
-// 							},
-// 							Close_periods: []*model.Close{
-// 								{
-// 									Close_day:  0,
-// 									Close_time: "2020",
-// 								},
-// 								{
-// 									Close_day:  0,
-// 									Close_time: "2020",
-// 								},
-// 							},
-// 						},
-// 					},
-// 				},
-// 			},
-// 			Address:            "8 rue de ta mère c'est la catin du coin",
-// 			Types:              "solide froid boite",
-// 			User_ratings_total: 2,
-// 			Price_level:        2,
-// 			Rating:             4.2,
-// 		},
-// 		{
-// 			Place_id: "CHIJyoimiya",
-// 			Name:     "yoimiya",
-// 			Opening_hours: []*model.Opening_hours{
-// 				{
-// 					Open_now: true,
-// 					Periods: []*model.Periods{
-// 						{
-// 							Open_periods: []*model.Open{
-// 								{
-// 									Open_day:  0,
-// 									Open_time: "2020",
-// 								},
-// 								{
-// 									Open_day:  0,
-// 									Open_time: "2020",
-// 								},
-// 							},
-// 							Close_periods: []*model.Close{
-// 								{
-// 									Close_day:  0,
-// 									Close_time: "2020",
-// 								},
-// 								{
-// 									Close_day:  0,
-// 									Close_time: "2020",
-// 								},
-// 							},
-// 						},
-// 					},
-// 				},
-// 			},
-// 			Types:              "solide froid boite",
-// 			User_ratings_total: 2,
-// 			Price_level:        2,
-// 			Rating:             4.2,
-// 		},
-// 	}
-// 	suite.repo.On("Enjoy", "test").Return(&activities, nil)
-// 	result, err := suite.svc.Enjoy("test")
-// 	suite.NoError(err, "no error when get all activities")
-// 	suite.Equal(len(activities), len(*result), "activities and result should have the same length")
-// 	suite.Equal(activities, *result, "result and activities are the same")
-// 	suite.repo.AssertExpectations(suite.T())
-// }
+func (suite *googleServiceSuite) TestEnjoyWithGoodAnswer() {
+	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
+	activities := []model.ActivityResult{
+		{
+			BusinessStatus: "OPEN",
+			Geometry: model.GeometryActivity{
+				Location: location,
+				Viewport: model.Bounds{
+					Northeast: model.Location{Lat: 48.9021475, Lng: 2.4698509},
+					Southwest: model.Location{Lat: 48.8155622, Lng: 2.2242191},
+				},
+			},
+			Icon:                "ucfytc",
+			IconBackgroundColor: "cbdosucb",
+			IconMaskBaseURI:     "ubcs",
+			Name:                "eonvfe",
+			OpeningHours: model.OpeningHours{
+				OpenNow: false,
+			},
+			Photos: []model.Photos{{
+				Height:           800,
+				HTMLAttributions: []string{"iubvd", "givuefbv"},
+				PhotoReference:   "dfvdvfd",
+				Width:            800,
+			}},
+			PlaceID: "CHIJoiubcfmigf1",
+			PlusCode: model.PlusCode{
+				CompoundCode: "",
+				GlobalCode:   "",
+			},
+			PriceLevel:       2,
+			Rating:           4.7695,
+			Reference:        "",
+			Scope:            "",
+			Types:            []string{"amusement_park"},
+			UserRatingsTotal: 5,
+			Vicinity:         "",
+		},
+		{
+			BusinessStatus: "OPEN",
+			Geometry: model.GeometryActivity{
+				Location: location,
+				Viewport: model.Bounds{
+					Northeast: model.Location{Lat: 48.9021475, Lng: 2.4698509},
+					Southwest: model.Location{Lat: 48.8155622, Lng: 2.2242191},
+				},
+			},
+			Icon:                "ucfytc",
+			IconBackgroundColor: "cbdosucb",
+			IconMaskBaseURI:     "ubcs",
+			Name:                "eonvfe",
+			OpeningHours: model.OpeningHours{
+				OpenNow: false,
+			},
+			Photos: []model.Photos{{
+				Height:           800,
+				HTMLAttributions: []string{"iubvd", "givuefbv"},
+				PhotoReference:   "dfvdvfd",
+				Width:            800,
+			}},
+			PlaceID: "CHIJoiubcfmigf1",
+			PlusCode: model.PlusCode{
+				CompoundCode: "",
+				GlobalCode:   "",
+			},
+			PriceLevel:       2,
+			Rating:           4.7695,
+			Reference:        "",
+			Scope:            "",
+			Types:            []string{"amusement_park"},
+			UserRatingsTotal: 5,
+			Vicinity:         "",
+		},
+	}
+	withResults := model.Activity{
+		HTMLAttributions: []interface{}{},
+		Results: activities,
+		Status: "no error",
+	}
+	router := gin.Default()
+	router.GET("/place/nearbysearch/json", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, &withResults)
+	})
+	server := httptest.NewServer(router)
+	result, err := suite.svc.Enjoy(server.URL, location)
+	suite.NoError(err, "no crashed")
+	suite.Equal(activities, *result, "result and error are the same")
+}
 
 func (suite *googleServiceSuite) TestGeocoding_NoResult_Negative() {
 	noResults := model.GoogleGeocodingResponse{
@@ -175,7 +147,7 @@ func (suite *googleServiceSuite) TestGeocoding_NoResult_Negative() {
 	})
 	server := httptest.NewServer(router)
 
-	result, err := suite.svc.GeoCoding(server.URL, "pancake")
+	result, err := suite.svc.GeoCoding(server.URL, "paris")
 	suite.Error(err, "error: no results")
 	suite.Equal(http.StatusNotFound, err.(*model.AppError).StatusCode)
 	suite.Equal(noResults.Status, err.Error())
