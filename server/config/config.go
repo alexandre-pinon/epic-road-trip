@@ -11,12 +11,14 @@ import (
 )
 
 type Config struct {
-	AppName   string
-	Database  DatabaseConfig
-	Env       Env
-	SecretKey string
-	GoogleKey string
+	AppName       string
+	Database      DatabaseConfig
+	Env           Env
+	SecretKey     string
+	GoogleKey     string
 	BaseUrlGoogle string
+	AmadeusKey    string
+	AmadeusSecret string
 }
 
 type DatabaseConfig struct {
@@ -25,13 +27,15 @@ type DatabaseConfig struct {
 }
 
 const (
-	APP_NAME   = "APP_NAME"
-	DB_URI     = "DB_URI"
-	DB_NAME    = "DB_NAME"
-	GO_MODE    = "GO_MODE"
-	SECRET_KEY = "SECRET_KEY"
-	GOOGLE_KEY = "GOOGLE_KEY"
+	APP_NAME        = "APP_NAME"
+	DB_URI          = "DB_URI"
+	DB_NAME         = "DB_NAME"
+	GO_MODE         = "GO_MODE"
+	SECRET_KEY      = "SECRET_KEY"
+	GOOGLE_KEY      = "GOOGLE_KEY"
 	BASE_URL_GOOGLE = "BASE_URL_GOOGLE"
+	AMADEUS_KEY     = "AMADEUS_KEY"
+	AMADEUS_SECRET  = "AMADEUS_SECRET"
 )
 
 func GetConfig() *Config {
@@ -51,13 +55,15 @@ func GetConfig() *Config {
 	}
 
 	envVariables := map[string]string{
-		APP_NAME:   os.Getenv("APP_NAME"),
-		DB_URI:     os.Getenv("DB_URI"),
-		DB_NAME:    os.Getenv("DB_NAME"),
-		GO_MODE:    os.Getenv("GO_MODE"),
-		SECRET_KEY: os.Getenv("SECRET_KEY"),
-		GOOGLE_KEY: os.Getenv("GOOGLE_KEY"),
-		BASE_URL_GOOGLE: os.Getenv("BASE_URL_GOOGLE"),
+		APP_NAME:        os.Getenv(APP_NAME),
+		DB_URI:          os.Getenv(DB_URI),
+		DB_NAME:         os.Getenv(DB_NAME),
+		GO_MODE:         os.Getenv(GO_MODE),
+		SECRET_KEY:      os.Getenv(SECRET_KEY),
+		GOOGLE_KEY:      os.Getenv(GOOGLE_KEY),
+		BASE_URL_GOOGLE: os.Getenv(BASE_URL_GOOGLE),
+		AMADEUS_KEY:     os.Getenv(AMADEUS_KEY),
+		AMADEUS_SECRET:  os.Getenv(AMADEUS_SECRET),
 	}
 
 	for k, v := range envVariables {
@@ -78,10 +84,12 @@ func GetConfig() *Config {
 			Uri:  envVariables[DB_URI],
 			Name: dbName,
 		},
-		Env:       Env(envVariables[GO_MODE]),
-		SecretKey: envVariables[SECRET_KEY],
-		GoogleKey: envVariables[GOOGLE_KEY],
+		Env:           Env(envVariables[GO_MODE]),
+		SecretKey:     envVariables[SECRET_KEY],
+		GoogleKey:     envVariables[GOOGLE_KEY],
 		BaseUrlGoogle: envVariables[BASE_URL_GOOGLE],
+		AmadeusKey:    envVariables[AMADEUS_KEY],
+		AmadeusSecret: envVariables[AMADEUS_SECRET],
 	}
 
 	return cfg
