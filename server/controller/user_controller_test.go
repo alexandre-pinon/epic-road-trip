@@ -309,6 +309,7 @@ func (suite *userControllerSuite) TestUpdateUser_Positive() {
 
 	response, err := http.DefaultClient.Do(request)
 	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
 
 	responseBody := model.AppResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
@@ -340,6 +341,7 @@ func (suite *userControllerSuite) TestUpdateUser_InvalidID_Negative() {
 
 	response, err := http.DefaultClient.Do(request)
 	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
 
 	responseBody := model.AppResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
@@ -371,6 +373,7 @@ func (suite *userControllerSuite) TestUpdateUser_InvalidJSON_Negative() {
 
 	response, err := http.DefaultClient.Do(request)
 	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
 
 	responseBody := model.AppResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
@@ -403,6 +406,7 @@ func (suite *userControllerSuite) TestDeleteUser_Positive() {
 
 	response, err := http.DefaultClient.Do(request)
 	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
 
 	responseBody := model.AppResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
@@ -424,6 +428,7 @@ func (suite *userControllerSuite) TestDeleteUser_InvalidID_Negative() {
 
 	response, err := http.DefaultClient.Do(request)
 	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
 
 	responseBody := model.AppResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
