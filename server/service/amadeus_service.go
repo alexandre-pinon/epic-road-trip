@@ -19,6 +19,7 @@ type amadeusService struct {
 
 type AmadeusService interface {
 	GetAccessToken(amadeusBaseUrl string) (string, error)
+	GetFlightOffers(amadeusBaseUrl string, flightFormData *model.FlightFormData) (*model.FlighOffersResponse, error)
 }
 
 func NewAmadeusService(cfg config.Config) AmadeusService {
@@ -55,4 +56,11 @@ func (svc *amadeusService) GetAccessToken(amadeusBaseUrl string) (string, error)
 	json.NewDecoder(response.Body).Decode(&responseBody)
 
 	return responseBody.AccessToken, nil
+}
+
+func (svc *amadeusService) GetFlightOffers(amadeusBaseUrl string, flightFormData *model.FlightFormData) (*model.FlighOffersResponse, error) {
+	return nil, &model.AppError{
+		StatusCode: http.StatusNotImplemented,
+		Err:        errors.New("TODO: implement GetFlightOffers"),
+	}
 }
