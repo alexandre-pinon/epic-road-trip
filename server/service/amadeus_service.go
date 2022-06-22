@@ -19,7 +19,7 @@ type amadeusService struct {
 
 type AmadeusService interface {
 	GetAccessToken(amadeusBaseUrl string) (string, error)
-	GetFlightOffers(amadeusBaseUrl string, flightFormData *model.FlightFormData) (*model.FlighOffersResponse, error)
+	GetFlightOffers(amadeusBaseUrl, accessToken string, flightFormData *model.FlightFormData) (*model.FlighOffersResponse, error)
 }
 
 func NewAmadeusService(cfg config.Config) AmadeusService {
@@ -58,9 +58,40 @@ func (svc *amadeusService) GetAccessToken(amadeusBaseUrl string) (string, error)
 	return responseBody.AccessToken, nil
 }
 
-func (svc *amadeusService) GetFlightOffers(amadeusBaseUrl string, flightFormData *model.FlightFormData) (*model.FlighOffersResponse, error) {
-	return nil, &model.AppError{
-		StatusCode: http.StatusNotImplemented,
-		Err:        errors.New("TODO: implement GetFlightOffers"),
+func (svc *amadeusService) GetFlightOffers(amadeusBaseUrl, accessToken string, flightFormData *model.FlightFormData) (*model.FlighOffersResponse, error) {
+	query := fmt.Sprintf("originLocationCode=%s", flightFormData.OriginLocationCode)
+	query += fmt.Sprintf("&destinationLocationCode=%s", flightFormData.DestinationLocationCode)
+	query += fmt.Sprintf("&departureDate=%s", flightFormData.DepartureDate.Format("2000-01-01"))
+	query += fmt.Sprintf("&adults=%d", flightFormData.Adults)
+	query += "&nonStop=true&max=50"
+	url := fmt.Sprintf("%s/v2/shopping/flight-offers?%s", amadeusBaseUrl, query)
+
+	request, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+		}
 	}
+	request.Header.Add("Authorization", fmt.Sprintf("Bearer %s", accessToken))
+
+	response, err := http.DefaultClient.Do(request)
+	if err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+		}
+	}
+	defer response.Body.Close()
+	responseBody := model.FlighOffersResponse{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	if len(responseBody.Data) == 0 {
+		return nil, &model.AppError{
+			StatusCode: http.StatusNotFound,
+			Err:        errors.New("flight offers not found"),
+		}
+	}
+
+	return &responseBody, nil
 }
