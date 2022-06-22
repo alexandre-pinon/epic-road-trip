@@ -83,6 +83,17 @@ func (svc *amadeusService) GetFlightOffers(amadeusBaseUrl, accessToken string, f
 		}
 	}
 	defer response.Body.Close()
+
+	if response.StatusCode == http.StatusUnauthorized {
+		responseBody := model.FlightOffersResponseError{}
+		json.NewDecoder(response.Body).Decode(&responseBody)
+
+		return nil, &model.AppError{
+			StatusCode: responseBody.Errors.Code,
+			Err:        errors.New(responseBody.Errors.Title),
+		}
+	}
+
 	responseBody := model.FlighOffersResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
 

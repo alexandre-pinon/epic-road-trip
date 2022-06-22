@@ -34,6 +34,17 @@ type FlighOffersResponse struct {
 	Dictionaries FlightOfferDictionary `json:"dictionaries,omitempty"`
 }
 
+type FlightOffersResponseError struct {
+	Errors FlightOffersErrors `json:"errors"`
+}
+
+type FlightOffersErrors struct {
+	Code   int    `json:"code"`
+	Title  string `json:"title"`
+	Detail string `json:"detail"`
+	Status int    `json:"status"`
+}
+
 type FlightOfferMeta struct {
 	Count int                  `json:"count"`
 	Links FlightOfferMetaLinks `json:"links"`
