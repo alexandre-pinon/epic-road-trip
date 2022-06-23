@@ -83,7 +83,7 @@ func (suite *amadeusServiceSuite) TestGetFlightOffers_Positive() {
 			OneWay:                   false,
 			LastTicketingDate:        "2022-11-07",
 			NumberOfBookableSeats:    9,
-			Itineraries: []model.Itinary{{
+			Itineraries: []model.FlightOfferItinary{{
 				Duration: "PT11H50M",
 				Segments: []model.Segment{{
 					Departure: model.Departure{

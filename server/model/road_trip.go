@@ -1,10 +1,16 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 type RoadTrip struct {
-	Name      	string    `json:"name"`
-	Startdate 	time.Time `json:"startdate"`
-	Enddate   	time.Time `json:"enddate"`
-	Locations 	[]int     `json:"locations"`
+	ID          primitive.ObjectID   `json:"id,omitempty" bson:"_id,omitempty"`
+	Name        string               `json:"name"`
+	Startdate   time.Time            `json:"startdate"`
+	Enddate     time.Time            `json:"enddate"`
+	TripSteps   []primitive.ObjectID `json:"trip_steps"`
+	Itineraries []primitive.ObjectID `json:"itineraries"`
 }

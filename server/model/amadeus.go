@@ -55,22 +55,22 @@ type FlightOfferMetaLinks struct {
 }
 
 type FlightOffer struct {
-	Type                     string            `json:"type"`
-	ID                       string            `json:"id"`
-	Source                   string            `json:"source"`
-	InstantTicketingRequired bool              `json:"instant_ticketing_required"`
-	NonHomogeneous           bool              `json:"non_homogeneous"`
-	OneWay                   bool              `json:"one_way"`
-	LastTicketingDate        string            `json:"last_ticketing_date"`
-	NumberOfBookableSeats    int               `json:"number_of_bookable_seats"`
-	Itineraries              []Itinary         `json:"itinaries"`
-	Price                    Price             `json:"price"`
-	PricingOptions           PricingOptions    `json:"pricing_options"`
-	ValidatingAirlineCodes   []string          `json:"validating_airline_codes"`
-	TravelerPricings         []TravelerPricing `json:"travel_pricings"`
+	Type                     string               `json:"type"`
+	ID                       string               `json:"id"`
+	Source                   string               `json:"source"`
+	InstantTicketingRequired bool                 `json:"instant_ticketing_required"`
+	NonHomogeneous           bool                 `json:"non_homogeneous"`
+	OneWay                   bool                 `json:"one_way"`
+	LastTicketingDate        string               `json:"last_ticketing_date"`
+	NumberOfBookableSeats    int                  `json:"number_of_bookable_seats"`
+	Itineraries              []FlightOfferItinary `json:"itinaries"`
+	Price                    Price                `json:"price"`
+	PricingOptions           PricingOptions       `json:"pricing_options"`
+	ValidatingAirlineCodes   []string             `json:"validating_airline_codes"`
+	TravelerPricings         []TravelerPricing    `json:"travel_pricings"`
 }
 
-type Itinary struct {
+type FlightOfferItinary struct {
 	Duration string    `json:"duration"`
 	Segments []Segment `json:"segments"`
 }
