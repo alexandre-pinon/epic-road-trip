@@ -151,11 +151,11 @@ func (suite *amadeusServiceSuite) TestGetFlightOffers_Positive() {
 		}},
 		Dictionaries: model.FlightOfferDictionary{
 			Locations: map[string]model.FlightOfferLocations{
-				"LHR": model.FlightOfferLocations{
+				"LHR": {
 					CityCode:    "LON",
 					CountryCode: "GB",
 				},
-				"HND": model.FlightOfferLocations{
+				"HND": {
 					CityCode:    "TYO",
 					CountryCode: "JP",
 				},
@@ -183,9 +183,11 @@ func (suite *amadeusServiceSuite) TestGetFlightOffers_Positive() {
 	server := httptest.NewServer(router)
 
 	flightFormData := model.FlightFormData{
+		OriginLocation:          "London",
+		DestinationLocation:     "Tokyo",
 		OriginLocationCode:      "LON",
 		DestinationLocationCode: "TYO",
-		DepartureDate:           time.Date(2022, 12, 05, 0, 0, 0, 0, time.Local),
+		DepartureDate:           time.Date(2022, 12, 5, 0, 0, 0, 0, time.UTC),
 		Adults:                  1,
 	}
 	accessToken := "kzijAxGphgIbhSm3WGIhmWvhep2G"
@@ -193,7 +195,16 @@ func (suite *amadeusServiceSuite) TestGetFlightOffers_Positive() {
 	flightOffers, err := suite.amadeusService.GetFlightOffers(server.URL, accessToken, &flightFormData)
 	suite.NoError(err, "no error if result")
 	suite.NotEmpty(flightOffers)
-	suite.Equal(&flightOfferResponse, flightOffers)
+	suite.Equal(1, len(*flightOffers))
+	suite.Equal(1229.85, (*flightOffers)[0].Price)
+
+	departure := model.Station{
+		Name:    "LHR",
+		City:    "London",
+		Country: "GB",
+	}
+	suite.Equal(departure, (*flightOffers)[0].Departure)
+	suite.Equal(time.Date(2022, 12, 6, 15, 50, 0, 0, time.UTC), (*flightOffers)[0].Enddate)
 }
 
 func (suite *amadeusServiceSuite) TestGetFlightOffers_NotFound_Negative() {
@@ -215,7 +226,7 @@ func (suite *amadeusServiceSuite) TestGetFlightOffers_NotFound_Negative() {
 	flightFormData := model.FlightFormData{
 		OriginLocationCode:      "ORY",
 		DestinationLocationCode: "TYO",
-		DepartureDate:           time.Date(2022, 12, 05, 0, 0, 0, 0, time.Local),
+		DepartureDate:           time.Date(2022, 12, 05, 0, 0, 0, 0, time.UTC),
 		Adults:                  1,
 	}
 	accessToken := "kzijAxGphgIbhSm3WGIhmWvhep2G"

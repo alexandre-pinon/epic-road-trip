@@ -22,8 +22,10 @@ type AccessTokenError struct {
 }
 
 type FlightFormData struct {
-	OriginLocationCode      string    `json:"origin_location_code" binding:"required"`
-	DestinationLocationCode string    `json:"destination_location_code" binding:"required"`
+	OriginLocation          string    `json:"origin_location" binding:"required"`
+	DestinationLocation     string    `json:"destination_location" binding:"required"`
+	OriginLocationCode      string    `json:"origin_location_code"`
+	DestinationLocationCode string    `json:"destination_location_code"`
 	DepartureDate           time.Time `json:"departure_date" binding:"required"`
 	Adults                  int       `json:"adults" binding:"required"`
 }

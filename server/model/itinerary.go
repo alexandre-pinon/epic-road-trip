@@ -20,5 +20,5 @@ type Itinerary struct {
 	Arrival   Station            `json:"arrival"`
 	Startdate time.Time          `json:"startdate"`
 	Enddate   time.Time          `json:"enddate"`
-	Price     float32            `json:"price"`
+	Price     float64            `json:"price"`
 }
