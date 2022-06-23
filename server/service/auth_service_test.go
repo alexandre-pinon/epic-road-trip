@@ -24,7 +24,6 @@ type authServiceSuite struct {
 }
 
 func (suite *authServiceSuite) SetupTest() {
-	gin.SetMode(gin.ReleaseMode)
 	repo := new(mocks.UserRepository)
 	authService := NewAuthService(repo)
 
@@ -239,5 +238,6 @@ func (suite *authServiceSuite) TestAuthenticator_Positive() {
 }
 
 func TestAuthService(t *testing.T) {
+	gin.SetMode(gin.TestMode)
 	suite.Run(t, new(authServiceSuite))
 }

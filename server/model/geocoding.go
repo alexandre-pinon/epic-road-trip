@@ -32,6 +32,6 @@ type Bounds struct {
 }
 
 type Location struct {
-	Lng float64 `json:"latitude"`
-	Lat float64 `json:"longitude"`
+	Lat float64 `json:"lat"`
+	Lng float64 `json:"lng"`
 }

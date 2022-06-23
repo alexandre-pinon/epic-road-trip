@@ -3,6 +3,7 @@ package controller
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -18,34 +19,34 @@ import (
 
 type roadtripControllerSuite struct {
 	suite.Suite
-	svc        *mocks.GoogleService
-	crtl       RoadTripController
-	testServer *httptest.Server
+	cfg           *config.Config
+	googleService *mocks.GoogleService
+	crtl          RoadTripController
+	testServer    *httptest.Server
 }
 
 func (suite *roadtripControllerSuite) SetupTest() {
-	svc := new(mocks.GoogleService)
-	crtl := NewRoadTripController(svc)
+	googleService := new(mocks.GoogleService)
+	crtl := NewRoadTripController(suite.cfg, googleService)
 
-	gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
 	apiRoutes := router.Group("/api/v1")
 	{
-		enjoyRoutes := apiRoutes.Group("/roadtrip")
+		roadtripRoutes := apiRoutes.Group("/roadtrip")
 		{
-			enjoyRoutes.POST("/enjoy", utils.ServeHTTP(crtl.Enjoy))
+			roadtripRoutes.POST("/enjoy", utils.ServeHTTP(crtl.Enjoy))
 		}
 	}
 	server := httptest.NewServer(router)
 
 	suite.testServer = server
-	suite.svc = svc
+	suite.googleService = googleService
 	suite.crtl = crtl
 }
 
 func (suite *roadtripControllerSuite) TestEnjoyWithGoodAnswer() {
 	request := model.CityFormData{
-		City: "paris",
+		City: "Paris",
 	}
 	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
 	activities := []model.ActivityResult{
@@ -121,8 +122,8 @@ func (suite *roadtripControllerSuite) TestEnjoyWithGoodAnswer() {
 		},
 	}
 
-	suite.svc.On("GeoCoding", config.GetConfig().BaseUrlGoogle , request.City).Return(&location, nil)
-	suite.svc.On("Enjoy", config.GetConfig().BaseUrlGoogle , location).Return(&activities, nil)
+	suite.googleService.On("GeoCoding", suite.cfg.BaseUrlGoogle, request.City).Return(&location, nil)
+	suite.googleService.On("Enjoy", suite.cfg.BaseUrlGoogle, location).Return(&activities, nil)
 
 	requestBody, err := json.Marshal(request)
 	if err != nil {
@@ -144,22 +145,25 @@ func (suite *roadtripControllerSuite) TestEnjoyWithGoodAnswer() {
 	suite.Equal(http.StatusOK, response.StatusCode)
 	suite.Equal("Activities retrieved successfuly", responseBody.Message)
 	suite.NotEmpty(responseBody.Data, "activities should be retrieved")
-	suite.svc.AssertExpectations(suite.T())
+	suite.googleService.AssertExpectations(suite.T())
 }
 
 func (suite *roadtripControllerSuite) TestEnjoyWithZeroResult() {
 	request := model.CityFormData{
-		City: "paris",
+		City: "Paris",
 	}
 	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
-	noResult := []model.ActivityResult{}
+	noResult := model.AppError{
+		StatusCode: http.StatusNotFound,
+		Err:        errors.New("ZERO_RESULTS"),
+	}
 
-	suite.svc.On("GeoCoding", config.GetConfig().BaseUrlGoogle , request.City ).Return(&location , nil)
-	suite.svc.On("Enjoy", config.GetConfig().BaseUrlGoogle, location).Return(&noResult, nil)
+	suite.googleService.On("GeoCoding", suite.cfg.BaseUrlGoogle, request.City).Return(&location, nil)
+	suite.googleService.On("Enjoy", suite.cfg.BaseUrlGoogle, location).Return(nil, &noResult)
 
 	requestBody, err := json.Marshal(request)
 	if err != nil {
-		suite.Nil(err , "json is emty")
+		suite.Nil(err, "json is emty")
 	}
 	response, err := http.Post(
 		fmt.Sprintf("%s/api/v1/roadtrip/enjoy", suite.testServer.URL),
@@ -173,14 +177,16 @@ func (suite *roadtripControllerSuite) TestEnjoyWithZeroResult() {
 	responseBody := model.AppResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
 
-	suite.Equal(http.StatusOK, response.StatusCode)
-	suite.Equal("Activities retrieved successfuly but empty", responseBody.Message)
-	suite.Equal([]interface{}{}, responseBody.Data, "the data returns activities array empty")
-	suite.Empty(responseBody.Data, "activities should be retrieved")
-	suite.svc.AssertExpectations(suite.T())
+	suite.Equal(http.StatusNotFound, response.StatusCode)
+	suite.Equal("ZERO_RESULTS", responseBody.Message)
+	suite.Empty(responseBody.Data, "activities should not be retrieved")
+	suite.googleService.AssertExpectations(suite.T())
 
 }
 
 func TestGoogleController(t *testing.T) {
-	suite.Run(t, new(roadtripControllerSuite))
+	gin.SetMode(gin.TestMode)
+	cfg := config.GetConfig()
+	cfg.Env = config.Test
+	suite.Run(t, &roadtripControllerSuite{cfg: cfg})
 }

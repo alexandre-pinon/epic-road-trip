@@ -10,6 +10,7 @@ import (
 )
 
 type roadtripController struct {
+	cfg           *config.Config
 	googleService service.GoogleService
 }
 
@@ -17,11 +18,11 @@ type RoadTripController interface {
 	Enjoy(ctx *gin.Context) (*model.AppResult, *model.AppError)
 }
 
-func NewRoadTripController(svc service.GoogleService) RoadTripController {
-	return &roadtripController{svc}
+func NewRoadTripController(cfg *config.Config, googleService service.GoogleService) RoadTripController {
+	return &roadtripController{cfg: cfg, googleService: googleService}
 }
 
-func (crtl *roadtripController) Enjoy(c *gin.Context) (*model.AppResult, *model.AppError) {
+func (ctrl *roadtripController) Enjoy(c *gin.Context) (*model.AppResult, *model.AppError) {
 
 	var position model.CityFormData
 
@@ -32,29 +33,17 @@ func (crtl *roadtripController) Enjoy(c *gin.Context) (*model.AppResult, *model.
 		}
 	}
 
-	location, err := crtl.googleService.GeoCoding(config.GetConfig().BaseUrlGoogle, position.City)
+	location, err := ctrl.googleService.GeoCoding(ctrl.cfg.BaseUrlGoogle, position.City)
 	if err != nil {
-		return nil, &model.AppError{
-			StatusCode: http.StatusInternalServerError,
-			Err:        err,
-		}
+		return nil, err.(*model.AppError)
 	}
 
-	activities, err := crtl.googleService.Enjoy(config.GetConfig().BaseUrlGoogle, *location)
+
+	activities, err := ctrl.googleService.Enjoy(ctrl.cfg.BaseUrlGoogle, *location)
 	if err != nil {
-		return nil, &model.AppError{
-			StatusCode: http.StatusInternalServerError,
-			Err:        err,
-		}
+		return nil, err.(*model.AppError)
 	}
 
-	if len(*activities) == 0 {
-		return &model.AppResult{
-			StatusCode: http.StatusOK,
-			Message:    "Activities retrieved successfuly but empty",
-			Data:       []model.ActivityResult{},
-		}, nil
-	}
 
 	return &model.AppResult{
 		StatusCode: http.StatusOK,

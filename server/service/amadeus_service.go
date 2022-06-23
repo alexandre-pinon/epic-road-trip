@@ -16,7 +16,7 @@ import (
 )
 
 type amadeusService struct {
-	cfg config.Config
+	cfg *config.Config
 }
 
 type AmadeusService interface {
@@ -24,7 +24,7 @@ type AmadeusService interface {
 	GetFlightOffers(amadeusBaseUrl, accessToken string, flightFormData *model.FlightFormData) (*[]model.Itinerary, error)
 }
 
-func NewAmadeusService(cfg config.Config) AmadeusService {
+func NewAmadeusService(cfg *config.Config) AmadeusService {
 	return &amadeusService{cfg}
 }
 

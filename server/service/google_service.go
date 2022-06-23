@@ -11,7 +11,7 @@ import (
 )
 
 type googleService struct {
-	cfg config.Config
+	cfg *config.Config
 }
 
 type GoogleService interface {
@@ -19,13 +19,13 @@ type GoogleService interface {
 	GeoCoding(url, position string) (*model.Location, error)
 }
 
-func NewGoogleService(cfg config.Config) GoogleService {
+func NewGoogleService(cfg *config.Config) GoogleService {
 	return &googleService{cfg}
 }
 
 func (svc *googleService) Enjoy(url string, position model.Location) (*[]model.ActivityResult, error) {
 
-	response, err := http.Get(fmt.Sprintf("%s/place/nearbysearch/json?location=%f,%f&type=restaurant&key=%s", url , position.Lat, position.Lng , svc.cfg.GoogleKey))
+	response, err := http.Get(fmt.Sprintf("%s/place/nearbysearch/json?location=%f,%f&radius=5000&type=tourist_attraction&key=%s", url, position.Lat, position.Lng, svc.cfg.GoogleKey))
 	if err != nil {
 		return nil, &model.AppError{
 			StatusCode: http.StatusBadRequest,
@@ -69,5 +69,6 @@ func (svc *googleService) GeoCoding(url, city string) (*model.Location, error) {
 	}
 
 	location := responseBody.Results[0].Geometry.Location
+
 	return &location, nil
 }

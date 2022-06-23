@@ -14,7 +14,7 @@ import (
 
 type googleServiceSuite struct {
 	suite.Suite
-	cfg  config.Config
+	cfg  *config.Config
 	repo *mocks.GoogleRepository
 	svc  GoogleService
 }
@@ -123,8 +123,8 @@ func (suite *googleServiceSuite) TestEnjoyWithGoodAnswer() {
 	}
 	withResults := model.Activity{
 		HTMLAttributions: []interface{}{},
-		Results: activities,
-		Status: "no error",
+		Results:          activities,
+		Status:           "no error",
 	}
 	router := gin.Default()
 	router.GET("/place/nearbysearch/json", func(ctx *gin.Context) {
@@ -201,5 +201,5 @@ func (suite *googleServiceSuite) TestGeocoding_Results_Positive() {
 func TestGoogleService(t *testing.T) {
 	cfg := config.GetConfig()
 	cfg.Env = config.Test
-	suite.Run(t, new(googleServiceSuite))
+	suite.Run(t, &googleServiceSuite{cfg: cfg})
 }

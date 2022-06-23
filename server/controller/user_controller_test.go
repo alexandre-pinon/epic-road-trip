@@ -29,7 +29,6 @@ func (suite *userControllerSuite) SetupTest() {
 	svc := new(mocks.UserService)
 	ctrl := NewUserController(svc)
 
-	gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
 	apiRoutes := router.Group("/api")
 	{
@@ -439,5 +438,6 @@ func (suite *userControllerSuite) TestDeleteUser_InvalidID_Negative() {
 }
 
 func TestUserController(t *testing.T) {
+	gin.SetMode(gin.TestMode)
 	suite.Run(t, new(userControllerSuite))
 }

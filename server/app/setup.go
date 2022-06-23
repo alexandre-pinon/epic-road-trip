@@ -16,7 +16,7 @@ func InitApp() {
 	defer config.DisconnectDB(cfg, db.Client())
 
 	repositories := SetupRepositories(db)
-	services := SetupServices(repositories)
+	services := SetupServices(cfg, repositories)
 	controllers := SetupControllers(cfg, services)
 
 	log.Print("Initializing swagger...")

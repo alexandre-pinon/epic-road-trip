@@ -15,7 +15,7 @@ import (
 type amadeusServiceSuite struct {
 	suite.Suite
 	amadeusService AmadeusService
-	cfg            config.Config
+	cfg            *config.Config
 }
 
 func (suite *amadeusServiceSuite) SetupTest() {
@@ -242,5 +242,5 @@ func TestAmadeusService(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	cfg := config.GetConfig()
 	cfg.Env = config.Test
-	suite.Run(t, &amadeusServiceSuite{cfg: *cfg})
+	suite.Run(t, &amadeusServiceSuite{cfg: cfg})
 }

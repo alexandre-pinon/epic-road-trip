@@ -13,13 +13,13 @@ import (
 
 type userRepositorySuite struct {
 	suite.Suite
-	cfg             config.Config
+	cfg             *config.Config
 	repo            UserRepository
 	cleanupExecutor utils.DropCollectionExecutor
 }
 
 func (suite *userRepositorySuite) SetupTest() {
-	db := config.ConnectDB(&suite.cfg)
+	db := config.ConnectDB(suite.cfg)
 	repo := NewUserRepository(db)
 
 	suite.repo = repo
@@ -28,7 +28,7 @@ func (suite *userRepositorySuite) SetupTest() {
 }
 
 func (suite *userRepositorySuite) TearDownTest() {
-	defer config.DisconnectDB(&suite.cfg, suite.cleanupExecutor.DB.Client())
+	defer config.DisconnectDB(suite.cfg, suite.cleanupExecutor.DB.Client())
 	defer suite.cleanupExecutor.DropCollection([]string{"user"})
 }
 
@@ -200,5 +200,5 @@ func (suite *userRepositorySuite) TestDeleteUser_Positive() {
 func TestUserRepository(t *testing.T) {
 	cfg := config.GetConfig()
 	cfg.Env = config.Test
-	suite.Run(t, &userRepositorySuite{cfg: *cfg})
+	suite.Run(t, &userRepositorySuite{cfg: cfg})
 }

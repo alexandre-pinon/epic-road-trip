@@ -6,15 +6,15 @@ import (
 )
 
 type Services struct {
-	UserService 	service.UserService
-	AuthService 	service.AuthService
-	GoogleService 	service.GoogleService
+	UserService   service.UserService
+	AuthService   service.AuthService
+	GoogleService service.GoogleService
 }
 
-func SetupServices(repos *Repositories) *Services {
+func SetupServices(cfg *config.Config, repos *Repositories) *Services {
 	return &Services{
-		UserService: service.NewUserService(repos.UserRepository),
-		AuthService: service.NewAuthService(repos.UserRepository),
-		GoogleService: service.NewGoogleService(*config.GetConfig()),
+		UserService:   service.NewUserService(repos.UserRepository),
+		AuthService:   service.NewAuthService(repos.UserRepository),
+		GoogleService: service.NewGoogleService(cfg),
 	}
 }
