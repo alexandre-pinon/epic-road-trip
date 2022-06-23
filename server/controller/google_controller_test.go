@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/alexandre-pinon/epic-road-trip/config"
 	"github.com/alexandre-pinon/epic-road-trip/mocks"
 	"github.com/alexandre-pinon/epic-road-trip/model"
 	"github.com/alexandre-pinon/epic-road-trip/utils"
@@ -120,15 +121,16 @@ func (suite *roadtripControllerSuite) TestEnjoyWithGoodAnswer() {
 		},
 	}
 
-	suite.svc.On("GeoCoding", suite.testServer.URL, request.City).Return(&location, nil)
-	suite.svc.On("Enjoy", suite.testServer.URL, location).Return(&activities, nil)
+	suite.svc.On("GeoCoding", config.GetConfig().BaseUrlGoogle , request.City).Return(&location, nil)
+	suite.svc.On("Enjoy", config.GetConfig().BaseUrlGoogle , location).Return(&activities, nil)
 
 	requestBody, err := json.Marshal(request)
 	if err != nil {
 		suite.Nil(err, "json is empty")
 	}
+
 	response, err := http.Post(
-		fmt.Sprintf("%s/api/roadtrip/enjoy", suite.testServer.URL),
+		fmt.Sprintf("%s/api/v1/roadtrip/enjoy", suite.testServer.URL),
 		gin.MIMEJSON,
 		bytes.NewBuffer(requestBody),
 	)
@@ -142,28 +144,25 @@ func (suite *roadtripControllerSuite) TestEnjoyWithGoodAnswer() {
 	suite.Equal(http.StatusOK, response.StatusCode)
 	suite.Equal("Activities retrieved successfuly", responseBody.Message)
 	suite.NotEmpty(responseBody.Data, "activities should be retrieved")
+	suite.svc.AssertExpectations(suite.T())
 }
 
-/* func (suite *roadtripControllerSuite) TestEnjoyWithZeroResult() {
+func (suite *roadtripControllerSuite) TestEnjoyWithZeroResult() {
 	request := model.CityFormData{
 		City: "paris",
 	}
 	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
-	noResult := model.Activity{
-		HTMLAttributions: []interface{}{},
-		Results:          []model.ActivityResult{},
-		Status:           "ZERO_RESULTS",
-	}
+	noResult := []model.ActivityResult{}
 
-	suite.svc.On("GeoCoding", suite.testServer.URL , request.City ).Return(&location , nil)
-	suite.svc.On("Enjoy", suite.testServer.URL, location).Return(&noResult, nil)
+	suite.svc.On("GeoCoding", config.GetConfig().BaseUrlGoogle , request.City ).Return(&location , nil)
+	suite.svc.On("Enjoy", config.GetConfig().BaseUrlGoogle, location).Return(&noResult, nil)
 
 	requestBody, err := json.Marshal(request)
 	if err != nil {
 		suite.Nil(err , "json is emty")
 	}
 	response, err := http.Post(
-		fmt.Sprintf("%s/api/roadtrip/enjoy", suite.testServer.URL),
+		fmt.Sprintf("%s/api/v1/roadtrip/enjoy", suite.testServer.URL),
 		gin.MIMEJSON,
 		bytes.NewBuffer(requestBody),
 	)
@@ -174,13 +173,13 @@ func (suite *roadtripControllerSuite) TestEnjoyWithGoodAnswer() {
 	responseBody := model.AppResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
 
-	suite.Equal(http.StatusOK, response.Status)
-	suite.Equal("Activities retrieved successfuly", responseBody.Message)
-	suite.Equal(noResult, responseBody.Data, "the data returns activities array empty")
-	suite.Nil(responseBody.Data, "activities should be retrieved")
+	suite.Equal(http.StatusOK, response.StatusCode)
+	suite.Equal("Activities retrieved successfuly but empty", responseBody.Message)
+	suite.Equal([]interface{}{}, responseBody.Data, "the data returns activities array empty")
+	suite.Empty(responseBody.Data, "activities should be retrieved")
 	suite.svc.AssertExpectations(suite.T())
 
-} */
+}
 
 func TestGoogleController(t *testing.T) {
 	suite.Run(t, new(roadtripControllerSuite))

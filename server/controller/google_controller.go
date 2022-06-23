@@ -27,7 +27,7 @@ func (crtl *roadtripController) Enjoy(c *gin.Context) (*model.AppResult, *model.
 
 	if err := c.ShouldBindJSON(&position); err != nil {
 		return nil, &model.AppError{
-			StatusCode: http.StatusInternalServerError,
+			StatusCode: http.StatusBadRequest,
 			Err:        err,
 		}
 	}
@@ -50,9 +50,9 @@ func (crtl *roadtripController) Enjoy(c *gin.Context) (*model.AppResult, *model.
 
 	if len(*activities) == 0 {
 		return &model.AppResult{
-			StatusCode: http.StatusInternalServerError,
+			StatusCode: http.StatusOK,
 			Message:    "Activities retrieved successfuly but empty",
-			Data:       []model.Activity{},
+			Data:       []model.ActivityResult{},
 		}, nil
 	}
 
