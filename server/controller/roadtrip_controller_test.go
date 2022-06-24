@@ -191,12 +191,19 @@ func (suite *roadtripControllerSuite) TestEnjoyWithZeroResult() {
 
 func (suite *roadtripControllerSuite) TestTravel_Positive() {
 	flighFormData := model.FlightFormData{
-		OriginLocation:      "Paris",
-		DestinationLocation: "Tokyo",
-		DepartureDate:       time.Date(2022, 12, 12, 12, 12, 12, 12, time.UTC),
-		Adults:              2,
+		OriginLocation:          "Paris",
+		DestinationLocation:     "Tokyo",
+		OriginLocationCode:      "PAR",
+		DestinationLocationCode: "TYO",
+		DepartureDate:           time.Date(2022, 12, 12, 12, 12, 12, 12, time.UTC),
+		Adults:                  2,
 	}
-	accessToken := "kzijAxGphgIbhSm3WGIhmWvhep2G"
+	now := time.Now().Unix()
+	accessToken := model.AccessToken{
+		Value: "kzijAxGphgIbhSm3WGIhmWvhep2G",
+		Iat:   now,
+		Exp:   int(now) + 30*60,
+	}
 	itineraries := []model.Itinerary{{
 		Type: model.Airplane,
 		Departure: model.Station{
@@ -214,14 +221,14 @@ func (suite *roadtripControllerSuite) TestTravel_Positive() {
 		Price:     999.99,
 	}}
 
-	suite.amadeusService.On("GetAccessToken", suite.cfg.Amadeus.BaseUrl).Return(accessToken, nil)
-	suite.amadeusService.On("GetFlightOffers", suite.cfg.Amadeus.BaseUrl, accessToken, flighFormData).Return(&itineraries, nil)
+	suite.amadeusService.On("GetAccessToken", suite.cfg.Amadeus.BaseUrl).Return(&accessToken, nil)
+	suite.amadeusService.On("GetFlightOffers", suite.cfg.Amadeus.BaseUrl, accessToken.Value, &flighFormData).Return(&itineraries, nil)
 
 	requestBody, err := json.Marshal(&flighFormData)
 	suite.NoError(err, "can not marshal struct to json")
 
 	response, err := http.Post(
-		fmt.Sprintf("%s/api/roadtrip/travel", suite.testServer.URL),
+		fmt.Sprintf("%s/api/v1/roadtrip/travel", suite.testServer.URL),
 		gin.MIMEJSON,
 		bytes.NewBuffer(requestBody),
 	)
@@ -239,25 +246,32 @@ func (suite *roadtripControllerSuite) TestTravel_Positive() {
 
 func (suite *roadtripControllerSuite) TestTravel_NoResults_Negative() {
 	flighFormData := model.FlightFormData{
-		OriginLocation:      "Paris",
-		DestinationLocation: "zofijzr",
-		DepartureDate:       time.Date(2022, 12, 12, 12, 12, 12, 12, time.UTC),
-		Adults:              2,
+		OriginLocation:          "Paris",
+		DestinationLocation:     "Sydney",
+		OriginLocationCode:      "PAR",
+		DestinationLocationCode: "SYD",
+		DepartureDate:           time.Date(2022, 12, 12, 12, 12, 12, 12, time.UTC),
+		Adults:                  2,
 	}
-	accessToken := "kzijAxGphgIbhSm3WGIhmWvhep2G"
+	now := time.Now().Unix()
+	accessToken := model.AccessToken{
+		Value: "kzijAxGphgIbhSm3WGIhmWvhep2G",
+		Iat:   now,
+		Exp:   int(now) + 30*60,
+	}
 	noResults := model.AppError{
 		StatusCode: http.StatusNotFound,
 		Err:        errors.New("flight offers not found"),
 	}
 
-	suite.amadeusService.On("GetAccessToken", suite.cfg.Amadeus.BaseUrl).Return(accessToken, nil)
-	suite.amadeusService.On("GetFlightOffers", suite.cfg.Amadeus.BaseUrl, accessToken, flighFormData).Return(nil, &noResults)
+	suite.amadeusService.On("GetAccessToken", suite.cfg.Amadeus.BaseUrl).Return(&accessToken, nil)
+	suite.amadeusService.On("GetFlightOffers", suite.cfg.Amadeus.BaseUrl, accessToken.Value, &flighFormData).Return(nil, &noResults)
 
 	requestBody, err := json.Marshal(&flighFormData)
 	suite.NoError(err, "can not marshal struct to json")
 
 	response, err := http.Post(
-		fmt.Sprintf("%s/api/roadtrip/travel", suite.testServer.URL),
+		fmt.Sprintf("%s/api/v1/roadtrip/travel", suite.testServer.URL),
 		gin.MIMEJSON,
 		bytes.NewBuffer(requestBody),
 	)
@@ -271,6 +285,33 @@ func (suite *roadtripControllerSuite) TestTravel_NoResults_Negative() {
 	suite.Equal("flight offers not found", responseBody.Message)
 	suite.Empty(&responseBody.Data, "itineraries should not be retrieved")
 	suite.amadeusService.AssertExpectations(suite.T())
+}
+
+func (suite *roadtripControllerSuite) TestTravel_InvalidOriginDestination_Negative() {
+	flighFormData := model.FlightFormData{
+		OriginLocation:      "gerkj",
+		DestinationLocation: "zofijzr",
+		DepartureDate:       time.Date(2022, 12, 12, 12, 12, 12, 12, time.UTC),
+		Adults:              2,
+	}
+
+	requestBody, err := json.Marshal(&flighFormData)
+	suite.NoError(err, "can not marshal struct to json")
+
+	response, err := http.Post(
+		fmt.Sprintf("%s/api/v1/roadtrip/travel", suite.testServer.URL),
+		gin.MIMEJSON,
+		bytes.NewBuffer(requestBody),
+	)
+	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
+
+	responseBody := model.AppResponse{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusNotFound, response.StatusCode)
+	suite.Equal("no airport found for origin/destination cities", responseBody.Message)
+	suite.Empty(&responseBody.Data, "itineraries should not be retrieved")
 }
 
 func TestRoadtripController(t *testing.T) {
