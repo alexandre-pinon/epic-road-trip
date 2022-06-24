@@ -20,7 +20,7 @@ type amadeusService struct {
 }
 
 type AmadeusService interface {
-	GetAccessToken(amadeusBaseUrl string) (string, error)
+	GetAccessToken(amadeusBaseUrl string) (*model.AccessToken, error)
 	GetFlightOffers(amadeusBaseUrl, accessToken string, flightFormData *model.FlightFormData) (*[]model.Itinerary, error)
 }
 
@@ -28,7 +28,7 @@ func NewAmadeusService(cfg *config.Config) AmadeusService {
 	return &amadeusService{cfg}
 }
 
-func (svc *amadeusService) GetAccessToken(amadeusBaseUrl string) (string, error) {
+func (svc *amadeusService) GetAccessToken(amadeusBaseUrl string) (*model.AccessToken, error) {
 	requestBody := url.Values{}
 	requestBody.Set("grant_type", "client_credentials")
 	requestBody.Set("client_id", svc.cfg.Amadeus.Key)
@@ -40,14 +40,14 @@ func (svc *amadeusService) GetAccessToken(amadeusBaseUrl string) (string, error)
 		strings.NewReader(requestBody.Encode()),
 	)
 	if err != nil {
-		return "", &model.AppError{
+		return nil, &model.AppError{
 			StatusCode: response.StatusCode,
 			Err:        err,
 		}
 	}
 
 	if response.StatusCode == http.StatusUnauthorized {
-		return "", &model.AppError{
+		return nil, &model.AppError{
 			StatusCode: response.StatusCode,
 			Err:        errors.New("invalid client credentials"),
 		}
@@ -57,7 +57,14 @@ func (svc *amadeusService) GetAccessToken(amadeusBaseUrl string) (string, error)
 	responseBody := model.AccessTokenResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
 
-	return responseBody.AccessToken, nil
+	now := time.Now().Unix()
+	accessToken := model.AccessToken{
+		Value: responseBody.AccessToken,
+		Iat:   now,
+		Exp:   int(now) + responseBody.ExpiresIn,
+	}
+
+	return &accessToken, nil
 }
 
 func (svc *amadeusService) GetFlightOffers(amadeusBaseUrl, accessToken string, flightFormData *model.FlightFormData) (*[]model.Itinerary, error) {

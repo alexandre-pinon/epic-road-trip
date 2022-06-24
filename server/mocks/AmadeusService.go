@@ -15,14 +15,16 @@ type AmadeusService struct {
 }
 
 // GetAccessToken provides a mock function with given fields: amadeusBaseUrl
-func (_m *AmadeusService) GetAccessToken(amadeusBaseUrl string) (string, error) {
+func (_m *AmadeusService) GetAccessToken(amadeusBaseUrl string) (*model.AccessToken, error) {
 	ret := _m.Called(amadeusBaseUrl)
 
-	var r0 string
-	if rf, ok := ret.Get(0).(func(string) string); ok {
+	var r0 *model.AccessToken
+	if rf, ok := ret.Get(0).(func(string) *model.AccessToken); ok {
 		r0 = rf(amadeusBaseUrl)
 	} else {
-		r0 = ret.Get(0).(string)
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.AccessToken)
+		}
 	}
 
 	var r1 error

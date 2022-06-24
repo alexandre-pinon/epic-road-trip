@@ -43,7 +43,8 @@ func (suite *amadeusServiceSuite) TestGetAccessToken_Positive() {
 
 	accessToken, err := suite.amadeusService.GetAccessToken(server.URL)
 	suite.NoError(err, "no error if result")
-	suite.Equal(accessTokenResponse.AccessToken, accessToken)
+	suite.Equal(accessTokenResponse.AccessToken, accessToken.Value)
+	suite.Equal(accessTokenResponse.ExpiresIn, accessToken.Exp-int(accessToken.Iat))
 }
 
 func (suite *amadeusServiceSuite) TestGetAccessToken_InvalidCredentials_Negative() {
@@ -63,7 +64,7 @@ func (suite *amadeusServiceSuite) TestGetAccessToken_InvalidCredentials_Negative
 	suite.Error(err, "error when bad credentials")
 	suite.Equal(http.StatusUnauthorized, err.(*model.AppError).StatusCode)
 	suite.Equal("invalid client credentials", err.Error())
-	suite.Empty(accessToken)
+	suite.Nil(accessToken)
 }
 
 func (suite *amadeusServiceSuite) TestGetFlightOffers_Positive() {

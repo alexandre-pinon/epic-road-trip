@@ -11,7 +11,7 @@ import (
 func GetIataCode(city string) string {
 	f, err := os.Open("data/iata_codes.json")
 	if err != nil {
-		log.Println(err)
+		log.Fatal(err)
 	}
 	defer f.Close()
 

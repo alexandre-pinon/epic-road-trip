@@ -21,6 +21,12 @@ type AccessTokenError struct {
 	Title            string `json:"title"`
 }
 
+type AccessToken struct {
+	Value string `json:"value"`
+	Iat   int64  `json:"iat"`
+	Exp   int    `json:"exp"`
+}
+
 type FlightFormData struct {
 	OriginLocation          string    `json:"origin_location" binding:"required"`
 	DestinationLocation     string    `json:"destination_location" binding:"required"`
