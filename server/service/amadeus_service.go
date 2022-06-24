@@ -70,10 +70,11 @@ func (svc *amadeusService) GetAccessToken(amadeusBaseUrl string) (*model.AccessT
 func (svc *amadeusService) GetFlightOffers(amadeusBaseUrl, accessToken string, flightFormData *model.FlightFormData) (*[]model.Itinerary, error) {
 	query := fmt.Sprintf("originLocationCode=%s", flightFormData.OriginLocationCode)
 	query += fmt.Sprintf("&destinationLocationCode=%s", flightFormData.DestinationLocationCode)
-	query += fmt.Sprintf("&departureDate=%s", flightFormData.DepartureDate.Format("2000-01-01"))
+	query += fmt.Sprintf("&departureDate=%s", flightFormData.DepartureDate.Format("2006-01-02"))
 	query += fmt.Sprintf("&adults=%d", flightFormData.Adults)
 	query += "&nonStop=true&max=50"
 	url := fmt.Sprintf("%s/v2/shopping/flight-offers?%s", amadeusBaseUrl, query)
+
 
 	request, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -105,6 +106,7 @@ func (svc *amadeusService) GetFlightOffers(amadeusBaseUrl, accessToken string, f
 
 	responseBody := model.FlighOffersResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
+
 
 	if len(responseBody.Data) == 0 {
 		return nil, &model.AppError{

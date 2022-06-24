@@ -6,7 +6,7 @@ type AccessTokenResponse struct {
 	Type            string `json:"type"`
 	Username        string `json:"username"`
 	ApplicationName string `json:"application_name"`
-	ClientID        string `json:"client_id"`
+	ClientID        string `json:"clien_id"`
 	TokenType       string `json:"token_type"`
 	AccessToken     string `json:"access_token"`
 	ExpiresIn       int    `json:"expires_in"`
@@ -28,11 +28,11 @@ type AccessToken struct {
 }
 
 type FlightFormData struct {
-	OriginLocation          string    `json:"origin_location" binding:"required"`
-	DestinationLocation     string    `json:"destination_location" binding:"required"`
-	OriginLocationCode      string    `json:"origin_location_code"`
-	DestinationLocationCode string    `json:"destination_location_code"`
-	DepartureDate           time.Time `json:"departure_date" binding:"required"`
+	OriginLocation          string    `json:"originLocation" binding:"required"`
+	DestinationLocation     string    `json:"destinationLocation" binding:"required"`
+	OriginLocationCode      string    `json:"originLocationCode"`
+	DestinationLocationCode string    `json:"destinationLocationCode"`
+	DepartureDate           time.Time `json:"departureDate" binding:"required"`
 	Adults                  int       `json:"adults" binding:"required"`
 }
 
@@ -66,16 +66,16 @@ type FlightOffer struct {
 	Type                     string               `json:"type"`
 	ID                       string               `json:"id"`
 	Source                   string               `json:"source"`
-	InstantTicketingRequired bool                 `json:"instant_ticketing_required"`
-	NonHomogeneous           bool                 `json:"non_homogeneous"`
-	OneWay                   bool                 `json:"one_way"`
-	LastTicketingDate        string               `json:"last_ticketing_date"`
-	NumberOfBookableSeats    int                  `json:"number_of_bookable_seats"`
-	Itineraries              []FlightOfferItinary `json:"itinaries"`
+	InstantTicketingRequired bool                 `json:"instantTicketingRequired"`
+	NonHomogeneous           bool                 `json:"nonHomogeneous"`
+	OneWay                   bool                 `json:"oneWay"`
+	LastTicketingDate        string               `json:"lastTicketingDate"`
+	NumberOfBookableSeats    int                  `json:"numberOfBookableSeats"`
+	Itineraries              []FlightOfferItinary `json:"itineraries"`
 	Price                    Price                `json:"price"`
-	PricingOptions           PricingOptions       `json:"pricing_options"`
-	ValidatingAirlineCodes   []string             `json:"validating_airline_codes"`
-	TravelerPricings         []TravelerPricing    `json:"travel_pricings"`
+	PricingOptions           PricingOptions       `json:"pricingOptions"`
+	ValidatingAirlineCodes   []string             `json:"validatingAirlineCodes"`
+	TravelerPricings         []TravelerPricing    `json:"travelPricings"`
 }
 
 type FlightOfferItinary struct {
@@ -86,24 +86,24 @@ type FlightOfferItinary struct {
 type Segment struct {
 	Departure       Departure `json:"departure"`
 	Arrival         Arrival   `json:"arrival"`
-	CarrierCode     string    `json:"carrier_code"`
+	CarrierCode     string    `json:"carrierCode"`
 	Number          string    `json:"number"`
 	Aircraft        Aircraft  `json:"aircraft"`
 	Operating       Operating `json:"operating"`
 	Duration        string    `json:"duration"`
 	ID              string    `json:"id"`
-	NumberOfStops   int       `json:"number_of_stops"`
-	BlacklistedInEU bool      `json:"blacklisted_in_EU"`
+	NumberOfStops   int       `json:"numberOfStops"`
+	BlacklistedInEU bool      `json:"blacklistedInEU"`
 }
 
 type Departure struct {
-	IataCode string `json:"iata_code"`
+	IataCode string `json:"iataCode"`
 	Terminal string `json:"terminal"`
 	At       string `json:"at"`
 }
 
 type Arrival struct {
-	IataCode string `json:"iata_code"`
+	IataCode string `json:"iataCode"`
 	At       string `json:"at"`
 }
 
@@ -112,7 +112,7 @@ type Aircraft struct {
 }
 
 type Operating struct {
-	CarrierCode string `json:"carrier_code"`
+	CarrierCode string `json:"carrierCode"`
 }
 
 type BasePrice struct {
@@ -124,7 +124,7 @@ type BasePrice struct {
 type Price struct {
 	BasePrice
 	Fees       []Fee  `json:"fees"`
-	GrandTotal string `json:"grand_total"`
+	GrandTotal string `json:"grandTotal"`
 }
 
 type Fee struct {
@@ -133,16 +133,16 @@ type Fee struct {
 }
 
 type PricingOptions struct {
-	FareType                []string `json:"fare_type"`
-	IncludedCheckedBagsOnly bool     `json:"included_checked_bags_only"`
+	FareType                []string `json:"fareType"`
+	IncludedCheckedBagsOnly bool     `json:"includedCheckedBagsOnly"`
 }
 
 type TravelerPricing struct {
-	TravelerID           string        `json:"traveler_id"`
-	FareOption           string        `json:"fare_option"`
-	TravelerType         string        `json:"traveler_type"`
+	TravelerID           string        `json:"travelerId"`
+	FareOption           string        `json:"fareOption"`
+	TravelerType         string        `json:"travelerType"`
 	Price                BasePrice     `json:"price"`
-	FareDetailsBySegment []FareDetails `json:"fare_details_by_segment"`
+	FareDetailsBySegment []FareDetails `json:"fareDetailsBySegment"`
 }
 
 type FareDetails struct {
@@ -150,7 +150,7 @@ type FareDetails struct {
 	Cabin               string              `json:"cabin"`
 	FareBasis           string              `json:"fareBasis"`
 	Class               string              `json:"class"`
-	IncludedCheckedBags IncludedCheckedBags `json:"included_checked_bags"`
+	IncludedCheckedBags IncludedCheckedBags `json:"includedCheckedBags"`
 }
 
 type IncludedCheckedBags struct {

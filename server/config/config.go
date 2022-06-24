@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"regexp"
 	"strings"
 
+	"github.com/alexandre-pinon/epic-road-trip/utils"
 	"github.com/joho/godotenv"
 )
 
@@ -53,10 +53,8 @@ const (
 )
 
 func GetConfig() *Config {
-	projectName := regexp.MustCompile(`^(.*server)`)
-	currentWorkDirectory, _ := os.Getwd()
-	rootPath := projectName.Find([]byte(currentWorkDirectory))
-	envPath := string(rootPath) + "/.env"
+	rootPath := utils.GetRootPath()
+	envPath := rootPath + "/.env"
 
 	_, err := os.Stat(envPath)
 	if err != nil {

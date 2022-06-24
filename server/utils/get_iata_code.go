@@ -5,13 +5,19 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"path/filepath"
 	"strings"
 )
 
 func GetIataCode(city string) string {
-	absPath, _ := filepath.Abs("../data/iata_codes.json")
-	f, err := os.Open(absPath)
+	rootPath := GetRootPath()
+	envPath := rootPath + "/data/iata_codes.json"
+
+	_, err := os.Stat(envPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	f, err := os.Open(envPath)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -2,7 +2,6 @@ package controller
 
 import (
 	"errors"
-	"log"
 	"net/http"
 	"time"
 
@@ -69,9 +68,6 @@ func (ctrl *roadtripController) Travel(ctx *gin.Context) (*model.AppResult, *mod
 
 	flighFormData.OriginLocationCode = utils.GetIataCode(flighFormData.OriginLocation)
 	flighFormData.DestinationLocationCode = utils.GetIataCode(flighFormData.DestinationLocation)
-	log.Print(flighFormData.OriginLocationCode)
-	log.Print(flighFormData.DestinationLocationCode)
-	log.Print(flighFormData.OriginLocationCode == "")
 	if flighFormData.OriginLocationCode == "" || flighFormData.DestinationLocationCode == "" {
 		return nil, &model.AppError{
 			StatusCode: http.StatusNotFound,
@@ -79,7 +75,8 @@ func (ctrl *roadtripController) Travel(ctx *gin.Context) (*model.AppResult, *mod
 		}
 	}
 
-	if time.Now().Unix() > ctrl.amadeusAccessToken.Iat+int64(ctrl.amadeusAccessToken.Exp) {
+
+	if time.Now().Unix() > int64(ctrl.amadeusAccessToken.Exp) {
 		accessToken, err := ctrl.amadeusService.GetAccessToken(ctrl.cfg.Amadeus.BaseUrl)
 		if err != nil {
 			return nil, err.(*model.AppError)
