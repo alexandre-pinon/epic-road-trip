@@ -200,6 +200,6 @@ func (suite *googleServiceSuite) TestGeocoding_Results_Positive() {
 
 func TestGoogleService(t *testing.T) {
 	cfg := config.GetConfig()
-	cfg.Env = config.Test
+	cfg.App.Env = config.Test
 	suite.Run(t, &googleServiceSuite{cfg: cfg})
 }

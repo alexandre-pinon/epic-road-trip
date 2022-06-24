@@ -17,6 +17,6 @@ func SetupControllers(cfg *config.Config, services *Services) *Controllers {
 		RootController:     controller.NewRootController(),
 		UserController:     controller.NewUserController(services.UserService),
 		AuthController:     controller.NewAuthController(cfg, services.AuthService),
-		RoadtripController: controller.NewRoadTripController(cfg, services.GoogleService),
+		RoadtripController: controller.NewRoadTripController(cfg, services.GoogleService, services.AmadeusService),
 	}
 }

@@ -35,8 +35,8 @@ type AuthController interface {
 // @Router /auth/register [post]
 func NewAuthController(cfg *config.Config, svc service.AuthService) AuthController {
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
-		Realm:           cfg.AppName,
-		Key:             []byte(cfg.SecretKey),
+		Realm:           cfg.App.Name,
+		Key:             []byte(cfg.App.Secret),
 		Timeout:         time.Minute * 15,
 		MaxRefresh:      time.Hour * 1,
 		IdentityKey:     jwt.IdentityKey,

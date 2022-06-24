@@ -241,6 +241,6 @@ func (suite *amadeusServiceSuite) TestGetFlightOffers_NotFound_Negative() {
 func TestAmadeusService(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	cfg := config.GetConfig()
-	cfg.Env = config.Test
+	cfg.App.Env = config.Test
 	suite.Run(t, &amadeusServiceSuite{cfg: cfg})
 }

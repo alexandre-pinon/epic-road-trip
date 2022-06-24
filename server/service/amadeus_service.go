@@ -31,8 +31,8 @@ func NewAmadeusService(cfg *config.Config) AmadeusService {
 func (svc *amadeusService) GetAccessToken(amadeusBaseUrl string) (string, error) {
 	requestBody := url.Values{}
 	requestBody.Set("grant_type", "client_credentials")
-	requestBody.Set("client_id", svc.cfg.AmadeusKey)
-	requestBody.Set("client_secret", svc.cfg.AmadeusSecret)
+	requestBody.Set("client_id", svc.cfg.Amadeus.Key)
+	requestBody.Set("client_secret", svc.cfg.Amadeus.Secret)
 
 	response, err := http.Post(
 		fmt.Sprintf("%s/v1/security/oauth2/token", amadeusBaseUrl),

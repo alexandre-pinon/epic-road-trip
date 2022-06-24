@@ -11,14 +11,27 @@ import (
 )
 
 type Config struct {
-	AppName       string
-	Database      DatabaseConfig
-	Env           Env
-	SecretKey     string
-	GoogleKey     string
-	BaseUrlGoogle string
-	AmadeusKey    string
-	AmadeusSecret string
+	App      AppConfig
+	Database DatabaseConfig
+	Google   GoogleConfig
+	Amadeus  AmadeusConfig
+}
+
+type AppConfig struct {
+	Env    Env
+	Name   string
+	Secret string
+}
+
+type AmadeusConfig struct {
+	BaseUrl string
+	Key     string
+	Secret  string
+}
+
+type GoogleConfig struct {
+	BaseUrl string
+	Key     string
 }
 
 type DatabaseConfig struct {
@@ -27,15 +40,16 @@ type DatabaseConfig struct {
 }
 
 const (
-	APP_NAME        = "APP_NAME"
-	DB_URI          = "DB_URI"
-	DB_NAME         = "DB_NAME"
-	GO_MODE         = "GO_MODE"
-	SECRET_KEY      = "SECRET_KEY"
-	GOOGLE_KEY      = "GOOGLE_KEY"
-	BASE_URL_GOOGLE = "BASE_URL_GOOGLE"
-	AMADEUS_KEY     = "AMADEUS_KEY"
-	AMADEUS_SECRET  = "AMADEUS_SECRET"
+	APP_ENV          = "APP_ENV"
+	APP_NAME         = "APP_NAME"
+	APP_SECRET       = "APP_SECRET"
+	DB_URI           = "DB_URI"
+	DB_NAME          = "DB_NAME"
+	GOOGLE_BASE_URL  = "GOOGLE_BASE_URL"
+	GOOGLE_KEY       = "GOOGLE_KEY"
+	AMADEUS_BASE_URL = "AMADEUS_BASE_URL"
+	AMADEUS_KEY      = "AMADEUS_KEY"
+	AMADEUS_SECRET   = "AMADEUS_SECRET"
 )
 
 func GetConfig() *Config {
@@ -55,15 +69,16 @@ func GetConfig() *Config {
 	}
 
 	envVariables := map[string]string{
-		APP_NAME:        os.Getenv(APP_NAME),
-		DB_URI:          os.Getenv(DB_URI),
-		DB_NAME:         os.Getenv(DB_NAME),
-		GO_MODE:         os.Getenv(GO_MODE),
-		SECRET_KEY:      os.Getenv(SECRET_KEY),
-		GOOGLE_KEY:      os.Getenv(GOOGLE_KEY),
-		BASE_URL_GOOGLE: os.Getenv(BASE_URL_GOOGLE),
-		AMADEUS_KEY:     os.Getenv(AMADEUS_KEY),
-		AMADEUS_SECRET:  os.Getenv(AMADEUS_SECRET),
+		APP_ENV:          os.Getenv(APP_ENV),
+		APP_NAME:         os.Getenv(APP_NAME),
+		APP_SECRET:       os.Getenv(APP_SECRET),
+		DB_URI:           os.Getenv(DB_URI),
+		DB_NAME:          os.Getenv(DB_NAME),
+		GOOGLE_BASE_URL:  os.Getenv(GOOGLE_BASE_URL),
+		GOOGLE_KEY:       os.Getenv(GOOGLE_KEY),
+		AMADEUS_BASE_URL: os.Getenv(AMADEUS_BASE_URL),
+		AMADEUS_KEY:      os.Getenv(AMADEUS_KEY),
+		AMADEUS_SECRET:   os.Getenv(AMADEUS_SECRET),
 	}
 
 	for k, v := range envVariables {
@@ -72,24 +87,31 @@ func GetConfig() *Config {
 		}
 	}
 
-	if err := Env(envVariables[GO_MODE]).IsValid(); err != nil {
+	if err := Env(envVariables[APP_ENV]).IsValid(); err != nil {
 		log.Fatal(err)
 	}
 
-	dbName := fmt.Sprintf("%s-%s", strings.ToLower(envVariables[GO_MODE]), envVariables[DB_NAME])
+	dbName := fmt.Sprintf("%s-%s", strings.ToLower(envVariables[APP_ENV]), envVariables[DB_NAME])
 
 	cfg := &Config{
-		AppName: envVariables[APP_NAME],
+		App: AppConfig{
+			Env:    Env(envVariables[APP_ENV]),
+			Name:   envVariables[APP_NAME],
+			Secret: envVariables[APP_SECRET],
+		},
 		Database: DatabaseConfig{
 			Uri:  envVariables[DB_URI],
 			Name: dbName,
 		},
-		Env:           Env(envVariables[GO_MODE]),
-		SecretKey:     envVariables[SECRET_KEY],
-		GoogleKey:     envVariables[GOOGLE_KEY],
-		BaseUrlGoogle: envVariables[BASE_URL_GOOGLE],
-		AmadeusKey:    envVariables[AMADEUS_KEY],
-		AmadeusSecret: envVariables[AMADEUS_SECRET],
+		Google: GoogleConfig{
+			BaseUrl: envVariables[GOOGLE_BASE_URL],
+			Key:     envVariables[GOOGLE_KEY],
+		},
+		Amadeus: AmadeusConfig{
+			BaseUrl: envVariables[AMADEUS_BASE_URL],
+			Key:     envVariables[AMADEUS_KEY],
+			Secret:  envVariables[AMADEUS_SECRET],
+		},
 	}
 
 	return cfg
