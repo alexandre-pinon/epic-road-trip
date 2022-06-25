@@ -200,7 +200,7 @@ func (suite *googleServiceSuite) TestGeocoding_Results_Positive() {
 }
 
 func (suite *googleServiceSuite) TestGetDirections_Positive() {
-	googleDirectionResponse := model.GoogleDirectionResponse{
+	googleDirectionResponse := model.GoogleDirectionsResponse{
 		GeocodedWaypoints: []model.GeocodedWaypoints{{
 			GeocoderStatus: "OK",
 			PlaceID:        "ChIJDbdkHFQayUwR7-8fITgxTmU",
@@ -251,7 +251,7 @@ func (suite *googleServiceSuite) TestGetDirections_Positive() {
 					Lat: 45.5001121,
 					Lng: -73.5665224,
 				},
-				Steps: []model.Step{{
+				Steps: []model.GoogleDestinationStep{{
 					Distance: model.Distance{
 						Text:  "538 km",
 						Value: 538294,
@@ -336,7 +336,7 @@ func (suite *googleServiceSuite) TestGetDirections_Positive() {
 	directionsFormData := model.DirectionsFormData{
 		Origin:        "Montreal",
 		Destination:   "Toronto",
-		DepartureTime: time.Date(2022, 8, 8, 10, 0, 0, 0, time.UTC).Unix(),
+		DepartureTime: time.Date(2022, 8, 8, 10, 0, 0, 0, time.UTC),
 	}
 
 	itineraries, err := suite.svc.GetDirections(server.URL, &directionsFormData)
@@ -344,7 +344,7 @@ func (suite *googleServiceSuite) TestGetDirections_Positive() {
 	suite.NotEmpty(itineraries)
 	suite.Require().Equal(1, len(*itineraries))
 	suite.Equal(1, len((*itineraries)[0].Steps))
-	suite.Equal(model.Train, (*itineraries)[0].Type)
+	suite.Equal(model.Ground, (*itineraries)[0].Type)
 
 	departure := model.Station{
 		Name:    "Montreal, QC, Canada",
@@ -360,7 +360,7 @@ func (suite *googleServiceSuite) TestGetDirections_Positive() {
 }
 
 func (suite *googleServiceSuite) TestGetDirections_NotFound_Negative() {
-	noResults := model.GoogleDirectionResponse{
+	noResults := model.GoogleDirectionsResponse{
 		GeocodedWaypoints: []model.GeocodedWaypoints{{
 			GeocoderStatus: "OK",
 			PlaceID:        "ChIJ51cu8IcbXWARiRtXIothAS4",
@@ -383,13 +383,13 @@ func (suite *googleServiceSuite) TestGetDirections_NotFound_Negative() {
 	directionsFormData := model.DirectionsFormData{
 		Origin:        "Montreal",
 		Destination:   "Toronto",
-		DepartureTime: time.Date(2022, 8, 8, 10, 0, 0, 0, time.UTC).Unix(),
+		DepartureTime: time.Date(2022, 8, 8, 10, 0, 0, 0, time.UTC),
 	}
 
 	itineraries, err := suite.svc.GetDirections(server.URL, &directionsFormData)
 	suite.Error(err, "error: not found")
 	suite.Equal(http.StatusNotFound, err.(*model.AppError).StatusCode)
-	suite.Equal("itineraries not found", err.Error())
+	suite.Equal("ZERO_RESULTS", err.Error())
 	suite.Nil(itineraries)
 }
 

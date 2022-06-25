@@ -9,10 +9,8 @@ import (
 type Transport string
 
 const (
-	Airplane Transport = "AIRPLANE"
-	Bus      Transport = "BUS"
-	Subway   Transport = "SUBWAY"
-	Train    Transport = "TRAIN"
+	Air    Transport = "AIR"
+	Ground Transport = "GROUND"
 )
 
 type Itinerary struct {
@@ -30,7 +28,7 @@ type Itinerary struct {
 
 type ItineraryStep struct {
 	ID             primitive.ObjectID `json:"-" bson:"_id,omitempty"`
-	Type           Transport          `json:"type"`
+	Type           string             `json:"type"`
 	Departure      string             `json:"departure"`
 	Arrival        string             `json:"arrival"`
 	Duration       time.Duration      `json:"-"`

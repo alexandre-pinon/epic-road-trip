@@ -137,7 +137,7 @@ func (svc *amadeusService) GetFlightOffers(amadeusBaseUrl, accessToken string, f
 		price, _ := strconv.ParseFloat(flightOffer.Price.GrandTotal, 64)
 
 		itinerary := model.Itinerary{
-			Type:           model.Airplane,
+			Type:           model.Air,
 			Departure:      stationDeparture,
 			Arrival:        stationArrival,
 			Duration:       duration,

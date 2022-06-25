@@ -205,7 +205,7 @@ func (suite *roadtripControllerSuite) TestTravel_Positive() {
 		Exp:   int(now) + 30*60,
 	}
 	itineraries := []model.Itinerary{{
-		Type: model.Airplane,
+		Type: model.Air,
 		Departure: model.Station{
 			Name:    "CDG",
 			City:    "Paris",

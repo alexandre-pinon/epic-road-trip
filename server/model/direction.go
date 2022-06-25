@@ -1,12 +1,14 @@
 package model
 
+import "time"
+
 type DirectionsFormData struct {
-	Origin        string `json:"origin"`
-	Destination   string `json:"destination"`
-	DepartureTime int64  `json:"departureTime"`
+	Origin        string    `json:"origin"`
+	Destination   string    `json:"destination"`
+	DepartureTime time.Time `json:"departureTime"`
 }
 
-type GoogleDirectionResponse struct {
+type GoogleDirectionsResponse struct {
 	GeocodedWaypoints []GeocodedWaypoints `json:"geocoded_waypoints"`
 	Routes            []Routes            `json:"routes"`
 	Status            string              `json:"status"`
@@ -74,7 +76,7 @@ type TransitDetails struct {
 	NumStops      int        `json:"num_stops"`
 }
 
-type SubStep struct {
+type GoogleDestinationSubStep struct {
 	Distance         Distance `json:"distance"`
 	Duration         Duration `json:"duration"`
 	EndLocation      Location `json:"end_location"`
@@ -84,30 +86,30 @@ type SubStep struct {
 	TravelMode       string   `json:"travel_mode"`
 }
 
-type Step struct {
-	Distance         Distance       `json:"distance"`
-	Duration         Duration       `json:"duration"`
-	EndLocation      Location       `json:"end_location"`
-	HTMLInstructions string         `json:"html_instructions"`
-	Polyline         Polyline       `json:"polyline"`
-	StartLocation    Location       `json:"start_location"`
-	TransitDetails   TransitDetails `json:"transit_details,omitempty"`
-	TravelMode       string         `json:"travel_mode"`
-	SubSteps         []SubStep      `json:"steps,omitempty"`
+type GoogleDestinationStep struct {
+	Distance         Distance                   `json:"distance"`
+	Duration         Duration                   `json:"duration"`
+	EndLocation      Location                   `json:"end_location"`
+	HTMLInstructions string                     `json:"html_instructions"`
+	Polyline         Polyline                   `json:"polyline"`
+	StartLocation    Location                   `json:"start_location"`
+	TransitDetails   TransitDetails             `json:"transit_details,omitempty"`
+	TravelMode       string                     `json:"travel_mode"`
+	SubSteps         []GoogleDestinationSubStep `json:"steps,omitempty"`
 }
 
 type Legs struct {
-	ArrivalTime       GoogleTime    `json:"arrival_time"`
-	DepartureTime     GoogleTime    `json:"departure_time"`
-	Distance          Distance      `json:"distance"`
-	Duration          Duration      `json:"duration"`
-	EndAddress        string        `json:"end_address"`
-	EndLocation       Location      `json:"end_location"`
-	StartAddress      string        `json:"start_address"`
-	StartLocation     Location      `json:"start_location"`
-	Steps             []Step        `json:"steps"`
-	TrafficSpeedEntry []interface{} `json:"traffic_speed_entry"`
-	ViaWaypoint       []interface{} `json:"via_waypoint"`
+	ArrivalTime       GoogleTime              `json:"arrival_time"`
+	DepartureTime     GoogleTime              `json:"departure_time"`
+	Distance          Distance                `json:"distance"`
+	Duration          Duration                `json:"duration"`
+	EndAddress        string                  `json:"end_address"`
+	EndLocation       Location                `json:"end_location"`
+	StartAddress      string                  `json:"start_address"`
+	StartLocation     Location                `json:"start_location"`
+	Steps             []GoogleDestinationStep `json:"steps"`
+	TrafficSpeedEntry []interface{}           `json:"traffic_speed_entry"`
+	ViaWaypoint       []interface{}           `json:"via_waypoint"`
 }
 
 type Routes struct {
