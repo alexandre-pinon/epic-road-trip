@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/alexandre-pinon/epic-road-trip/config"
+	"github.com/alexandre-pinon/epic-road-trip/middleware"
 	"github.com/alexandre-pinon/epic-road-trip/mocks"
 	"github.com/alexandre-pinon/epic-road-trip/model"
 	"github.com/alexandre-pinon/epic-road-trip/utils"
@@ -38,7 +39,7 @@ func (suite *roadtripControllerSuite) SetupTest() {
 		roadtripRoutes := apiRoutes.Group("/roadtrip")
 		{
 			roadtripRoutes.POST("/enjoy", utils.ServeHTTP(crtl.Enjoy))
-			roadtripRoutes.POST("/travel", utils.ServeHTTP(crtl.Travel))
+			roadtripRoutes.POST("/travel/:mode", middleware.CheckTravelMode(), utils.ServeHTTP(crtl.Travel))
 		}
 	}
 	server := httptest.NewServer(router)
@@ -189,8 +190,8 @@ func (suite *roadtripControllerSuite) TestEnjoyWithZeroResult() {
 
 }
 
-func (suite *roadtripControllerSuite) TestTravel_Positive() {
-	flighFormData := model.FlightFormData{
+func (suite *roadtripControllerSuite) TestTravelAir_Positive() {
+	flightFormData := model.FlightFormData{
 		OriginLocation:          "Paris",
 		DestinationLocation:     "Tokyo",
 		OriginLocationCode:      "PAR",
@@ -224,13 +225,13 @@ func (suite *roadtripControllerSuite) TestTravel_Positive() {
 	}}
 
 	suite.amadeusService.On("GetAccessToken", suite.cfg.Amadeus.BaseUrl).Return(&accessToken, nil)
-	suite.amadeusService.On("GetFlightOffers", suite.cfg.Amadeus.BaseUrl, accessToken.Value, &flighFormData).Return(&itineraries, nil)
+	suite.amadeusService.On("GetFlightOffers", suite.cfg.Amadeus.BaseUrl, accessToken.Value, &flightFormData).Return(&itineraries, nil)
 
-	requestBody, err := json.Marshal(&flighFormData)
+	requestBody, err := json.Marshal(&flightFormData)
 	suite.NoError(err, "can not marshal struct to json")
 
 	response, err := http.Post(
-		fmt.Sprintf("%s/api/v1/roadtrip/travel", suite.testServer.URL),
+		fmt.Sprintf("%s/api/v1/roadtrip/travel/air", suite.testServer.URL),
 		gin.MIMEJSON,
 		bytes.NewBuffer(requestBody),
 	)
@@ -246,8 +247,8 @@ func (suite *roadtripControllerSuite) TestTravel_Positive() {
 	suite.amadeusService.AssertExpectations(suite.T())
 }
 
-func (suite *roadtripControllerSuite) TestTravel_NoResults_Negative() {
-	flighFormData := model.FlightFormData{
+func (suite *roadtripControllerSuite) TestTravelAir_NoResults_Negative() {
+	flightFormData := model.FlightFormData{
 		OriginLocation:          "Paris",
 		DestinationLocation:     "Sydney",
 		OriginLocationCode:      "PAR",
@@ -267,13 +268,13 @@ func (suite *roadtripControllerSuite) TestTravel_NoResults_Negative() {
 	}
 
 	suite.amadeusService.On("GetAccessToken", suite.cfg.Amadeus.BaseUrl).Return(&accessToken, nil)
-	suite.amadeusService.On("GetFlightOffers", suite.cfg.Amadeus.BaseUrl, accessToken.Value, &flighFormData).Return(nil, &noResults)
+	suite.amadeusService.On("GetFlightOffers", suite.cfg.Amadeus.BaseUrl, accessToken.Value, &flightFormData).Return(nil, &noResults)
 
-	requestBody, err := json.Marshal(&flighFormData)
+	requestBody, err := json.Marshal(&flightFormData)
 	suite.NoError(err, "can not marshal struct to json")
 
 	response, err := http.Post(
-		fmt.Sprintf("%s/api/v1/roadtrip/travel", suite.testServer.URL),
+		fmt.Sprintf("%s/api/v1/roadtrip/travel/air", suite.testServer.URL),
 		gin.MIMEJSON,
 		bytes.NewBuffer(requestBody),
 	)
@@ -289,19 +290,19 @@ func (suite *roadtripControllerSuite) TestTravel_NoResults_Negative() {
 	suite.amadeusService.AssertExpectations(suite.T())
 }
 
-func (suite *roadtripControllerSuite) TestTravel_InvalidOriginDestination_Negative() {
-	flighFormData := model.FlightFormData{
+func (suite *roadtripControllerSuite) TestTravelAir_InvalidOriginDestination_Negative() {
+	flightFormData := model.FlightFormData{
 		OriginLocation:      "gerkj",
 		DestinationLocation: "zofijzr",
 		DepartureDate:       time.Date(2022, 12, 12, 12, 12, 12, 12, time.UTC),
 		Adults:              2,
 	}
 
-	requestBody, err := json.Marshal(&flighFormData)
+	requestBody, err := json.Marshal(&flightFormData)
 	suite.NoError(err, "can not marshal struct to json")
 
 	response, err := http.Post(
-		fmt.Sprintf("%s/api/v1/roadtrip/travel", suite.testServer.URL),
+		fmt.Sprintf("%s/api/v1/roadtrip/travel/air", suite.testServer.URL),
 		gin.MIMEJSON,
 		bytes.NewBuffer(requestBody),
 	)
@@ -314,6 +315,102 @@ func (suite *roadtripControllerSuite) TestTravel_InvalidOriginDestination_Negati
 	suite.Equal(http.StatusNotFound, response.StatusCode)
 	suite.Equal("no airport found for origin/destination cities", responseBody.Message)
 	suite.Empty(&responseBody.Data, "itineraries should not be retrieved")
+}
+
+func (suite *roadtripControllerSuite) TestTravelGround_Positive() {
+	directionsFormData := model.DirectionsFormData{
+		Origin:        "Paris",
+		Destination:   "Madrid",
+		DepartureTime: time.Date(2022, 12, 12, 12, 12, 12, 12, time.UTC),
+	}
+	itineraries := []model.Itinerary{{
+		Type: model.Ground,
+		Departure: model.Station{
+			Name:    "Paris, France",
+			City:    "Paris",
+			Country: "France",
+		},
+		Arrival: model.Station{
+			Name:    "Madrid, Spain",
+			City:    "Madrid",
+			Country: "Spain",
+		},
+		Duration:       9 * time.Hour,
+		DurationString: (9 * time.Hour).String(),
+		Startdate:      time.Date(2022, 12, 12, 12, 0, 0, 0, time.UTC),
+		Enddate:        time.Date(2022, 12, 13, 2, 0, 0, 0, time.UTC),
+		Steps: []model.ItineraryStep{{
+			Type:           "Train",
+			Departure:      "Montparnasse",
+			Arrival:        "Gare de Hendaye",
+			Duration:       4*time.Hour + 36*time.Hour,
+			DurationString: (4*time.Hour + 36*time.Hour).String(),
+			Startdate:      time.Date(2022, 12, 12, 12, 23, 0, 0, time.UTC),
+			Enddate:        time.Date(2022, 12, 12, 16, 59, 0, 0, time.UTC),
+		}, {
+			Type:           "Bus",
+			Departure:      "Hendaye",
+			Arrival:        "Bilbao (Bus Station)",
+			Duration:       2 * time.Hour,
+			DurationString: (2 * time.Hour).String(),
+			Startdate:      time.Date(2022, 12, 12, 17, 14, 0, 0, time.UTC),
+			Enddate:        time.Date(2022, 12, 12, 19, 14, 0, 0, time.UTC),
+		}},
+	}}
+
+	suite.googleService.On("GetDirections", suite.cfg.Google.BaseUrl, &directionsFormData).Return(&itineraries, nil)
+
+	requestBody, err := json.Marshal(&directionsFormData)
+	suite.NoError(err, "can not marshal struct to json")
+
+	response, err := http.Post(
+		fmt.Sprintf("%s/api/v1/roadtrip/travel/ground", suite.testServer.URL),
+		gin.MIMEJSON,
+		bytes.NewBuffer(requestBody),
+	)
+	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
+
+	responseBody := model.AppResponse{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusOK, response.StatusCode)
+	suite.Equal("Itineraries retrieved successfully", responseBody.Message)
+	suite.NotEmpty(&responseBody.Data, "itineraries should be retrieved")
+	suite.amadeusService.AssertExpectations(suite.T())
+}
+
+func (suite *roadtripControllerSuite) TestTravelGround_NoResults_Negative() {
+	directionsFormData := model.DirectionsFormData{
+		Origin:        "Paris",
+		Destination:   "Madrid",
+		DepartureTime: time.Date(2022, 12, 12, 12, 12, 12, 12, time.UTC),
+	}
+	noResults := model.AppError{
+		StatusCode: http.StatusNotFound,
+		Err:        errors.New("ZERO_RESULTS"),
+	}
+
+	suite.googleService.On("GetDirections", suite.cfg.Google.BaseUrl, &directionsFormData).Return(nil, &noResults)
+
+	requestBody, err := json.Marshal(&directionsFormData)
+	suite.NoError(err, "can not marshal struct to json")
+
+	response, err := http.Post(
+		fmt.Sprintf("%s/api/v1/roadtrip/travel/ground", suite.testServer.URL),
+		gin.MIMEJSON,
+		bytes.NewBuffer(requestBody),
+	)
+	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
+
+	responseBody := model.AppResponse{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusNotFound, response.StatusCode)
+	suite.Equal("ZERO_RESULTS", responseBody.Message)
+	suite.Empty(&responseBody.Data, "itineraries should not be retrieved")
+	suite.amadeusService.AssertExpectations(suite.T())
 }
 
 func TestRoadtripController(t *testing.T) {
