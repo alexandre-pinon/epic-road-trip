@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 
@@ -27,9 +28,12 @@ func NewGoogleService(cfg *config.Config) GoogleService {
 	return &googleService{cfg}
 }
 
-func (svc *googleService) Enjoy(url string, position model.Location) (*[]model.ActivityResult, error) {
-
-	response, err := http.Get(fmt.Sprintf("%s/place/nearbysearch/json?location=%f,%f&radius=5000&type=tourist_attraction&key=%s", url, position.Lat, position.Lng, svc.cfg.Google.Key))
+func (svc *googleService) Enjoy(googleBaseUrl string, position model.Location) (*[]model.ActivityResult, error) {
+	query := fmt.Sprintf("location=%f,%f", position.Lat, position.Lng)
+	query += fmt.Sprintf("&key=%s", svc.cfg.Google.Key)
+	query += "&radius=5000&type=tourist_attraction"
+	uri := fmt.Sprintf("%s/place/nearbysearch/json?%s", googleBaseUrl, url.PathEscape(query))
+	response, err := http.Get(uri)
 	if err != nil {
 		return nil, &model.AppError{
 			StatusCode: http.StatusBadRequest,
@@ -50,10 +54,11 @@ func (svc *googleService) Enjoy(url string, position model.Location) (*[]model.A
 	return &responseBody.Results, nil
 }
 
-func (svc *googleService) GeoCoding(url, city string) (*model.Location, error) {
-	response, err := http.Get(
-		fmt.Sprintf("%s/geocode/json?address=%s&key=%s", url, city, svc.cfg.Google.Key),
-	)
+func (svc *googleService) GeoCoding(googleBaseUrl, city string) (*model.Location, error) {
+	query := fmt.Sprintf("address=%s", city)
+	query += fmt.Sprintf("&key=%s", svc.cfg.Google.Key)
+	uri := fmt.Sprintf("%s/geocode/json?%s", googleBaseUrl, url.PathEscape(query))
+	response, err := http.Get(uri)
 	if err != nil {
 		return nil, &model.AppError{
 			StatusCode: http.StatusBadRequest,
@@ -83,9 +88,9 @@ func (svc *googleService) GetDirections(googleBaseUrl string, directionsFormData
 	query += fmt.Sprintf("&departure_time=%d", directionsFormData.DepartureTime.Unix())
 	query += fmt.Sprintf("&key=%s", svc.cfg.Google.Key)
 	query += "&mode=transit"
-	url := fmt.Sprintf("%s/directions/json?%s", googleBaseUrl, query)
+	uri := fmt.Sprintf("%s/directions/json?%s", googleBaseUrl, url.PathEscape(query))
 
-	response, err := http.Get(url)
+	response, err := http.Get(uri)
 	if err != nil {
 		return nil, &model.AppError{
 			StatusCode: http.StatusInternalServerError,

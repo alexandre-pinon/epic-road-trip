@@ -74,9 +74,9 @@ func (svc *amadeusService) GetFlightOffers(amadeusBaseUrl, accessToken string, f
 	query += fmt.Sprintf("&departureDate=%s", flightFormData.DepartureDate.Format("2006-01-02"))
 	query += fmt.Sprintf("&adults=%d", flightFormData.Adults)
 	query += "&nonStop=true&max=20"
-	url := fmt.Sprintf("%s/v2/shopping/flight-offers?%s", amadeusBaseUrl, query)
+	uri := fmt.Sprintf("%s/v2/shopping/flight-offers?%s", amadeusBaseUrl, url.PathEscape(query))
 
-	request, err := http.NewRequest(http.MethodGet, url, nil)
+	request, err := http.NewRequest(http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, &model.AppError{
 			StatusCode: http.StatusInternalServerError,
