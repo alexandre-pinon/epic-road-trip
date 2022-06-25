@@ -36,7 +36,7 @@ type FlightFormData struct {
 	Adults                  int       `json:"adults" binding:"required"`
 }
 
-type FlighOffersResponse struct {
+type FlightOffersResponse struct {
 	Meta         FlightOfferMeta       `json:"meta"`
 	Data         []FlightOffer         `json:"data"`
 	Dictionaries FlightOfferDictionary `json:"dictionaries,omitempty"`

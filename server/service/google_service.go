@@ -17,6 +17,7 @@ type googleService struct {
 type GoogleService interface {
 	Enjoy(url string, position model.Location) (*[]model.ActivityResult, error)
 	GeoCoding(url, position string) (*model.Location, error)
+	GetDirections(url string, directionsFormData *model.DirectionsFormData) (*[]model.Itinerary, error)
 }
 
 func NewGoogleService(cfg *config.Config) GoogleService {
@@ -71,4 +72,11 @@ func (svc *googleService) GeoCoding(url, city string) (*model.Location, error) {
 	location := responseBody.Results[0].Geometry.Location
 
 	return &location, nil
+}
+
+func (svc *googleService) GetDirections(url string, directionsFormData *model.DirectionsFormData) (*[]model.Itinerary, error) {
+	return &[]model.Itinerary{}, &model.AppError{
+		StatusCode: http.StatusNotImplemented,
+		Err:        errors.New("TODO: implement GetDirections"),
+	}
 }

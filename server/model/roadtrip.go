@@ -11,6 +11,6 @@ type RoadTrip struct {
 	Name        string               `json:"name"`
 	Startdate   time.Time            `json:"startdate"`
 	Enddate     time.Time            `json:"enddate"`
-	TripSteps   []primitive.ObjectID `json:"trip_steps"`
+	TripSteps   []primitive.ObjectID `json:"tripSteps"`
 	Itineraries []primitive.ObjectID `json:"itineraries"`
 }

@@ -68,7 +68,7 @@ func (suite *amadeusServiceSuite) TestGetAccessToken_InvalidCredentials_Negative
 }
 
 func (suite *amadeusServiceSuite) TestGetFlightOffers_Positive() {
-	flightOfferResponse := model.FlighOffersResponse{
+	flightOfferResponse := model.FlightOffersResponse{
 		Meta: model.FlightOfferMeta{
 			Count: 1,
 			Links: model.FlightOfferMetaLinks{
@@ -210,7 +210,7 @@ func (suite *amadeusServiceSuite) TestGetFlightOffers_Positive() {
 }
 
 func (suite *amadeusServiceSuite) TestGetFlightOffers_NotFound_Negative() {
-	flightOfferResponse := model.FlighOffersResponse{
+	flightOfferResponse := model.FlightOffersResponse{
 		Meta: model.FlightOfferMeta{
 			Count: 0,
 			Links: model.FlightOfferMetaLinks{

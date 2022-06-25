@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
 	"github.com/alexandre-pinon/epic-road-trip/config"
 	"github.com/alexandre-pinon/epic-road-trip/mocks"
@@ -136,7 +137,7 @@ func (suite *googleServiceSuite) TestEnjoyWithGoodAnswer() {
 	suite.Equal(activities, *result, "result and error are the same")
 }
 
-func (suite *googleServiceSuite) TestGeocoding_NoResult_Negative() {
+func (suite *googleServiceSuite) TestGeocoding_NoResults_Negative() {
 	noResults := model.GoogleGeocodingResponse{
 		Results: []model.GoogleGeocodingResult{},
 		Status:  "ZERO RESULTS",
@@ -196,6 +197,200 @@ func (suite *googleServiceSuite) TestGeocoding_Results_Positive() {
 	result, err := suite.svc.GeoCoding(server.URL, "Paris")
 	suite.NoError(err, "no error if result")
 	suite.Equal(location, *result)
+}
+
+func (suite *googleServiceSuite) TestGetDirections_Positive() {
+	googleDirectionResponse := model.GoogleDirectionResponse{
+		GeocodedWaypoints: []model.GeocodedWaypoints{{
+			GeocoderStatus: "OK",
+			PlaceID:        "ChIJDbdkHFQayUwR7-8fITgxTmU",
+			Types:          []string{"locality", "political"},
+		}, {
+			GeocoderStatus: "OK",
+			PlaceID:        "ChIJpTvG15DL1IkRd8S0KlBVNTI",
+			Types:          []string{"locality", "political"},
+		}},
+		Routes: []model.Routes{{
+			Bounds: model.Bounds{
+				Northeast: model.Location{
+					Lat: 45.5001121,
+					Lng: -73.5559308,
+				},
+				Southwest: model.Location{
+					Lat: 43.6452417,
+					Lng: -79.3806321,
+				},
+			},
+			Copyrights: "Map data ©2022 Google",
+			Legs: []model.Legs{{
+				ArrivalTime: model.GoogleTime{
+					Text:     "12:03pm",
+					TimeZone: "America/Toronto",
+					Value:    1659974580,
+				},
+				DepartureTime: model.GoogleTime{
+					Text:     "6:51am",
+					TimeZone: "America/Toronto",
+					Value:    1659955860,
+				},
+				Distance: model.Distance{
+					Text:  "538 km",
+					Value: 538294,
+				},
+				Duration: model.Duration{
+					Text:  "5 hours 12 mins",
+					Value: 18720,
+				},
+				EndAddress: "Toronto, ON, Canada",
+				EndLocation: model.Location{
+					Lat: 43.6452417,
+					Lng: -79.3806321,
+				},
+				StartAddress: "Montreal, QC, Canada",
+				StartLocation: model.Location{
+					Lat: 45.5001121,
+					Lng: -73.5665224,
+				},
+				Steps: []model.Step{{
+					Distance: model.Distance{
+						Text:  "538 km",
+						Value: 538294,
+					},
+					Duration: model.Duration{
+						Text:  "5 hours 12 mins",
+						Value: 18720,
+					},
+					EndLocation: model.Location{
+						Lat: 43.6452417,
+						Lng: -79.3806321,
+					},
+					HTMLInstructions: "Train towards Toronto",
+					Polyline:         model.Polyline{Points: ""},
+					StartLocation: model.Location{
+						Lat: 45.5001121,
+						Lng: -73.5665224,
+					},
+					TransitDetails: model.TransitDetails{
+						ArrivalStop: model.Stop{
+							Location: model.Location{
+								Lat: 43.6452417,
+								Lng: -79.3806321,
+							},
+							Name: "Union",
+						},
+						ArrivalTime: model.GoogleTime{
+							Text:     "12:03pm",
+							TimeZone: "America/Toronto",
+							Value:    1659974580,
+						},
+						DepartureStop: model.Stop{
+							Location: model.Location{
+								Lat: 45.5001121,
+								Lng: -73.5665224,
+							},
+							Name: "Gare Centrale",
+						},
+						DepartureTime: model.GoogleTime{
+							Text:     "6:51am",
+							TimeZone: "America/Toronto",
+							Value:    1659955860,
+						},
+						Headsign: "Toronto",
+						Line: model.Line{
+							Agencies: []model.Agencies{{
+								Name:  "Via Rail Canada Inc",
+								Phone: "1 888 VIA-RAIL",
+								URL:   "http://www.viarail.ca/",
+							}},
+							Color:     "#f2c106",
+							Name:      "Montréal - Toronto",
+							ShortName: "VIA Rail",
+							TextColor: "#000000",
+							Vehicle: model.Vehicle{
+								Icon: "//maps.gstatic.com/mapfiles/transit/iw2/6/rail2.png",
+								Name: "Train",
+								Type: "HEAVY_RAIL",
+							},
+						},
+						NumStops: 6,
+					},
+					TravelMode: "TRANSIT",
+				}},
+				TrafficSpeedEntry: []interface{}{},
+				ViaWaypoint:       []interface{}{},
+			}},
+			OverviewPolyline: model.Polyline{Points: ""},
+			Summary:          "",
+			Warnings:         []string{},
+			WaypointOrder:    []interface{}{},
+		}},
+		Status: "OK",
+	}
+
+	router := gin.New()
+	router.GET("/directions/json", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, &googleDirectionResponse)
+	})
+	server := httptest.NewServer(router)
+
+	directionsFormData := model.DirectionsFormData{
+		Origin:        "Montreal",
+		Destination:   "Toronto",
+		DepartureTime: time.Date(2022, 8, 8, 10, 0, 0, 0, time.UTC).Unix(),
+	}
+
+	itineraries, err := suite.svc.GetDirections(server.URL, &directionsFormData)
+	suite.NoError(err, "no error if result")
+	suite.NotEmpty(itineraries)
+	suite.Require().Equal(1, len(*itineraries))
+	suite.Equal(1, len((*itineraries)[0].Steps))
+	suite.Equal(model.Train, (*itineraries)[0].Type)
+
+	departure := model.Station{
+		Name:    "Montreal, QC, Canada",
+		City:    "Montreal",
+		Country: "Canada",
+	}
+	suite.Equal(departure, (*itineraries)[0].Departure)
+	suite.Equal(5*time.Hour+12*time.Minute, (*itineraries)[0].Duration)
+
+	loc, _ := time.LoadLocation("America/Toronto")
+	arrivalTime := time.Unix(1659974580, 0).In(loc)
+	suite.Equal(arrivalTime, (*itineraries)[0].Enddate)
+}
+
+func (suite *googleServiceSuite) TestGetDirections_NotFound_Negative() {
+	noResults := model.GoogleDirectionResponse{
+		GeocodedWaypoints: []model.GeocodedWaypoints{{
+			GeocoderStatus: "OK",
+			PlaceID:        "ChIJ51cu8IcbXWARiRtXIothAS4",
+			Types:          []string{"administrative_area_level_1", "political"},
+		}, {
+			GeocoderStatus: "OK",
+			PlaceID:        "ChIJ8cM8zdaoAWARPR27azYdlsA",
+			Types:          []string{"locality", "political"},
+		}},
+		Routes: []model.Routes{},
+		Status: "ZERO_RESULTS",
+	}
+
+	router := gin.New()
+	router.GET("/directions/json", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, &noResults)
+	})
+	server := httptest.NewServer(router)
+
+	directionsFormData := model.DirectionsFormData{
+		Origin:        "Montreal",
+		Destination:   "Toronto",
+		DepartureTime: time.Date(2022, 8, 8, 10, 0, 0, 0, time.UTC).Unix(),
+	}
+
+	itineraries, err := suite.svc.GetDirections(server.URL, &directionsFormData)
+	suite.Error(err, "error: not found")
+	suite.Equal(http.StatusNotFound, err.(*model.AppError).StatusCode)
+	suite.Equal("itineraries not found", err.Error())
+	suite.Nil(itineraries)
 }
 
 func TestGoogleService(t *testing.T) {

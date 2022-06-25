@@ -1,9 +1,9 @@
 package model
 
 type Activity struct {
-	HTMLAttributions []interface{} `json:"html_attributions"`
-	Results          []ActivityResult       `json:"results"`
-	Status           string        `json:"status"`
+	HTMLAttributions []interface{}    `json:"html_attributions"`
+	Results          []ActivityResult `json:"results"`
+	Status           string           `json:"status"`
 }
 
 type ActivityResult struct {
@@ -14,7 +14,7 @@ type ActivityResult struct {
 	IconMaskBaseURI     string           `json:"icon_mask_base_uri"`
 	Name                string           `json:"name"`
 	OpeningHours        OpeningHours     `json:"opening_hours,omitempty"`
-	Photos              []Photos           `json:"photos"`
+	Photos              []Photos         `json:"photos"`
 	PlaceID             string           `json:"place_id"`
 	PlusCode            PlusCode         `json:"plus_code"`
 	PriceLevel          int              `json:"price_level,omitempty"`
@@ -27,8 +27,8 @@ type ActivityResult struct {
 }
 
 type GeometryActivity struct {
-	Location Location 	`json:"location"`
-	Viewport Bounds		`json:"viewport"`
+	Location Location `json:"location"`
+	Viewport Bounds   `json:"viewport"`
 }
 
 type OpeningHours struct {

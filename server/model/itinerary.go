@@ -31,8 +31,8 @@ type Itinerary struct {
 type ItineraryStep struct {
 	ID             primitive.ObjectID `json:"-" bson:"_id,omitempty"`
 	Type           Transport          `json:"type"`
-	Departure      Station            `json:"departure"`
-	Arrival        Station            `json:"arrival"`
+	Departure      string             `json:"departure"`
+	Arrival        string             `json:"arrival"`
 	Duration       time.Duration      `json:"-"`
 	DurationString string             `json:"duration" bson:"-"`
 	Startdate      time.Time          `json:"startdate"`

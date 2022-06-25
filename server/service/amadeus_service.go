@@ -104,7 +104,7 @@ func (svc *amadeusService) GetFlightOffers(amadeusBaseUrl, accessToken string, f
 		}
 	}
 
-	responseBody := model.FlighOffersResponse{}
+	responseBody := model.FlightOffersResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
 
 	if len(responseBody.Data) == 0 {
