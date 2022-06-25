@@ -22,8 +22,8 @@ type Itinerary struct {
 	DurationString string             `json:"duration" bson:"-"`
 	Startdate      time.Time          `json:"startdate"`
 	Enddate        time.Time          `json:"enddate"`
-	Price          float64            `json:"price"`
-	Steps          []ItineraryStep    `json:"steps,omitempty" bson:"steps,omitempty"`
+	Price          float64            `json:"price,omitempty" bson:"omitempty"`
+	Steps          []ItineraryStep    `json:"steps,omitempty" bson:"omitempty"`
 }
 
 type ItineraryStep struct {
