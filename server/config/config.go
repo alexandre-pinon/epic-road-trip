@@ -81,7 +81,11 @@ func GetConfig() *Config {
 
 	for k, v := range envVariables {
 		if v == "" {
-			log.Fatalf("%s is not set", k)
+			if envVariables[APP_ENV] == string(Test) {
+				log.Printf("[WARNING]: %s is not set", k) // don't crash server in test mode
+			} else {
+				log.Fatalf("%s is not set", k)
+			}
 		}
 	}
 
