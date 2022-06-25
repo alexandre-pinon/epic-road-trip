@@ -206,6 +206,7 @@ func (suite *amadeusServiceSuite) TestGetFlightOffers_Positive() {
 	}
 	suite.Equal(departure, (*flightOffers)[0].Departure)
 	suite.Equal(time.Date(2022, 12, 6, 15, 50, 0, 0, time.UTC), (*flightOffers)[0].Enddate)
+	suite.Equal(11*time.Hour+50*time.Minute, (*flightOffers)[0].Duration)
 }
 
 func (suite *amadeusServiceSuite) TestGetFlightOffers_NotFound_Negative() {

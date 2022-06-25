@@ -66,15 +66,14 @@ func (ctrl *roadtripController) Travel(ctx *gin.Context) (*model.AppResult, *mod
 		}
 	}
 
-	flighFormData.OriginLocationCode = utils.GetIataCode(flighFormData.OriginLocation)
-	flighFormData.DestinationLocationCode = utils.GetIataCode(flighFormData.DestinationLocation)
+	flighFormData.OriginLocationCode = utils.CityToIata(flighFormData.OriginLocation)
+	flighFormData.DestinationLocationCode = utils.CityToIata(flighFormData.DestinationLocation)
 	if flighFormData.OriginLocationCode == "" || flighFormData.DestinationLocationCode == "" {
 		return nil, &model.AppError{
 			StatusCode: http.StatusNotFound,
 			Err:        errors.New("no airport found for origin/destination cities"),
 		}
 	}
-
 
 	if time.Now().Unix() > int64(ctrl.amadeusAccessToken.Exp) {
 		accessToken, err := ctrl.amadeusService.GetAccessToken(ctrl.cfg.Amadeus.BaseUrl)

@@ -8,7 +8,23 @@ import (
 	"strings"
 )
 
-func GetIataCode(city string) string {
+func CityToIata(city string) string {
+	data := getCitiesIataCodes()
+	city = strings.ToTitle(city[:1]) + city[1:]
+	return data[city]
+}
+
+func IataToCity(iata string) string {
+	data := getCitiesIataCodes()
+	for city, code := range data {
+		if code == iata {
+			return city
+		}
+	}
+	return ""
+}
+
+func getCitiesIataCodes() map[string]string {
 	rootPath := GetRootPath()
 	envPath := rootPath + "/data/iata_codes.json"
 
@@ -28,6 +44,5 @@ func GetIataCode(city string) string {
 	var data map[string]string
 	json.Unmarshal([]byte(bytes), &data)
 
-	city = strings.ToTitle(city[:1]) + city[1:]
-	return data[city]
+	return data
 }

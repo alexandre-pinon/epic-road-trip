@@ -12,6 +12,7 @@ import (
 
 	"github.com/alexandre-pinon/epic-road-trip/config"
 	"github.com/alexandre-pinon/epic-road-trip/model"
+	"github.com/alexandre-pinon/epic-road-trip/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -72,9 +73,8 @@ func (svc *amadeusService) GetFlightOffers(amadeusBaseUrl, accessToken string, f
 	query += fmt.Sprintf("&destinationLocationCode=%s", flightFormData.DestinationLocationCode)
 	query += fmt.Sprintf("&departureDate=%s", flightFormData.DepartureDate.Format("2006-01-02"))
 	query += fmt.Sprintf("&adults=%d", flightFormData.Adults)
-	query += "&nonStop=true&max=50"
+	query += "&nonStop=true&max=20"
 	url := fmt.Sprintf("%s/v2/shopping/flight-offers?%s", amadeusBaseUrl, query)
-
 
 	request, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -107,7 +107,6 @@ func (svc *amadeusService) GetFlightOffers(amadeusBaseUrl, accessToken string, f
 	responseBody := model.FlighOffersResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
 
-
 	if len(responseBody.Data) == 0 {
 		return nil, &model.AppError{
 			StatusCode: http.StatusNotFound,
@@ -122,6 +121,7 @@ func (svc *amadeusService) GetFlightOffers(amadeusBaseUrl, accessToken string, f
 
 		startdate, _ := time.Parse(time.RFC3339, departure.At+"Z")
 		enddate, _ := time.Parse(time.RFC3339, arrival.At+"Z")
+		duration := utils.ExtractAmadeusTime(flightOffer.Itineraries[0].Duration)
 
 		stationDeparture := model.Station{
 			Name:    departure.IataCode,
@@ -137,12 +137,14 @@ func (svc *amadeusService) GetFlightOffers(amadeusBaseUrl, accessToken string, f
 		price, _ := strconv.ParseFloat(flightOffer.Price.GrandTotal, 64)
 
 		itinerary := model.Itinerary{
-			Type:      model.Airplane,
-			Departure: stationDeparture,
-			Arrival:   stationArrival,
-			Startdate: startdate,
-			Enddate:   enddate,
-			Price:     price,
+			Type:           model.Airplane,
+			Departure:      stationDeparture,
+			Arrival:        stationArrival,
+			Duration:       duration,
+			DurationString: duration.String(),
+			Startdate:      startdate,
+			Enddate:        enddate,
+			Price:          price,
 		}
 		itineraries = append(itineraries, itinerary)
 	}

@@ -216,9 +216,11 @@ func (suite *roadtripControllerSuite) TestTravel_Positive() {
 			City:    "Tokyo",
 			Country: "JP",
 		},
-		Startdate: time.Date(2022, 12, 12, 14, 0, 0, 0, time.UTC),
-		Enddate:   time.Date(2022, 12, 13, 8, 0, 0, 0, time.UTC),
-		Price:     999.99,
+		Duration:       10 * time.Hour,
+		DurationString: (10 * time.Hour).String(),
+		Startdate:      time.Date(2022, 12, 12, 14, 0, 0, 0, time.UTC),
+		Enddate:        time.Date(2022, 12, 13, 8, 0, 0, 0, time.UTC),
+		Price:          999.99,
 	}}
 
 	suite.amadeusService.On("GetAccessToken", suite.cfg.Amadeus.BaseUrl).Return(&accessToken, nil)

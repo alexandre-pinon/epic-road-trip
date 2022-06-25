@@ -1,0 +1,2520 @@
+{
+  "meta": {
+    "count": 20,
+    "links": {
+      "self": "https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=LON&destinationLocationCode=TYO&departureDate=2022-12-05&adults=1&nonStop=false&max=20"
+    }
+  },
+  "data": [
+    {
+      "type": "flight-offer",
+      "id": "1",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2022-12-05",
+      "numberOfBookableSeats": 9,
+      "itineraries": [
+        {
+          "duration": "PT17H10M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LGW",
+                "terminal": "S",
+                "at": "2022-12-05T16:50:00"
+              },
+              "arrival": {
+                "iataCode": "IST",
+                "at": "2022-12-05T23:50:00"
+              },
+              "carrierCode": "TK",
+              "number": "1998",
+              "aircraft": {
+                "code": "321"
+              },
+              "operating": {
+                "carrierCode": "TK"
+              },
+              "duration": "PT4H",
+              "id": "5",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            },
+            {
+              "departure": {
+                "iataCode": "IST",
+                "at": "2022-12-06T02:05:00"
+              },
+              "arrival": {
+                "iataCode": "HND",
+                "terminal": "3",
+                "at": "2022-12-06T19:00:00"
+              },
+              "carrierCode": "TK",
+              "number": "198",
+              "aircraft": {
+                "code": "77W"
+              },
+              "operating": {
+                "carrierCode": "TK"
+              },
+              "duration": "PT10H55M",
+              "id": "6",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "EUR",
+        "total": "606.07",
+        "base": "309.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "606.07"
+      },
+      "pricingOptions": {
+        "fareType": ["PUBLISHED"],
+        "includedCheckedBagsOnly": true
+      },
+      "validatingAirlineCodes": ["TK"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "EUR",
+            "total": "606.07",
+            "base": "309.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "5",
+              "cabin": "ECONOMY",
+              "fareBasis": "OLXN2PXO",
+              "class": "O",
+              "includedCheckedBags": {
+                "quantity": 2
+              }
+            },
+            {
+              "segmentId": "6",
+              "cabin": "ECONOMY",
+              "fareBasis": "OLXN2PXO",
+              "brandedFare": "RS",
+              "class": "O",
+              "includedCheckedBags": {
+                "quantity": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "2",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2022-12-05",
+      "numberOfBookableSeats": 9,
+      "itineraries": [
+        {
+          "duration": "PT23H35M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LGW",
+                "terminal": "S",
+                "at": "2022-12-05T10:25:00"
+              },
+              "arrival": {
+                "iataCode": "IST",
+                "at": "2022-12-05T17:15:00"
+              },
+              "carrierCode": "TK",
+              "number": "1982",
+              "aircraft": {
+                "code": "321"
+              },
+              "operating": {
+                "carrierCode": "TK"
+              },
+              "duration": "PT3H50M",
+              "id": "19",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            },
+            {
+              "departure": {
+                "iataCode": "IST",
+                "at": "2022-12-06T02:05:00"
+              },
+              "arrival": {
+                "iataCode": "HND",
+                "terminal": "3",
+                "at": "2022-12-06T19:00:00"
+              },
+              "carrierCode": "TK",
+              "number": "198",
+              "aircraft": {
+                "code": "77W"
+              },
+              "operating": {
+                "carrierCode": "TK"
+              },
+              "duration": "PT10H55M",
+              "id": "20",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "EUR",
+        "total": "606.07",
+        "base": "309.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "606.07"
+      },
+      "pricingOptions": {
+        "fareType": ["PUBLISHED"],
+        "includedCheckedBagsOnly": true
+      },
+      "validatingAirlineCodes": ["TK"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "EUR",
+            "total": "606.07",
+            "base": "309.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "19",
+              "cabin": "ECONOMY",
+              "fareBasis": "OLXN2PXO",
+              "class": "O",
+              "includedCheckedBags": {
+                "quantity": 2
+              }
+            },
+            {
+              "segmentId": "20",
+              "cabin": "ECONOMY",
+              "fareBasis": "OLXN2PXO",
+              "brandedFare": "RS",
+              "class": "O",
+              "includedCheckedBags": {
+                "quantity": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "3",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2022-12-05",
+      "numberOfBookableSeats": 7,
+      "itineraries": [
+        {
+          "duration": "PT38H15M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LHR",
+                "terminal": "2",
+                "at": "2022-12-05T20:15:00"
+              },
+              "arrival": {
+                "iataCode": "ADD",
+                "terminal": "2",
+                "at": "2022-12-06T07:00:00"
+              },
+              "carrierCode": "ET",
+              "number": "701",
+              "aircraft": {
+                "code": "350"
+              },
+              "operating": {
+                "carrierCode": "ET"
+              },
+              "duration": "PT7H45M",
+              "id": "9",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            },
+            {
+              "departure": {
+                "iataCode": "ADD",
+                "terminal": "2",
+                "at": "2022-12-06T22:25:00"
+              },
+              "arrival": {
+                "iataCode": "NRT",
+                "terminal": "1",
+                "at": "2022-12-07T19:30:00"
+              },
+              "carrierCode": "ET",
+              "number": "672",
+              "aircraft": {
+                "code": "788"
+              },
+              "operating": {
+                "carrierCode": "ET"
+              },
+              "duration": "PT15H5M",
+              "stops": [
+                {
+                  "iataCode": "ICN",
+                  "duration": "PT55M",
+                  "arrivalAt": "2022-12-07T15:45:00",
+                  "departureAt": "2022-12-07T16:40:00"
+                }
+              ],
+              "id": "10",
+              "numberOfStops": 1,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "EUR",
+        "total": "640.45",
+        "base": "285.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "640.45"
+      },
+      "pricingOptions": {
+        "fareType": ["PUBLISHED"],
+        "includedCheckedBagsOnly": true
+      },
+      "validatingAirlineCodes": ["ET"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "EUR",
+            "total": "640.45",
+            "base": "285.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "9",
+              "cabin": "ECONOMY",
+              "fareBasis": "ULOWUK",
+              "class": "U",
+              "includedCheckedBags": {
+                "quantity": 2
+              }
+            },
+            {
+              "segmentId": "10",
+              "cabin": "ECONOMY",
+              "fareBasis": "ULOWUK",
+              "class": "U",
+              "includedCheckedBags": {
+                "quantity": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "4",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2022-06-28",
+      "numberOfBookableSeats": 9,
+      "itineraries": [
+        {
+          "duration": "PT13H55M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LHR",
+                "terminal": "2",
+                "at": "2022-12-05T10:25:00"
+              },
+              "arrival": {
+                "iataCode": "WAW",
+                "at": "2022-12-05T13:55:00"
+              },
+              "carrierCode": "LO",
+              "number": "282",
+              "aircraft": {
+                "code": "7M8"
+              },
+              "operating": {
+                "carrierCode": "LO"
+              },
+              "duration": "PT2H30M",
+              "id": "35",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            },
+            {
+              "departure": {
+                "iataCode": "WAW",
+                "at": "2022-12-05T14:40:00"
+              },
+              "arrival": {
+                "iataCode": "NRT",
+                "terminal": "1",
+                "at": "2022-12-06T09:20:00"
+              },
+              "carrierCode": "LO",
+              "number": "79",
+              "aircraft": {
+                "code": "789"
+              },
+              "operating": {
+                "carrierCode": "LO"
+              },
+              "duration": "PT10H40M",
+              "id": "36",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "EUR",
+        "total": "642.88",
+        "base": "344.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "642.88",
+        "additionalServices": [
+          {
+            "amount": "70.00",
+            "type": "CHECKED_BAGS"
+          }
+        ]
+      },
+      "pricingOptions": {
+        "fareType": ["PUBLISHED"],
+        "includedCheckedBagsOnly": false
+      },
+      "validatingAirlineCodes": ["LO"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "EUR",
+            "total": "642.88",
+            "base": "344.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "35",
+              "cabin": "ECONOMY",
+              "fareBasis": "Q1LA0ENB",
+              "class": "Q",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            },
+            {
+              "segmentId": "36",
+              "cabin": "ECONOMY",
+              "fareBasis": "Q1LA0ENB",
+              "brandedFare": "ECONOBAG",
+              "class": "Q",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "5",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2022-06-28",
+      "numberOfBookableSeats": 9,
+      "itineraries": [
+        {
+          "duration": "PT17H50M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LHR",
+                "terminal": "2",
+                "at": "2022-12-05T06:30:00"
+              },
+              "arrival": {
+                "iataCode": "WAW",
+                "at": "2022-12-05T10:00:00"
+              },
+              "carrierCode": "LO",
+              "number": "286",
+              "aircraft": {
+                "code": "7M8"
+              },
+              "operating": {
+                "carrierCode": "LO"
+              },
+              "duration": "PT2H30M",
+              "id": "33",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            },
+            {
+              "departure": {
+                "iataCode": "WAW",
+                "at": "2022-12-05T14:40:00"
+              },
+              "arrival": {
+                "iataCode": "NRT",
+                "terminal": "1",
+                "at": "2022-12-06T09:20:00"
+              },
+              "carrierCode": "LO",
+              "number": "79",
+              "aircraft": {
+                "code": "789"
+              },
+              "operating": {
+                "carrierCode": "LO"
+              },
+              "duration": "PT10H40M",
+              "id": "34",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "EUR",
+        "total": "642.88",
+        "base": "344.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "642.88",
+        "additionalServices": [
+          {
+            "amount": "70.00",
+            "type": "CHECKED_BAGS"
+          }
+        ]
+      },
+      "pricingOptions": {
+        "fareType": ["PUBLISHED"],
+        "includedCheckedBagsOnly": false
+      },
+      "validatingAirlineCodes": ["LO"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "EUR",
+            "total": "642.88",
+            "base": "344.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "33",
+              "cabin": "ECONOMY",
+              "fareBasis": "Q1LA0ENB",
+              "class": "Q",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            },
+            {
+              "segmentId": "34",
+              "cabin": "ECONOMY",
+              "fareBasis": "Q1LA0ENB",
+              "brandedFare": "ECONOBAG",
+              "class": "Q",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "6",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2022-12-05",
+      "numberOfBookableSeats": 9,
+      "itineraries": [
+        {
+          "duration": "PT16H15M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LHR",
+                "terminal": "2",
+                "at": "2022-12-05T17:45:00"
+              },
+              "arrival": {
+                "iataCode": "IST",
+                "at": "2022-12-06T00:40:00"
+              },
+              "carrierCode": "TK",
+              "number": "1972",
+              "aircraft": {
+                "code": "333"
+              },
+              "operating": {
+                "carrierCode": "TK"
+              },
+              "duration": "PT3H55M",
+              "id": "7",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            },
+            {
+              "departure": {
+                "iataCode": "IST",
+                "at": "2022-12-06T02:05:00"
+              },
+              "arrival": {
+                "iataCode": "HND",
+                "terminal": "3",
+                "at": "2022-12-06T19:00:00"
+              },
+              "carrierCode": "TK",
+              "number": "198",
+              "aircraft": {
+                "code": "77W"
+              },
+              "operating": {
+                "carrierCode": "TK"
+              },
+              "duration": "PT10H55M",
+              "id": "8",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "EUR",
+        "total": "651.54",
+        "base": "309.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "651.54"
+      },
+      "pricingOptions": {
+        "fareType": ["PUBLISHED"],
+        "includedCheckedBagsOnly": true
+      },
+      "validatingAirlineCodes": ["TK"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "EUR",
+            "total": "651.54",
+            "base": "309.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "7",
+              "cabin": "ECONOMY",
+              "fareBasis": "OLXN2PXO",
+              "class": "O",
+              "includedCheckedBags": {
+                "quantity": 2
+              }
+            },
+            {
+              "segmentId": "8",
+              "cabin": "ECONOMY",
+              "fareBasis": "OLXN2PXO",
+              "brandedFare": "RS",
+              "class": "O",
+              "includedCheckedBags": {
+                "quantity": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "7",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2022-12-05",
+      "numberOfBookableSeats": 9,
+      "itineraries": [
+        {
+          "duration": "PT17H45M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LHR",
+                "terminal": "2",
+                "at": "2022-12-05T16:15:00"
+              },
+              "arrival": {
+                "iataCode": "IST",
+                "at": "2022-12-05T23:05:00"
+              },
+              "carrierCode": "TK",
+              "number": "1986",
+              "aircraft": {
+                "code": "77W"
+              },
+              "operating": {
+                "carrierCode": "TK"
+              },
+              "duration": "PT3H50M",
+              "id": "29",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            },
+            {
+              "departure": {
+                "iataCode": "IST",
+                "at": "2022-12-06T02:05:00"
+              },
+              "arrival": {
+                "iataCode": "HND",
+                "terminal": "3",
+                "at": "2022-12-06T19:00:00"
+              },
+              "carrierCode": "TK",
+              "number": "198",
+              "aircraft": {
+                "code": "77W"
+              },
+              "operating": {
+                "carrierCode": "TK"
+              },
+              "duration": "PT10H55M",
+              "id": "30",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "EUR",
+        "total": "651.54",
+        "base": "309.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "651.54"
+      },
+      "pricingOptions": {
+        "fareType": ["PUBLISHED"],
+        "includedCheckedBagsOnly": true
+      },
+      "validatingAirlineCodes": ["TK"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "EUR",
+            "total": "651.54",
+            "base": "309.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "29",
+              "cabin": "ECONOMY",
+              "fareBasis": "OLXN2PXO",
+              "class": "O",
+              "includedCheckedBags": {
+                "quantity": 2
+              }
+            },
+            {
+              "segmentId": "30",
+              "cabin": "ECONOMY",
+              "fareBasis": "OLXN2PXO",
+              "brandedFare": "RS",
+              "class": "O",
+              "includedCheckedBags": {
+                "quantity": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "8",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2022-12-05",
+      "numberOfBookableSeats": 9,
+      "itineraries": [
+        {
+          "duration": "PT22H25M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LHR",
+                "terminal": "2",
+                "at": "2022-12-05T11:35:00"
+              },
+              "arrival": {
+                "iataCode": "IST",
+                "at": "2022-12-05T18:25:00"
+              },
+              "carrierCode": "TK",
+              "number": "1980",
+              "aircraft": {
+                "code": "77W"
+              },
+              "operating": {
+                "carrierCode": "TK"
+              },
+              "duration": "PT3H50M",
+              "id": "11",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            },
+            {
+              "departure": {
+                "iataCode": "IST",
+                "at": "2022-12-06T02:05:00"
+              },
+              "arrival": {
+                "iataCode": "HND",
+                "terminal": "3",
+                "at": "2022-12-06T19:00:00"
+              },
+              "carrierCode": "TK",
+              "number": "198",
+              "aircraft": {
+                "code": "77W"
+              },
+              "operating": {
+                "carrierCode": "TK"
+              },
+              "duration": "PT10H55M",
+              "id": "12",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "EUR",
+        "total": "651.54",
+        "base": "309.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "651.54"
+      },
+      "pricingOptions": {
+        "fareType": ["PUBLISHED"],
+        "includedCheckedBagsOnly": true
+      },
+      "validatingAirlineCodes": ["TK"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "EUR",
+            "total": "651.54",
+            "base": "309.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "11",
+              "cabin": "ECONOMY",
+              "fareBasis": "OLXN2PXO",
+              "class": "O",
+              "includedCheckedBags": {
+                "quantity": 2
+              }
+            },
+            {
+              "segmentId": "12",
+              "cabin": "ECONOMY",
+              "fareBasis": "OLXN2PXO",
+              "brandedFare": "RS",
+              "class": "O",
+              "includedCheckedBags": {
+                "quantity": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "9",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2022-12-05",
+      "numberOfBookableSeats": 9,
+      "itineraries": [
+        {
+          "duration": "PT26H55M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LHR",
+                "terminal": "2",
+                "at": "2022-12-05T07:05:00"
+              },
+              "arrival": {
+                "iataCode": "IST",
+                "at": "2022-12-05T13:55:00"
+              },
+              "carrierCode": "TK",
+              "number": "1988",
+              "aircraft": {
+                "code": "321"
+              },
+              "operating": {
+                "carrierCode": "TK"
+              },
+              "duration": "PT3H50M",
+              "id": "39",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            },
+            {
+              "departure": {
+                "iataCode": "IST",
+                "at": "2022-12-06T02:05:00"
+              },
+              "arrival": {
+                "iataCode": "HND",
+                "terminal": "3",
+                "at": "2022-12-06T19:00:00"
+              },
+              "carrierCode": "TK",
+              "number": "198",
+              "aircraft": {
+                "code": "77W"
+              },
+              "operating": {
+                "carrierCode": "TK"
+              },
+              "duration": "PT10H55M",
+              "id": "40",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "EUR",
+        "total": "651.54",
+        "base": "309.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "651.54"
+      },
+      "pricingOptions": {
+        "fareType": ["PUBLISHED"],
+        "includedCheckedBagsOnly": true
+      },
+      "validatingAirlineCodes": ["TK"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "EUR",
+            "total": "651.54",
+            "base": "309.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "39",
+              "cabin": "ECONOMY",
+              "fareBasis": "OLXN2PXO",
+              "class": "O",
+              "includedCheckedBags": {
+                "quantity": 2
+              }
+            },
+            {
+              "segmentId": "40",
+              "cabin": "ECONOMY",
+              "fareBasis": "OLXN2PXO",
+              "brandedFare": "RS",
+              "class": "O",
+              "includedCheckedBags": {
+                "quantity": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "10",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2022-11-28",
+      "numberOfBookableSeats": 9,
+      "itineraries": [
+        {
+          "duration": "PT14H35M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LHR",
+                "terminal": "4",
+                "at": "2022-12-05T19:50:00"
+              },
+              "arrival": {
+                "iataCode": "CDG",
+                "terminal": "2E",
+                "at": "2022-12-05T22:10:00"
+              },
+              "carrierCode": "AF",
+              "number": "1181",
+              "aircraft": {
+                "code": "319"
+              },
+              "operating": {
+                "carrierCode": "AF"
+              },
+              "duration": "PT1H20M",
+              "id": "15",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            },
+            {
+              "departure": {
+                "iataCode": "CDG",
+                "terminal": "2E",
+                "at": "2022-12-05T23:20:00"
+              },
+              "arrival": {
+                "iataCode": "HND",
+                "terminal": "3",
+                "at": "2022-12-06T19:25:00"
+              },
+              "carrierCode": "AF",
+              "number": "274",
+              "aircraft": {
+                "code": "77W"
+              },
+              "operating": {
+                "carrierCode": "AF"
+              },
+              "duration": "PT12H5M",
+              "id": "16",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "EUR",
+        "total": "687.29",
+        "base": "425.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "687.29",
+        "additionalServices": [
+          {
+            "amount": "60.00",
+            "type": "CHECKED_BAGS"
+          }
+        ]
+      },
+      "pricingOptions": {
+        "fareType": ["PUBLISHED"],
+        "includedCheckedBagsOnly": false
+      },
+      "validatingAirlineCodes": ["AF"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "EUR",
+            "total": "687.29",
+            "base": "425.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "15",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "class": "L",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            },
+            {
+              "segmentId": "16",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "brandedFare": "LIGHT2",
+              "class": "T",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "11",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2022-11-28",
+      "numberOfBookableSeats": 9,
+      "itineraries": [
+        {
+          "duration": "PT15H10M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LHR",
+                "terminal": "4",
+                "at": "2022-12-05T09:00:00"
+              },
+              "arrival": {
+                "iataCode": "CDG",
+                "terminal": "2E",
+                "at": "2022-12-05T11:25:00"
+              },
+              "carrierCode": "AF",
+              "number": "1681",
+              "aircraft": {
+                "code": "320"
+              },
+              "operating": {
+                "carrierCode": "AF"
+              },
+              "duration": "PT1H25M",
+              "id": "3",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            },
+            {
+              "departure": {
+                "iataCode": "CDG",
+                "terminal": "2E",
+                "at": "2022-12-05T13:15:00"
+              },
+              "arrival": {
+                "iataCode": "NRT",
+                "terminal": "1",
+                "at": "2022-12-06T09:10:00"
+              },
+              "carrierCode": "AF",
+              "number": "276",
+              "aircraft": {
+                "code": "77W"
+              },
+              "operating": {
+                "carrierCode": "AF"
+              },
+              "duration": "PT11H55M",
+              "id": "4",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "EUR",
+        "total": "687.29",
+        "base": "425.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "687.29",
+        "additionalServices": [
+          {
+            "amount": "60.00",
+            "type": "CHECKED_BAGS"
+          }
+        ]
+      },
+      "pricingOptions": {
+        "fareType": ["PUBLISHED"],
+        "includedCheckedBagsOnly": false
+      },
+      "validatingAirlineCodes": ["AF"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "EUR",
+            "total": "687.29",
+            "base": "425.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "3",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "class": "L",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            },
+            {
+              "segmentId": "4",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "brandedFare": "LIGHT2",
+              "class": "T",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "12",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2022-11-28",
+      "numberOfBookableSeats": 9,
+      "itineraries": [
+        {
+          "duration": "PT15H35M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LHR",
+                "terminal": "4",
+                "at": "2022-12-05T11:30:00"
+              },
+              "arrival": {
+                "iataCode": "CDG",
+                "terminal": "2E",
+                "at": "2022-12-05T13:50:00"
+              },
+              "carrierCode": "AF",
+              "number": "1581",
+              "aircraft": {
+                "code": "320"
+              },
+              "operating": {
+                "carrierCode": "AF"
+              },
+              "duration": "PT1H20M",
+              "id": "17",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            },
+            {
+              "departure": {
+                "iataCode": "CDG",
+                "terminal": "2E",
+                "at": "2022-12-05T16:05:00"
+              },
+              "arrival": {
+                "iataCode": "HND",
+                "terminal": "3",
+                "at": "2022-12-06T12:05:00"
+              },
+              "carrierCode": "AF",
+              "number": "272",
+              "aircraft": {
+                "code": "772"
+              },
+              "operating": {
+                "carrierCode": "AF"
+              },
+              "duration": "PT12H",
+              "id": "18",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "EUR",
+        "total": "687.29",
+        "base": "425.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "687.29",
+        "additionalServices": [
+          {
+            "amount": "60.00",
+            "type": "CHECKED_BAGS"
+          }
+        ]
+      },
+      "pricingOptions": {
+        "fareType": ["PUBLISHED"],
+        "includedCheckedBagsOnly": false
+      },
+      "validatingAirlineCodes": ["AF"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "EUR",
+            "total": "687.29",
+            "base": "425.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "17",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "class": "L",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            },
+            {
+              "segmentId": "18",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "brandedFare": "LIGHT2",
+              "class": "T",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "13",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2022-11-28",
+      "numberOfBookableSeats": 9,
+      "itineraries": [
+        {
+          "duration": "PT16H50M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LHR",
+                "terminal": "4",
+                "at": "2022-12-05T17:35:00"
+              },
+              "arrival": {
+                "iataCode": "CDG",
+                "terminal": "2E",
+                "at": "2022-12-05T19:55:00"
+              },
+              "carrierCode": "AF",
+              "number": "1281",
+              "aircraft": {
+                "code": "320"
+              },
+              "operating": {
+                "carrierCode": "AF"
+              },
+              "duration": "PT1H20M",
+              "id": "31",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            },
+            {
+              "departure": {
+                "iataCode": "CDG",
+                "terminal": "2E",
+                "at": "2022-12-05T23:20:00"
+              },
+              "arrival": {
+                "iataCode": "HND",
+                "terminal": "3",
+                "at": "2022-12-06T19:25:00"
+              },
+              "carrierCode": "AF",
+              "number": "274",
+              "aircraft": {
+                "code": "77W"
+              },
+              "operating": {
+                "carrierCode": "AF"
+              },
+              "duration": "PT12H5M",
+              "id": "32",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "EUR",
+        "total": "687.29",
+        "base": "425.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "687.29",
+        "additionalServices": [
+          {
+            "amount": "60.00",
+            "type": "CHECKED_BAGS"
+          }
+        ]
+      },
+      "pricingOptions": {
+        "fareType": ["PUBLISHED"],
+        "includedCheckedBagsOnly": false
+      },
+      "validatingAirlineCodes": ["AF"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "EUR",
+            "total": "687.29",
+            "base": "425.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "31",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "class": "L",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            },
+            {
+              "segmentId": "32",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "brandedFare": "LIGHT2",
+              "class": "T",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "14",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2022-11-28",
+      "numberOfBookableSeats": 9,
+      "itineraries": [
+        {
+          "duration": "PT17H45M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LHR",
+                "terminal": "4",
+                "at": "2022-12-05T06:25:00"
+              },
+              "arrival": {
+                "iataCode": "CDG",
+                "terminal": "2E",
+                "at": "2022-12-05T08:45:00"
+              },
+              "carrierCode": "AF",
+              "number": "1381",
+              "aircraft": {
+                "code": "320"
+              },
+              "operating": {
+                "carrierCode": "AF"
+              },
+              "duration": "PT1H20M",
+              "id": "27",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            },
+            {
+              "departure": {
+                "iataCode": "CDG",
+                "terminal": "2E",
+                "at": "2022-12-05T13:15:00"
+              },
+              "arrival": {
+                "iataCode": "NRT",
+                "terminal": "1",
+                "at": "2022-12-06T09:10:00"
+              },
+              "carrierCode": "AF",
+              "number": "276",
+              "aircraft": {
+                "code": "77W"
+              },
+              "operating": {
+                "carrierCode": "AF"
+              },
+              "duration": "PT11H55M",
+              "id": "28",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "EUR",
+        "total": "687.29",
+        "base": "425.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "687.29",
+        "additionalServices": [
+          {
+            "amount": "60.00",
+            "type": "CHECKED_BAGS"
+          }
+        ]
+      },
+      "pricingOptions": {
+        "fareType": ["PUBLISHED"],
+        "includedCheckedBagsOnly": false
+      },
+      "validatingAirlineCodes": ["AF"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "EUR",
+            "total": "687.29",
+            "base": "425.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "27",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "class": "L",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            },
+            {
+              "segmentId": "28",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "brandedFare": "LIGHT2",
+              "class": "T",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "15",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2022-11-28",
+      "numberOfBookableSeats": 9,
+      "itineraries": [
+        {
+          "duration": "PT18H5M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LHR",
+                "terminal": "4",
+                "at": "2022-12-05T09:00:00"
+              },
+              "arrival": {
+                "iataCode": "CDG",
+                "terminal": "2E",
+                "at": "2022-12-05T11:25:00"
+              },
+              "carrierCode": "AF",
+              "number": "1681",
+              "aircraft": {
+                "code": "320"
+              },
+              "operating": {
+                "carrierCode": "AF"
+              },
+              "duration": "PT1H25M",
+              "id": "1",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            },
+            {
+              "departure": {
+                "iataCode": "CDG",
+                "terminal": "2E",
+                "at": "2022-12-05T16:05:00"
+              },
+              "arrival": {
+                "iataCode": "HND",
+                "terminal": "3",
+                "at": "2022-12-06T12:05:00"
+              },
+              "carrierCode": "AF",
+              "number": "272",
+              "aircraft": {
+                "code": "772"
+              },
+              "operating": {
+                "carrierCode": "AF"
+              },
+              "duration": "PT12H",
+              "id": "2",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "EUR",
+        "total": "687.29",
+        "base": "425.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "687.29",
+        "additionalServices": [
+          {
+            "amount": "60.00",
+            "type": "CHECKED_BAGS"
+          }
+        ]
+      },
+      "pricingOptions": {
+        "fareType": ["PUBLISHED"],
+        "includedCheckedBagsOnly": false
+      },
+      "validatingAirlineCodes": ["AF"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "EUR",
+            "total": "687.29",
+            "base": "425.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "1",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "class": "L",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            },
+            {
+              "segmentId": "2",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "brandedFare": "LIGHT2",
+              "class": "T",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "16",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2022-11-28",
+      "numberOfBookableSeats": 9,
+      "itineraries": [
+        {
+          "duration": "PT19H40M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LHR",
+                "terminal": "4",
+                "at": "2022-12-05T14:45:00"
+              },
+              "arrival": {
+                "iataCode": "CDG",
+                "terminal": "2E",
+                "at": "2022-12-05T17:05:00"
+              },
+              "carrierCode": "AF",
+              "number": "1781",
+              "aircraft": {
+                "code": "320"
+              },
+              "operating": {
+                "carrierCode": "AF"
+              },
+              "duration": "PT1H20M",
+              "id": "21",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            },
+            {
+              "departure": {
+                "iataCode": "CDG",
+                "terminal": "2E",
+                "at": "2022-12-05T23:20:00"
+              },
+              "arrival": {
+                "iataCode": "HND",
+                "terminal": "3",
+                "at": "2022-12-06T19:25:00"
+              },
+              "carrierCode": "AF",
+              "number": "274",
+              "aircraft": {
+                "code": "77W"
+              },
+              "operating": {
+                "carrierCode": "AF"
+              },
+              "duration": "PT12H5M",
+              "id": "22",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "EUR",
+        "total": "687.29",
+        "base": "425.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "687.29",
+        "additionalServices": [
+          {
+            "amount": "60.00",
+            "type": "CHECKED_BAGS"
+          }
+        ]
+      },
+      "pricingOptions": {
+        "fareType": ["PUBLISHED"],
+        "includedCheckedBagsOnly": false
+      },
+      "validatingAirlineCodes": ["AF"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "EUR",
+            "total": "687.29",
+            "base": "425.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "21",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "class": "L",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            },
+            {
+              "segmentId": "22",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "brandedFare": "LIGHT2",
+              "class": "T",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "17",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2022-11-28",
+      "numberOfBookableSeats": 9,
+      "itineraries": [
+        {
+          "duration": "PT20H40M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LHR",
+                "terminal": "4",
+                "at": "2022-12-05T06:25:00"
+              },
+              "arrival": {
+                "iataCode": "CDG",
+                "terminal": "2E",
+                "at": "2022-12-05T08:45:00"
+              },
+              "carrierCode": "AF",
+              "number": "1381",
+              "aircraft": {
+                "code": "320"
+              },
+              "operating": {
+                "carrierCode": "AF"
+              },
+              "duration": "PT1H20M",
+              "id": "23",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            },
+            {
+              "departure": {
+                "iataCode": "CDG",
+                "terminal": "2E",
+                "at": "2022-12-05T16:05:00"
+              },
+              "arrival": {
+                "iataCode": "HND",
+                "terminal": "3",
+                "at": "2022-12-06T12:05:00"
+              },
+              "carrierCode": "AF",
+              "number": "272",
+              "aircraft": {
+                "code": "772"
+              },
+              "operating": {
+                "carrierCode": "AF"
+              },
+              "duration": "PT12H",
+              "id": "24",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "EUR",
+        "total": "687.29",
+        "base": "425.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "687.29",
+        "additionalServices": [
+          {
+            "amount": "60.00",
+            "type": "CHECKED_BAGS"
+          }
+        ]
+      },
+      "pricingOptions": {
+        "fareType": ["PUBLISHED"],
+        "includedCheckedBagsOnly": false
+      },
+      "validatingAirlineCodes": ["AF"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "EUR",
+            "total": "687.29",
+            "base": "425.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "23",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "class": "L",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            },
+            {
+              "segmentId": "24",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "brandedFare": "LIGHT2",
+              "class": "T",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "18",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2022-11-28",
+      "numberOfBookableSeats": 9,
+      "itineraries": [
+        {
+          "duration": "PT22H55M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LHR",
+                "terminal": "4",
+                "at": "2022-12-05T11:30:00"
+              },
+              "arrival": {
+                "iataCode": "CDG",
+                "terminal": "2E",
+                "at": "2022-12-05T13:50:00"
+              },
+              "carrierCode": "AF",
+              "number": "1581",
+              "aircraft": {
+                "code": "320"
+              },
+              "operating": {
+                "carrierCode": "AF"
+              },
+              "duration": "PT1H20M",
+              "id": "37",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            },
+            {
+              "departure": {
+                "iataCode": "CDG",
+                "terminal": "2E",
+                "at": "2022-12-05T23:20:00"
+              },
+              "arrival": {
+                "iataCode": "HND",
+                "terminal": "3",
+                "at": "2022-12-06T19:25:00"
+              },
+              "carrierCode": "AF",
+              "number": "274",
+              "aircraft": {
+                "code": "77W"
+              },
+              "operating": {
+                "carrierCode": "AF"
+              },
+              "duration": "PT12H5M",
+              "id": "38",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "EUR",
+        "total": "687.29",
+        "base": "425.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "687.29",
+        "additionalServices": [
+          {
+            "amount": "60.00",
+            "type": "CHECKED_BAGS"
+          }
+        ]
+      },
+      "pricingOptions": {
+        "fareType": ["PUBLISHED"],
+        "includedCheckedBagsOnly": false
+      },
+      "validatingAirlineCodes": ["AF"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "EUR",
+            "total": "687.29",
+            "base": "425.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "37",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "class": "L",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            },
+            {
+              "segmentId": "38",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "brandedFare": "LIGHT2",
+              "class": "T",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "19",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2022-11-28",
+      "numberOfBookableSeats": 9,
+      "itineraries": [
+        {
+          "duration": "PT25H25M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LHR",
+                "terminal": "4",
+                "at": "2022-12-05T09:00:00"
+              },
+              "arrival": {
+                "iataCode": "CDG",
+                "terminal": "2E",
+                "at": "2022-12-05T11:25:00"
+              },
+              "carrierCode": "AF",
+              "number": "1681",
+              "aircraft": {
+                "code": "320"
+              },
+              "operating": {
+                "carrierCode": "AF"
+              },
+              "duration": "PT1H25M",
+              "id": "13",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            },
+            {
+              "departure": {
+                "iataCode": "CDG",
+                "terminal": "2E",
+                "at": "2022-12-05T23:20:00"
+              },
+              "arrival": {
+                "iataCode": "HND",
+                "terminal": "3",
+                "at": "2022-12-06T19:25:00"
+              },
+              "carrierCode": "AF",
+              "number": "274",
+              "aircraft": {
+                "code": "77W"
+              },
+              "operating": {
+                "carrierCode": "AF"
+              },
+              "duration": "PT12H5M",
+              "id": "14",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "EUR",
+        "total": "687.29",
+        "base": "425.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "687.29",
+        "additionalServices": [
+          {
+            "amount": "60.00",
+            "type": "CHECKED_BAGS"
+          }
+        ]
+      },
+      "pricingOptions": {
+        "fareType": ["PUBLISHED"],
+        "includedCheckedBagsOnly": false
+      },
+      "validatingAirlineCodes": ["AF"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "EUR",
+            "total": "687.29",
+            "base": "425.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "13",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "class": "L",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            },
+            {
+              "segmentId": "14",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "brandedFare": "LIGHT2",
+              "class": "T",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "flight-offer",
+      "id": "20",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2022-11-28",
+      "numberOfBookableSeats": 9,
+      "itineraries": [
+        {
+          "duration": "PT14H45M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LHR",
+                "terminal": "3",
+                "at": "2022-12-05T10:00:00"
+              },
+              "arrival": {
+                "iataCode": "AMS",
+                "at": "2022-12-05T12:25:00"
+              },
+              "carrierCode": "KL",
+              "number": "1008",
+              "aircraft": {
+                "code": "73J"
+              },
+              "operating": {
+                "carrierCode": "KL"
+              },
+              "duration": "PT1H25M",
+              "id": "25",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            },
+            {
+              "departure": {
+                "iataCode": "AMS",
+                "at": "2022-12-05T14:35:00"
+              },
+              "arrival": {
+                "iataCode": "NRT",
+                "terminal": "1",
+                "at": "2022-12-06T09:45:00"
+              },
+              "carrierCode": "KL",
+              "number": "861",
+              "aircraft": {
+                "code": "772"
+              },
+              "operating": {
+                "carrierCode": "KL"
+              },
+              "duration": "PT11H10M",
+              "id": "26",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "EUR",
+        "total": "687.74",
+        "base": "435.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "687.74",
+        "additionalServices": [
+          {
+            "amount": "60.00",
+            "type": "CHECKED_BAGS"
+          }
+        ]
+      },
+      "pricingOptions": {
+        "fareType": ["PUBLISHED"],
+        "includedCheckedBagsOnly": false
+      },
+      "validatingAirlineCodes": ["AF"],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "EUR",
+            "total": "687.74",
+            "base": "435.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "25",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "class": "L",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            },
+            {
+              "segmentId": "26",
+              "cabin": "ECONOMY",
+              "fareBasis": "TL54BAL8",
+              "brandedFare": "LIGHT2",
+              "class": "T",
+              "includedCheckedBags": {
+                "quantity": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "dictionaries": {
+    "locations": {
+      "NRT": {
+        "cityCode": "TYO",
+        "countryCode": "JP"
+      },
+      "ADD": {
+        "cityCode": "ADD",
+        "countryCode": "ET"
+      },
+      "CDG": {
+        "cityCode": "PAR",
+        "countryCode": "FR"
+      },
+      "LHR": {
+        "cityCode": "LON",
+        "countryCode": "GB"
+      },
+      "AMS": {
+        "cityCode": "AMS",
+        "countryCode": "NL"
+      },
+      "IST": {
+        "cityCode": "IST",
+        "countryCode": "TR"
+      },
+      "WAW": {
+        "cityCode": "WAW",
+        "countryCode": "PL"
+      },
+      "LGW": {
+        "cityCode": "LON",
+        "countryCode": "GB"
+      },
+      "HND": {
+        "cityCode": "TYO",
+        "countryCode": "JP"
+      }
+    },
+    "aircraft": {
+      "320": "AIRBUS A320",
+      "321": "AIRBUS A321",
+      "7M8": "BOEING 737 MAX 8",
+      "772": "BOEING 777-200/200ER",
+      "333": "AIRBUS A330-300",
+      "77W": "BOEING 777-300ER",
+      "788": "BOEING 787-8",
+      "789": "BOEING 787-9",
+      "319": "AIRBUS A319",
+      "350": "AIRBUS INDUSTRIE A350",
+      "73J": "BOEING 737-900"
+    },
+    "currencies": {
+      "EUR": "EURO"
+    },
+    "carriers": {
+      "KL": "KLM ROYAL DUTCH AIRLINES",
+      "LO": "LOT POLISH AIRLINES",
+      "AF": "AIR FRANCE",
+      "TK": "TURKISH AIRLINES",
+      "ET": "ETHIOPIAN AIRLINES"
+    }
+  }
+}
