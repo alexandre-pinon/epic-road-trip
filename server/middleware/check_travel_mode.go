@@ -3,23 +3,24 @@ package middleware
 import (
 	"errors"
 	"net/http"
+	"strings"
 
 	"github.com/alexandre-pinon/epic-road-trip/model"
 	"github.com/gin-gonic/gin"
 )
 
-func CheckCity() gin.HandlerFunc {
+func CheckTravelMode() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		city , err := ctx.Params.Get("city")
-		if err == false {
+		mode := model.Transport(strings.ToUpper(ctx.Param("mode")))
+		if mode != model.Air && mode != model.Ground {
 			ctx.AbortWithStatusJSON(http.StatusBadRequest, model.AppResponse{
 				Success:   false,
-				Message:   errors.New("no city fund").Error(),
+				Message:   errors.New("invalid travel mode").Error(),
 				Data:      struct{}{},
 				ValErrors: []model.ValError{},
 			})
 		}
-		ctx.Set("city", city)
+		ctx.Set("mode", mode)
 		ctx.Next()
 	}
 }
