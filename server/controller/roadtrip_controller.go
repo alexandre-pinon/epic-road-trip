@@ -49,7 +49,7 @@ func (ctrl *roadtripController) Enjoy(c *gin.Context) (*model.AppResult, *model.
 		return nil, err.(*model.AppError)
 	}
 
-	activities, err := ctrl.googleService.Enjoy(ctrl.cfg.Google.BaseUrl, *location)
+	activities, err := ctrl.googleService.Enjoy(ctrl.cfg.Google.BaseUrl, *location , position.Constraints)
 	if err != nil {
 		return nil, err.(*model.AppError)
 	}
@@ -76,7 +76,7 @@ func (ctrl *roadtripController) Sleep(c *gin.Context) (*model.AppResult , *model
 		return nil, err.(*model.AppError)
 	}
 
-	hotels, err := ctrl.googleService.Sleep(ctrl.cfg.Google.BaseUrl, *location)
+	hotels, err := ctrl.googleService.Sleep(ctrl.cfg.Google.BaseUrl, *location , position.Constraints)
 	if err != nil {
 		return nil, err.(*model.AppError)
 	}
@@ -103,7 +103,7 @@ func (ctrl *roadtripController) Eat(c *gin.Context) (*model.AppResult , *model.A
 		return nil, err.(*model.AppError)
 	}
 
-	restaurants, err := ctrl.googleService.Eat(ctrl.cfg.Google.BaseUrl, *location)
+	restaurants, err := ctrl.googleService.Eat(ctrl.cfg.Google.BaseUrl, *location , position.Constraints)
 	if err != nil {
 		return nil, err.(*model.AppError)
 	}
@@ -130,7 +130,7 @@ func (ctrl *roadtripController) Drink(c *gin.Context) (*model.AppResult , *model
 		return nil, err.(*model.AppError)
 	}
 
-	bars, err := ctrl.googleService.Drink(ctrl.cfg.Google.BaseUrl, *location)
+	bars, err := ctrl.googleService.Drink(ctrl.cfg.Google.BaseUrl, *location , position.Constraints)
 	if err != nil {
 		return nil, err.(*model.AppError)
 	}

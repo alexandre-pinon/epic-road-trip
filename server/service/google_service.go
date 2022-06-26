@@ -19,10 +19,10 @@ type googleService struct {
 }
 
 type GoogleService interface {
-	Enjoy(url string, position model.Location) (*[]model.ActivityResult, error)
-	Sleep(url string , position model.Location) (*[]model.ActivityResult, error)
-	Eat(url string , position model.Location) (*[]model.ActivityResult, error)
-	Drink(url string , position model.Location) (*[]model.ActivityResult, error)
+	Enjoy(url string, position model.Location, constraint model.Constraints) (*[]model.ActivityResult, error)
+	Sleep(url string, position model.Location, constraint model.Constraints) (*[]model.ActivityResult, error)
+	Eat(url string, position model.Location, constraint model.Constraints) (*[]model.ActivityResult, error)
+	Drink(url string, position model.Location, constraint model.Constraints) (*[]model.ActivityResult, error)
 	GeoCoding(url, position string) (*model.Location, error)
 	GetDirections(url string, directionsFormData *model.DirectionsFormData) (*[]model.Itinerary, error)
 }
@@ -31,18 +31,21 @@ func NewGoogleService(cfg *config.Config) GoogleService {
 	return &googleService{cfg}
 }
 
-func (svc *googleService) Enjoy(googleBaseUrl string, position model.Location) (*[]model.ActivityResult, error) {
+func (svc *googleService) Enjoy(googleBaseUrl string, position model.Location, constraint model.Constraints) (*[]model.ActivityResult, error) {
 	query := fmt.Sprintf("location=%f,%f", position.Lat, position.Lng)
 	query += fmt.Sprintf("&key=%s", svc.cfg.Google.Key)
-	query += "&radius=5000&type=tourist_attraction"
+	query += utils.ConstraintStringify(constraint)
+	query += "&type=tourist_attraction"
 	uri := fmt.Sprintf("%s/place/nearbysearch/json?%s", googleBaseUrl, url.PathEscape(query))
 	response, err := http.Get(uri)
+
 	if err != nil {
 		return nil, &model.AppError{
 			StatusCode: http.StatusBadRequest,
 			Err:        err,
 		}
 	}
+
 	defer response.Body.Close()
 	responseBody := model.Activity{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
@@ -57,8 +60,11 @@ func (svc *googleService) Enjoy(googleBaseUrl string, position model.Location) (
 	return &responseBody.Results, nil
 }
 
-func (svc * googleService) Sleep(url string, position model.Location) (*[]model.ActivityResult , error)  {
-	response, err := http.Get(fmt.Sprintf("%s/place/nearbysearch/json?location=%f,%f&type=lodging&key=%s", url, position.Lat, position.Lng, svc.cfg.Google.Key))
+func (svc *googleService) Sleep(url string, position model.Location, constraint model.Constraints) (*[]model.ActivityResult, error) {
+
+	params := utils.ConstraintStringify(constraint)
+
+	response, err := http.Get(fmt.Sprintf("%s/place/nearbysearch/json?location=%f,%f&type=lodging%s&key=%s", url, position.Lat, position.Lng, params, svc.cfg.Google.Key))
 	if err != nil {
 		return nil, &model.AppError{
 			StatusCode: http.StatusBadRequest,
@@ -79,8 +85,11 @@ func (svc * googleService) Sleep(url string, position model.Location) (*[]model.
 	return &responseBody.Results, nil
 }
 
-func (svc *googleService) Eat(url string, position model.Location ) (*[]model.ActivityResult , error)  {
-	response, err := http.Get(fmt.Sprintf("%s/place/nearbysearch/json?location=%f,%f&type=restaurant&key=%s", url, position.Lat, position.Lng, svc.cfg.Google.Key))
+func (svc *googleService) Eat(url string, position model.Location, constraint model.Constraints) (*[]model.ActivityResult, error) {
+
+	params := utils.ConstraintStringify(constraint)
+
+	response, err := http.Get(fmt.Sprintf("%s/place/nearbysearch/json?location=%f,%f&type=restaurant%s&key=%s", url, position.Lat, position.Lng, params, svc.cfg.Google.Key))
 	if err != nil {
 		return nil, &model.AppError{
 			StatusCode: http.StatusBadRequest,
@@ -101,8 +110,11 @@ func (svc *googleService) Eat(url string, position model.Location ) (*[]model.Ac
 	return &responseBody.Results, nil
 }
 
-func (svc *googleService) Drink(url string, position model.Location ) (*[]model.ActivityResult , error)  {
-	response, err := http.Get(fmt.Sprintf("%s/place/nearbysearch/json?location=%f,%f&type=bar&key=%s", url, position.Lat, position.Lng, svc.cfg.Google.Key))
+func (svc *googleService) Drink(url string, position model.Location, constraint model.Constraints) (*[]model.ActivityResult, error) {
+
+	params := utils.ConstraintStringify(constraint)
+
+	response, err := http.Get(fmt.Sprintf("%s/place/nearbysearch/json?location=%f,%f&type=bar%s&key=%s", url, position.Lat, position.Lng, params, svc.cfg.Google.Key))
 	if err != nil {
 		return nil, &model.AppError{
 			StatusCode: http.StatusBadRequest,
