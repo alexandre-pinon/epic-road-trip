@@ -20,6 +20,9 @@ type googleService struct {
 
 type GoogleService interface {
 	Enjoy(url string, position model.Location) (*[]model.ActivityResult, error)
+	Sleep(url string , position model.Location) (*[]model.ActivityResult, error)
+	Eat(url string , position model.Location) (*[]model.ActivityResult, error)
+	Drink(url string , position model.Location) (*[]model.ActivityResult, error)
 	GeoCoding(url, position string) (*model.Location, error)
 	GetDirections(url string, directionsFormData *model.DirectionsFormData) (*[]model.Itinerary, error)
 }
@@ -34,6 +37,72 @@ func (svc *googleService) Enjoy(googleBaseUrl string, position model.Location) (
 	query += "&radius=5000&type=tourist_attraction"
 	uri := fmt.Sprintf("%s/place/nearbysearch/json?%s", googleBaseUrl, url.PathEscape(query))
 	response, err := http.Get(uri)
+	if err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+	}
+	defer response.Body.Close()
+	responseBody := model.Activity{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	if len(responseBody.Results) == 0 {
+		return nil, &model.AppError{
+			StatusCode: http.StatusNotFound,
+			Err:        errors.New(responseBody.Status),
+		}
+	}
+
+	return &responseBody.Results, nil
+}
+
+func (svc * googleService) Sleep(url string, position model.Location) (*[]model.ActivityResult , error)  {
+	response, err := http.Get(fmt.Sprintf("%s/place/nearbysearch/json?location=%f,%f&type=lodging&key=%s", url, position.Lat, position.Lng, svc.cfg.Google.Key))
+	if err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+	}
+	defer response.Body.Close()
+	responseBody := model.Hotel{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	if len(responseBody.Results) == 0 {
+		return nil, &model.AppError{
+			StatusCode: http.StatusNotFound,
+			Err:        errors.New(responseBody.Status),
+		}
+	}
+
+	return &responseBody.Results, nil
+}
+
+func (svc *googleService) Eat(url string, position model.Location ) (*[]model.ActivityResult , error)  {
+	response, err := http.Get(fmt.Sprintf("%s/place/nearbysearch/json?location=%f,%f&type=restaurant&key=%s", url, position.Lat, position.Lng, svc.cfg.Google.Key))
+	if err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+	}
+	defer response.Body.Close()
+	responseBody := model.Activity{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	if len(responseBody.Results) == 0 {
+		return nil, &model.AppError{
+			StatusCode: http.StatusNotFound,
+			Err:        errors.New(responseBody.Status),
+		}
+	}
+
+	return &responseBody.Results, nil
+}
+
+func (svc *googleService) Drink(url string, position model.Location ) (*[]model.ActivityResult , error)  {
+	response, err := http.Get(fmt.Sprintf("%s/place/nearbysearch/json?location=%f,%f&type=bar&key=%s", url, position.Lat, position.Lng, svc.cfg.Google.Key))
 	if err != nil {
 		return nil, &model.AppError{
 			StatusCode: http.StatusBadRequest,

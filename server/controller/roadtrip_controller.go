@@ -20,10 +20,13 @@ type roadtripController struct {
 }
 
 type RoadTripController interface {
-	Enjoy(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	Travel(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	TravelAir(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	TravelGround(ctx *gin.Context) (*model.AppResult, *model.AppError)
+	Enjoy(ctx *gin.Context) 	(*model.AppResult, *model.AppError)
+	Sleep(ctx *gin.Context) 	(*model.AppResult, *model.AppError)
+	Eat(c *gin.Context) 		(*model.AppResult , *model.AppError)
+	Drink(c *gin.Context) 		(*model.AppResult , *model.AppError)
 }
 
 func NewRoadTripController(cfg *config.Config, googleService service.GoogleService, amadeusService service.AmadeusService) RoadTripController {
@@ -55,6 +58,87 @@ func (ctrl *roadtripController) Enjoy(c *gin.Context) (*model.AppResult, *model.
 		StatusCode: http.StatusOK,
 		Message:    "Activities retrieved successfuly",
 		Data:       &activities,
+	}, nil
+}
+
+func (ctrl *roadtripController) Sleep(c *gin.Context) (*model.AppResult , *model.AppError)  {
+	var position model.CityFormData
+
+	if err := c.ShouldBindJSON(&position); err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+	}
+
+	location, err := ctrl.googleService.GeoCoding(ctrl.cfg.Google.BaseUrl, position.City)
+	if err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	hotels, err := ctrl.googleService.Sleep(ctrl.cfg.Google.BaseUrl, *location)
+	if err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	return &model.AppResult{
+		StatusCode: http.StatusOK,
+		Message:    "Activities retrieved successfuly",
+		Data:       &hotels,
+	}, nil
+}
+
+func (ctrl *roadtripController) Eat(c *gin.Context) (*model.AppResult , *model.AppError)  {
+	var position model.CityFormData
+
+	if err := c.ShouldBindJSON(&position); err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+	}
+
+	location, err := ctrl.googleService.GeoCoding(ctrl.cfg.Google.BaseUrl, position.City)
+	if err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	restaurants, err := ctrl.googleService.Eat(ctrl.cfg.Google.BaseUrl, *location)
+	if err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	return &model.AppResult{
+		StatusCode: http.StatusOK,
+		Message:    "Activities retrieved successfuly",
+		Data:       &restaurants,
+	}, nil
+}
+
+func (ctrl *roadtripController) Drink(c *gin.Context) (*model.AppResult , *model.AppError)  {
+	var position model.CityFormData
+
+	if err := c.ShouldBindJSON(&position); err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+	}
+
+	location, err := ctrl.googleService.GeoCoding(ctrl.cfg.Google.BaseUrl, position.City)
+	if err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	bars, err := ctrl.googleService.Drink(ctrl.cfg.Google.BaseUrl, *location)
+	if err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	return &model.AppResult{
+		StatusCode: http.StatusOK,
+		Message:    "Activities retrieved successfuly",
+		Data:       &bars,
 	}, nil
 }
 

@@ -38,8 +38,12 @@ func (suite *roadtripControllerSuite) SetupTest() {
 	{
 		roadtripRoutes := apiRoutes.Group("/roadtrip")
 		{
-			roadtripRoutes.POST("/enjoy", utils.ServeHTTP(crtl.Enjoy))
 			roadtripRoutes.POST("/travel/:mode", middleware.CheckTravelMode(), utils.ServeHTTP(crtl.Travel))
+			roadtripRoutes.POST("/enjoy", utils.ServeHTTP(crtl.Enjoy))
+			roadtripRoutes.POST("/sleep", utils.ServeHTTP(crtl.Sleep))
+			roadtripRoutes.POST("/eat", utils.ServeHTTP(crtl.Eat))
+			roadtripRoutes.POST("/drink", utils.ServeHTTP(crtl.Drink))
+			roadtripRoutes.POST("/travel", utils.ServeHTTP(crtl.Travel))
 		}
 	}
 	server := httptest.NewServer(router)
@@ -188,6 +192,426 @@ func (suite *roadtripControllerSuite) TestEnjoyWithZeroResult() {
 	suite.Empty(responseBody.Data, "activities should not be retrieved")
 	suite.googleService.AssertExpectations(suite.T())
 
+}
+
+func (suite *roadtripControllerSuite) TestSleepWithGoodAnswer() {
+	request := model.CityFormData{
+		City: "Paris",
+	}
+	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
+	activities := []model.ActivityResult{
+		{
+			BusinessStatus: "OPEN",
+			Geometry: model.GeometryActivity{
+				Location: location,
+				Viewport: model.Bounds{
+					Northeast: model.Location{Lat: 48.9021475, Lng: 2.4698509},
+					Southwest: model.Location{Lat: 48.8155622, Lng: 2.2242191},
+				},
+			},
+			Icon:                "ucfytc",
+			IconBackgroundColor: "cbdosucb",
+			IconMaskBaseURI:     "ubcs",
+			Name:                "eonvfe",
+			OpeningHours: model.OpeningHours{
+				OpenNow: false,
+			},
+			Photos: []model.Photos{{
+				Height:           800,
+				HTMLAttributions: []string{"iubvd", "givuefbv"},
+				PhotoReference:   "dfvdvfd",
+				Width:            800,
+			}},
+			PlaceID: "CHIJoiubcfmigf1",
+			PlusCode: model.PlusCode{
+				CompoundCode: "",
+				GlobalCode:   "",
+			},
+			PriceLevel:       2,
+			Rating:           4.7695,
+			Reference:        "",
+			Scope:            "",
+			Types:            []string{"amusement_park"},
+			UserRatingsTotal: 5,
+			Vicinity:         "",
+		},
+		{
+			BusinessStatus: "OPEN",
+			Geometry: model.GeometryActivity{
+				Location: location,
+				Viewport: model.Bounds{
+					Northeast: model.Location{Lat: 48.9021475, Lng: 2.4698509},
+					Southwest: model.Location{Lat: 48.8155622, Lng: 2.2242191},
+				},
+			},
+			Icon:                "ucfytc",
+			IconBackgroundColor: "cbdosucb",
+			IconMaskBaseURI:     "ubcs",
+			Name:                "eonvfe",
+			OpeningHours: model.OpeningHours{
+				OpenNow: false,
+			},
+			Photos: []model.Photos{{
+				Height:           800,
+				HTMLAttributions: []string{"iubvd", "givuefbv"},
+				PhotoReference:   "dfvdvfd",
+				Width:            800,
+			}},
+			PlaceID: "CHIJoiubcfmigf1",
+			PlusCode: model.PlusCode{
+				CompoundCode: "",
+				GlobalCode:   "",
+			},
+			PriceLevel:       2,
+			Rating:           4.7695,
+			Reference:        "",
+			Scope:            "",
+			Types:            []string{"lodging"},
+			UserRatingsTotal: 5,
+			Vicinity:         "",
+		},
+	}
+
+	suite.googleService.On("GeoCoding", suite.cfg.Google.BaseUrl, request.City).Return(&location, nil)
+	suite.googleService.On("Sleep", suite.cfg.Google.BaseUrl, location).Return(&activities, nil)
+
+	requestBody, err := json.Marshal(request)
+	if err != nil {
+		suite.Nil(err, "json is empty")
+	}
+
+	response, err := http.Post(
+		fmt.Sprintf("%s/api/v1/roadtrip/sleep", suite.testServer.URL),
+		gin.MIMEJSON,
+		bytes.NewBuffer(requestBody),
+	)
+
+	suite.NoError(err, "no error when calling this endpoint")
+	defer response.Body.Close()
+
+	responseBody := model.AppResponse{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusOK, response.StatusCode)
+	suite.Equal("Activities retrieved successfuly", responseBody.Message)
+	suite.NotEmpty(responseBody.Data, "activities should be retrieved")
+	suite.googleService.AssertExpectations(suite.T())
+}
+
+func (suite *roadtripControllerSuite) TestSleepWithZeroResult() {
+	request := model.CityFormData{
+		City: "Paris",
+	}
+	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
+	noResult := model.AppError{
+		StatusCode: http.StatusNotFound,
+		Err:        errors.New("ZERO_RESULTS"),
+	}
+
+	suite.googleService.On("GeoCoding", suite.cfg.Google.BaseUrl, request.City).Return(&location, nil)
+	suite.googleService.On("Sleep", suite.cfg.Google.BaseUrl, location).Return(nil, &noResult)
+
+	requestBody, err := json.Marshal(request)
+	if err != nil {
+		suite.Nil(err, "json is empty")
+	}
+	response, err := http.Post(
+		fmt.Sprintf("%s/api/v1/roadtrip/sleep", suite.testServer.URL),
+		gin.MIMEJSON,
+		bytes.NewBuffer(requestBody),
+	)
+
+	suite.NoError(err, "no error when calling this endpoint")
+	defer response.Body.Close()
+
+	responseBody := model.AppResponse{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusNotFound, response.StatusCode)
+	suite.Equal("ZERO_RESULTS", responseBody.Message)
+	suite.Empty(responseBody.Data, "activities should not be retrieved")
+	suite.googleService.AssertExpectations(suite.T())
+
+}
+
+func (suite *roadtripControllerSuite) TestEatWithGoodAnswer() {
+	request := model.CityFormData{
+		City: "Paris",
+	}
+	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
+	restaurant := []model.ActivityResult{
+		{
+			BusinessStatus: "OPEN",
+			Geometry: model.GeometryActivity{
+				Location: location,
+				Viewport: model.Bounds{
+					Northeast: model.Location{Lat: 48.9021475, Lng: 2.4698509},
+					Southwest: model.Location{Lat: 48.8155622, Lng: 2.2242191},
+				},
+			},
+			Icon:                "ucfytc",
+			IconBackgroundColor: "cbdosucb",
+			IconMaskBaseURI:     "ubcs",
+			Name:                "eonvfe",
+			OpeningHours: model.OpeningHours{
+				OpenNow: false,
+			},
+			Photos: []model.Photos{{
+				Height:           800,
+				HTMLAttributions: []string{"iubvd", "givuefbv"},
+				PhotoReference:   "dfvdvfd",
+				Width:            800,
+			}},
+			PlaceID: "CHIJoiubcfmigf1",
+			PlusCode: model.PlusCode{
+				CompoundCode: "",
+				GlobalCode:   "",
+			},
+			PriceLevel:       2,
+			Rating:           4.7695,
+			Reference:        "",
+			Scope:            "",
+			Types:            []string{"amusement_park"},
+			UserRatingsTotal: 5,
+			Vicinity:         "",
+		},
+		{
+			BusinessStatus: "OPEN",
+			Geometry: model.GeometryActivity{
+				Location: location,
+				Viewport: model.Bounds{
+					Northeast: model.Location{Lat: 48.9021475, Lng: 2.4698509},
+					Southwest: model.Location{Lat: 48.8155622, Lng: 2.2242191},
+				},
+			},
+			Icon:                "ucfytc",
+			IconBackgroundColor: "cbdosucb",
+			IconMaskBaseURI:     "ubcs",
+			Name:                "eonvfe",
+			OpeningHours: model.OpeningHours{
+				OpenNow: false,
+			},
+			Photos: []model.Photos{{
+				Height:           800,
+				HTMLAttributions: []string{"iubvd", "givuefbv"},
+				PhotoReference:   "dfvdvfd",
+				Width:            800,
+			}},
+			PlaceID: "CHIJoiubcfmigf1",
+			PlusCode: model.PlusCode{
+				CompoundCode: "",
+				GlobalCode:   "",
+			},
+			PriceLevel:       2,
+			Rating:           4.7695,
+			Reference:        "",
+			Scope:            "",
+			Types:            []string{"restaurant"},
+			UserRatingsTotal: 5,
+			Vicinity:         "",
+		},
+	}
+
+	suite.googleService.On("GeoCoding", suite.cfg.Google.BaseUrl, request.City).Return(&location, nil)
+	suite.googleService.On("Eat", suite.cfg.Google.BaseUrl, location).Return(&restaurant, nil)
+
+	requestBody, err := json.Marshal(request)
+	if err != nil {
+		suite.Nil(err, "json is empty")
+	}
+
+	response, err := http.Post(
+		fmt.Sprintf("%s/api/v1/roadtrip/eat", suite.testServer.URL),
+		gin.MIMEJSON,
+		bytes.NewBuffer(requestBody),
+	)
+
+	suite.NoError(err, "no error when calling this endpoint")
+	defer response.Body.Close()
+
+	responseBody := model.AppResponse{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusOK, response.StatusCode)
+	suite.Equal("Activities retrieved successfuly", responseBody.Message)
+	suite.NotEmpty(responseBody.Data, "activities should be retrieved")
+	suite.googleService.AssertExpectations(suite.T())
+}
+
+func (suite *roadtripControllerSuite) TestEatWithZeroResult() {
+	request := model.CityFormData{
+		City: "Paris",
+	}
+	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
+	noResult := model.AppError{
+		StatusCode: http.StatusNotFound,
+		Err:        errors.New("ZERO_RESULTS"),
+	}
+
+	suite.googleService.On("GeoCoding", suite.cfg.Google.BaseUrl, request.City).Return(&location, nil)
+	suite.googleService.On("Eat", suite.cfg.Google.BaseUrl, location).Return(nil, &noResult)
+
+	requestBody, err := json.Marshal(request)
+	if err != nil {
+		suite.Nil(err, "json is empty")
+	}
+	response, err := http.Post(
+		fmt.Sprintf("%s/api/v1/roadtrip/eat", suite.testServer.URL),
+		gin.MIMEJSON,
+		bytes.NewBuffer(requestBody),
+	)
+
+	suite.NoError(err, "no error when calling this endpoint")
+	defer response.Body.Close()
+
+	responseBody := model.AppResponse{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusNotFound, response.StatusCode)
+	suite.Equal("ZERO_RESULTS", responseBody.Message)
+	suite.Empty(responseBody.Data, "activities should not be retrieved")
+	suite.googleService.AssertExpectations(suite.T())
+
+}
+
+func (suite *roadtripControllerSuite) TestDrinkWithZeroResult() {
+	request := model.CityFormData{
+		City: "Paris",
+	}
+	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
+	noResult := model.AppError{
+		StatusCode: http.StatusNotFound,
+		Err:        errors.New("ZERO_RESULTS"),
+	}
+
+	suite.googleService.On("GeoCoding", suite.cfg.Google.BaseUrl, request.City).Return(&location, nil)
+	suite.googleService.On("Drink", suite.cfg.Google.BaseUrl, location).Return(nil, &noResult)
+
+	requestBody, err := json.Marshal(request)
+	if err != nil {
+		suite.Nil(err, "json is empty")
+	}
+	response, err := http.Post(
+		fmt.Sprintf("%s/api/v1/roadtrip/drink", suite.testServer.URL),
+		gin.MIMEJSON,
+		bytes.NewBuffer(requestBody),
+	)
+
+	suite.NoError(err, "no error when calling this endpoint")
+	defer response.Body.Close()
+
+	responseBody := model.AppResponse{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusNotFound, response.StatusCode)
+	suite.Equal("ZERO_RESULTS", responseBody.Message)
+	suite.Empty(responseBody.Data, "activities should not be retrieved")
+	suite.googleService.AssertExpectations(suite.T())
+
+}
+
+func (suite *roadtripControllerSuite) TestDrinkWithGoodAnswer() {
+	request := model.CityFormData{
+		City: "Paris",
+	}
+	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
+	bars := []model.ActivityResult{
+		{
+			BusinessStatus: "OPEN",
+			Geometry: model.GeometryActivity{
+				Location: location,
+				Viewport: model.Bounds{
+					Northeast: model.Location{Lat: 48.9021475, Lng: 2.4698509},
+					Southwest: model.Location{Lat: 48.8155622, Lng: 2.2242191},
+				},
+			},
+			Icon:                "ucfytc",
+			IconBackgroundColor: "cbdosucb",
+			IconMaskBaseURI:     "ubcs",
+			Name:                "eonvfe",
+			OpeningHours: model.OpeningHours{
+				OpenNow: false,
+			},
+			Photos: []model.Photos{{
+				Height:           800,
+				HTMLAttributions: []string{"iubvd", "givuefbv"},
+				PhotoReference:   "dfvdvfd",
+				Width:            800,
+			}},
+			PlaceID: "CHIJoiubcfmigf1",
+			PlusCode: model.PlusCode{
+				CompoundCode: "",
+				GlobalCode:   "",
+			},
+			PriceLevel:       2,
+			Rating:           4.7695,
+			Reference:        "",
+			Scope:            "",
+			Types:            []string{"amusement_park"},
+			UserRatingsTotal: 5,
+			Vicinity:         "",
+		},
+		{
+			BusinessStatus: "OPEN",
+			Geometry: model.GeometryActivity{
+				Location: location,
+				Viewport: model.Bounds{
+					Northeast: model.Location{Lat: 48.9021475, Lng: 2.4698509},
+					Southwest: model.Location{Lat: 48.8155622, Lng: 2.2242191},
+				},
+			},
+			Icon:                "ucfytc",
+			IconBackgroundColor: "cbdosucb",
+			IconMaskBaseURI:     "ubcs",
+			Name:                "eonvfe",
+			OpeningHours: model.OpeningHours{
+				OpenNow: false,
+			},
+			Photos: []model.Photos{{
+				Height:           800,
+				HTMLAttributions: []string{"iubvd", "givuefbv"},
+				PhotoReference:   "dfvdvfd",
+				Width:            800,
+			}},
+			PlaceID: "CHIJoiubcfmigf1",
+			PlusCode: model.PlusCode{
+				CompoundCode: "",
+				GlobalCode:   "",
+			},
+			PriceLevel:       2,
+			Rating:           4.7695,
+			Reference:        "",
+			Scope:            "",
+			Types:            []string{"drink"},
+			UserRatingsTotal: 5,
+			Vicinity:         "",
+		},
+	}
+
+	suite.googleService.On("GeoCoding", suite.cfg.Google.BaseUrl, request.City).Return(&location, nil)
+	suite.googleService.On("Drink", suite.cfg.Google.BaseUrl, location).Return(&bars, nil)
+
+	requestBody, err := json.Marshal(request)
+	if err != nil {
+		suite.Nil(err, "json is empty")
+	}
+
+	response, err := http.Post(
+		fmt.Sprintf("%s/api/v1/roadtrip/drink", suite.testServer.URL),
+		gin.MIMEJSON,
+		bytes.NewBuffer(requestBody),
+	)
+
+	suite.NoError(err, "no error when calling this endpoint")
+	defer response.Body.Close()
+
+	responseBody := model.AppResponse{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusOK, response.StatusCode)
+	suite.Equal("Activities retrieved successfuly", responseBody.Message)
+	suite.NotEmpty(responseBody.Data, "activities should be retrieved")
+	suite.googleService.AssertExpectations(suite.T())
 }
 
 func (suite *roadtripControllerSuite) TestTravelAir_Positive() {
