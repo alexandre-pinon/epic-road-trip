@@ -11,6 +11,7 @@ export { Home } from "./Home/Home"
 // Trip components
 export { Trip } from "./Trip/Trip"
 export { City } from "./Trip/City"
+export { ResumeTrip } from "./Trip/resumeTrip"
 
 // Mock-Service-Worker components
 export { MockTest } from "./MockTest/MockTest"
