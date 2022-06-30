@@ -9,6 +9,7 @@ export { AppHeader } from "./AppHeader/Header"
 export { Home } from "./Home/Home"
 
 // Trip components
+export {StartEndTrip} from "./Trip/startEndTrip"
 export { Trip } from "./Trip/Trip"
 export { City } from "./Trip/City"
 export { ResumeTrip } from "./Trip/resumeTrip"
