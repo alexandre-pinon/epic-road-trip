@@ -23,7 +23,7 @@ func ConnectDB(cfg *Config) *mongo.Database {
 		log.Fatal(err)
 	}
 
-	if cfg.Env != Test {
+	if cfg.App.Env != Test {
 		log.Printf("Connected to MongoDB using %s database", cfg.Database.Name)
 	}
 
@@ -40,7 +40,7 @@ func DisconnectDB(cfg *Config, client *mongo.Client) {
 		log.Fatal(err)
 	}
 
-	if cfg.Env != Test {
+	if cfg.App.Env != Test {
 		log.Print("Connection to MongoDB closed.")
 	}
 }

@@ -29,7 +29,6 @@ func (suite *userControllerSuite) SetupTest() {
 	svc := new(mocks.UserService)
 	ctrl := NewUserController(svc)
 
-	gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
 	apiRoutes := router.Group("/api")
 	{
@@ -309,6 +308,7 @@ func (suite *userControllerSuite) TestUpdateUser_Positive() {
 
 	response, err := http.DefaultClient.Do(request)
 	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
 
 	responseBody := model.AppResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
@@ -340,6 +340,7 @@ func (suite *userControllerSuite) TestUpdateUser_InvalidID_Negative() {
 
 	response, err := http.DefaultClient.Do(request)
 	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
 
 	responseBody := model.AppResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
@@ -371,6 +372,7 @@ func (suite *userControllerSuite) TestUpdateUser_InvalidJSON_Negative() {
 
 	response, err := http.DefaultClient.Do(request)
 	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
 
 	responseBody := model.AppResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
@@ -403,6 +405,7 @@ func (suite *userControllerSuite) TestDeleteUser_Positive() {
 
 	response, err := http.DefaultClient.Do(request)
 	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
 
 	responseBody := model.AppResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
@@ -424,6 +427,7 @@ func (suite *userControllerSuite) TestDeleteUser_InvalidID_Negative() {
 
 	response, err := http.DefaultClient.Do(request)
 	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
 
 	responseBody := model.AppResponse{}
 	json.NewDecoder(response.Body).Decode(&responseBody)
@@ -434,5 +438,6 @@ func (suite *userControllerSuite) TestDeleteUser_InvalidID_Negative() {
 }
 
 func TestUserController(t *testing.T) {
+	gin.SetMode(gin.TestMode)
 	suite.Run(t, new(userControllerSuite))
 }

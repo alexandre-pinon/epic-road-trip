@@ -33,6 +33,11 @@ func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
 			userRoutes.PUT("/:id", middleware.CheckID(), utils.ServeHTTP(controllers.UserController.UpdateUser))
 			userRoutes.DELETE("/:id", middleware.CheckID(), utils.ServeHTTP(controllers.UserController.DeleteUser))
 		}
+		roadtripRoutes := apiRoutes.Group("/roadtrip")
+		{
+			roadtripRoutes.POST("/enjoy", utils.ServeHTTP(controllers.RoadtripController.Enjoy))
+			roadtripRoutes.POST("/travel/:mode", middleware.CheckTravelMode(), utils.ServeHTTP(controllers.RoadtripController.Travel))
+		}
 		apiRoutes.GET("/", utils.ServeHTTP(controllers.RootController.Healthcheck))
 	}
 }

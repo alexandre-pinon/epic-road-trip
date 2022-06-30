@@ -12,7 +12,7 @@ import (
 
 type authControllerSuite struct {
 	suite.Suite
-	cfg        config.Config
+	cfg        *config.Config
 	svc        *mocks.AuthService
 	ctrl       AuthController
 	testServer *httptest.Server
@@ -20,9 +20,8 @@ type authControllerSuite struct {
 
 func (suite *authControllerSuite) SetupTest() {
 	svc := new(mocks.AuthService)
-	ctrl := NewAuthController(&suite.cfg, svc)
+	ctrl := NewAuthController(suite.cfg, svc)
 
-	gin.SetMode(gin.TestMode)
 	router := gin.New()
 	apiRoutes := router.Group("/api")
 	{
@@ -43,7 +42,8 @@ func (suite *authControllerSuite) TearDownTest() {
 }
 
 func TestAuthController(t *testing.T) {
+	gin.SetMode(gin.TestMode)
 	cfg := config.GetConfig()
-	cfg.Env = config.Test
-	suite.Run(t, &authControllerSuite{cfg: *cfg})
+	cfg.App.Env = config.Test
+	suite.Run(t, &authControllerSuite{cfg: cfg})
 }

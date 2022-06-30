@@ -6,7 +6,6 @@ env:
   APP_NAME: ${{secrets.APP_NAME}}
   DB_URI: ${{secrets.DB_URI}}
   DB_NAME: ${{secrets.DB_NAME}}
-  SECRET_KEY: ${{secrets.SECRET_KEY}}
 
 jobs:
   server:
@@ -25,10 +24,10 @@ jobs:
         run: go build -v ./...
         working-directory: ./server
         env:
-          GO_MODE: PROD
+          APP_ENV: PROD
 
       - name: Launch all tests 🧪
         run: go test -race -covermode=atomic -v ./...
         working-directory: ./server
         env:
-          GO_MODE: TEST
+          APP_ENV: TEST
