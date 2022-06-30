@@ -34,6 +34,7 @@ type FlightFormData struct {
 	DestinationLocationCode string    `json:"destinationLocationCode"`
 	DepartureDate           time.Time `json:"departureDate" binding:"required"`
 	Adults                  int       `json:"adults" binding:"required"`
+	MaxPrice                int       `json:"maxPrice"`
 }
 
 type FlightOffersResponse struct {
