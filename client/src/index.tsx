@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MantineProvider } from '@mantine/core';
-import { Register, Login, AppHeader, Home, Trip, City, ResumeTrip, MockTest } from "./components/organizationComponent";
+import { Register, Login, AppHeader, Home, Trip, StartEndTrip, City, ResumeTrip, MockTest } from "./components/organizationComponent";
 import reportWebVitals from './reportWebVitals';
 
 if (process.env.NODE_ENV === 'development') {
@@ -20,6 +20,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/trip" element={<Trip />} />
+          <Route path="/startEndTrip" element={<StartEndTrip />} />
         <Route path="/city" element={<City />} />
         <Route path="/resumeTrip" element={<ResumeTrip />} />
         <Route path="/mocking" element={<MockTest />} />
