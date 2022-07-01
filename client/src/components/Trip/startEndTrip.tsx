@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 
 import React, {useState} from "react";
-import {ActionIcon, Button, Center, Container, createStyles, Modal, Space, TextInput, Title} from "@mantine/core";
+import {ActionIcon, Button, Center, Container, createStyles, Modal, Space, TextInput, Title, Autocomplete} from "@mantine/core";
 import {BuildingSkyscraper, CalendarEvent, Search, BuildingCommunity, CalendarMinus} from "tabler-icons-react";
 import {Calendar, DatePicker} from "@mantine/dates";
 import {props} from "kea";
+import cityObjects from '../../data/iata_codes.json';
 
 
 
@@ -16,6 +17,8 @@ export function StartEndTrip() {
     const [endDateValue, setEndDate] = React.useState<Date | null>(new Date());
     const [startCity, setStartCity] = useState('Paris');
     const [endCity, setEndCity] = useState('');
+
+    const city = Object.keys(cityObjects)
 
     return (
         <>
@@ -34,28 +37,31 @@ export function StartEndTrip() {
 
             <Container size={540}>
                 {/* Ville de départ */}
-                <TextInput
+                <Autocomplete
                     icon={<BuildingCommunity size={18} />}
                     radius="xl"
                     size="md"
                     placeholder="Ville de départ"
                     rightSectionWidth={42}
                     {...props}
+                    data={city}
                     value={startCity}
-                    onChange={(event) => setStartCity(event.currentTarget.value)}
+                    onChange={(event) => setStartCity(event)}
                 />
 
                 <Space h="xl" />
 
                 {/* Ville d'arrivée */}
-                <TextInput
-                    icon={<BuildingSkyscraper size={18} />}
+
+                <Autocomplete
+                    icon={<BuildingCommunity size={18} />}
                     radius="xl"
                     size="md"
                     placeholder="Ville d'arrivée"
                     rightSectionWidth={42}
                     {...props}
-                    onChange={(event) => setEndCity(event.currentTarget.value)}
+                    data={city}
+                    onChange={(event) => setEndCity(event)}
                 />
 
             </Container>
