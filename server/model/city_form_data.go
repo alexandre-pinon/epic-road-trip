@@ -1,7 +1,7 @@
 package model
 
 type CityFormData struct {
-	City string `json:"city"`
+	City string `json:"city" binding:"required"`
 	Constraints Constraints `json:"constraints"`
 }
 

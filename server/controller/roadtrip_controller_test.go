@@ -38,12 +38,11 @@ func (suite *roadtripControllerSuite) SetupTest() {
 	{
 		roadtripRoutes := apiRoutes.Group("/roadtrip")
 		{
-			roadtripRoutes.POST("/travel/:mode", middleware.CheckTravelMode(), utils.ServeHTTP(crtl.Travel))
 			roadtripRoutes.POST("/enjoy", utils.ServeHTTP(crtl.Enjoy))
 			roadtripRoutes.POST("/sleep", utils.ServeHTTP(crtl.Sleep))
 			roadtripRoutes.POST("/eat", utils.ServeHTTP(crtl.Eat))
 			roadtripRoutes.POST("/drink", utils.ServeHTTP(crtl.Drink))
-			roadtripRoutes.POST("/travel", utils.ServeHTTP(crtl.Travel))
+			roadtripRoutes.POST("/travel/:mode", middleware.CheckTravelMode(), utils.ServeHTTP(crtl.Travel))
 		}
 	}
 	server := httptest.NewServer(router)
@@ -311,7 +310,7 @@ func (suite *roadtripControllerSuite) TestSleepWithGoodAnswer() {
 	json.NewDecoder(response.Body).Decode(&responseBody)
 
 	suite.Equal(http.StatusOK, response.StatusCode)
-	suite.Equal("Activities retrieved successfuly", responseBody.Message)
+	suite.Equal("Hotels retrieved successfuly", responseBody.Message)
 	suite.NotEmpty(responseBody.Data, "activities should be retrieved")
 	suite.googleService.AssertExpectations(suite.T())
 }
@@ -463,7 +462,7 @@ func (suite *roadtripControllerSuite) TestEatWithGoodAnswer() {
 	json.NewDecoder(response.Body).Decode(&responseBody)
 
 	suite.Equal(http.StatusOK, response.StatusCode)
-	suite.Equal("Activities retrieved successfuly", responseBody.Message)
+	suite.Equal("Restaurants retrieved successfuly", responseBody.Message)
 	suite.NotEmpty(responseBody.Data, "activities should be retrieved")
 	suite.googleService.AssertExpectations(suite.T())
 }
@@ -657,7 +656,7 @@ func (suite *roadtripControllerSuite) TestDrinkWithGoodAnswer() {
 	json.NewDecoder(response.Body).Decode(&responseBody)
 
 	suite.Equal(http.StatusOK, response.StatusCode)
-	suite.Equal("Activities retrieved successfuly", responseBody.Message)
+	suite.Equal("Bars retrieved successfuly", responseBody.Message)
 	suite.NotEmpty(responseBody.Data, "activities should be retrieved")
 	suite.googleService.AssertExpectations(suite.T())
 }
