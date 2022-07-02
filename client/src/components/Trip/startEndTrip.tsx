@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-
 import React, {useState} from "react";
 import {ActionIcon, Button, Center, Container, createStyles, Modal, Space, TextInput, Title, Autocomplete} from "@mantine/core";
 import {BuildingSkyscraper, CalendarEvent, Search, BuildingCommunity, CalendarMinus} from "tabler-icons-react";
@@ -10,6 +9,7 @@ import cityObjects from '../../data/iata_codes.json';
 
 
 export function StartEndTrip() {
+    const navigate = useNavigate();
 
     //const [startCalendar, setStartCalendar] = useState(false);
     //const [endCalendar, setEndCalendar] = useState(false);
@@ -19,6 +19,11 @@ export function StartEndTrip() {
     const [endCity, setEndCity] = useState('');
 
     const city = Object.keys(cityObjects)
+
+    const GotoTrip = async () => {
+        console.log("Go to the trip page!")
+        navigate('/trip');
+    };
 
     return (
         <>
@@ -94,7 +99,7 @@ export function StartEndTrip() {
                 <Space h="xl" />
 
                 <Center>
-                    <Button rightIcon={<Search size={18} />} variant="light" radius="xl">
+                    <Button onClick={GotoTrip} rightIcon={<Search size={18} />} variant="light" radius="xl">
                         Search for itineraries
                     </Button>
                 </Center>

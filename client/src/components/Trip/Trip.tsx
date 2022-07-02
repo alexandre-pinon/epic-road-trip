@@ -26,20 +26,9 @@ export function Trip() {
   return (
     <Container size={720}>
       <Group grow spacing={0}>
-        <Button variant="default" className={classes.button}>
-          <ArrowForwardUp />
-        </Button>
-        <Button variant="default" className={classes.button}>
-          <Car />
-        </Button>
+
         <Button variant="default" className={classes.button}>
           <Train />
-        </Button>
-        <Button variant="default" className={classes.button}>
-          <Walk />
-        </Button>
-        <Button variant="default" className={classes.button}>
-          <Bike />
         </Button>
         <Button variant="default" className={classes.button}>
           <PlaneInflight />
@@ -48,6 +37,7 @@ export function Trip() {
 
       <Space h="xl" />
 
+      {/*
       <AspectRatio ratio={16 / 9}>
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10500.902039411167!2d2.2913514895690534!3d48.85391001859108!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e2964e34e2d%3A0x8ddca9ee380ef7e0!2sEiffel%20Tower!5e0!3m2!1sen!2sru!4v1653233639984!5m2!1sen!2sru"
@@ -55,6 +45,7 @@ export function Trip() {
           frameBorder="0"
         />
       </AspectRatio>
+      */}
     </Container>
   )
 }
