@@ -14,13 +14,13 @@ type GoogleService struct {
 	mock.Mock
 }
 
-// Enjoy provides a mock function with given fields: url, position
-func (_m *GoogleService) Enjoy(url string, position model.Location) (*[]model.ActivityResult, error) {
-	ret := _m.Called(url, position)
+// Drink provides a mock function with given fields: url, position, constraint
+func (_m *GoogleService) Drink(url string, position model.Location, constraint model.Constraints) (*[]model.ActivityResult, error) {
+	ret := _m.Called(url, position, constraint)
 
 	var r0 *[]model.ActivityResult
-	if rf, ok := ret.Get(0).(func(string, model.Location) *[]model.ActivityResult); ok {
-		r0 = rf(url, position)
+	if rf, ok := ret.Get(0).(func(string, model.Location, model.Constraints) *[]model.ActivityResult); ok {
+		r0 = rf(url, position, constraint)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*[]model.ActivityResult)
@@ -28,8 +28,54 @@ func (_m *GoogleService) Enjoy(url string, position model.Location) (*[]model.Ac
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(string, model.Location) error); ok {
-		r1 = rf(url, position)
+	if rf, ok := ret.Get(1).(func(string, model.Location, model.Constraints) error); ok {
+		r1 = rf(url, position, constraint)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// Eat provides a mock function with given fields: url, position, constraint
+func (_m *GoogleService) Eat(url string, position model.Location, constraint model.Constraints) (*[]model.ActivityResult, error) {
+	ret := _m.Called(url, position, constraint)
+
+	var r0 *[]model.ActivityResult
+	if rf, ok := ret.Get(0).(func(string, model.Location, model.Constraints) *[]model.ActivityResult); ok {
+		r0 = rf(url, position, constraint)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*[]model.ActivityResult)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string, model.Location, model.Constraints) error); ok {
+		r1 = rf(url, position, constraint)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// Enjoy provides a mock function with given fields: url, position, constraint
+func (_m *GoogleService) Enjoy(url string, position model.Location, constraint model.Constraints) (*[]model.ActivityResult, error) {
+	ret := _m.Called(url, position, constraint)
+
+	var r0 *[]model.ActivityResult
+	if rf, ok := ret.Get(0).(func(string, model.Location, model.Constraints) *[]model.ActivityResult); ok {
+		r0 = rf(url, position, constraint)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*[]model.ActivityResult)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string, model.Location, model.Constraints) error); ok {
+		r1 = rf(url, position, constraint)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -76,6 +122,29 @@ func (_m *GoogleService) GetDirections(url string, directionsFormData *model.Dir
 	var r1 error
 	if rf, ok := ret.Get(1).(func(string, *model.DirectionsFormData) error); ok {
 		r1 = rf(url, directionsFormData)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// Sleep provides a mock function with given fields: url, position, constraint
+func (_m *GoogleService) Sleep(url string, position model.Location, constraint model.Constraints) (*[]model.ActivityResult, error) {
+	ret := _m.Called(url, position, constraint)
+
+	var r0 *[]model.ActivityResult
+	if rf, ok := ret.Get(0).(func(string, model.Location, model.Constraints) *[]model.ActivityResult); ok {
+		r0 = rf(url, position, constraint)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*[]model.ActivityResult)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string, model.Location, model.Constraints) error); ok {
+		r1 = rf(url, position, constraint)
 	} else {
 		r1 = ret.Error(1)
 	}

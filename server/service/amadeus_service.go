@@ -73,6 +73,11 @@ func (svc *amadeusService) GetFlightOffers(amadeusBaseUrl, accessToken string, f
 	query += fmt.Sprintf("&destinationLocationCode=%s", flightFormData.DestinationLocationCode)
 	query += fmt.Sprintf("&departureDate=%s", flightFormData.DepartureDate.Format("2006-01-02"))
 	query += fmt.Sprintf("&adults=%d", flightFormData.Adults)
+
+	if flightFormData.MaxPrice > 0 {
+		query += fmt.Sprintf("&maxPrice=%d", flightFormData.MaxPrice)
+	}
+
 	query += "&nonStop=true&max=20"
 	uri := fmt.Sprintf("%s/v2/shopping/flight-offers?%s", amadeusBaseUrl, url.PathEscape(query))
 

@@ -20,10 +20,13 @@ type roadtripController struct {
 }
 
 type RoadTripController interface {
-	Enjoy(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	Travel(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	TravelAir(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	TravelGround(ctx *gin.Context) (*model.AppResult, *model.AppError)
+	Enjoy(ctx *gin.Context) (*model.AppResult, *model.AppError)
+	Sleep(ctx *gin.Context) (*model.AppResult, *model.AppError)
+	Eat(c *gin.Context) (*model.AppResult, *model.AppError)
+	Drink(c *gin.Context) (*model.AppResult, *model.AppError)
 }
 
 func NewRoadTripController(cfg *config.Config, googleService service.GoogleService, amadeusService service.AmadeusService) RoadTripController {
@@ -31,6 +34,19 @@ func NewRoadTripController(cfg *config.Config, googleService service.GoogleServi
 	return &roadtripController{cfg, googleService, amadeusService, amadeusAccessToken}
 }
 
+// Enjoy godoc
+// @Summary Enjoy
+// @Description Search for tourist attraction around the given city & constraints
+// @Tags Roadtrip
+// @Accept json
+// @Produce json
+// @Param cityFormData body model.CityFormData true "city & constraints"
+// @Success 200 {object} model.EnjoySuccess "Success"
+// @Failure 400 {object} model.InvalidJsonBody "Invalid request body"
+// @Failure 401 {object} model.Unauthorized "Missing/Expired token"
+// @Failure 404 {object} model.GoogleNotFound "Zero results"
+// @Failure 500 {object} model.InternalServerError "Internal server error"
+// @Router /roadtrip/enjoy [post]
 func (ctrl *roadtripController) Enjoy(c *gin.Context) (*model.AppResult, *model.AppError) {
 	var position model.CityFormData
 
@@ -46,7 +62,7 @@ func (ctrl *roadtripController) Enjoy(c *gin.Context) (*model.AppResult, *model.
 		return nil, err.(*model.AppError)
 	}
 
-	activities, err := ctrl.googleService.Enjoy(ctrl.cfg.Google.BaseUrl, *location)
+	activities, err := ctrl.googleService.Enjoy(ctrl.cfg.Google.BaseUrl, *location, position.Constraints)
 	if err != nil {
 		return nil, err.(*model.AppError)
 	}
@@ -55,6 +71,126 @@ func (ctrl *roadtripController) Enjoy(c *gin.Context) (*model.AppResult, *model.
 		StatusCode: http.StatusOK,
 		Message:    "Activities retrieved successfuly",
 		Data:       &activities,
+	}, nil
+}
+
+// Sleep godoc
+// @Summary Sleep
+// @Description Search for hotels around the given city & constraints
+// @Tags Roadtrip
+// @Accept json
+// @Produce json
+// @Param cityFormData body model.CityFormData true "city & constraints"
+// @Success 200 {object} model.SleepSuccess "Success"
+// @Failure 400 {object} model.InvalidJsonBody "Invalid request body"
+// @Failure 401 {object} model.Unauthorized "Missing/Expired token"
+// @Failure 404 {object} model.GoogleNotFound "Zero results"
+// @Failure 500 {object} model.InternalServerError "Internal server error"
+// @Router /roadtrip/sleep [post]
+func (ctrl *roadtripController) Sleep(c *gin.Context) (*model.AppResult, *model.AppError) {
+	var position model.CityFormData
+
+	if err := c.ShouldBindJSON(&position); err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+	}
+
+	location, err := ctrl.googleService.GeoCoding(ctrl.cfg.Google.BaseUrl, position.City)
+	if err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	hotels, err := ctrl.googleService.Sleep(ctrl.cfg.Google.BaseUrl, *location, position.Constraints)
+	if err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	return &model.AppResult{
+		StatusCode: http.StatusOK,
+		Message:    "Hotels retrieved successfuly",
+		Data:       &hotels,
+	}, nil
+}
+
+// Eat godoc
+// @Summary Eat
+// @Description Search for restaurants around the given city & constraints
+// @Tags Roadtrip
+// @Accept json
+// @Produce json
+// @Param cityFormData body model.CityFormData true "city & constraints"
+// @Success 200 {object} model.EatSuccess "Success"
+// @Failure 400 {object} model.InvalidJsonBody "Invalid request body"
+// @Failure 401 {object} model.Unauthorized "Missing/Expired token"
+// @Failure 404 {object} model.GoogleNotFound "Zero results"
+// @Failure 500 {object} model.InternalServerError "Internal server error"
+// @Router /roadtrip/eat [post]
+func (ctrl *roadtripController) Eat(c *gin.Context) (*model.AppResult, *model.AppError) {
+	var position model.CityFormData
+
+	if err := c.ShouldBindJSON(&position); err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+	}
+
+	location, err := ctrl.googleService.GeoCoding(ctrl.cfg.Google.BaseUrl, position.City)
+	if err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	restaurants, err := ctrl.googleService.Eat(ctrl.cfg.Google.BaseUrl, *location, position.Constraints)
+	if err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	return &model.AppResult{
+		StatusCode: http.StatusOK,
+		Message:    "Restaurants retrieved successfuly",
+		Data:       &restaurants,
+	}, nil
+}
+
+// Drink godoc
+// @Summary Drink
+// @Description Search for bars around the given city & constraints
+// @Tags Roadtrip
+// @Accept json
+// @Produce json
+// @Param cityFormData body model.CityFormData true "city & constraints"
+// @Success 200 {object} model.DrinkSuccess "Success"
+// @Failure 400 {object} model.InvalidJsonBody "Invalid request body"
+// @Failure 401 {object} model.Unauthorized "Missing/Expired token"
+// @Failure 404 {object} model.GoogleNotFound "Zero results"
+// @Failure 500 {object} model.InternalServerError "Internal server error"
+// @Router /roadtrip/drink [post]
+func (ctrl *roadtripController) Drink(c *gin.Context) (*model.AppResult, *model.AppError) {
+	var position model.CityFormData
+
+	if err := c.ShouldBindJSON(&position); err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+	}
+
+	location, err := ctrl.googleService.GeoCoding(ctrl.cfg.Google.BaseUrl, position.City)
+	if err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	bars, err := ctrl.googleService.Drink(ctrl.cfg.Google.BaseUrl, *location, position.Constraints)
+	if err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	return &model.AppResult{
+		StatusCode: http.StatusOK,
+		Message:    "Bars retrieved successfuly",
+		Data:       &bars,
 	}, nil
 }
 
@@ -73,6 +209,19 @@ func (ctrl *roadtripController) Travel(ctx *gin.Context) (*model.AppResult, *mod
 	}
 }
 
+// Travel air godoc
+// @Summary Travel air
+// @Description Search for flight offers given a valid origin & destination
+// @Tags Roadtrip
+// @Accept json
+// @Produce json
+// @Param flightFormData body model.FlightFormData true "origin, destination, departure date, adults, max price"
+// @Success 200 {object} model.TravelSuccess "Success"
+// @Failure 400 {object} model.InvalidJsonBody "Invalid request body"
+// @Failure 401 {object} model.Unauthorized "Missing/Expired token"
+// @Failure 404 {object} model.FlightOfferNotFound "Flight offers not found"
+// @Failure 500 {object} model.InternalServerError "Internal server error"
+// @Router /roadtrip/travel/air [post]
 func (ctrl *roadtripController) TravelAir(ctx *gin.Context) (*model.AppResult, *model.AppError) {
 	var flightFormData model.FlightFormData
 
@@ -112,6 +261,19 @@ func (ctrl *roadtripController) TravelAir(ctx *gin.Context) (*model.AppResult, *
 	}, nil
 }
 
+// Travel ground godoc
+// @Summary Travel ground
+// @Description Search for train/bus directions given a valid origin & destination
+// @Tags Roadtrip
+// @Accept json
+// @Produce json
+// @Param directionsFormData body model.DirectionsFormData true "origin, destination, departure date"
+// @Success 200 {object} model.TravelSuccess "Success"
+// @Failure 400 {object} model.InvalidJsonBody "Invalid request body"
+// @Failure 401 {object} model.Unauthorized "Missing/Expired token"
+// @Failure 404 {object} model.GoogleNotFound "Zero results"
+// @Failure 500 {object} model.InternalServerError "Internal server error"
+// @Router /roadtrip/travel/ground [post]
 func (ctrl *roadtripController) TravelGround(ctx *gin.Context) (*model.AppResult, *model.AppError) {
 	var directionsFormData model.DirectionsFormData
 

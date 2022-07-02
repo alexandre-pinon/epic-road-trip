@@ -30,10 +30,11 @@ type AccessToken struct {
 type FlightFormData struct {
 	OriginLocation          string    `json:"originLocation" binding:"required"`
 	DestinationLocation     string    `json:"destinationLocation" binding:"required"`
-	OriginLocationCode      string    `json:"originLocationCode"`
-	DestinationLocationCode string    `json:"destinationLocationCode"`
+	OriginLocationCode      string    `json:"-"`
+	DestinationLocationCode string    `json:"-"`
 	DepartureDate           time.Time `json:"departureDate" binding:"required"`
 	Adults                  int       `json:"adults" binding:"required"`
+	MaxPrice                int       `json:"maxPrice"`
 }
 
 type FlightOffersResponse struct {

@@ -36,6 +36,9 @@ func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
 		roadtripRoutes := apiRoutes.Group("/roadtrip")
 		{
 			roadtripRoutes.POST("/enjoy", utils.ServeHTTP(controllers.RoadtripController.Enjoy))
+			roadtripRoutes.POST("/sleep", utils.ServeHTTP(controllers.RoadtripController.Sleep))
+			roadtripRoutes.POST("/eat", utils.ServeHTTP(controllers.RoadtripController.Eat))
+			roadtripRoutes.POST("/drink", utils.ServeHTTP(controllers.RoadtripController.Drink))
 			roadtripRoutes.POST("/travel/:mode", middleware.CheckTravelMode(), utils.ServeHTTP(controllers.RoadtripController.Travel))
 		}
 		apiRoutes.GET("/", utils.ServeHTTP(controllers.RootController.Healthcheck))

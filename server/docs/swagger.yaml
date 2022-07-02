@@ -1,4 +1,45 @@
 definitions:
+  model.ActivityResult:
+    properties:
+      business_status:
+        type: string
+      geometry:
+        $ref: '#/definitions/model.GeometryActivity'
+      icon:
+        type: string
+      icon_background_color:
+        type: string
+      icon_mask_base_uri:
+        type: string
+      name:
+        type: string
+      opening_hours:
+        $ref: '#/definitions/model.OpeningHours'
+      photos:
+        items:
+          $ref: '#/definitions/model.Photos'
+        type: array
+      place_id:
+        type: string
+      plus_code:
+        $ref: '#/definitions/model.PlusCode'
+      price_level:
+        type: integer
+      rating:
+        type: number
+      reference:
+        type: string
+      scope:
+        type: string
+      types:
+        items:
+          type: string
+        type: array
+      user_ratings_total:
+        type: integer
+      vicinity:
+        type: string
+    type: object
   model.AppResponse:
     properties:
       data: {}
@@ -10,6 +51,33 @@ definitions:
         items:
           $ref: '#/definitions/model.ValError'
         type: array
+    type: object
+  model.Bounds:
+    properties:
+      northeast:
+        $ref: '#/definitions/model.Location'
+      southwest:
+        $ref: '#/definitions/model.Location'
+    type: object
+  model.CityFormData:
+    properties:
+      city:
+        type: string
+      constraints:
+        $ref: '#/definitions/model.Constraints'
+    required:
+    - city
+    type: object
+  model.Constraints:
+    properties:
+      maxprice:
+        type: integer
+      minprice:
+        type: integer
+      opennow:
+        type: boolean
+      radius:
+        type: integer
     type: object
   model.DeleteUserSuccess:
     properties:
@@ -27,6 +95,106 @@ definitions:
         items:
           type: object
         type: array
+    type: object
+  model.DirectionsFormData:
+    properties:
+      departureTime:
+        type: string
+      destination:
+        type: string
+      origin:
+        type: string
+    type: object
+  model.DrinkSuccess:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.ActivityResult'
+        type: array
+      message:
+        example: Bars retrieved successfuly
+        type: string
+      success:
+        example: true
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.EatSuccess:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.ActivityResult'
+        type: array
+      message:
+        example: Restaurants retrieved successfuly
+        type: string
+      success:
+        example: true
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.EnjoySuccess:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.ActivityResult'
+        type: array
+      message:
+        example: Activities retrieved successfuly
+        type: string
+      success:
+        example: true
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.FlightFormData:
+    properties:
+      adults:
+        type: integer
+      departureDate:
+        type: string
+      destinationLocation:
+        type: string
+      maxPrice:
+        type: integer
+      originLocation:
+        type: string
+    required:
+    - adults
+    - departureDate
+    - destinationLocation
+    - originLocation
+    type: object
+  model.FlightOfferNotFound:
+    properties:
+      data:
+        type: object
+      message:
+        example: flight offers/airport not found for origin/destination cities
+        type: string
+      success:
+        example: false
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.GeometryActivity:
+    properties:
+      location:
+        $ref: '#/definitions/model.Location'
+      viewport:
+        $ref: '#/definitions/model.Bounds'
     type: object
   model.GetAllUserSuccess:
     properties:
@@ -54,6 +222,21 @@ definitions:
         type: string
       success:
         example: true
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.GoogleNotFound:
+    properties:
+      data:
+        type: object
+      message:
+        example: ZERO RESULTS
+        type: string
+      success:
+        example: false
         type: boolean
       valErrors:
         items:
@@ -103,6 +286,49 @@ definitions:
         items:
           $ref: '#/definitions/model.ValError'
         type: array
+    type: object
+  model.Itinerary:
+    properties:
+      arrival:
+        $ref: '#/definitions/model.Station'
+      departure:
+        $ref: '#/definitions/model.Station'
+      duration:
+        type: string
+      enddate:
+        type: string
+      price:
+        type: number
+      startdate:
+        type: string
+      steps:
+        items:
+          $ref: '#/definitions/model.ItineraryStep'
+        type: array
+      type:
+        type: string
+    type: object
+  model.ItineraryStep:
+    properties:
+      arrival:
+        type: string
+      departure:
+        type: string
+      duration:
+        type: string
+      enddate:
+        type: string
+      startdate:
+        type: string
+      type:
+        type: string
+    type: object
+  model.Location:
+    properties:
+      lat:
+        type: number
+      lng:
+        type: number
     type: object
   model.LoginFailureCredentials:
     properties:
@@ -160,6 +386,31 @@ definitions:
         items:
           type: object
         type: array
+    type: object
+  model.OpeningHours:
+    properties:
+      open_now:
+        type: boolean
+    type: object
+  model.Photos:
+    properties:
+      height:
+        type: integer
+      html_attributions:
+        items:
+          type: string
+        type: array
+      photo_reference:
+        type: string
+      width:
+        type: integer
+    type: object
+  model.PlusCode:
+    properties:
+      compound_code:
+        type: string
+      global_code:
+        type: string
     type: object
   model.RefreshSuccess:
     properties:
@@ -225,14 +476,63 @@ definitions:
     properties:
       enddate:
         type: string
-      locations:
+      id:
+        type: string
+      itineraries:
         items:
-          type: integer
+          type: string
         type: array
       name:
         type: string
       startdate:
         type: string
+      tripSteps:
+        items:
+          type: string
+        type: array
+    type: object
+  model.SleepSuccess:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.ActivityResult'
+        type: array
+      message:
+        example: Hotels retrieved successfuly
+        type: string
+      success:
+        example: true
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.Station:
+    properties:
+      city:
+        type: string
+      country:
+        type: string
+      name:
+        type: string
+    type: object
+  model.TravelSuccess:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.Itinerary'
+        type: array
+      message:
+        example: Itineraries retrieved successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
     type: object
   model.Unauthorized:
     properties:
@@ -306,7 +606,7 @@ definitions:
         type: string
       phone:
         type: string
-      roadTrip:
+      trips:
         items:
           $ref: '#/definitions/model.RoadTrip'
         type: array
@@ -461,6 +761,234 @@ paths:
       summary: Register
       tags:
       - Auth
+  /roadtrip/drink:
+    post:
+      consumes:
+      - application/json
+      description: Search for bars around the given city & constraints
+      parameters:
+      - description: city & constraints
+        in: body
+        name: cityFormData
+        required: true
+        schema:
+          $ref: '#/definitions/model.CityFormData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/model.DrinkSuccess'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/model.InvalidJsonBody'
+        "401":
+          description: Missing/Expired token
+          schema:
+            $ref: '#/definitions/model.Unauthorized'
+        "404":
+          description: Zero results
+          schema:
+            $ref: '#/definitions/model.GoogleNotFound'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.InternalServerError'
+      summary: Drink
+      tags:
+      - Roadtrip
+  /roadtrip/eat:
+    post:
+      consumes:
+      - application/json
+      description: Search for restaurants around the given city & constraints
+      parameters:
+      - description: city & constraints
+        in: body
+        name: cityFormData
+        required: true
+        schema:
+          $ref: '#/definitions/model.CityFormData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/model.EatSuccess'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/model.InvalidJsonBody'
+        "401":
+          description: Missing/Expired token
+          schema:
+            $ref: '#/definitions/model.Unauthorized'
+        "404":
+          description: Zero results
+          schema:
+            $ref: '#/definitions/model.GoogleNotFound'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.InternalServerError'
+      summary: Eat
+      tags:
+      - Roadtrip
+  /roadtrip/enjoy:
+    post:
+      consumes:
+      - application/json
+      description: Search for tourist attraction around the given city & constraints
+      parameters:
+      - description: city & constraints
+        in: body
+        name: cityFormData
+        required: true
+        schema:
+          $ref: '#/definitions/model.CityFormData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/model.EnjoySuccess'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/model.InvalidJsonBody'
+        "401":
+          description: Missing/Expired token
+          schema:
+            $ref: '#/definitions/model.Unauthorized'
+        "404":
+          description: Zero results
+          schema:
+            $ref: '#/definitions/model.GoogleNotFound'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.InternalServerError'
+      summary: Enjoy
+      tags:
+      - Roadtrip
+  /roadtrip/sleep:
+    post:
+      consumes:
+      - application/json
+      description: Search for hotels around the given city & constraints
+      parameters:
+      - description: city & constraints
+        in: body
+        name: cityFormData
+        required: true
+        schema:
+          $ref: '#/definitions/model.CityFormData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/model.SleepSuccess'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/model.InvalidJsonBody'
+        "401":
+          description: Missing/Expired token
+          schema:
+            $ref: '#/definitions/model.Unauthorized'
+        "404":
+          description: Zero results
+          schema:
+            $ref: '#/definitions/model.GoogleNotFound'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.InternalServerError'
+      summary: Sleep
+      tags:
+      - Roadtrip
+  /roadtrip/travel/air:
+    post:
+      consumes:
+      - application/json
+      description: Search for flight offers given a valid origin & destination
+      parameters:
+      - description: origin, destination, departure date, adults, max price
+        in: body
+        name: flightFormData
+        required: true
+        schema:
+          $ref: '#/definitions/model.FlightFormData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/model.TravelSuccess'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/model.InvalidJsonBody'
+        "401":
+          description: Missing/Expired token
+          schema:
+            $ref: '#/definitions/model.Unauthorized'
+        "404":
+          description: Flight offers not found
+          schema:
+            $ref: '#/definitions/model.FlightOfferNotFound'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.InternalServerError'
+      summary: Travel air
+      tags:
+      - Roadtrip
+  /roadtrip/travel/ground:
+    post:
+      consumes:
+      - application/json
+      description: Search for train/bus directions given a valid origin & destination
+      parameters:
+      - description: origin, destination, departure date
+        in: body
+        name: directionsFormData
+        required: true
+        schema:
+          $ref: '#/definitions/model.DirectionsFormData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/model.TravelSuccess'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/model.InvalidJsonBody'
+        "401":
+          description: Missing/Expired token
+          schema:
+            $ref: '#/definitions/model.Unauthorized'
+        "404":
+          description: Zero results
+          schema:
+            $ref: '#/definitions/model.GoogleNotFound'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.InternalServerError'
+      summary: Travel ground
+      tags:
+      - Roadtrip
   /user:
     get:
       consumes:

@@ -186,6 +186,354 @@
                 }
             }
         },
+        "/roadtrip/drink": {
+            "post": {
+                "description": "Search for bars around the given city \u0026 constraints",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Roadtrip"
+                ],
+                "summary": "Drink",
+                "parameters": [
+                    {
+                        "description": "city \u0026 constraints",
+                        "name": "cityFormData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CityFormData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/model.DrinkSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body",
+                        "schema": {
+                            "$ref": "#/definitions/model.InvalidJsonBody"
+                        }
+                    },
+                    "401": {
+                        "description": "Missing/Expired token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Unauthorized"
+                        }
+                    },
+                    "404": {
+                        "description": "Zero results",
+                        "schema": {
+                            "$ref": "#/definitions/model.GoogleNotFound"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/model.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/roadtrip/eat": {
+            "post": {
+                "description": "Search for restaurants around the given city \u0026 constraints",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Roadtrip"
+                ],
+                "summary": "Eat",
+                "parameters": [
+                    {
+                        "description": "city \u0026 constraints",
+                        "name": "cityFormData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CityFormData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/model.EatSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body",
+                        "schema": {
+                            "$ref": "#/definitions/model.InvalidJsonBody"
+                        }
+                    },
+                    "401": {
+                        "description": "Missing/Expired token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Unauthorized"
+                        }
+                    },
+                    "404": {
+                        "description": "Zero results",
+                        "schema": {
+                            "$ref": "#/definitions/model.GoogleNotFound"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/model.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/roadtrip/enjoy": {
+            "post": {
+                "description": "Search for tourist attraction around the given city \u0026 constraints",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Roadtrip"
+                ],
+                "summary": "Enjoy",
+                "parameters": [
+                    {
+                        "description": "city \u0026 constraints",
+                        "name": "cityFormData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CityFormData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/model.EnjoySuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body",
+                        "schema": {
+                            "$ref": "#/definitions/model.InvalidJsonBody"
+                        }
+                    },
+                    "401": {
+                        "description": "Missing/Expired token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Unauthorized"
+                        }
+                    },
+                    "404": {
+                        "description": "Zero results",
+                        "schema": {
+                            "$ref": "#/definitions/model.GoogleNotFound"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/model.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/roadtrip/sleep": {
+            "post": {
+                "description": "Search for hotels around the given city \u0026 constraints",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Roadtrip"
+                ],
+                "summary": "Sleep",
+                "parameters": [
+                    {
+                        "description": "city \u0026 constraints",
+                        "name": "cityFormData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CityFormData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/model.SleepSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body",
+                        "schema": {
+                            "$ref": "#/definitions/model.InvalidJsonBody"
+                        }
+                    },
+                    "401": {
+                        "description": "Missing/Expired token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Unauthorized"
+                        }
+                    },
+                    "404": {
+                        "description": "Zero results",
+                        "schema": {
+                            "$ref": "#/definitions/model.GoogleNotFound"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/model.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/roadtrip/travel/air": {
+            "post": {
+                "description": "Search for flight offers given a valid origin \u0026 destination",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Roadtrip"
+                ],
+                "summary": "Travel air",
+                "parameters": [
+                    {
+                        "description": "origin, destination, departure date, adults, max price",
+                        "name": "flightFormData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.FlightFormData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/model.TravelSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body",
+                        "schema": {
+                            "$ref": "#/definitions/model.InvalidJsonBody"
+                        }
+                    },
+                    "401": {
+                        "description": "Missing/Expired token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Unauthorized"
+                        }
+                    },
+                    "404": {
+                        "description": "Flight offers not found",
+                        "schema": {
+                            "$ref": "#/definitions/model.FlightOfferNotFound"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/model.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/roadtrip/travel/ground": {
+            "post": {
+                "description": "Search for train/bus directions given a valid origin \u0026 destination",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Roadtrip"
+                ],
+                "summary": "Travel ground",
+                "parameters": [
+                    {
+                        "description": "origin, destination, departure date",
+                        "name": "directionsFormData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.DirectionsFormData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/model.TravelSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body",
+                        "schema": {
+                            "$ref": "#/definitions/model.InvalidJsonBody"
+                        }
+                    },
+                    "401": {
+                        "description": "Missing/Expired token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Unauthorized"
+                        }
+                    },
+                    "404": {
+                        "description": "Zero results",
+                        "schema": {
+                            "$ref": "#/definitions/model.GoogleNotFound"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/model.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
         "/user": {
             "get": {
                 "description": "Get all users",
@@ -434,6 +782,68 @@
         }
     },
     "definitions": {
+        "model.ActivityResult": {
+            "type": "object",
+            "properties": {
+                "business_status": {
+                    "type": "string"
+                },
+                "geometry": {
+                    "$ref": "#/definitions/model.GeometryActivity"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "icon_background_color": {
+                    "type": "string"
+                },
+                "icon_mask_base_uri": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "opening_hours": {
+                    "$ref": "#/definitions/model.OpeningHours"
+                },
+                "photos": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Photos"
+                    }
+                },
+                "place_id": {
+                    "type": "string"
+                },
+                "plus_code": {
+                    "$ref": "#/definitions/model.PlusCode"
+                },
+                "price_level": {
+                    "type": "integer"
+                },
+                "rating": {
+                    "type": "number"
+                },
+                "reference": {
+                    "type": "string"
+                },
+                "scope": {
+                    "type": "string"
+                },
+                "types": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "user_ratings_total": {
+                    "type": "integer"
+                },
+                "vicinity": {
+                    "type": "string"
+                }
+            }
+        },
         "model.AppResponse": {
             "type": "object",
             "properties": {
@@ -449,6 +859,48 @@
                     "items": {
                         "$ref": "#/definitions/model.ValError"
                     }
+                }
+            }
+        },
+        "model.Bounds": {
+            "type": "object",
+            "properties": {
+                "northeast": {
+                    "$ref": "#/definitions/model.Location"
+                },
+                "southwest": {
+                    "$ref": "#/definitions/model.Location"
+                }
+            }
+        },
+        "model.CityFormData": {
+            "type": "object",
+            "required": [
+                "city"
+            ],
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "constraints": {
+                    "$ref": "#/definitions/model.Constraints"
+                }
+            }
+        },
+        "model.Constraints": {
+            "type": "object",
+            "properties": {
+                "maxprice": {
+                    "type": "integer"
+                },
+                "minprice": {
+                    "type": "integer"
+                },
+                "opennow": {
+                    "type": "boolean"
+                },
+                "radius": {
+                    "type": "integer"
                 }
             }
         },
@@ -474,6 +926,154 @@
                     "items": {
                         "type": "object"
                     }
+                }
+            }
+        },
+        "model.DirectionsFormData": {
+            "type": "object",
+            "properties": {
+                "departureTime": {
+                    "type": "string"
+                },
+                "destination": {
+                    "type": "string"
+                },
+                "origin": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.DrinkSuccess": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.ActivityResult"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Bars retrieved successfuly"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.EatSuccess": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.ActivityResult"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Restaurants retrieved successfuly"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.EnjoySuccess": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.ActivityResult"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Activities retrieved successfuly"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.FlightFormData": {
+            "type": "object",
+            "required": [
+                "adults",
+                "departureDate",
+                "destinationLocation",
+                "originLocation"
+            ],
+            "properties": {
+                "adults": {
+                    "type": "integer"
+                },
+                "departureDate": {
+                    "type": "string"
+                },
+                "destinationLocation": {
+                    "type": "string"
+                },
+                "maxPrice": {
+                    "type": "integer"
+                },
+                "originLocation": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.FlightOfferNotFound": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "flight offers/airport not found for origin/destination cities"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.GeometryActivity": {
+            "type": "object",
+            "properties": {
+                "location": {
+                    "$ref": "#/definitions/model.Location"
+                },
+                "viewport": {
+                    "$ref": "#/definitions/model.Bounds"
                 }
             }
         },
@@ -515,6 +1115,28 @@
                 "success": {
                     "type": "boolean",
                     "example": true
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.GoogleNotFound": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "ZERO RESULTS"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
                 },
                 "valErrors": {
                     "type": "array",
@@ -586,6 +1208,72 @@
                     "items": {
                         "$ref": "#/definitions/model.ValError"
                     }
+                }
+            }
+        },
+        "model.Itinerary": {
+            "type": "object",
+            "properties": {
+                "arrival": {
+                    "$ref": "#/definitions/model.Station"
+                },
+                "departure": {
+                    "$ref": "#/definitions/model.Station"
+                },
+                "duration": {
+                    "type": "string"
+                },
+                "enddate": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "startdate": {
+                    "type": "string"
+                },
+                "steps": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.ItineraryStep"
+                    }
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ItineraryStep": {
+            "type": "object",
+            "properties": {
+                "arrival": {
+                    "type": "string"
+                },
+                "departure": {
+                    "type": "string"
+                },
+                "duration": {
+                    "type": "string"
+                },
+                "enddate": {
+                    "type": "string"
+                },
+                "startdate": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Location": {
+            "type": "object",
+            "properties": {
+                "lat": {
+                    "type": "number"
+                },
+                "lng": {
+                    "type": "number"
                 }
             }
         },
@@ -669,6 +1357,45 @@
                     "items": {
                         "type": "object"
                     }
+                }
+            }
+        },
+        "model.OpeningHours": {
+            "type": "object",
+            "properties": {
+                "open_now": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.Photos": {
+            "type": "object",
+            "properties": {
+                "height": {
+                    "type": "integer"
+                },
+                "html_attributions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "photo_reference": {
+                    "type": "string"
+                },
+                "width": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.PlusCode": {
+            "type": "object",
+            "properties": {
+                "compound_code": {
+                    "type": "string"
+                },
+                "global_code": {
+                    "type": "string"
                 }
             }
         },
@@ -760,10 +1487,13 @@
                 "enddate": {
                     "type": "string"
                 },
-                "locations": {
+                "id": {
+                    "type": "string"
+                },
+                "itineraries": {
                     "type": "array",
                     "items": {
-                        "type": "integer"
+                        "type": "string"
                     }
                 },
                 "name": {
@@ -771,6 +1501,76 @@
                 },
                 "startdate": {
                     "type": "string"
+                },
+                "tripSteps": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "model.SleepSuccess": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.ActivityResult"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Hotels retrieved successfuly"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.Station": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.TravelSuccess": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Itinerary"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Itineraries retrieved successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
                 }
             }
         },
@@ -880,7 +1680,7 @@
                 "phone": {
                     "type": "string"
                 },
-                "roadTrip": {
+                "trips": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/model.RoadTrip"

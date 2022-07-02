@@ -29,6 +29,14 @@ func (suite *googleServiceSuite) SetupTest() {
 }
 
 func (suite *googleServiceSuite) TestEnjoyWithZeroResult() {
+
+	params := model.Constraints{
+		Radius:   0,
+		MaxPrice: 500,
+		MinPrice: 0,
+		OpenNow:  false,
+	}
+
 	noResult := model.Activity{
 		HTMLAttributions: []interface{}{},
 		Results:          []model.ActivityResult{},
@@ -41,7 +49,7 @@ func (suite *googleServiceSuite) TestEnjoyWithZeroResult() {
 	})
 	server := httptest.NewServer(router)
 
-	result, err := suite.svc.Enjoy(server.URL, model.Location{Lat: 48.856614, Lng: 2.3522219})
+	result, err := suite.svc.Enjoy(server.URL, model.Location{Lat: 48.856614, Lng: 2.3522219} , params)
 	suite.Error(err, "error: no results")
 	suite.Equal(http.StatusNotFound, err.(*model.AppError).StatusCode)
 	suite.Equal(noResult.Status, err.Error())
@@ -49,6 +57,13 @@ func (suite *googleServiceSuite) TestEnjoyWithZeroResult() {
 }
 
 func (suite *googleServiceSuite) TestEnjoyWithGoodAnswer() {
+	params := model.Constraints{
+		Radius:   0,
+		MaxPrice: 500,
+		MinPrice: 0,
+		OpenNow:  false,
+	}
+
 	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
 	activities := []model.ActivityResult{
 		{
@@ -132,12 +147,379 @@ func (suite *googleServiceSuite) TestEnjoyWithGoodAnswer() {
 		ctx.JSON(http.StatusOK, &withResults)
 	})
 	server := httptest.NewServer(router)
-	result, err := suite.svc.Enjoy(server.URL, location)
+	result, err := suite.svc.Enjoy(server.URL, location , params)
 	suite.NoError(err, "no crashed")
 	suite.Equal(activities, *result, "result and error are the same")
 }
 
-func (suite *googleServiceSuite) TestGeocoding_NoResults_Negative() {
+func (suite *googleServiceSuite) TestSleepWithGoodAnswer()  {
+	params := model.Constraints{
+		Radius:   0,
+		MaxPrice: 500,
+		MinPrice: 0,
+		OpenNow:  false,
+	}
+	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
+	hotels := []model.ActivityResult{
+		{
+			BusinessStatus: "OPEN",
+			Geometry: model.GeometryActivity{
+				Location: location,
+				Viewport: model.Bounds{
+					Northeast: model.Location{Lat: 48.9021475, Lng: 2.4698509},
+					Southwest: model.Location{Lat: 48.8155622, Lng: 2.2242191},
+				},
+			},
+			Icon:                "ucfytc",
+			IconBackgroundColor: "cbdosucb",
+			IconMaskBaseURI:     "ubcs",
+			Name:                "eonvfe",
+			OpeningHours: model.OpeningHours{
+				OpenNow: false,
+			},
+			Photos: []model.Photos{{
+				Height:           800,
+				HTMLAttributions: []string{"iubvd", "givuefbv"},
+				PhotoReference:   "dfvdvfd",
+				Width:            800,
+			}},
+			PlaceID: "CHIJoiubcfmigf1",
+			PlusCode: model.PlusCode{
+				CompoundCode: "",
+				GlobalCode:   "",
+			},
+			PriceLevel:       2,
+			Rating:           4.7695,
+			Reference:        "",
+			Scope:            "",
+			Types:            []string{"amusement_park"},
+			UserRatingsTotal: 5,
+			Vicinity:         "",
+		},
+		{
+			BusinessStatus: "OPEN",
+			Geometry: model.GeometryActivity{
+				Location: location,
+				Viewport: model.Bounds{
+					Northeast: model.Location{Lat: 48.9021475, Lng: 2.4698509},
+					Southwest: model.Location{Lat: 48.8155622, Lng: 2.2242191},
+				},
+			},
+			Icon:                "ucfytc",
+			IconBackgroundColor: "cbdosucb",
+			IconMaskBaseURI:     "ubcs",
+			Name:                "eonvfe",
+			OpeningHours: model.OpeningHours{
+				OpenNow: false,
+			},
+			Photos: []model.Photos{{
+				Height:           800,
+				HTMLAttributions: []string{"iubvd", "givuefbv"},
+				PhotoReference:   "dfvdvfd",
+				Width:            800,
+			}},
+			PlaceID: "CHIJoiubcfmigf1",
+			PlusCode: model.PlusCode{
+				CompoundCode: "",
+				GlobalCode:   "",
+			},
+			PriceLevel:       2,
+			Rating:           4.7695,
+			Reference:        "",
+			Scope:            "",
+			Types:            []string{"lodging"},
+			UserRatingsTotal: 5,
+			Vicinity:         "",
+		},
+	}
+	withResults := model.Hotel{
+		HTMLAttributions: []interface{}{},
+		NextPageToken: "nvoinrvo",
+		Results:          hotels,
+		Status:           "no error",
+	}
+	router := gin.Default()
+	router.GET("/place/nearbysearch/json", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, &withResults)
+	})
+	server := httptest.NewServer(router)
+	result, err := suite.svc.Sleep(server.URL, location , params)
+	suite.NoError(err, "no crashed")
+	suite.Equal(hotels, *result, "result and error are the same")
+}
+
+func (suite *googleServiceSuite) TestSleepWithZeroResult() {
+	params := model.Constraints{
+		Radius:   0,
+		MaxPrice: 500,
+		MinPrice: 0,
+		OpenNow:  false,
+	}
+	noResult := model.Hotel{
+		HTMLAttributions: []interface{}{},
+		NextPageToken: "",
+		Results:          []model.ActivityResult{},
+		Status:           "ZERO_RESULTS",
+	}
+
+	router := gin.Default()
+	router.GET("/place/nearbysearch/json", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, &noResult)
+	})
+	server := httptest.NewServer(router)
+
+	result, err := suite.svc.Sleep(server.URL, model.Location{Lat: 48.856614, Lng: 2.3522219}, params)
+	suite.Error(err, "error: no results")
+	suite.Equal(http.StatusNotFound, err.(*model.AppError).StatusCode)
+	suite.Equal(noResult.Status, err.Error())
+	suite.Nil(result)
+}
+
+func (suite *googleServiceSuite) TestEatWithGoodAnswer()  {
+	params := model.Constraints{
+		Radius:   0,
+		MaxPrice: 500,
+		MinPrice: 0,
+		OpenNow:  false,
+	}
+	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
+	restaurant := []model.ActivityResult{
+		{
+			BusinessStatus: "OPEN",
+			Geometry: model.GeometryActivity{
+				Location: location,
+				Viewport: model.Bounds{
+					Northeast: model.Location{Lat: 48.9021475, Lng: 2.4698509},
+					Southwest: model.Location{Lat: 48.8155622, Lng: 2.2242191},
+				},
+			},
+			Icon:                "ucfytc",
+			IconBackgroundColor: "cbdosucb",
+			IconMaskBaseURI:     "ubcs",
+			Name:                "eonvfe",
+			OpeningHours: model.OpeningHours{
+				OpenNow: false,
+			},
+			Photos: []model.Photos{{
+				Height:           800,
+				HTMLAttributions: []string{"iubvd", "givuefbv"},
+				PhotoReference:   "dfvdvfd",
+				Width:            800,
+			}},
+			PlaceID: "CHIJoiubcfmigf1",
+			PlusCode: model.PlusCode{
+				CompoundCode: "",
+				GlobalCode:   "",
+			},
+			PriceLevel:       2,
+			Rating:           4.7695,
+			Reference:        "",
+			Scope:            "",
+			Types:            []string{"amusement_park"},
+			UserRatingsTotal: 5,
+			Vicinity:         "",
+		},
+		{
+			BusinessStatus: "OPEN",
+			Geometry: model.GeometryActivity{
+				Location: location,
+				Viewport: model.Bounds{
+					Northeast: model.Location{Lat: 48.9021475, Lng: 2.4698509},
+					Southwest: model.Location{Lat: 48.8155622, Lng: 2.2242191},
+				},
+			},
+			Icon:                "ucfytc",
+			IconBackgroundColor: "cbdosucb",
+			IconMaskBaseURI:     "ubcs",
+			Name:                "eonvfe",
+			OpeningHours: model.OpeningHours{
+				OpenNow: false,
+			},
+			Photos: []model.Photos{{
+				Height:           800,
+				HTMLAttributions: []string{"iubvd", "givuefbv"},
+				PhotoReference:   "dfvdvfd",
+				Width:            800,
+			}},
+			PlaceID: "CHIJoiubcfmigf1",
+			PlusCode: model.PlusCode{
+				CompoundCode: "",
+				GlobalCode:   "",
+			},
+			PriceLevel:       2,
+			Rating:           4.7695,
+			Reference:        "",
+			Scope:            "",
+			Types:            []string{"restaurant"},
+			UserRatingsTotal: 5,
+			Vicinity:         "",
+		},
+	}
+	withResults := model.Activity{
+		HTMLAttributions: []interface{}{},
+		Results:          restaurant,
+		Status:           "no error",
+	}
+	router := gin.Default()
+	router.GET("/place/nearbysearch/json", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, &withResults)
+	})
+	server := httptest.NewServer(router)
+	result, err := suite.svc.Eat(server.URL, location, params)
+	suite.NoError(err, "no crashed")
+	suite.Equal(restaurant, *result, "result and error are the same")
+}
+
+func (suite *googleServiceSuite) TestEatWithZeroResult() {
+	params := model.Constraints{
+		Radius:   0,
+		MaxPrice: 500,
+		MinPrice: 0,
+		OpenNow:  false,
+	}
+	noResult := model.Activity{
+		HTMLAttributions: []interface{}{},
+		Results:          []model.ActivityResult{},
+		Status:           "ZERO_RESULTS",
+	}
+
+	router := gin.Default()
+	router.GET("/place/nearbysearch/json", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, &noResult)
+	})
+	server := httptest.NewServer(router)
+
+	result, err := suite.svc.Eat(server.URL, model.Location{Lat: 48.856614, Lng: 2.3522219}, params)
+	suite.Error(err, "error: no results")
+	suite.Equal(http.StatusNotFound, err.(*model.AppError).StatusCode)
+	suite.Equal(noResult.Status, err.Error())
+	suite.Nil(result)
+}
+
+func (suite *googleServiceSuite) TestDrinkWithGoodAnswer()  {
+	params := model.Constraints{
+		Radius:   0,
+		MaxPrice: 500,
+		MinPrice: 0,
+		OpenNow:  false,
+	}
+	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
+	restaurant := []model.ActivityResult{
+		{
+			BusinessStatus: "OPEN",
+			Geometry: model.GeometryActivity{
+				Location: location,
+				Viewport: model.Bounds{
+					Northeast: model.Location{Lat: 48.9021475, Lng: 2.4698509},
+					Southwest: model.Location{Lat: 48.8155622, Lng: 2.2242191},
+				},
+			},
+			Icon:                "ucfytc",
+			IconBackgroundColor: "cbdosucb",
+			IconMaskBaseURI:     "ubcs",
+			Name:                "eonvfe",
+			OpeningHours: model.OpeningHours{
+				OpenNow: false,
+			},
+			Photos: []model.Photos{{
+				Height:           800,
+				HTMLAttributions: []string{"iubvd", "givuefbv"},
+				PhotoReference:   "dfvdvfd",
+				Width:            800,
+			}},
+			PlaceID: "CHIJoiubcfmigf1",
+			PlusCode: model.PlusCode{
+				CompoundCode: "",
+				GlobalCode:   "",
+			},
+			PriceLevel:       2,
+			Rating:           4.7695,
+			Reference:        "",
+			Scope:            "",
+			Types:            []string{"amusement_park"},
+			UserRatingsTotal: 5,
+			Vicinity:         "",
+		},
+		{
+			BusinessStatus: "OPEN",
+			Geometry: model.GeometryActivity{
+				Location: location,
+				Viewport: model.Bounds{
+					Northeast: model.Location{Lat: 48.9021475, Lng: 2.4698509},
+					Southwest: model.Location{Lat: 48.8155622, Lng: 2.2242191},
+				},
+			},
+			Icon:                "ucfytc",
+			IconBackgroundColor: "cbdosucb",
+			IconMaskBaseURI:     "ubcs",
+			Name:                "eonvfe",
+			OpeningHours: model.OpeningHours{
+				OpenNow: false,
+			},
+			Photos: []model.Photos{{
+				Height:           800,
+				HTMLAttributions: []string{"iubvd", "givuefbv"},
+				PhotoReference:   "dfvdvfd",
+				Width:            800,
+			}},
+			PlaceID: "CHIJoiubcfmigf1",
+			PlusCode: model.PlusCode{
+				CompoundCode: "",
+				GlobalCode:   "",
+			},
+			PriceLevel:       2,
+			Rating:           4.7695,
+			Reference:        "",
+			Scope:            "",
+			Types:            []string{"restaurant"},
+			UserRatingsTotal: 5,
+			Vicinity:         "",
+		},
+	}
+	withResults := model.Activity{
+		HTMLAttributions: []interface{}{},
+		Results:          restaurant,
+		Status:           "no error",
+	}
+	router := gin.Default()
+	router.GET("/place/nearbysearch/json", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, &withResults)
+	})
+	server := httptest.NewServer(router)
+	result, err := suite.svc.Drink(server.URL, location, params)
+	suite.NoError(err, "no crashed")
+	suite.Equal(restaurant, *result, "result and error are the same")
+}
+
+func (suite *googleServiceSuite) TestDrinkWithZeroResult() {
+	params := model.Constraints{
+		Radius:   0,
+		MaxPrice: 500,
+		MinPrice: 0,
+		OpenNow:  false,
+	}
+	noResult := model.Hotel{
+		HTMLAttributions: []interface{}{},
+		NextPageToken: "",
+		Results:          []model.ActivityResult{},
+		Status:           "ZERO_RESULTS",
+	}
+
+	router := gin.Default()
+	router.GET("/place/nearbysearch/json", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, &noResult)
+	})
+	server := httptest.NewServer(router)
+
+	result, err := suite.svc.Drink(server.URL, model.Location{Lat: 48.856614, Lng: 2.3522219}, params)
+	suite.Error(err, "error: no results")
+	suite.Equal(http.StatusNotFound, err.(*model.AppError).StatusCode)
+	suite.Equal(noResult.Status, err.Error())
+	suite.Nil(result)
+}
+
+func (suite *googleServiceSuite) TestGeocoding_NoResult_Negative() {
+	
 	noResults := model.GoogleGeocodingResponse{
 		Results: []model.GoogleGeocodingResult{},
 		Status:  "ZERO RESULTS",
