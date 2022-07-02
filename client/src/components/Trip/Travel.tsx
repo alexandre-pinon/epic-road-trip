@@ -21,7 +21,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function Trip() {
+export function Travel() {
   const { classes } = useStyles();
   return (
     <Container size={720}>

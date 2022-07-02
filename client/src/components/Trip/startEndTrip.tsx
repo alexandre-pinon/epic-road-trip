@@ -25,6 +25,13 @@ export function StartEndTrip() {
         navigate('/trip');
     };
 
+    let myTrip = {
+        startCity: startCity,
+        endCity: endCity,
+        startDateValue: startDateValue,
+        endDateValue: endDateValue
+    };
+
     return (
         <>
             <Center>
