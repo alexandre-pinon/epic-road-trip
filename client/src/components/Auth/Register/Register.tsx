@@ -1,107 +1,102 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'
 import { NumberInput, TextInput, Checkbox, Button, Group, Box, PasswordInput, Avatar, Center } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { SyntheticEvent, useState } from 'react';
 
 export function Register() {
   const navigate = useNavigate();
 
-  const form = useForm({
-    initialValues: {
-      firstname: '',
-      lastname: '',
-      email: '',
-      termsOfService: false,
-    },
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [phone, setPhone] = useState('')
 
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-    },
-  });
-
-  const goToLogin = async () => {
-    console.log("Dummy register!")
-    navigate('/login');
+  const submitData = (data: any) => {
+    let params = {
+      firstname: data.firstname,
+      lastname: data.lastname,
+      email: data.email,
+      password: data.password,
+      confirmpassword: data.cpassword,
+    };
+    console.log(data);
+    axios({
+      method: 'post',
+      url: 'http://localhost:8000/api/v1/auth/register',
+      data: params
+    });
   };
 
+
+
+
+  // const form = useForm({
+  //   initialValues: {
+  //     firstname: '',
+  //     lastname: '',
+  //     email: '',
+  //     password: '',
+  //     phone: ''
+  //   },
+
+  //   validate: {
+  //     email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+  //   },
+  // });
+
+  // const submitRegister = (data: any) => {
+  //   axios
+  //     .post("http://localhost:8000/api/v1/auth/register")
+  //     .then(function (response) {
+  //       toast.success(response.data.message, {
+  //         position: "top-right",
+  //         autoClose: 3000,
+  //         hideProgressBar: true,
+  //         closeOnClick: true,
+  //         pauseOnHover: true,
+  //         draggable: false,
+  //         progress: 0,
+  //         toastId: "my_toast",
+  //       });
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // };
+
+  // const goToLogin = async () => {
+  //   console.log("Dummy register!")
+  //   navigate('/login');
+  // };
+
   return (
-    <Box sx={{ maxWidth: 300 }} mx="auto">
-      <form onSubmit={form.onSubmit((values) => console.log(values))}>
+    <form onSubmit={submitData}>
+      <h1 className="h3 mb-3 fw-normal">Please register</h1>
 
-        <Center>
-          <Avatar
-            component="a"
-            target="_blank"
-            src="https://cf.creatrip.com/original/blog/8482/ugu92lsquro327caty8re397qbb0cdb8.png"
-            alt="it's me"
-            size="lg"
-            mt="sm"
-          />
-        </Center>
+      <input className="form-control" placeholder="Name" required
+        onChange={e => setFirstName(e.target.value)}
+      />
 
-        <TextInput
-          required
-          data-attr="firstname"
-          label="Firstname"
-          placeholder="Han"
-          mt="sm"
-          {...form.getInputProps('firstname')}
-        />
+      <input className="form-control" placeholder="Name" required
+        onChange={e => setLastName(e.target.value)}
+      />
 
-        <TextInput
-          required
-          data-attr="lastname"
-          label="Lastname"
-          placeholder="SoHee"
-          mt="sm"
-          {...form.getInputProps('lastname')}
-        />
+      <input type="email" className="form-control" placeholder="Email address" required
+        onChange={e => setEmail(e.target.value)}
+      />
 
-        <TextInput
-          required
-          data-attr="email"
-          label="Email"
-          placeholder="hansohee@gmail.com"
-          {...form.getInputProps('email')}
-          mt="sm"
-        />
+      <input type="password" className="form-control" placeholder="Password" required
+        onChange={e => setPassword(e.target.value)}
+      />
 
-        <NumberInput
-          required
-          data-attr="Phone"
-          label="Phone"
-          hideControls
-          placeholder="Your phone number"
-          mt="sm"
-        />
+      <input className="form-control" placeholder="Phone" required
+        onChange={e => setPhone(e.target.value)}
+      />
 
-        <PasswordInput
-          required
-          data-attr="password"
-          placeholder="Password"
-          label="Password"
-          description="Password must include at least one letter, number and special character"
-          mt="sm"
-        />
-
-        <PasswordInput
-          required
-          data-attr="passwordCheck"
-          placeholder="Confirm Password"
-          label="Confirm Password"
-          description="Confirm your password"
-          mt="sm"
-        />
-
-        <Checkbox
-          mt="sm"
-          label="I agree to sell my soul"
-          {...form.getInputProps('termsOfService', { type: 'checkbox' })}
-        />
-
-        <Group position="right" mt="sm">
-          <Button data-attr="register-confirm" variant="default" radius="xl" size="sm" onClick={goToLogin} type="submit">Continue</Button>
-        </Group>
-      </form>
-    </Box>
+      <button className="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
+    </form>
   );
 }
