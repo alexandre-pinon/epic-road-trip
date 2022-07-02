@@ -112,3 +112,60 @@ type DeleteUserSuccess struct {
 	Data      []User     `json:"data"`
 	ValErrors []struct{} `json:"valErrors"`
 }
+
+//* ROADTRIP EXAMPLES *//
+type GoogleNotFound struct {
+	Success   bool       `json:"success" example:"false"`
+	Message   string     `json:"message" example:"ZERO RESULTS"`
+	Data      struct{}   `json:"data"`
+	ValErrors []struct{} `json:"valErrors"`
+}
+
+type FlightOfferNotFound struct {
+	Success   bool       `json:"success" example:"false"`
+	Message   string     `json:"message" example:"flight offers/airport not found for origin/destination cities"`
+	Data      struct{}   `json:"data"`
+	ValErrors []struct{} `json:"valErrors"`
+}
+
+type DirectionsNotFound struct {
+	Success   bool       `json:"success" example:"false"`
+	Message   string     `json:"message" example:"flight offers/airport not found for origin/destination cities"`
+	Data      struct{}   `json:"data"`
+	ValErrors []struct{} `json:"valErrors"`
+}
+
+type EnjoySuccess struct {
+	Success   bool             `json:"success" example:"true"`
+	Message   string           `json:"message" example:"Activities retrieved successfuly"`
+	Data      []ActivityResult `json:"data"`
+	ValErrors []struct{}       `json:"valErrors"`
+}
+
+type SleepSuccess struct {
+	Success   bool             `json:"success" example:"true"`
+	Message   string           `json:"message" example:"Hotels retrieved successfuly"`
+	Data      []ActivityResult `json:"data"`
+	ValErrors []struct{}       `json:"valErrors"`
+}
+
+type EatSuccess struct {
+	Success   bool             `json:"success" example:"true"`
+	Message   string           `json:"message" example:"Restaurants retrieved successfuly"`
+	Data      []ActivityResult `json:"data"`
+	ValErrors []struct{}       `json:"valErrors"`
+}
+
+type DrinkSuccess struct {
+	Success   bool             `json:"success" example:"true"`
+	Message   string           `json:"message" example:"Bars retrieved successfuly"`
+	Data      []ActivityResult `json:"data"`
+	ValErrors []struct{}       `json:"valErrors"`
+}
+
+type TravelSuccess struct {
+	Success   bool        `json:"success" example:"true"`
+	Message   string      `json:"message" example:"Itineraries retrieved successfully"`
+	Data      []Itinerary `json:"data"`
+	ValErrors []struct{}  `json:"valErrors"`
+}

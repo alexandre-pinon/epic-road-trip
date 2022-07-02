@@ -5,6 +5,7 @@ import (
 
 	"github.com/alexandre-pinon/epic-road-trip/config"
 	"github.com/alexandre-pinon/epic-road-trip/docs"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,6 +23,10 @@ func InitApp() {
 	log.Print("Initializing swagger...")
 
 	router := gin.Default()
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowOrigins = []string{"http://localhost:3000"}
+	corsConfig.AllowCredentials = true
+	router.Use(cors.New(corsConfig))
 	router.StaticFile("/docs.html", "docs/index.html")
 
 	RegisterRoutes(router, controllers)
