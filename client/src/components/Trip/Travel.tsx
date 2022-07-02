@@ -1,5 +1,6 @@
 import { AspectRatio, Button, Container, createStyles, Group, Space, Tooltip } from "@mantine/core";
 import { ArrowForwardUp, Bike, Car, PlaneInflight, Train, Walk } from 'tabler-icons-react';
+import axios from "axios";
 
 const useStyles = createStyles((theme) => ({
   button: {
@@ -21,8 +22,26 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function Travel() {
+export function Travel(props: any) {
   const { classes } = useStyles();
+
+
+  const submitData = () => {
+    let params = {
+      adults: 1,
+      departureDate: "2022-08-08T15:04:05Z",
+      destinationLocation: "Paris",
+      maxPrice: 10000,
+      originLocation: "London",
+    };
+    axios({
+      method: 'post',
+      url: 'http://localhost:8000/api/v1/roadtrip/travel/air',
+      data: params
+    });
+  };
+
+  console.log(props)
   return (
     <Container size={720}>
       <Group grow spacing={0}>
@@ -32,6 +51,10 @@ export function Travel() {
         </Button>
         <Button variant="default" className={classes.button}>
           <PlaneInflight />
+        </Button>
+
+        <Button onClick={submitData}>
+          TEST
         </Button>
       </Group>
 

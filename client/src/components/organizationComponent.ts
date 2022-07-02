@@ -1,4 +1,8 @@
 // Authentification components
+
+let TKT = "Hello World";
+
+
 export { Register } from "./Auth/Register/Register";
 export { Login } from "./Auth/Login/Login";
 
@@ -9,7 +13,6 @@ export { AppHeader } from "./AppHeader/Header"
 export { Home } from "./Home/Home"
 
 // Trip components
-export{TripParent} from "./Trip/TripParent"
 export {StartEndTrip} from "./Trip/startEndTrip"
 export { Travel } from "./Trip/Travel"
 export { City } from "./Trip/City"

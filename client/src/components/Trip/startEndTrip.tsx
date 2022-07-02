@@ -1,36 +1,23 @@
 import { useNavigate } from 'react-router-dom';
 import React, {useState} from "react";
-import {ActionIcon, Button, Center, Container, createStyles, Modal, Space, TextInput, Title, Autocomplete} from "@mantine/core";
+import {ActionIcon, Button, Center, Container, createStyles, Modal, Space, TextInput, Title, Autocomplete, AutocompleteProps} from "@mantine/core";
 import {BuildingSkyscraper, CalendarEvent, Search, BuildingCommunity, CalendarMinus} from "tabler-icons-react";
 import {Calendar, DatePicker} from "@mantine/dates";
 import {props} from "kea";
 import cityObjects from '../../data/iata_codes.json';
 
 
-
-export function StartEndTrip() {
+export function StartEndTrip({fulTrip}: any) {
     const navigate = useNavigate();
-
-    //const [startCalendar, setStartCalendar] = useState(false);
-    //const [endCalendar, setEndCalendar] = useState(false);
-    const [startDateValue, setStartDate] = React.useState<Date | null>(new Date());
-    const [endDateValue, setEndDate] = React.useState<Date | null>(new Date());
-    const [startCity, setStartCity] = useState('Paris');
-    const [endCity, setEndCity] = useState('');
-
     const city = Object.keys(cityObjects)
 
     const GotoTrip = async () => {
         console.log("Go to the trip page!")
-        navigate('/trip');
+        navigate('/travel');
     };
 
-    let myTrip = {
-        startCity: startCity,
-        endCity: endCity,
-        startDateValue: startDateValue,
-        endDateValue: endDateValue
-    };
+
+
 
     return (
         <>
@@ -57,8 +44,8 @@ export function StartEndTrip() {
                     rightSectionWidth={42}
                     {...props}
                     data={city}
-                    value={startCity}
-                    onChange={(event) => setStartCity(event)}
+                    value={fulTrip.startCity}
+                    onChange={(event) => fulTrip.setStartCity(event)}
                 />
 
                 <Space h="xl" />
@@ -73,17 +60,17 @@ export function StartEndTrip() {
                     rightSectionWidth={42}
                     {...props}
                     data={city}
-                    onChange={(event) => setEndCity(event)}
+                    onChange={(event) => fulTrip.setEndCity(event)}
                 />
 
             </Container>
-                <Space h="xl" />
+            <Space h="xl" />
 
-                <Center>
-                    <Title order={3}> Please choose the date of departure and arrival of your sub-trip </Title>
-                </Center>
+            <Center>
+                <Title order={3}> Please choose the date of departure and arrival of your sub-trip </Title>
+            </Center>
 
-                <Space h="xl" />
+            <Space h="xl" />
 
             <Container size={540}>
 
@@ -91,7 +78,7 @@ export function StartEndTrip() {
                     icon={<CalendarEvent size={18} />}
                     placeholder="Start date of your Trip"
                     radius="xl"
-                    onChange={setStartDate}
+                    onChange={fulTrip.setStartDate}
                 />
 
                 <Space h="xl" />
@@ -100,7 +87,7 @@ export function StartEndTrip() {
                     icon={<CalendarMinus size={18} />}
                     placeholder="End date of your Trip"
                     radius="xl"
-                    onChange={setEndDate}
+                    onChange={fulTrip.setEndDate}
                 />
 
                 <Space h="xl" />
