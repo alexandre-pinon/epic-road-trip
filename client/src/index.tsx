@@ -7,6 +7,7 @@ import { Register, Login, AppHeader, Home, Travel, StartEndTrip, City, ResumeTri
 import reportWebVitals from './reportWebVitals';
 import { Sleep } from './components/Sleep/Sleep';
 import { Eat } from './components/Eat/Eat';
+import { Drink } from './components/Drink/Drink';
 
 // if (process.env.NODE_ENV === 'development') {
 //   const { worker } = require('./mocks/browser')
@@ -61,6 +62,7 @@ function App() {
         <Route path="/enjoy" element={<Enjoy fulTrip={fulTrip} />} />
         <Route path="/sleep" element={<Sleep fulTrip={fulTrip} />} />
         <Route path="/eat" element={<Eat fulTrip={fulTrip} />} />
+        <Route path="/drink" element={<Drink fulTrip={fulTrip} />} />
 
         {/* <Route path="/login" element={<Login />} /> */}
       </Routes>
