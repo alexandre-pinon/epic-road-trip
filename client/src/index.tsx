@@ -22,6 +22,7 @@ function App() {
   const [endDateValue, setEndDate] = React.useState<Date | null>(new Date());
   const [selectedTravel, setSelectedTravel] = useState([]);
   const [enjoyName, setEnjoyName] = useState('');
+  const [sleep, setSleep] = useState('');
 
   let fulTrip = {
     startCity,
@@ -36,6 +37,8 @@ function App() {
     setSelectedTravel,
     enjoyName,
     setEnjoyName,
+    sleep,
+    setSleep
   }
 
 
@@ -52,7 +55,7 @@ function App() {
         <Route path="/resumeTrip" element={<ResumeTrip fulTrip={fulTrip} />} />
         <Route path="/mocking" element={<MockTest />} />
         <Route path="/enjoy" element={<Enjoy fulTrip={fulTrip} />} />
-        <Route path="/sleep" element={<Sleep />} />
+        <Route path="/sleep" element={<Sleep fulTrip={fulTrip} />} />
 
         {/* <Route path="/login" element={<Login />} /> */}
       </Routes>
