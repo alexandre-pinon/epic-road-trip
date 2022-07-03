@@ -9,7 +9,8 @@ import {
   Tooltip,
   Text,
   SimpleGrid,
-  Paper
+  Paper,
+  Grid
 } from "@mantine/core";
 import { ArrowForwardUp, Bike, Car, PlaneInflight, Train, Walk } from 'tabler-icons-react';
 import axios from "axios";
@@ -119,11 +120,9 @@ export function Travel(props: any) {
 
   const trainTravel = () => {
     let params = {
-      adults: 1,
-      departureDate: "2022-08-08T15:04:05Z",
-      destinationLocation: "Paris",
-      maxPrice: 10000,
-      originLocation: "London",
+      departureTime: "2022-08-18T15:04:05Z",
+      destination: "Paris",
+      origin: "London",
     };
     axios({
       method: 'post',
@@ -153,10 +152,6 @@ export function Travel(props: any) {
 
 
 
-
-  // @ts-ignore
-  // @ts-ignore
-  // @ts-ignore
   return (
       <Container size={1000}>
         <Group grow spacing={0} position="apart">
@@ -173,21 +168,18 @@ export function Travel(props: any) {
                     plane.length ? (
                             plane.map((item, index) => (
                                 <Paper shadow="xl" p="md" withBorder key={index}>
-                                  <Text>Paper is the most basic ui component</Text>
-                                  <Text>
-                                    Use it to create cards, dropdowns, modals and other components that require background
-                                    with shadow
-                                  </Text>
+                                  <Grid><Text weight={700}>Departure :  </Text> <Text> -  {item.cityDeparture}</Text></Grid>
+                                  <Grid><Text weight={700}>Arrival :  </Text> <Text> -  {item.cityArrival}</Text></Grid>
+                                  <Grid><Text weight={700}>Start Date :  </Text> <Text> -  {item.startDate}</Text></Grid>
+                                  <Grid><Text weight={700}>End Date :  </Text> <Text> -  {item.endDate}</Text></Grid>
+                                  <Grid><Text weight={700}>Duration :  </Text> <Text> -  {item.duration}</Text></Grid>
+                                  <Grid><Text weight={700}>Price :  </Text> <Text>{ - item.price}</Text></Grid>
                                 </Paper>
                             ))
                         )
-                        : <li> No Message Found </li>
+                        : null
                   }
                 </ul>
-
-
-
-
               </>
             </SimpleGrid>
 
@@ -204,15 +196,15 @@ export function Travel(props: any) {
                     train.length ? (
                             train.map((item, index) => (
                                 <Paper shadow="xl" p="md" withBorder key={index}>
-                                  <Text>Paper is the most basic ui component</Text>
-                                  <Text>
-                                    Use it to create cards, dropdowns, modals and other components that require background
-                                    with shadow
-                                  </Text>
+                                  <Grid><Text weight={700}>Departure :  </Text> <Text> -  {item.cityDeparture}</Text></Grid>
+                                  <Grid><Text weight={700}>Arrival :  </Text> <Text> -  {item.cityArrival}</Text></Grid>
+                                  <Grid><Text weight={700}>Start Date :  </Text> <Text> -  {item.startDate}</Text></Grid>
+                                  <Grid><Text weight={700}>End Date :  </Text> <Text> -  {item.endDate}</Text></Grid>
+                                  <Grid><Text weight={700}>Duration :  </Text> <Text> -  {item.duration}</Text></Grid>
                                 </Paper>
                             ))
                         )
-                        : <li> No Message Found </li>
+                        : null
                   }
                 </ul>
               </>
@@ -225,20 +217,10 @@ export function Travel(props: any) {
 
 
 
-        <ul>
-          {
-            plane.length ? (
-                    plane.map((item, index) => <li key={index}>{item.cityArrival}</li>)
-                )
-                : <li> No Message Found </li>
-          }
-        </ul>
 
 
 
         <Space h="xl" />
-        <Button onClick={NON}>NON</Button>
-        <div>{JSON.stringify(plane)}</div>
 
       {/*
       <AspectRatio ratio={16 / 9}>
