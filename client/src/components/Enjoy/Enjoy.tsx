@@ -1,7 +1,8 @@
-import { AspectRatio, Avatar, Button, Card, Container, createStyles, Group, Space, Tooltip, Text, Image, Paper, Grid } from "@mantine/core";
+import { AspectRatio, Avatar, Button, Card, Container, createStyles, Group, Space, Tooltip, Text, Image, Paper, Grid, Center } from "@mantine/core";
 import axios from "axios";
 import { useState } from "react";
-import { ArrowForwardUp, Bike, Car, PlaneInflight, Train, Walk } from 'tabler-icons-react';
+import { ArrowForwardUp, Bike, Car, PlaneInflight, Search, Train, Walk } from 'tabler-icons-react';
+import { useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   button: {
@@ -25,17 +26,34 @@ const useStyles = createStyles((theme) => ({
 
 
 export function Enjoy({ fulTrip }: any) {
+  const navigate = useNavigate();
 
+  const goTravel = async () => {
+    console.log("Go to travel page!")
+    navigate('/travel');
+  };
+
+  const goSleep = async () => {
+    console.log("Go to sleep page!")
+    navigate('/sleep');
+  };
+
+  const [id, setId] = useState(0)
   const [city, setCity] = useState('')
   const [radius, setRadius] = useState('')
   const [name, setName] = useState('')
   const [rating, setRating] = useState('')
   const [vicinity, setVicinity] = useState('')
+
   const [enjoy, setEnjoy] = useState([{
+    id,
     name,
     rating,
     vicinity
   }])
+
+  let [selectedEnjoy, setSelectedEnjoy] = useState('')
+
 
   const [toggleEnjoy, setToggleEnjoy] = useState(false)
 
@@ -57,14 +75,17 @@ export function Enjoy({ fulTrip }: any) {
     })
       .then((response) => {
         console.log(response.data);
+        let id = 0
         let enjoyActivities: any = [];
         response.data.data.forEach((data: any) => {
           let activities = {
+            id: id,
             name: data.name,
             rating: data.rating,
             vicinity: data.vicinity,
           }
           enjoyActivities.push(activities)
+          id++;
         })
         setEnjoy(enjoyActivities)
       })
@@ -81,6 +102,18 @@ export function Enjoy({ fulTrip }: any) {
     console.log(fulTrip)
   }
 
+  const selectEnjoy = (id: number, type: string) => {
+
+    setSelectedEnjoy(type)
+    console.log(id)
+    setId(id)
+
+    if (type == "Enjoy") {
+      fulTrip.setEnjoyName(enjoy[id])
+    }
+
+    console.log("fulTrip content: ", fulTrip)
+  }
 
   return (
     <Container>
@@ -105,17 +138,45 @@ export function Enjoy({ fulTrip }: any) {
       <ul>
         {
           toggleEnjoy ? (
-            enjoy.map((item, index) => (
-              <Paper onClick={saveEnjoy} shadow="xl" p="md" withBorder key={index}>
+            enjoy.map((item) => (
+              <Paper shadow="xl" p="md" withBorder key={item.id}>
                 <Grid><Text weight={700}>Name :  </Text> <Text> -  {item.name}</Text></Grid>
                 <Grid><Text weight={700}>Rating :  </Text> <Text> -  {item.rating}</Text></Grid>
                 <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {item.vicinity}</Text></Grid>
+                <Center><Button onClick={() => selectEnjoy(item.id, 'Enjoy')} >Select this enjoy </Button></Center>
               </Paper>
             ))
           )
             : null
         }
       </ul>
+
+      <div>
+        {
+          selectedEnjoy === "Enjoy" ? (
+            <>
+              <Center><h3>SELECTED TRAVEL : </h3></Center>
+              <Paper shadow="xl" p="md" withBorder >
+                <Grid><Text weight={700}>Enjoy ID  {enjoy[id].id}</Text> </Grid>
+                <Grid><Text weight={700}>Name :  </Text> <Text> -  {enjoy[id].name}</Text></Grid>
+                <Grid><Text weight={700}>Rating :  </Text> <Text> -  {enjoy[id].rating}</Text></Grid>
+                <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {enjoy[id].vicinity}</Text></Grid>
+                <Center><Button onClick={() => selectEnjoy(enjoy[id].id, 'Enjoy')} >Confirm this enjoy </Button></Center>
+              </Paper>
+            </>
+          )
+            : null
+        }
+      </div>
+
+      <Center>
+        <Button onClick={goTravel} rightIcon={<Search size={18} />} variant="light" radius="xl">
+          Go back
+        </Button>
+        <Button onClick={goSleep} rightIcon={<Search size={18} />} variant="light" radius="xl">
+          Search for Activities
+        </Button>
+      </Center>
     </Container>
 
 
