@@ -17,6 +17,7 @@ export {StartEndTrip} from "./Trip/startEndTrip"
 export { Travel } from "./Trip/Travel"
 export { City } from "./Trip/City"
 export { ResumeTrip } from "./Trip/resumeTrip"
+export {Test} from "./Trip/test"
 
 // Mock-Service-Worker components
 export { MockTest } from "./MockTest/MockTest"

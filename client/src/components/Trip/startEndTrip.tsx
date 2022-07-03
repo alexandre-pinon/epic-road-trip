@@ -9,14 +9,13 @@ import cityObjects from '../../data/iata_codes.json';
 
 
 
-export function StartEndTrip( {fultrip} : any) {
+export function StartEndTrip( {fulTrip} : any) {
+    const navigate = useNavigate();
 
-    //const [startCalendar, setStartCalendar] = useState(false);
-    //const [endCalendar, setEndCalendar] = useState(false);
-    const [startDateValue, setStartDate] = React.useState<Date | null>(new Date());
-    const [endDateValue, setEndDate] = React.useState<Date | null>(new Date());
-    const [startCity, setStartCity] = useState('Paris');
-    const [endCity, setEndCity] = useState('');
+    const goToHome = async () => {
+        console.log("Going back home!")
+        navigate('/');
+    };
 
     const city = Object.keys(cityObjects)
 
@@ -45,8 +44,8 @@ export function StartEndTrip( {fultrip} : any) {
                     rightSectionWidth={42}
                     {...props}
                     data={city}
-                    value={startCity}
-                    onChange={(event) => setStartCity(event)}
+                    value={fulTrip.startCity}
+                    onChange={(event) => fulTrip.setStartCity(event)}
                 />
 
                 <Space h="xl" />
@@ -61,7 +60,7 @@ export function StartEndTrip( {fultrip} : any) {
                     rightSectionWidth={42}
                     {...props}
                     data={city}
-                    onChange={(event) => setEndCity(event)}
+                    onChange={(event) => fulTrip.setEndCity(event)}
                 />
 
             </Container>
@@ -79,7 +78,7 @@ export function StartEndTrip( {fultrip} : any) {
                     icon={<CalendarEvent size={18} />}
                     placeholder="Start date of your Trip"
                     radius="xl"
-                    onChange={setStartDate}
+                    onChange={fulTrip.setStartDate}
                 />
 
                 <Space h="xl" />
@@ -88,7 +87,7 @@ export function StartEndTrip( {fultrip} : any) {
                     icon={<CalendarMinus size={18} />}
                     placeholder="End date of your Trip"
                     radius="xl"
-                    onChange={setEndDate}
+                    onChange={fulTrip.setEndDate}
                 />
 
                 <Space h="xl" />

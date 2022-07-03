@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MantineProvider } from '@mantine/core';
 
-import { Register, Login, AppHeader, Home, Travel, StartEndTrip, City, ResumeTrip, MockTest } from "./components/organizationComponent";
+import { Register, Login, AppHeader, Home, Travel, StartEndTrip, City, ResumeTrip, MockTest, Test } from "./components/organizationComponent";
 import reportWebVitals from './reportWebVitals';
 
 // if (process.env.NODE_ENV === 'development') {
@@ -42,6 +42,7 @@ function App() {
         <Route path="/startEndTrip" element={<StartEndTrip fulTrip={fulTrip} />} />
         <Route path="/travel" element={<Travel txt={TXT}/>} />
         <Route path="/city" element={<City />} />
+          <Route path="/test" element={<Test />} />
         <Route path="/resumeTrip" element={<ResumeTrip />} />
         <Route path="/mocking" element={<MockTest />} />
 
