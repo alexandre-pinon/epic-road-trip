@@ -26,6 +26,7 @@ function App() {
   const [enjoyName, setEnjoyName] = useState('');
   const [sleep, setSleep] = useState('');
   const [eat, setEat] = useState('');
+  const [drink, setDrink] = useState('');
 
   let fulTrip = {
     startCity,
@@ -43,7 +44,9 @@ function App() {
     sleep,
     setSleep,
     eat,
-    setEat
+    setEat,
+    drink,
+    setDrink
   }
 
 
