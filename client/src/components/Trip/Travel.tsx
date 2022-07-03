@@ -13,7 +13,7 @@ import {
 } from "@mantine/core";
 import { ArrowForwardUp, Bike, Car, PlaneInflight, Train, Walk } from 'tabler-icons-react';
 import axios from "axios";
-import {SetStateAction, useState} from "react";
+import {SetStateAction, useEffect, useState} from "react";
 
 const useStyles = createStyles((theme) => ({
   button: {
@@ -48,7 +48,14 @@ export function Travel(props: any) {
 
 
   const [train, setTrain] = useState([])
-  const [plane, setPlane] = useState('')
+  const [plane, setPlane] = useState([{
+    cityDeparture,
+    cityArrival,
+    duration,
+    startDate,
+    endDate,
+    price
+  }])
 
 
   const NON = () => {
@@ -69,6 +76,8 @@ export function Travel(props: any) {
     setTrain(myList)
     console.log(train)
   }
+
+
 
 
   const planeTravel = () => {
@@ -105,9 +114,16 @@ export function Travel(props: any) {
          */
       })
       setPlane(myList2)
-      console.log(plane)
+      console.log(myList2)
     });
   };
+
+  useEffect(() => {
+    planeTravel();
+  }, []);
+
+
+
 
   // @ts-ignore
   // @ts-ignore
@@ -142,9 +158,39 @@ export function Travel(props: any) {
         </Group>
 
 
+        <ul>
+          {
+            plane.length ? (
+                    plane.map((item, index) => (
+                        <Paper shadow="xl" p="md" withBorder key={index}>
+                          <Text>Paper is the most basic ui component</Text>
+                          <Text>
+                            Use it to create cards, dropdowns, modals and other components that require background
+                            with shadow
+                          </Text>
+                        </Paper>
+                    ))
+                )
+                : <li> No Message Found </li>
+          }
+        </ul>
+
+
+
+        <ul>
+          {
+            plane.length ? (
+                    plane.map((item, index) => <li key={index}>{item.cityArrival}</li>)
+                )
+                : <li> No Message Found </li>
+          }
+        </ul>
+
+
 
         <Space h="xl" />
         <Button onClick={NON}>NON</Button>
+        <div>{JSON.stringify(plane)}</div>
 
       {/*
       <AspectRatio ratio={16 / 9}>
