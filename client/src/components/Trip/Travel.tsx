@@ -15,6 +15,7 @@ import {
 import { ArrowForwardUp, Bike, Car, PlaneInflight, Train, Walk } from 'tabler-icons-react';
 import axios from "axios";
 import {SetStateAction, useEffect, useState} from "react";
+import {use} from "msw/lib/types/utils/internal/requestHandlerUtils";
 
 const useStyles = createStyles((theme) => ({
   button: {
@@ -47,6 +48,10 @@ export function Travel(props: any) {
   const [endDate, setEndDate] = useState('')
   const [price, setPrice] = useState('')
 
+  const [togglePlane, setTogglePlane] = useState(false)
+  const [toggleTrain, setToggleTrain] = useState(false)
+
+
 
   const [train, setTrain] = useState([{
     cityDeparture,
@@ -64,28 +69,6 @@ export function Travel(props: any) {
     endDate,
     price
   }])
-
-
-  const NON = () => {
-    let maVoiture = {
-      make: 'Ford',
-      model: 'Mustang',
-      year: 1969
-    };
-    let maVoiture2 = {
-      make: 'Ford',
-      model: 'Mustang',
-      year: 1969
-    };
-    let myList = [];
-    myList.push(maVoiture)
-
-    // @ts-ignore
-    setTrain(myList)
-    console.log(train)
-  }
-
-
 
 
   const planeTravel = () => {
@@ -151,6 +134,14 @@ export function Travel(props: any) {
   }, []);
 
 
+  const showPlane = () => {
+    setTogglePlane(!togglePlane)
+  }
+
+  const showTrain = () => {
+    setToggleTrain(!toggleTrain)
+  }
+
 
   return (
       <Container size={1000}>
@@ -159,13 +150,13 @@ export function Travel(props: any) {
           <Group grow spacing={0} position="apart">
             <SimpleGrid cols={1}>
               <>
-                <Button onClick={planeTravel} variant="default" className={classes.button}>
+                <Button onClick={showPlane} variant="default" className={classes.button}>
                   <PlaneInflight />
                 </Button>
 
                 <ul>
                   {
-                    plane.length ? (
+                    togglePlane ? (
                             plane.map((item, index) => (
                                 <Paper shadow="xl" p="md" withBorder key={index}>
                                   <Grid><Text weight={700}>Departure :  </Text> <Text> -  {item.cityDeparture}</Text></Grid>
@@ -188,12 +179,12 @@ export function Travel(props: any) {
           <Group grow spacing={0} position="apart">
             <SimpleGrid cols={1}>
               <>
-                <Button variant="default" className={classes.button}>
+                <Button onClick={showTrain} variant="default" className={classes.button}>
                   <Train />
                 </Button>
                 <ul>
                   {
-                    train.length ? (
+                    toggleTrain ? (
                             train.map((item, index) => (
                                 <Paper shadow="xl" p="md" withBorder key={index}>
                                   <Grid><Text weight={700}>Departure :  </Text> <Text> -  {item.cityDeparture}</Text></Grid>
@@ -211,6 +202,7 @@ export function Travel(props: any) {
             </SimpleGrid>
           </Group>
         </Group>
+
 
 
 
