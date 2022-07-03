@@ -16,8 +16,6 @@ import {ArrowForwardUp, Bike, Car, PlaneInflight, Search, Train, Walk} from 'tab
 import axios from "axios";
 import React, {SetStateAction, useEffect, useState} from "react";
 import {use} from "msw/lib/types/utils/internal/requestHandlerUtils";
-// @ts-ignore
-import { v4 as uuidv4 } from 'uuid';
 import {useNavigate} from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
@@ -55,6 +53,11 @@ export function Travel({fulTrip} : any) {
   const goEnjoy = async () => {
     console.log("Go to enjoy page!")
     navigate('/enjoy');
+  };
+
+  const goResumeTrip = async () => {
+    console.log("Go to enjoy page!")
+    navigate('/resumeTrip');
   };
 
   const [id, setId] = useState(0)
@@ -204,11 +207,11 @@ export function Travel({fulTrip} : any) {
                             plane.map((item) => (
                                   <Paper shadow="xl" p="md" withBorder key={item.id}>
                                     <Grid><Text weight={700}>Travel : PLANE number  {item.id}</Text> </Grid>
-                                    <Grid><Text weight={700}>Departure :  </Text> <Text> -  {item.cityDeparture}</Text></Grid>
-                                    <Grid><Text weight={700}>Arrival :  </Text> <Text> -  {item.cityArrival}</Text></Grid>
-                                    <Grid><Text weight={700}>Start Date :  </Text> <Text> -  {item.startDate}</Text></Grid>
-                                    <Grid><Text weight={700}>End Date :  </Text> <Text> -  {item.endDate}</Text></Grid>
-                                    <Grid><Text weight={700}>Duration :  </Text> <Text> -  {item.duration}</Text></Grid>
+                                    <Grid><Text weight={700}>Departure :  </Text> <Text>&nbsp;{item.cityDeparture}</Text></Grid>
+                                    <Grid><Text weight={700}>Arrival :  </Text> <Text> &nbsp;{item.cityArrival}</Text></Grid>
+                                    <Grid><Text weight={700}>Start Date :  </Text> <Text>&nbsp;{item.startDate}</Text></Grid>
+                                    <Grid><Text weight={700}>End Date :  </Text> <Text>&nbsp;{item.endDate}</Text></Grid>
+                                    <Grid><Text weight={700}>Duration :  </Text> <Text>&nbsp;{item.duration}</Text></Grid>
                                     <Center><Button onClick={()=>SelectTravel(item.id, 'Plane')} >Select this travel </Button></Center>
                                   </Paper>
                             ))
@@ -233,11 +236,11 @@ export function Travel({fulTrip} : any) {
                             train.map((item) => (
                                 <Paper shadow="xl" p="md" withBorder key={item.id}>
                                   <Grid><Text weight={700}>Travel : TRAIN number {item.id} </Text> </Grid>
-                                  <Grid><Text weight={700}>Departure :  </Text> <Text> -  {item.cityDeparture}</Text></Grid>
-                                  <Grid><Text weight={700}>Arrival :  </Text> <Text> -  {item.cityArrival}</Text></Grid>
-                                  <Grid><Text weight={700}>Start Date :  </Text> <Text> -  {item.startDate}</Text></Grid>
-                                  <Grid><Text weight={700}>End Date :  </Text> <Text> -  {item.endDate}</Text></Grid>
-                                  <Grid><Text weight={700}>Duration :  </Text> <Text> -  {item.duration}</Text></Grid>
+                                  <Grid><Text weight={700}>Departure :  </Text> <Text>&nbsp;{item.cityDeparture}</Text></Grid>
+                                  <Grid><Text weight={700}>Arrival :  </Text> <Text>&nbsp;{item.cityArrival}</Text></Grid>
+                                  <Grid><Text weight={700}>Start Date :  </Text> <Text>&nbsp;{item.startDate}</Text></Grid>
+                                  <Grid><Text weight={700}>End Date :  </Text> <Text>&nbsp;{item.endDate}</Text></Grid>
+                                  <Grid><Text weight={700}>Duration :  </Text> <Text>&nbsp;{item.duration}</Text></Grid>
                                   <Center><Button onClick={()=>SelectTravel(item.id, 'Train')} >Select this travel </Button></Center>
                                 </Paper>
                             ))
@@ -256,11 +259,11 @@ export function Travel({fulTrip} : any) {
                   <Center><h3>SELECTED TRAVEL : </h3></Center>
                   <Paper shadow="xl" p="md" withBorder >
                     <Grid><Text weight={700}>Travel : PLANE number  {plane[id].id}</Text> </Grid>
-                    <Grid><Text weight={700}>Departure :  </Text> <Text> -  {plane[id].cityDeparture}</Text></Grid>
-                    <Grid><Text weight={700}>Arrival :  </Text> <Text> -  {plane[id].cityArrival}</Text></Grid>
-                    <Grid><Text weight={700}>Start Date :  </Text> <Text> -  {plane[id].startDate}</Text></Grid>
-                    <Grid><Text weight={700}>End Date :  </Text> <Text> -  {plane[id].endDate}</Text></Grid>
-                    <Grid><Text weight={700}>Duration :  </Text> <Text> -  {plane[id].duration}</Text></Grid>
+                    <Grid><Text weight={700}>Departure :  </Text> <Text>&nbsp;{plane[id].cityDeparture}</Text></Grid>
+                    <Grid><Text weight={700}>Arrival :  </Text> <Text>&nbsp;{plane[id].cityArrival}</Text></Grid>
+                    <Grid><Text weight={700}>Start Date :  </Text> <Text>&nbsp;{plane[id].startDate}</Text></Grid>
+                    <Grid><Text weight={700}>End Date :  </Text> <Text>&nbsp;{plane[id].endDate}</Text></Grid>
+                    <Grid><Text weight={700}>Duration :  </Text> <Text>&nbsp;{plane[id].duration}</Text></Grid>
                   </Paper>
                 </>
                 )
@@ -272,11 +275,11 @@ export function Travel({fulTrip} : any) {
                   <Center><h3>SELECTED TRAVEL : </h3></Center>
                   <Paper shadow="xl" p="md" withBorder >
                   <Grid><Text weight={700}>Travel : TRAIN number  {train[id].id}</Text> </Grid>
-                  <Grid><Text weight={700}>Departure :  </Text> <Text> -  {train[id].cityDeparture}</Text></Grid>
-                  <Grid><Text weight={700}>Arrival :  </Text> <Text> -  {train[id].cityArrival}</Text></Grid>
-                  <Grid><Text weight={700}>Start Date :  </Text> <Text> -  {train[id].startDate}</Text></Grid>
-                  <Grid><Text weight={700}>End Date :  </Text> <Text> -  {train[id].endDate}</Text></Grid>
-                  <Grid><Text weight={700}>Duration :  </Text> <Text> -  {train[id].duration}</Text></Grid>
+                  <Grid><Text weight={700}>Departure :  </Text> <Text>&nbsp;{train[id].cityDeparture}</Text></Grid>
+                  <Grid><Text weight={700}>Arrival :  </Text> <Text>&nbsp;{train[id].cityArrival}</Text></Grid>
+                  <Grid><Text weight={700}>Start Date :  </Text> <Text>&nbsp;{train[id].startDate}</Text></Grid>
+                  <Grid><Text weight={700}>End Date :  </Text> <Text>&nbsp;{train[id].endDate}</Text></Grid>
+                  <Grid><Text weight={700}>Duration :  </Text> <Text>&nbsp;{train[id].duration}</Text></Grid>
                 </Paper>
                 </>
 
@@ -300,6 +303,9 @@ export function Travel({fulTrip} : any) {
           </Button>
           <Button onClick={goEnjoy} rightIcon={<Search size={18} />} variant="light" radius="xl">
             Search for Activities
+          </Button>
+          <Button onClick={goResumeTrip} rightIcon={<Search size={18} />} variant="light" radius="xl">
+            Delete après
           </Button>
         </Center>
 

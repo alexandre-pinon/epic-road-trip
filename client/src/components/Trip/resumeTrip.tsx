@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import {Avatar, Button, Center, Title, Card, Image, Text, Paper, Space} from '@mantine/core';
+import {Avatar, Button, Center, Title, Card, Image, Text, Paper, Space, Grid} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import React, {useState} from "react";
 
@@ -7,9 +7,8 @@ import React, {useState} from "react";
 
 
 
-export function ResumeTrip() {
+export function ResumeTrip({fulTrip} : any) {
     const navigate = useNavigate();
-
     const [subTrip, setSubTrip] = useState(
         [
             {
@@ -53,8 +52,8 @@ export function ResumeTrip() {
             }
         ])
 
-    console.log(subTrip.length)
-    console.log(subTrip[0])
+    console.log(fulTrip)
+    console.log(fulTrip.startDateValue.toDateString())
 
 
 
@@ -73,6 +72,29 @@ export function ResumeTrip() {
             <Center><Title order={1}>This is the summary of your Trip</Title></Center>
 
             <Space h="xl" />
+
+            <Paper shadow="xs" radius="lg" p="lg" withBorder>
+                <Center><h2>Your TRIP</h2></Center>
+                <h3>Cities</h3>
+                <Grid><Text weight={700}>Start City :  </Text><Text> &nbsp;{fulTrip.startCity}</Text></Grid>
+                <Grid><Text weight={700}>End City :  </Text><Text> &nbsp;{fulTrip.endCity}</Text></Grid>
+                <Space h="md" />
+                <h3>Dates</h3>
+                <Grid><Text weight={700}>Start Date :  </Text><Text> &nbsp;{fulTrip.startDateValue.toDateString()}</Text></Grid>
+                <Grid><Text weight={700}>End Date :  </Text><Text> &nbsp;{fulTrip.endDateValue.toDateString()}</Text></Grid>
+                <Space h="md" />
+                <h3>Itinerary</h3>
+                <Grid><Text weight={700}>Departure city :  </Text><Text> &nbsp;{fulTrip.selectedTravel.cityDeparture}</Text></Grid>
+                <Grid><Text weight={700}>Arrival city :  </Text><Text> &nbsp;{fulTrip.selectedTravel.cityArrival}</Text></Grid>
+                <Grid><Text weight={700}>Departure time :  </Text><Text> &nbsp;{fulTrip.selectedTravel.startDate}</Text></Grid>
+                <Grid><Text weight={700}>Arrival time :  </Text><Text> &nbsp;{fulTrip.selectedTravel.endDate}</Text></Grid>
+                <Grid><Text weight={700}>Duration :  </Text><Text> &nbsp;{fulTrip.selectedTravel.duration}</Text></Grid>
+                <Space h="md" />
+                <h3>Enjoy Activities</h3>
+                <Grid><Text weight={700}>Name :  </Text><Text> &nbsp;{fulTrip.enjoyName.name}</Text></Grid>
+                <Grid><Text weight={700}>Vicinity :  </Text><Text> &nbsp;{fulTrip.enjoyName.vicinity}</Text></Grid>
+                <Grid><Text weight={700}>Rating :  </Text><Text> &nbsp;{fulTrip.enjoyName.rating}</Text></Grid>
+            </Paper>
 
             <Paper shadow="xs" radius="lg" p="lg" withBorder>
                 {subTrip.map((subTrip, index) => (

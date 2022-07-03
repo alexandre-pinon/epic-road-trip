@@ -22,6 +22,7 @@ import {
 } from 'tabler-icons-react';
 
 import type { logicType } from "./HomeType";
+import {useNavigate} from "react-router-dom";
 
 const API_URL = 'https://api.github.com'
 
@@ -205,7 +206,9 @@ const useStyles = createStyles((theme) => ({
   // [END] Card with icon features
 }));
 
-export function Home() {
+export function Home({fulTrip} : any) {
+  const navigate = useNavigate();
+
   // const [username, setUsername] = useState('keajs')
   const { username, isLoading, sortedRepositories, error } = useValues(logic)
   const { setUsername } = useActions(logic)
@@ -214,6 +217,17 @@ export function Home() {
   const [endCalendar, setEndCalendar] = useState(false);
   const [startDateValue, setStartDate] = React.useState<Date | null>(new Date());
   const [endDateValue, setEndDate] = React.useState<Date | null>(new Date());
+
+
+  const validStartCity = (e: any) => {
+
+    console.log(e.key)
+    if(e.key === "Enter") {
+      fulTrip.setStartCity(e.target.value)
+      navigate('/startEndTrip');
+
+    }
+  }
 
   const items = mockdata.map((item) => (
     <UnstyledButton key={item.title} className={classes.item}>
@@ -251,6 +265,7 @@ export function Home() {
               placeholder="Where to?"
               radius="xl"
               size="md"
+              onKeyPress={(e: any) => validStartCity(e)}
             />
           </Container>
         </div>

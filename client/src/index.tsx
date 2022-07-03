@@ -16,7 +16,7 @@ function App() {
 
   let TXT = "Hello World";
 
-  const [startCity, setStartCity] = useState('Paris');
+  const [startCity, setStartCity] = useState('');
   const [endCity, setEndCity] = useState('');
   const [startDateValue, setStartDate] = React.useState<Date | null>(new Date());
   const [endDateValue, setEndDate] = React.useState<Date | null>(new Date());
@@ -43,14 +43,13 @@ function App() {
     <BrowserRouter>
       <AppHeader />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home fulTrip={fulTrip} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/startEndTrip" element={<StartEndTrip fulTrip={fulTrip} />} />
         <Route path="/travel" element={<Travel fulTrip={fulTrip} />} />
         <Route path="/city" element={<City />} />
-        {/* <Route path="/test" element={<Test />} /> */}
-        <Route path="/resumeTrip" element={<ResumeTrip />} />
+        <Route path="/resumeTrip" element={<ResumeTrip fulTrip={fulTrip} />} />
         <Route path="/mocking" element={<MockTest />} />
         <Route path="/enjoy" element={<Enjoy fulTrip={fulTrip} />} />
         <Route path="/sleep" element={<Sleep />} />
