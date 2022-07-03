@@ -47,7 +47,14 @@ export function Travel(props: any) {
   const [price, setPrice] = useState('')
 
 
-  const [train, setTrain] = useState([])
+  const [train, setTrain] = useState([{
+    cityDeparture,
+    cityArrival,
+    duration,
+    startDate,
+    endDate
+  }
+  ])
   const [plane, setPlane] = useState([{
     cityDeparture,
     cityArrival,
@@ -104,22 +111,44 @@ export function Travel(props: any) {
           price: data.price
         }
         myList2.push(travelInfo)
-        /*
-        setCityDeparture(data.arrival.city)
-        setCityArrival(data.departure.city)
-        setDuration(data.duration)
-        setStartDate(data.startdate)
-        setEndDate(data.enddate)
-        setPrice(data.price)
-         */
       })
       setPlane(myList2)
       console.log(myList2)
     });
   };
 
+  const trainTravel = () => {
+    let params = {
+      adults: 1,
+      departureDate: "2022-08-08T15:04:05Z",
+      destinationLocation: "Paris",
+      maxPrice: 10000,
+      originLocation: "London",
+    };
+    axios({
+      method: 'post',
+      url: 'http://localhost:8000/api/v1/roadtrip/travel/ground',
+      data: params
+    }).then(res => {
+      let myList2: any = [];
+      res.data.data.forEach((data: any ) => {
+        let travelInfo = {
+          cityDeparture: data.arrival.city,
+          cityArrival: data.departure.city,
+          duration: data.duration,
+          startDate: data.startdate,
+          endDate: data.enddate,
+        }
+        myList2.push(travelInfo)
+      })
+      setTrain(myList2)
+      console.log(myList2)
+    });
+  };
+
   useEffect(() => {
     planeTravel();
+    trainTravel();
   }, []);
 
 
@@ -138,9 +167,23 @@ export function Travel(props: any) {
                 <Button onClick={planeTravel} variant="default" className={classes.button}>
                   <PlaneInflight />
                 </Button>
-                <div>
 
-                </div>
+                <ul>
+                  {
+                    plane.length ? (
+                            plane.map((item, index) => (
+                                <Paper shadow="xl" p="md" withBorder key={index}>
+                                  <Text>Paper is the most basic ui component</Text>
+                                  <Text>
+                                    Use it to create cards, dropdowns, modals and other components that require background
+                                    with shadow
+                                  </Text>
+                                </Paper>
+                            ))
+                        )
+                        : <li> No Message Found </li>
+                  }
+                </ul>
 
 
 
@@ -151,29 +194,34 @@ export function Travel(props: any) {
           </Group>
 
           <Group grow spacing={0} position="apart">
-            <Button variant="default" className={classes.button}>
-              <Train />
-            </Button>
+            <SimpleGrid cols={1}>
+              <>
+                <Button variant="default" className={classes.button}>
+                  <Train />
+                </Button>
+                <ul>
+                  {
+                    train.length ? (
+                            train.map((item, index) => (
+                                <Paper shadow="xl" p="md" withBorder key={index}>
+                                  <Text>Paper is the most basic ui component</Text>
+                                  <Text>
+                                    Use it to create cards, dropdowns, modals and other components that require background
+                                    with shadow
+                                  </Text>
+                                </Paper>
+                            ))
+                        )
+                        : <li> No Message Found </li>
+                  }
+                </ul>
+              </>
+            </SimpleGrid>
           </Group>
         </Group>
 
 
-        <ul>
-          {
-            plane.length ? (
-                    plane.map((item, index) => (
-                        <Paper shadow="xl" p="md" withBorder key={index}>
-                          <Text>Paper is the most basic ui component</Text>
-                          <Text>
-                            Use it to create cards, dropdowns, modals and other components that require background
-                            with shadow
-                          </Text>
-                        </Paper>
-                    ))
-                )
-                : <li> No Message Found </li>
-          }
-        </ul>
+
 
 
 
