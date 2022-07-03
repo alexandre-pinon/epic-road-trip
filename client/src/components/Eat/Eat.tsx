@@ -1,7 +1,8 @@
-import { AspectRatio, Button, Container, createStyles, Group, Space, Tooltip } from "@mantine/core";
+import { AspectRatio, Button, Center, Container, createStyles, Grid, Group, Paper, Space, Tooltip, Text } from "@mantine/core";
 import axios from "axios";
 import { useState } from "react";
-import { ArrowForwardUp, Bike, Car, PlaneInflight, Train, Walk } from 'tabler-icons-react';
+import { useNavigate } from "react-router-dom";
+import { ArrowForwardUp, Bike, Car, PlaneInflight, Search, Train, Walk } from 'tabler-icons-react';
 
 const useStyles = createStyles((theme) => ({
   button: {
@@ -23,13 +24,39 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function Eat() {
+export function Eat({ fulTrip }: any) {
 
+  const navigate = useNavigate();
+
+  const goSleep = async () => {
+    console.log("Go to travel page!")
+    navigate('/sleep');
+  };
+
+  const goDrink = async () => {
+    console.log("Go to sleep page!")
+    navigate('/drink');
+  };
+
+  const [id, setId] = useState(0)
   const [city, setCity] = useState('')
   const [radius, setRadius] = useState('')
+  const [name, setName] = useState('')
+  const [rating, setRating] = useState('')
+  const [vicinity, setVicinity] = useState('')
 
+  const [eat, setEat] = useState([{
+    id,
+    name,
+    rating,
+    vicinity
+  }])
 
-  const retrieveSleep = (event: any) => {
+  let [selectedEat, setSelectedEat] = useState('')
+
+  const [toggleEat, setToggleEat] = useState(false)
+
+  const retrieveEat = (event: any) => {
     axios.defaults.withCredentials = true
     event.preventDefault()
     let params = {
@@ -47,27 +74,110 @@ export function Eat() {
     })
       .then((response) => {
         console.log(response.data);
-        return response.data;
+        let id = 0
+        let eatActivities: any = [];
+        response.data.data.forEach((data: any) => {
+          let activities = {
+            id: id,
+            name: data.name,
+            rating: data.rating,
+            vicinity: data.vicinity,
+          }
+          eatActivities.push(activities)
+          id++;
+        })
+        setEat(eatActivities)
       })
       .catch(function (error) {
         console.log(error);
       });
   };
 
+  const showEat = () => {
+    setToggleEat(!toggleEat)
+  }
+
+  const selectEat = (id: number, type: string) => {
+
+    setSelectedEat(type)
+    console.log(id)
+    setId(id)
+
+    if (type == "Eat") {
+      fulTrip.setEat(eat[id])
+    }
+
+    console.log("fulTrip content: ", fulTrip)
+  }
+
   return (
-    <form onSubmit={retrieveSleep}>
-      <h1 className="h3 mb-3 fw-normal">Eat Activities</h1>
+    <Container>
+      <form onSubmit={retrieveEat}>
+        <h1 className="h3 mb-3 fw-normal">Eat Activities</h1>
 
-      <input type="text" className="form-control" placeholder="City" required
-        onChange={e => setCity(e.target.value)}
-      />
+        <input type="text" className="form-control" placeholder="City" required
+          onChange={e => setCity(e.target.value)}
+        />
 
-      <input type="text" className="form-control" placeholder="Radius" required
-        onChange={e => setRadius(e.target.value)}
-      />
+        <input type="text" className="form-control" placeholder="Radius" required
+          onChange={e => setRadius(e.target.value)}
+        />
 
-      <button className="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
-    </form>
+        <button className="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
+
+
+      </form>
+
+      <Button onClick={showEat} variant="default">
+        <PlaneInflight />
+      </Button>
+
+
+      <ul>
+        {
+          toggleEat ? (
+            eat.map((item) => (
+              <Paper shadow="xl" p="md" withBorder key={item.id}>
+                <Grid><Text weight={700}>Name :  </Text> <Text> -  {item.name}</Text></Grid>
+                <Grid><Text weight={700}>Rating :  </Text> <Text> -  {item.rating}</Text></Grid>
+                <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {item.vicinity}</Text></Grid>
+                <Center><Button onClick={() => selectEat(item.id, 'Eat')} >Select this eat </Button></Center>
+              </Paper>
+            ))
+          )
+            : null
+        }
+      </ul>
+
+
+      <div>
+        {
+          selectedEat === "Eat" ? (
+            <>
+              <Center><h3>SELECTED TRAVEL : </h3></Center>
+              <Paper shadow="xl" p="md" withBorder >
+                <Grid><Text weight={700}>Enjoy ID  {eat[id].id}</Text> </Grid>
+                <Grid><Text weight={700}>Name :  </Text> <Text> -  {eat[id].name}</Text></Grid>
+                <Grid><Text weight={700}>Rating :  </Text> <Text> -  {eat[id].rating}</Text></Grid>
+                <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {eat[id].vicinity}</Text></Grid>
+                <Center><Button onClick={() => selectEat(eat[id].id, 'Eat')} >Confirm this Eat </Button></Center>
+              </Paper>
+            </>
+          )
+            : null
+        }
+      </div>
+
+
+      <Center>
+        <Button onClick={goSleep} rightIcon={<Search size={18} />} variant="light" radius="xl">
+          Go back
+        </Button>
+        <Button onClick={goDrink} rightIcon={<Search size={18} />} variant="light" radius="xl">
+          Search for Activities
+        </Button>
+      </Center>
+    </Container>
     // <Container size={720}>
     //   <Group grow spacing={0}>
     //     <Button variant="default" className={classes.button}>
@@ -102,3 +212,8 @@ export function Eat() {
     // </Container>
   )
 }
+
+function enjoyActivities(enjoyActivities: any) {
+  throw new Error("Function not implemented.");
+}
+

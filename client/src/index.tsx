@@ -6,6 +6,7 @@ import { MantineProvider } from '@mantine/core';
 import { Register, Login, AppHeader, Home, Travel, StartEndTrip, City, ResumeTrip, MockTest, Enjoy } from "./components/organizationComponent";
 import reportWebVitals from './reportWebVitals';
 import { Sleep } from './components/Sleep/Sleep';
+import { Eat } from './components/Eat/Eat';
 
 // if (process.env.NODE_ENV === 'development') {
 //   const { worker } = require('./mocks/browser')
@@ -23,6 +24,7 @@ function App() {
   const [selectedTravel, setSelectedTravel] = useState([]);
   const [enjoyName, setEnjoyName] = useState('');
   const [sleep, setSleep] = useState('');
+  const [eat, setEat] = useState('');
 
   let fulTrip = {
     startCity,
@@ -38,7 +40,9 @@ function App() {
     enjoyName,
     setEnjoyName,
     sleep,
-    setSleep
+    setSleep,
+    eat,
+    setEat
   }
 
 
@@ -56,7 +60,7 @@ function App() {
         <Route path="/mocking" element={<MockTest />} />
         <Route path="/enjoy" element={<Enjoy fulTrip={fulTrip} />} />
         <Route path="/sleep" element={<Sleep fulTrip={fulTrip} />} />
-        <Route path="/eat" element={<Sleep fulTrip={fulTrip} />} />
+        <Route path="/eat" element={<Eat fulTrip={fulTrip} />} />
 
         {/* <Route path="/login" element={<Login />} /> */}
       </Routes>
