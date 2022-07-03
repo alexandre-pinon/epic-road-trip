@@ -47,7 +47,9 @@ export function Travel({fulTrip} : any) {
 
   const goStartAndEnd = async () => {
     console.log("Go to travel page!")
-    navigate('/startEndTrip');
+    console.log(fulTrip)
+    console.log(fulTrip.startDateValue)
+    //navigate('/startEndTrip');
   };
 
   const goEnjoy = async () => {
@@ -96,10 +98,10 @@ export function Travel({fulTrip} : any) {
   const planeTravel = () => {
     let params = {
       adults: 1,
-      departureDate: "2022-08-08T15:04:05Z",
-      destinationLocation: "Paris",
+      departureDate: fulTrip.startDateValue,
+      destinationLocation: fulTrip.endCity,
       maxPrice: 10000,
-      originLocation: "London",
+      originLocation: fulTrip.startCity
     };
     axios({
       method: 'post',
@@ -111,8 +113,8 @@ export function Travel({fulTrip} : any) {
       res.data.data.forEach((data: any ) => {
         let travelInfo = {
           id: id,
-          cityDeparture: data.arrival.city,
-          cityArrival: data.departure.city,
+          cityDeparture: data.departure.city,
+          cityArrival: data.arrival.city,
           duration: data.duration,
           startDate: data.startdate,
           endDate: data.enddate
@@ -127,9 +129,9 @@ export function Travel({fulTrip} : any) {
 
   const trainTravel = () => {
     let params = {
-      departureTime: "2022-08-18T15:04:05Z",
-      destination: "Paris",
-      origin: "London",
+      departureTime: fulTrip.startDateValue,
+      destination: fulTrip.endCity,
+      origin: fulTrip.startCity
     };
     axios({
       method: 'post',
@@ -141,8 +143,8 @@ export function Travel({fulTrip} : any) {
       res.data.data.forEach((data: any ) => {
         let travelInfo = {
           id: id,
-          cityDeparture: data.arrival.city,
-          cityArrival: data.departure.city,
+          cityDeparture: data.departure.city,
+          cityArrival: data.arrival.city,
           duration: data.duration,
           startDate: data.startdate,
           endDate: data.enddate,
