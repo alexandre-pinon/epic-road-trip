@@ -17,6 +17,11 @@ export function StartEndTrip( {fulTrip} : any) {
         navigate('/');
     };
 
+    const goTravel = async () => {
+        console.log("Go to travel page!")
+        navigate('/travel');
+    };
+
     const city = Object.keys(cityObjects)
 
     return (
@@ -93,7 +98,10 @@ export function StartEndTrip( {fulTrip} : any) {
                 <Space h="xl" />
 
                 <Center>
-                    <Button rightIcon={<Search size={18} />} variant="light" radius="xl">
+                    <Button onClick={goToHome} rightIcon={<Search size={18} />} variant="light" radius="xl">
+                        Go back
+                    </Button>
+                    <Button onClick={goTravel} rightIcon={<Search size={18} />} variant="light" radius="xl">
                         Search for itineraries
                     </Button>
                 </Center>

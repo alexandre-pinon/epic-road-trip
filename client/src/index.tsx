@@ -20,6 +20,7 @@ function App() {
   const [endCity, setEndCity] = useState('');
   const [startDateValue, setStartDate] = React.useState<Date | null>(new Date());
   const [endDateValue, setEndDate] = React.useState<Date | null>(new Date());
+  const [selectedTravel, setSelectedTravel] = useState([]);
   const [enjoyName, setEnjoyName] = useState('');
 
   let fulTrip = {
@@ -31,6 +32,8 @@ function App() {
     setStartDate,
     endDateValue,
     setEndDate,
+    selectedTravel,
+    setSelectedTravel,
     enjoyName,
     setEnjoyName,
   }
@@ -44,7 +47,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/startEndTrip" element={<StartEndTrip fulTrip={fulTrip} />} />
-        <Route path="/travel" element={<Travel txt={TXT} />} />
+        <Route path="/travel" element={<Travel fulTrip={fulTrip} />} />
         <Route path="/city" element={<City />} />
         {/* <Route path="/test" element={<Test />} /> */}
         <Route path="/resumeTrip" element={<ResumeTrip />} />

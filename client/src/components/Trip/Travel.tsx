@@ -12,12 +12,13 @@ import {
   Paper,
   Grid, Center
 } from "@mantine/core";
-import { ArrowForwardUp, Bike, Car, PlaneInflight, Train, Walk } from 'tabler-icons-react';
+import {ArrowForwardUp, Bike, Car, PlaneInflight, Search, Train, Walk} from 'tabler-icons-react';
 import axios from "axios";
-import {SetStateAction, useEffect, useState} from "react";
+import React, {SetStateAction, useEffect, useState} from "react";
 import {use} from "msw/lib/types/utils/internal/requestHandlerUtils";
 // @ts-ignore
 import { v4 as uuidv4 } from 'uuid';
+import {useNavigate} from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   button: {
@@ -40,8 +41,19 @@ const useStyles = createStyles((theme) => ({
 }));
 
 
-export function Travel(props: any) {
+export function Travel({fulTrip} : any) {
   const {classes} = useStyles();
+  const navigate = useNavigate();
+
+  const goStartAndEnd = async () => {
+    console.log("Go to travel page!")
+    navigate('/startEndTrip');
+  };
+
+  const goEnjoy = async () => {
+    console.log("Go to enjoy page!")
+    navigate('/enjoy');
+  };
 
   const [id, setId] = useState(0)
   const [cityDeparture, setCityDeparture] = useState('')
@@ -166,6 +178,13 @@ export function Travel(props: any) {
     setSelectedTravel(type)
     console.log(id)
     setId(id)
+
+    if (type == "Plane") {
+      fulTrip.setSelectedTravel(plane[id])
+    }
+    else {
+      fulTrip.setSelectedTravel(train[id])
+    }
   }
 
   return (
@@ -272,6 +291,16 @@ export function Travel(props: any) {
 
         <Space h="xl" />
 
+
+        <Center>
+          <Button onClick={goStartAndEnd} rightIcon={<Search size={18} />} variant="light" radius="xl">
+            Go back
+          </Button>
+          <Button onClick={goEnjoy} rightIcon={<Search size={18} />} variant="light" radius="xl">
+            Search for Activities
+          </Button>
+        </Center>
+
       {/*
       <AspectRatio ratio={16 / 9}>
         <iframe
@@ -281,6 +310,8 @@ export function Travel(props: any) {
         />
       </AspectRatio>
       */}
+
+
     </Container>
   )
 }
