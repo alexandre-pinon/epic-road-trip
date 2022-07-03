@@ -56,6 +56,7 @@ function App() {
         <Route path="/mocking" element={<MockTest />} />
         <Route path="/enjoy" element={<Enjoy fulTrip={fulTrip} />} />
         <Route path="/sleep" element={<Sleep fulTrip={fulTrip} />} />
+        <Route path="/eat" element={<Sleep fulTrip={fulTrip} />} />
 
         {/* <Route path="/login" element={<Login />} /> */}
       </Routes>
