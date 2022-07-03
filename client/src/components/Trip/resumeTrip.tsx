@@ -94,6 +94,21 @@ export function ResumeTrip({fulTrip} : any) {
                 <Grid><Text weight={700}>Name :  </Text><Text> &nbsp;{fulTrip.enjoyName.name}</Text></Grid>
                 <Grid><Text weight={700}>Vicinity :  </Text><Text> &nbsp;{fulTrip.enjoyName.vicinity}</Text></Grid>
                 <Grid><Text weight={700}>Rating :  </Text><Text> &nbsp;{fulTrip.enjoyName.rating}</Text></Grid>
+                <Space h="md" />
+                <h3>Eat</h3>
+                <Grid><Text weight={700}>Restaurant name :  </Text><Text> &nbsp;{fulTrip.eat.name}</Text></Grid>
+                <Grid><Text weight={700}>Address :  </Text><Text> &nbsp;{fulTrip.eat.vicinity}</Text></Grid>
+                <Grid><Text weight={700}>Rating :  </Text><Text> &nbsp;{fulTrip.eat.rating}</Text></Grid>
+                <Space h="md" />
+                <h3>Drink</h3>
+                <Grid><Text weight={700}>Restaurant name :  </Text><Text> &nbsp;{fulTrip.drink.name}</Text></Grid>
+                <Grid><Text weight={700}>Address :  </Text><Text> &nbsp;{fulTrip.drink.vicinity}</Text></Grid>
+                <Grid><Text weight={700}>Rating :  </Text><Text> &nbsp;{fulTrip.drink.rating}</Text></Grid>
+                <Space h="md" />
+                <h3>Hotel</h3>
+                <Grid><Text weight={700}>Hotel :  </Text><Text> &nbsp;{fulTrip.sleep.nameSleep}</Text></Grid>
+                <Grid><Text weight={700}>Address :  </Text><Text> &nbsp;{fulTrip.sleep.vicinitySleep}</Text></Grid>
+                <Grid><Text weight={700}>Rating :  </Text><Text> &nbsp;{fulTrip.sleep.ratingSleep}</Text></Grid>
             </Paper>
 
             {/*
