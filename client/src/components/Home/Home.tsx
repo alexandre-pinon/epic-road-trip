@@ -1,6 +1,26 @@
 import React, { useState } from 'react'
 import { kea, actions, path, reducers, useActions, useValues, listeners, afterMount, selectors, props } from 'kea';
-import { createStyles, Container, UnstyledButton, Text, Card, SimpleGrid, Overlay, Space, Input, Center, TextInput, ActionIcon, Modal, Button, Title, Loader, List, ThemeIcon } from '@mantine/core';
+import {
+  createStyles,
+  Container,
+  UnstyledButton,
+  Text,
+  Card,
+  SimpleGrid,
+  Overlay,
+  Space,
+  Input,
+  Center,
+  TextInput,
+  ActionIcon,
+  Modal,
+  Button,
+  Title,
+  Loader,
+  List,
+  ThemeIcon,
+  Autocomplete
+} from '@mantine/core';
 import { Calendar } from '@mantine/dates';
 
 import {
@@ -23,6 +43,8 @@ import {
 
 import type { logicType } from "./HomeType";
 import {useNavigate} from "react-router-dom";
+import cityObjects from "../../data/iata_codes.json";
+
 
 const API_URL = 'https://api.github.com'
 
@@ -220,14 +242,14 @@ export function Home({fulTrip} : any) {
 
 
   const validStartCity = (e: any) => {
-
-    console.log(e.key)
     if(e.key === "Enter") {
       fulTrip.setStartCity(e.target.value)
       navigate('/startEndTrip');
 
     }
   }
+
+  const city = Object.keys(cityObjects)
 
   const items = mockdata.map((item) => (
     <UnstyledButton key={item.title} className={classes.item}>
@@ -260,13 +282,13 @@ export function Home({fulTrip} : any) {
 
         <div className={classes.inner}>
           <Container size={640}>
-            <Input
+            <Autocomplete
               icon={<Search />}
               placeholder="Where to?"
               radius="xl"
               size="md"
               onKeyPress={(e: any) => validStartCity(e)}
-            />
+              data={city}/>
           </Container>
         </div>
       </div>

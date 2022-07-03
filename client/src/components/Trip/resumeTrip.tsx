@@ -96,6 +96,7 @@ export function ResumeTrip({fulTrip} : any) {
                 <Grid><Text weight={700}>Rating :  </Text><Text> &nbsp;{fulTrip.enjoyName.rating}</Text></Grid>
             </Paper>
 
+            {/*
             <Paper shadow="xs" radius="lg" p="lg" withBorder>
                 {subTrip.map((subTrip, index) => (
                     <>
@@ -118,24 +119,26 @@ export function ResumeTrip({fulTrip} : any) {
                                 </>
 
                             ))}
-
-
                         </Paper>
                         <h1></h1>
                     </>
                 ))}
-
             </Paper>
+            */}
+
 
             <Space h="xl" />
 
             <Center>
                 <Button onClick={goToHome} variant="light" radius="xl">
-                    Retour
+                    Go to Home Page
                 </Button>
+                {/*
                 <Button onClick={addSubTrip} variant="light" radius="xl">
                     Add an other sub-Trip
                 </Button>
+                */}
+
             </Center>
         </>
     )
