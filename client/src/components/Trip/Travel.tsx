@@ -182,7 +182,7 @@ export function Travel(props: any) {
                     togglePlane ? (
                             plane.map((item) => (
                                   <Paper shadow="xl" p="md" withBorder key={item.id}>
-                                    <Grid><Text weight={700}>Departure :  </Text> <Text> -  {item.id}</Text></Grid>
+                                    <Grid><Text weight={700}>Travel : PLANE number  {item.id}</Text> </Grid>
                                     <Grid><Text weight={700}>Departure :  </Text> <Text> -  {item.cityDeparture}</Text></Grid>
                                     <Grid><Text weight={700}>Arrival :  </Text> <Text> -  {item.cityArrival}</Text></Grid>
                                     <Grid><Text weight={700}>Start Date :  </Text> <Text> -  {item.startDate}</Text></Grid>
@@ -211,14 +211,13 @@ export function Travel(props: any) {
                     toggleTrain ? (
                             train.map((item) => (
                                 <Paper shadow="xl" p="md" withBorder key={item.id}>
-                                  <Grid><Text weight={700}>Departure :  </Text> <Text> -  {item.id}</Text></Grid>
+                                  <Grid><Text weight={700}>Travel : TRAIN number {item.id} </Text> </Grid>
                                   <Grid><Text weight={700}>Departure :  </Text> <Text> -  {item.cityDeparture}</Text></Grid>
                                   <Grid><Text weight={700}>Arrival :  </Text> <Text> -  {item.cityArrival}</Text></Grid>
                                   <Grid><Text weight={700}>Start Date :  </Text> <Text> -  {item.startDate}</Text></Grid>
                                   <Grid><Text weight={700}>End Date :  </Text> <Text> -  {item.endDate}</Text></Grid>
                                   <Grid><Text weight={700}>Duration :  </Text> <Text> -  {item.duration}</Text></Grid>
                                   <Center><Button onClick={()=>SelectTravel(item.id, 'Train')} >Select this travel </Button></Center>
-
                                 </Paper>
                             ))
                         )
@@ -232,31 +231,36 @@ export function Travel(props: any) {
         <div>
           {
             selectedTravel==="Plane" ? (
-                <Paper shadow="xl" p="md" withBorder >
-                  <div>{id}</div>
-                  <Grid><Text weight={700}>Departure :  </Text> <Text> -  {plane[id].id}</Text></Grid>
-                  <Grid><Text weight={700}>Departure :  </Text> <Text> -  {plane[id].cityDeparture}</Text></Grid>
-                  <Grid><Text weight={700}>Arrival :  </Text> <Text> -  {plane[id].cityArrival}</Text></Grid>
-                  <Grid><Text weight={700}>Start Date :  </Text> <Text> -  {plane[id].startDate}</Text></Grid>
-                  <Grid><Text weight={700}>End Date :  </Text> <Text> -  {plane[id].endDate}</Text></Grid>
-                  <Grid><Text weight={700}>Duration :  </Text> <Text> -  {plane[id].duration}</Text></Grid>
-                </Paper>
+                <>
+                  <Center><h3>SELECTED TRAVEL : </h3></Center>
+                  <Paper shadow="xl" p="md" withBorder >
+                    <Grid><Text weight={700}>Travel : PLANE number  {plane[id].id}</Text> </Grid>
+                    <Grid><Text weight={700}>Departure :  </Text> <Text> -  {plane[id].cityDeparture}</Text></Grid>
+                    <Grid><Text weight={700}>Arrival :  </Text> <Text> -  {plane[id].cityArrival}</Text></Grid>
+                    <Grid><Text weight={700}>Start Date :  </Text> <Text> -  {plane[id].startDate}</Text></Grid>
+                    <Grid><Text weight={700}>End Date :  </Text> <Text> -  {plane[id].endDate}</Text></Grid>
+                    <Grid><Text weight={700}>Duration :  </Text> <Text> -  {plane[id].duration}</Text></Grid>
+                  </Paper>
+                </>
                 )
-                : <div>NOOONNNNNN</div>
+                : null
           }
           {
             selectedTravel==="Train" ? (
-                    <Paper shadow="xl" p="md" withBorder >
-                      <div>{id}</div>
-                      <Grid><Text weight={700}>Departure :  </Text> <Text> -  {plane[id].id}</Text></Grid>
-                      <Grid><Text weight={700}>Departure :  </Text> <Text> -  {plane[id].cityDeparture}</Text></Grid>
-                      <Grid><Text weight={700}>Arrival :  </Text> <Text> -  {plane[id].cityArrival}</Text></Grid>
-                      <Grid><Text weight={700}>Start Date :  </Text> <Text> -  {plane[id].startDate}</Text></Grid>
-                      <Grid><Text weight={700}>End Date :  </Text> <Text> -  {plane[id].endDate}</Text></Grid>
-                      <Grid><Text weight={700}>Duration :  </Text> <Text> -  {plane[id].duration}</Text></Grid>
-                    </Paper>
+                <>
+                  <Center><h3>SELECTED TRAVEL : </h3></Center>
+                  <Paper shadow="xl" p="md" withBorder >
+                  <Grid><Text weight={700}>Travel : TRAIN number  {train[id].id}</Text> </Grid>
+                  <Grid><Text weight={700}>Departure :  </Text> <Text> -  {train[id].cityDeparture}</Text></Grid>
+                  <Grid><Text weight={700}>Arrival :  </Text> <Text> -  {train[id].cityArrival}</Text></Grid>
+                  <Grid><Text weight={700}>Start Date :  </Text> <Text> -  {train[id].startDate}</Text></Grid>
+                  <Grid><Text weight={700}>End Date :  </Text> <Text> -  {train[id].endDate}</Text></Grid>
+                  <Grid><Text weight={700}>Duration :  </Text> <Text> -  {train[id].duration}</Text></Grid>
+                </Paper>
+                </>
+
                 )
-                : <div>NOOONNNNNN</div>
+                : null
           }
         </div>
 
