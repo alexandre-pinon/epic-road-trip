@@ -10,12 +10,14 @@ import {
   Text,
   SimpleGrid,
   Paper,
-  Grid
+  Grid, Center
 } from "@mantine/core";
 import { ArrowForwardUp, Bike, Car, PlaneInflight, Train, Walk } from 'tabler-icons-react';
 import axios from "axios";
 import {SetStateAction, useEffect, useState} from "react";
 import {use} from "msw/lib/types/utils/internal/requestHandlerUtils";
+// @ts-ignore
+import { v4 as uuidv4 } from 'uuid';
 
 const useStyles = createStyles((theme) => ({
   button: {
@@ -41,6 +43,7 @@ const useStyles = createStyles((theme) => ({
 export function Travel(props: any) {
   const {classes} = useStyles();
 
+  const [id, setId] = useState(0)
   const [cityDeparture, setCityDeparture] = useState('')
   const [cityArrival, setCityArrival] = useState('')
   const [duration, setDuration] = useState('')
@@ -48,12 +51,15 @@ export function Travel(props: any) {
   const [endDate, setEndDate] = useState('')
   const [price, setPrice] = useState('')
 
+  let [selectedTravel, setSelectedTravel] = useState('')
+
   const [togglePlane, setTogglePlane] = useState(false)
   const [toggleTrain, setToggleTrain] = useState(false)
 
 
 
-  const [train, setTrain] = useState([{
+  const [plane, setPlane] = useState([{
+    id,
     cityDeparture,
     cityArrival,
     duration,
@@ -61,14 +67,18 @@ export function Travel(props: any) {
     endDate
   }
   ])
-  const [plane, setPlane] = useState([{
+
+  const [train, setTrain] = useState([{
+    id,
     cityDeparture,
     cityArrival,
     duration,
     startDate,
-    endDate,
-    price
-  }])
+    endDate
+  }
+  ])
+
+
 
 
   const planeTravel = () => {
@@ -84,17 +94,19 @@ export function Travel(props: any) {
       url: 'http://localhost:8000/api/v1/roadtrip/travel/air',
       data: params
     }).then(res => {
+      let id = 0
       let myList2: any = [];
       res.data.data.forEach((data: any ) => {
         let travelInfo = {
+          id: id,
           cityDeparture: data.arrival.city,
           cityArrival: data.departure.city,
           duration: data.duration,
           startDate: data.startdate,
-          endDate: data.enddate,
-          price: data.price
+          endDate: data.enddate
         }
         myList2.push(travelInfo)
+        id ++
       })
       setPlane(myList2)
       console.log(myList2)
@@ -112,9 +124,11 @@ export function Travel(props: any) {
       url: 'http://localhost:8000/api/v1/roadtrip/travel/ground',
       data: params
     }).then(res => {
+      let id = 0
       let myList2: any = [];
       res.data.data.forEach((data: any ) => {
         let travelInfo = {
+          id: id,
           cityDeparture: data.arrival.city,
           cityArrival: data.departure.city,
           duration: data.duration,
@@ -122,6 +136,7 @@ export function Travel(props: any) {
           endDate: data.enddate,
         }
         myList2.push(travelInfo)
+        id ++;
       })
       setTrain(myList2)
       console.log(myList2)
@@ -142,12 +157,20 @@ export function Travel(props: any) {
     setToggleTrain(!toggleTrain)
   }
 
+  const test = () => {
+    console.log("test")
+  }
+
+  const SelectTravel = (id: number, type: string) => {
+
+    setSelectedTravel(type)
+    console.log(id)
+    setId(id)
+  }
 
   return (
-      <Container size={1000}>
+      <Container size={600}>
         <Group grow spacing={0} position="apart">
-
-          <Group grow spacing={0} position="apart">
             <SimpleGrid cols={1}>
               <>
                 <Button onClick={showPlane} variant="default" className={classes.button}>
@@ -157,15 +180,16 @@ export function Travel(props: any) {
                 <ul>
                   {
                     togglePlane ? (
-                            plane.map((item, index) => (
-                                <Paper shadow="xl" p="md" withBorder key={index}>
-                                  <Grid><Text weight={700}>Departure :  </Text> <Text> -  {item.cityDeparture}</Text></Grid>
-                                  <Grid><Text weight={700}>Arrival :  </Text> <Text> -  {item.cityArrival}</Text></Grid>
-                                  <Grid><Text weight={700}>Start Date :  </Text> <Text> -  {item.startDate}</Text></Grid>
-                                  <Grid><Text weight={700}>End Date :  </Text> <Text> -  {item.endDate}</Text></Grid>
-                                  <Grid><Text weight={700}>Duration :  </Text> <Text> -  {item.duration}</Text></Grid>
-                                  <Grid><Text weight={700}>Price :  </Text> <Text>{ - item.price}</Text></Grid>
-                                </Paper>
+                            plane.map((item) => (
+                                  <Paper shadow="xl" p="md" withBorder key={item.id}>
+                                    <Grid><Text weight={700}>Departure :  </Text> <Text> -  {item.id}</Text></Grid>
+                                    <Grid><Text weight={700}>Departure :  </Text> <Text> -  {item.cityDeparture}</Text></Grid>
+                                    <Grid><Text weight={700}>Arrival :  </Text> <Text> -  {item.cityArrival}</Text></Grid>
+                                    <Grid><Text weight={700}>Start Date :  </Text> <Text> -  {item.startDate}</Text></Grid>
+                                    <Grid><Text weight={700}>End Date :  </Text> <Text> -  {item.endDate}</Text></Grid>
+                                    <Grid><Text weight={700}>Duration :  </Text> <Text> -  {item.duration}</Text></Grid>
+                                    <Center><Button onClick={()=>SelectTravel(item.id, 'Plane')} >Select this travel </Button></Center>
+                                  </Paper>
                             ))
                         )
                         : null
@@ -185,13 +209,16 @@ export function Travel(props: any) {
                 <ul>
                   {
                     toggleTrain ? (
-                            train.map((item, index) => (
-                                <Paper shadow="xl" p="md" withBorder key={index}>
+                            train.map((item) => (
+                                <Paper shadow="xl" p="md" withBorder key={item.id}>
+                                  <Grid><Text weight={700}>Departure :  </Text> <Text> -  {item.id}</Text></Grid>
                                   <Grid><Text weight={700}>Departure :  </Text> <Text> -  {item.cityDeparture}</Text></Grid>
                                   <Grid><Text weight={700}>Arrival :  </Text> <Text> -  {item.cityArrival}</Text></Grid>
                                   <Grid><Text weight={700}>Start Date :  </Text> <Text> -  {item.startDate}</Text></Grid>
                                   <Grid><Text weight={700}>End Date :  </Text> <Text> -  {item.endDate}</Text></Grid>
                                   <Grid><Text weight={700}>Duration :  </Text> <Text> -  {item.duration}</Text></Grid>
+                                  <Center><Button onClick={()=>SelectTravel(item.id, 'Train')} >Select this travel </Button></Center>
+
                                 </Paper>
                             ))
                         )
@@ -200,11 +227,38 @@ export function Travel(props: any) {
                 </ul>
               </>
             </SimpleGrid>
-          </Group>
         </Group>
 
-
-
+        <div>
+          {
+            selectedTravel==="Plane" ? (
+                <Paper shadow="xl" p="md" withBorder >
+                  <div>{id}</div>
+                  <Grid><Text weight={700}>Departure :  </Text> <Text> -  {plane[id].id}</Text></Grid>
+                  <Grid><Text weight={700}>Departure :  </Text> <Text> -  {plane[id].cityDeparture}</Text></Grid>
+                  <Grid><Text weight={700}>Arrival :  </Text> <Text> -  {plane[id].cityArrival}</Text></Grid>
+                  <Grid><Text weight={700}>Start Date :  </Text> <Text> -  {plane[id].startDate}</Text></Grid>
+                  <Grid><Text weight={700}>End Date :  </Text> <Text> -  {plane[id].endDate}</Text></Grid>
+                  <Grid><Text weight={700}>Duration :  </Text> <Text> -  {plane[id].duration}</Text></Grid>
+                </Paper>
+                )
+                : <div>NOOONNNNNN</div>
+          }
+          {
+            selectedTravel==="Train" ? (
+                    <Paper shadow="xl" p="md" withBorder >
+                      <div>{id}</div>
+                      <Grid><Text weight={700}>Departure :  </Text> <Text> -  {plane[id].id}</Text></Grid>
+                      <Grid><Text weight={700}>Departure :  </Text> <Text> -  {plane[id].cityDeparture}</Text></Grid>
+                      <Grid><Text weight={700}>Arrival :  </Text> <Text> -  {plane[id].cityArrival}</Text></Grid>
+                      <Grid><Text weight={700}>Start Date :  </Text> <Text> -  {plane[id].startDate}</Text></Grid>
+                      <Grid><Text weight={700}>End Date :  </Text> <Text> -  {plane[id].endDate}</Text></Grid>
+                      <Grid><Text weight={700}>Duration :  </Text> <Text> -  {plane[id].duration}</Text></Grid>
+                    </Paper>
+                )
+                : <div>NOOONNNNNN</div>
+          }
+        </div>
 
 
 
