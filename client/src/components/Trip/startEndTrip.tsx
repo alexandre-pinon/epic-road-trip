@@ -1,15 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 
-import React, {useState} from "react";
-import {ActionIcon, Button, Center, Container, createStyles, Modal, Space, TextInput, Title, Autocomplete} from "@mantine/core";
-import {BuildingSkyscraper, CalendarEvent, Search, BuildingCommunity, CalendarMinus} from "tabler-icons-react";
-import {Calendar, DatePicker} from "@mantine/dates";
-import {props} from "kea";
+import React, { useState } from "react";
+import { ActionIcon, Button, Center, Container, createStyles, Modal, Space, TextInput, Title, Autocomplete } from "@mantine/core";
+import { BuildingSkyscraper, CalendarEvent, Search, BuildingCommunity, CalendarMinus } from "tabler-icons-react";
+import { Calendar, DatePicker } from "@mantine/dates";
+import { props } from "kea";
 import cityObjects from '../../data/iata_codes.json';
 
 
 
-export function StartEndTrip( {fulTrip} : any) {
+export function StartEndTrip({ fulTrip }: any) {
     const navigate = useNavigate();
 
     const goToHome = async () => {
@@ -27,13 +27,13 @@ export function StartEndTrip( {fulTrip} : any) {
     return (
         <>
             <Center>
-                <Title order={2}> Start & End of your sub-trip </Title>
+                <Title style={{ color: "#616161 " }} order={2}> Start & End of your sub-trip </Title>
             </Center>
 
             <Space h="xl" />
 
             <Center>
-                <Title order={3}> Please choose the city of departure and arrival of your sub-trip </Title>
+                <Title style={{ color: "#616161 " }} order={4}>Choose the city of departure & arrival of your sub-trip </Title>
             </Center>
 
             <Space h="lg" />
@@ -72,7 +72,7 @@ export function StartEndTrip( {fulTrip} : any) {
             <Space h="xl" />
 
             <Center>
-                <Title order={3}> Please choose the date of departure and arrival of your sub-trip </Title>
+                <Title style={{ color: "#616161 " }} order={4}>Choose the date of departure & arrival of your sub-trip </Title>
             </Center>
 
             <Space h="xl" />
