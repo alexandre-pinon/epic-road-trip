@@ -120,7 +120,7 @@ func (suite *userControllerSuite) TestGetUserByID_Exists_Positive() {
 		Trips:     []*model.Roadtrip{},
 	}
 
-	suite.svc.On("GetUserByID", id).Return(&user, nil)
+	suite.svc.On("GetUserByID", id, false).Return(&user, nil)
 	response, err := http.Get(fmt.Sprintf("%s/api/user/%s", suite.testServer.URL, id.Hex()))
 	suite.NoError(err, "no error when calling this endpoint")
 	defer response.Body.Close()

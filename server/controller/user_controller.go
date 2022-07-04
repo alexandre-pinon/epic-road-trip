@@ -1,8 +1,10 @@
 package controller
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/alexandre-pinon/epic-road-trip/model"
 	"github.com/alexandre-pinon/epic-road-trip/service"
@@ -72,7 +74,21 @@ func (ctrl *userController) GetAllUsers(ctx *gin.Context) (*model.AppResult, *mo
 // @Router /user/:id [get]
 func (ctrl *userController) GetUserByID(ctx *gin.Context) (*model.AppResult, *model.AppError) {
 	id, _ := ctx.Get("id")
-	user, err := ctrl.userService.GetUserByID(id.(primitive.ObjectID))
+
+	var populate bool
+	populateParam, exists := ctx.GetQuery("populate")
+	if exists {
+		var err error
+		populate, err = strconv.ParseBool(populateParam)
+		if err != nil {
+			return nil, &model.AppError{
+				StatusCode: http.StatusBadRequest,
+				Err:        errors.New("invalid query parameters"),
+			}
+		}
+	}
+
+	user, err := ctrl.userService.GetUserByID(id.(primitive.ObjectID), populate)
 	if err != nil {
 		return nil, err.(*model.AppError)
 	}

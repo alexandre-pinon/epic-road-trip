@@ -69,7 +69,7 @@ func (suite *authServiceSuite) TestIdentityHandler_Positive() {
 		Trips:          []*model.Roadtrip{},
 	}
 
-	suite.repo.On("GetUserByID", ID).Return(&user, nil)
+	suite.repo.On("GetUserByID", ID, false).Return(&user, nil)
 
 	result, ok := suite.authService.IdentityHandler(ctx).(*model.User)
 	suite.Require().True(ok)
@@ -82,7 +82,7 @@ func (suite *authServiceSuite) TestIdentityHandler_NotFound_Positive() {
 	ctx, _ := gin.CreateTestContext(httptest.NewRecorder())
 	ctx.Set("JWT_PAYLOAD", jwt.MapClaims{jwt.IdentityKey: ID})
 
-	suite.repo.On("GetUserByID", ID).Return(nil, mongo.ErrNoDocuments)
+	suite.repo.On("GetUserByID", ID, false).Return(nil, mongo.ErrNoDocuments)
 
 	result := suite.authService.IdentityHandler(ctx)
 	suite.Nil(result)

@@ -16,7 +16,7 @@ type userService struct {
 
 type UserService interface {
 	GetAllUsers() (*[]model.User, error)
-	GetUserByID(id primitive.ObjectID) (*model.User, error)
+	GetUserByID(id primitive.ObjectID, populate bool) (*model.User, error)
 	CreateUser(user *model.User) error
 	UpdateUser(id primitive.ObjectID, user *model.User) error
 	DeleteUser(id primitive.ObjectID) error
@@ -31,8 +31,8 @@ func (svc *userService) GetAllUsers() (*[]model.User, error) {
 	return svc.userRepository.GetAllUsers()
 }
 
-func (svc *userService) GetUserByID(id primitive.ObjectID) (*model.User, error) {
-	user, _ := svc.userRepository.GetUserByID(id)
+func (svc *userService) GetUserByID(id primitive.ObjectID, populate bool) (*model.User, error) {
+	user, _ := svc.userRepository.GetUserByID(id, populate)
 	if user == nil {
 		return nil, &model.AppError{
 			StatusCode: http.StatusNotFound,

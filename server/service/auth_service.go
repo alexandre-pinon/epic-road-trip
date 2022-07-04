@@ -46,7 +46,7 @@ func (svc *authService) IdentityHandler(ctx *gin.Context) interface{} {
 		return nil
 	}
 
-	user, err := svc.userRepository.GetUserByID(ID)
+	user, err := svc.userRepository.GetUserByID(ID, false)
 	if err != nil {
 		return nil
 	}

@@ -18,7 +18,7 @@ type userRepository struct {
 
 type UserRepository interface {
 	GetAllUsers() (*[]model.User, error)
-	GetUserByID(id primitive.ObjectID) (*model.User, error)
+	GetUserByID(id primitive.ObjectID, populate bool) (*model.User, error)
 	GetUserByEmail(email string) (*model.User, error)
 	CreateUser(user *model.User) (*mongo.InsertOneResult, error)
 	UpdateUser(id primitive.ObjectID, user *model.User) (*mongo.UpdateResult, error)
@@ -56,13 +56,49 @@ func (repo *userRepository) GetAllUsers() (*[]model.User, error) {
 	return &results, nil
 }
 
-func (repo *userRepository) GetUserByID(id primitive.ObjectID) (*model.User, error) {
-	filter := bson.D{{Key: "_id", Value: id}}
-	result := repo.coll.FindOne(context.Background(), filter)
-
+func (repo *userRepository) GetUserByID(id primitive.ObjectID, populate bool) (*model.User, error) {
 	var user model.User
-	if err := result.Decode(&user); err != nil {
+	filter := bson.D{{Key: "_id", Value: id}}
+
+	if !populate {
+		result := repo.coll.FindOne(context.Background(), filter)
+
+		if err := result.Decode(&user); err != nil {
+			return nil, err
+		}
+		return &user, nil
+	}
+
+	aggSearch := bson.M{"$match": filter}
+	aggUnwind1 := bson.M{"$unwind": bson.M{"path": "$trips"}}
+	aggPopulate := bson.M{"$lookup": bson.M{
+		"from":         "tripStep",           // the collection name
+		"localField":   "trips.tripSteps_id", // the field on the child struct
+		"foreignField": "_id",                // the field on the parent struct
+		"as":           "trips.tripSteps",    // the field to populate into
+	}}
+	// aggUnwind2 := bson.M{"$unwind": bson.M{"path": "$trips.tripSteps_id"}}
+	aggGroup := bson.M{"$group": bson.M{
+		"_id":            "$_id",
+		"firstname":      bson.M{"$first": "$firstname"},
+		"lastname":       bson.M{"$first": "$lastname"},
+		"email":          bson.M{"$first": "$email"},
+		"hashedpassword": bson.M{"$first": "$hashedpassword"},
+		"phone":          bson.M{"$first": "$phone"},
+		"trips":          bson.M{"$push": "$trips"},
+	}}
+
+	agg := []bson.M{aggSearch, aggUnwind1, aggPopulate, aggGroup}
+	cursor, err := repo.coll.Aggregate(context.Background(), agg)
+	if err != nil {
 		return nil, err
+	}
+
+	if cursor.Next(context.Background()) {
+		err := cursor.Decode(&user)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return &user, nil

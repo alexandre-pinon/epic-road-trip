@@ -50,7 +50,7 @@ func (ctrl *roadtripController) CreateRoadtrip(ctx *gin.Context) (*model.AppResu
 		}
 	}
 
-	user, err := ctrl.userService.GetUserByID(id.(primitive.ObjectID))
+	user, err := ctrl.userService.GetUserByID(id.(primitive.ObjectID), false)
 	if err != nil {
 		return nil, err.(*model.AppError)
 	}

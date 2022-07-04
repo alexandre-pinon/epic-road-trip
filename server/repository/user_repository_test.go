@@ -80,7 +80,7 @@ func (suite *userRepositorySuite) TestGetAllUsers_FilledRecords_Positive() {
 func (suite *userRepositorySuite) TestGetUserByID_NotFound_Negative() {
 	id := primitive.NewObjectID()
 
-	_, err := suite.repo.GetUserByID(id)
+	_, err := suite.repo.GetUserByID(id, false)
 	suite.Error(err, "error not found")
 	suite.Equal(mongo.ErrNoDocuments, err)
 }
@@ -98,7 +98,7 @@ func (suite *userRepositorySuite) TestGetUserByID_Exists_Positive() {
 	id, err := suite.repo.CreateUser(&user)
 	suite.NoError(err, "no error when create user with valid input")
 
-	result, err := suite.repo.GetUserByID(id.InsertedID.(primitive.ObjectID))
+	result, err := suite.repo.GetUserByID(id.InsertedID.(primitive.ObjectID), false)
 	suite.NoError(err, "no error because user is found")
 	suite.Equal(user.Firstname, (*result).Firstname, "should be equal between result and user")
 	suite.Equal(user.Email, (*result).Email, "should be equal between result and user")
@@ -172,7 +172,7 @@ func (suite *userRepositorySuite) TestUpdateUser_Positive() {
 
 	suite.Equal(int64(1), updateResult.ModifiedCount)
 
-	userResult, err := suite.repo.GetUserByID(id)
+	userResult, err := suite.repo.GetUserByID(id, false)
 	suite.NoError(err, "no error because user is found")
 	suite.Equal("yoiyoiyoimiya", (*userResult).Firstname, "should be equal between result and user")
 	suite.Equal("+33712345678", (*userResult).Phone, "should be equal between result and user")

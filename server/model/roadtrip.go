@@ -11,7 +11,7 @@ type Roadtrip struct {
 	Startdate   time.Time            `json:"startdate"`
 	Enddate     time.Time            `json:"enddate"`
 	TripStepsID []primitive.ObjectID `json:"-" bson:"tripSteps_id"`
-	TripSteps   *[]TripStep          `json:"tripSteps" bson:"tripSteps"`
+	TripSteps   *[]TripStep          `json:"tripSteps,omitempty" bson:"tripSteps,omitempty"`
 }
 
 type TripStep struct {
@@ -20,10 +20,10 @@ type TripStep struct {
 	Startdate time.Time          `json:"startdate" binding:"required"`
 	Enddate   time.Time          `json:"enddate" binding:"required"`
 	Travel    *Itinerary         `json:"travel,omitempty" bson:"travel,omitempty"`
-	Enjoy     *[]Enjoy           `json:"enjoy"`
-	Sleep     *[]Sleep           `json:"sleep"`
-	Eat       *[]Eat             `json:"eat"`
-	Drink     *[]Drink           `json:"drink"`
+	Enjoy     *[]Enjoy           `json:"enjoy,omitempty"`
+	Sleep     *[]Sleep           `json:"sleep,omitempty"`
+	Eat       *[]Eat             `json:"eat,omitempty"`
+	Drink     *[]Drink           `json:"drink,omitempty"`
 }
 type Enjoy struct {
 	ID       int     `json:"id"`

@@ -73,9 +73,9 @@ func (suite *userServiceSuite) TestGetAllUsers_FilledSlice_Positive() {
 func (suite *userServiceSuite) TestGetUserByID_NotFound_Negative() {
 	id := primitive.NewObjectID()
 
-	suite.repo.On("GetUserByID", id).Return(nil, mongo.ErrNoDocuments)
+	suite.repo.On("GetUserByID", id, false).Return(nil, mongo.ErrNoDocuments)
 
-	result, err := suite.svc.GetUserByID(id)
+	result, err := suite.svc.GetUserByID(id, false)
 	suite.Nil(result, "error is returned so result has to be nil")
 	suite.Error(err, "error not found")
 	suite.Equal("user not found", err.Error())
@@ -94,9 +94,9 @@ func (suite *userServiceSuite) TestGetUserByID_Exists_Positive() {
 		Trips:          []*model.Roadtrip{},
 	}
 
-	suite.repo.On("GetUserByID", id).Return(&user, nil)
+	suite.repo.On("GetUserByID", id, false).Return(&user, nil)
 
-	result, err := suite.svc.GetUserByID(id)
+	result, err := suite.svc.GetUserByID(id, false)
 	suite.Nil(err, "no error when return the user")
 	suite.Equal(user, *result, "result and user should be equal")
 	suite.repo.AssertExpectations(suite.T())
