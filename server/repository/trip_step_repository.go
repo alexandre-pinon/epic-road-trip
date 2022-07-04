@@ -1,9 +1,10 @@
 package repository
 
 import (
-	"errors"
+	"context"
 
 	"github.com/alexandre-pinon/epic-road-trip/model"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -27,14 +28,36 @@ func NewTripStepRepository(db *mongo.Database) TripStepRepository {
 }
 
 func (repo *tripStepRepository) GetAllTripSteps() (*[]model.TripStep, error) {
-	return &[]model.TripStep{}, errors.New("TODO: implement GetAllTripSteps")
+	ctx := context.Background()
+
+	cursor, err := repo.coll.Find(ctx, struct{}{})
+	if err != nil {
+		return nil, err
+	}
+
+	var results []model.TripStep
+	if err := cursor.All(ctx, &results); err != nil {
+		return nil, err
+	}
+
+	return &results, nil
 }
 func (repo *tripStepRepository) GetTripStepByID(id primitive.ObjectID) (*model.TripStep, error) {
-	return &model.TripStep{}, errors.New("TODO: implement GetTripStepByID")
+	filter := bson.D{{Key: "_id", Value: id}}
+	result := repo.coll.FindOne(context.Background(), filter)
+
+	var tripStep model.TripStep
+	if err := result.Decode(&tripStep); err != nil {
+		return nil, err
+	}
+
+	return &tripStep, nil
 }
 func (repo *tripStepRepository) CreateTripStep(tripStep *model.TripStep) (*mongo.InsertOneResult, error) {
-	return &mongo.InsertOneResult{}, errors.New("TODO: implement CreateTripStep")
+	return repo.coll.InsertOne(context.Background(), tripStep)
 }
 func (repo *tripStepRepository) DeleteTripStep(id primitive.ObjectID) (*mongo.DeleteResult, error) {
-	return &mongo.DeleteResult{}, errors.New("TODO: implement DeleteTripStep")
+	filter := bson.D{{Key: "_id", Value: id}}
+
+	return repo.coll.DeleteOne(context.Background(), filter)
 }
