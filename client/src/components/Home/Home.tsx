@@ -39,10 +39,11 @@ import {
   BuildingSkyscraper,
   UserSearch,
   ArrowNarrowRight,
+  Bike,
 } from 'tabler-icons-react';
 
 import type { logicType } from "./HomeType";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import cityObjects from "../../data/iata_codes.json";
 
 
@@ -228,7 +229,7 @@ const useStyles = createStyles((theme) => ({
   // [END] Card with icon features
 }));
 
-export function Home({fulTrip} : any) {
+export function Home({ fulTrip }: any) {
   const navigate = useNavigate();
 
   // const [username, setUsername] = useState('keajs')
@@ -242,7 +243,7 @@ export function Home({fulTrip} : any) {
 
 
   const validStartCity = (e: any) => {
-    if(e.key === "Enter") {
+    if (e.key === "Enter") {
       fulTrip.setStartCity(e.target.value)
       navigate('/startEndTrip');
 
@@ -251,14 +252,14 @@ export function Home({fulTrip} : any) {
 
   const city = Object.keys(cityObjects)
 
-  const items = mockdata.map((item) => (
-    <UnstyledButton key={item.title} className={classes.item}>
-      <item.icon color={theme.colors[item.color][6]} size={32} />
-      <Text size="xs" mt={7}>
-        {item.title}
-      </Text>
-    </UnstyledButton>
-  ));
+  // const items = mockdata.map((item) => (
+  //   <UnstyledButton key={item.title} className={classes.item}>
+  //     <item.icon color={theme.colors[item.color][6]} size={32} />
+  //     <Text size="xs" mt={7}>
+  //       {item.title}
+  //     </Text>
+  //   </UnstyledButton>
+  // ));
 
   const features = mockdata2.map((feature) => (
     <Center key={feature.label}>
@@ -269,13 +270,11 @@ export function Home({fulTrip} : any) {
 
   return (
     <Container>
-      <Card withBorder radius="md" className={classes.card}>
+      {/* <Card withBorder radius="md" className={classes.card}>
         <SimpleGrid cols={6} mt="md">
           {items}
         </SimpleGrid>
-      </Card>
-
-      <Space h="xl" />
+      </Card> */}
 
       <div className={classes.wrapper}>
         <Overlay color="#000" opacity={0.25} zIndex={1} />
@@ -288,18 +287,18 @@ export function Home({fulTrip} : any) {
               radius="xl"
               size="md"
               onKeyPress={(e: any) => validStartCity(e)}
-              data={city}/>
+              data={city} />
           </Container>
         </div>
       </div>
 
       <Space h="xl" />
-      <Space h="xl" />
-      <Space h="xl" />
+      {/* <Space h="xl" />
+      <Space h="xl" /> */}
 
       <Container size={540}>
         {/* Ville de départ */}
-        <TextInput
+        {/* <TextInput
           icon={<BuildingSkyscraper size={18} />}
           radius="xl"
           size="md"
@@ -322,12 +321,12 @@ export function Home({fulTrip} : any) {
           placeholder="Ville de départ"
           rightSectionWidth={42}
           {...props}
-        />
+        /> */}
 
-        <Space h="xl" />
+        {/* <Space h="xl" /> */}
 
         {/* Ville d'arrivée */}
-        <TextInput
+        {/* <TextInput
           icon={<BuildingSkyscraper size={18} />}
           radius="xl"
           size="md"
@@ -350,15 +349,15 @@ export function Home({fulTrip} : any) {
           placeholder="Ville d'arrivée"
           rightSectionWidth={42}
           {...props}
-        />
+        /> */}
 
-        <Space h="xl" />
+        {/* <Space h="xl" /> */}
 
-        <Center>
-          <Button rightIcon={<Search size={18} />} variant="light" radius="xl">
-            Rechercher
+        {/* <Center>
+          <Button rightIcon={<Bike size={18} />} variant="light" radius="xl">
+            Create a Trip
           </Button>
-        </Center>
+        </Center> */}
 
       </Container>
 
