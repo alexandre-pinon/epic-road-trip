@@ -12,13 +12,13 @@ import (
 func InitApp() {
 	log.Print("Initializing app...")
 
-	cfg := config.GetConfig()
+	cfg := config.GetConfig("")
 	db := config.ConnectDB(cfg)
 	defer config.DisconnectDB(cfg, db.Client())
 
 	repositories := SetupRepositories(db)
 	services := SetupServices(cfg, repositories)
-	controllers := SetupControllers(cfg, services)
+	controllers := SetupControllers(cfg, services, repositories)
 
 	log.Print("Initializing swagger...")
 

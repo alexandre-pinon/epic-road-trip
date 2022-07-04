@@ -46,32 +46,32 @@ func (suite *tripStepRepositorySuite) TestGetAllTripSteps_FilledRecords_Positive
 			Startdate: time.Date(2022, 8, 5, 0, 0, 0, 0, time.UTC),
 			Enddate:   time.Date(2022, 8, 21, 0, 0, 0, 0, time.UTC),
 			City:      "Paris",
-			Enjoy: model.Enjoy{
+			Enjoy: &[]model.Enjoy{{
 				Name:     "Hôtel de Ville",
 				Rating:   4.4,
 				Vicinity: "Place de l'Hôtel de Ville, Paris",
-			},
-			Sleep: model.Sleep{
+			}},
+			Sleep: &[]model.Sleep{{
 				Name:     "Britannique Hotel - Paris Centre",
 				Rating:   4.7,
 				Vicinity: "20 Avenue Victoria, Paris",
-			},
-			Eat: model.Eat{
+			}},
+			Eat: &[]model.Eat{{
 				Name:     "L'Art Brut Bistrot",
 				Rating:   4.6,
 				Vicinity: "78 Rue Quincampoix, Paris",
-			},
-			Drink: model.Drink{
+			}},
+			Drink: &[]model.Drink{{
 				Name:     "Hôtel Duo",
 				Rating:   4.2,
 				Vicinity: "11 Rue du Temple, Paris",
-			},
+			}},
 		},
 		{
 			Startdate: time.Date(2022, 8, 5, 0, 0, 0, 0, time.UTC),
 			Enddate:   time.Date(2022, 8, 21, 0, 0, 0, 0, time.UTC),
 			City:      "London",
-			Travel: model.Itinerary{
+			Travel: &model.Itinerary{
 				Type: model.Ground,
 				Departure: model.Station{
 					Name:    "Paris, France",
@@ -105,16 +105,16 @@ func (suite *tripStepRepositorySuite) TestGetAllTripSteps_FilledRecords_Positive
 					Enddate:        time.Date(2022, 12, 12, 19, 14, 0, 0, time.UTC),
 				}},
 			},
-			Enjoy: model.Enjoy{},
-			Sleep: model.Sleep{},
-			Eat:   model.Eat{},
-			Drink: model.Drink{},
+			Enjoy: &[]model.Enjoy{},
+			Sleep: &[]model.Sleep{},
+			Eat:   &[]model.Eat{},
+			Drink: &[]model.Drink{},
 		},
 		{
 			Startdate: time.Date(2022, 8, 5, 0, 0, 0, 0, time.UTC),
 			Enddate:   time.Date(2022, 8, 21, 0, 0, 0, 0, time.UTC),
 			City:      "Tokyo",
-			Travel: model.Itinerary{
+			Travel: &model.Itinerary{
 				Type: model.Air,
 				Departure: model.Station{
 					Name:    "LHR",
@@ -132,10 +132,10 @@ func (suite *tripStepRepositorySuite) TestGetAllTripSteps_FilledRecords_Positive
 				Enddate:        time.Date(2022, 12, 13, 8, 0, 0, 0, time.UTC),
 				Price:          999.99,
 			},
-			Enjoy: model.Enjoy{},
-			Sleep: model.Sleep{},
-			Eat:   model.Eat{},
-			Drink: model.Drink{},
+			Enjoy: &[]model.Enjoy{},
+			Sleep: &[]model.Sleep{},
+			Eat:   &[]model.Eat{},
+			Drink: &[]model.Drink{},
 		},
 	}
 
@@ -162,26 +162,26 @@ func (suite *tripStepRepositorySuite) TestGetTripStepByID_Exists_Positive() {
 		Startdate: time.Date(2022, 8, 5, 0, 0, 0, 0, time.UTC),
 		Enddate:   time.Date(2022, 8, 21, 0, 0, 0, 0, time.UTC),
 		City:      "Paris",
-		Enjoy: model.Enjoy{
+		Enjoy: &[]model.Enjoy{{
 			Name:     "Hôtel de Ville",
 			Rating:   4.4,
 			Vicinity: "Place de l'Hôtel de Ville, Paris",
-		},
-		Sleep: model.Sleep{
+		}},
+		Sleep: &[]model.Sleep{{
 			Name:     "Britannique Hotel - Paris Centre",
 			Rating:   4.7,
 			Vicinity: "20 Avenue Victoria, Paris",
-		},
-		Eat: model.Eat{
+		}},
+		Eat: &[]model.Eat{{
 			Name:     "L'Art Brut Bistrot",
 			Rating:   4.6,
 			Vicinity: "78 Rue Quincampoix, Paris",
-		},
-		Drink: model.Drink{
+		}},
+		Drink: &[]model.Drink{{
 			Name:     "Hôtel Duo",
 			Rating:   4.2,
 			Vicinity: "11 Rue du Temple, Paris",
-		},
+		}},
 	}
 
 	id, err := suite.repo.CreateTripStep(&tripStep)
@@ -199,26 +199,26 @@ func (suite *tripStepRepositorySuite) TestCreateTripStep_Positive() {
 		Startdate: time.Date(2022, 8, 5, 0, 0, 0, 0, time.UTC),
 		Enddate:   time.Date(2022, 8, 21, 0, 0, 0, 0, time.UTC),
 		City:      "Paris",
-		Enjoy: model.Enjoy{
+		Enjoy: &[]model.Enjoy{{
 			Name:     "Hôtel de Ville",
 			Rating:   4.4,
 			Vicinity: "Place de l'Hôtel de Ville, Paris",
-		},
-		Sleep: model.Sleep{
+		}},
+		Sleep: &[]model.Sleep{{
 			Name:     "Britannique Hotel - Paris Centre",
 			Rating:   4.7,
 			Vicinity: "20 Avenue Victoria, Paris",
-		},
-		Eat: model.Eat{
+		}},
+		Eat: &[]model.Eat{{
 			Name:     "L'Art Brut Bistrot",
 			Rating:   4.6,
 			Vicinity: "78 Rue Quincampoix, Paris",
-		},
-		Drink: model.Drink{
+		}},
+		Drink: &[]model.Drink{{
 			Name:     "Hôtel Duo",
 			Rating:   4.2,
 			Vicinity: "11 Rue du Temple, Paris",
-		},
+		}},
 	}
 
 	_, err := suite.repo.CreateTripStep(&tripStep)
@@ -236,26 +236,26 @@ func (suite *tripStepRepositorySuite) TestDeleteTripStep_Positive() {
 		Startdate: time.Date(2022, 8, 5, 0, 0, 0, 0, time.UTC),
 		Enddate:   time.Date(2022, 8, 21, 0, 0, 0, 0, time.UTC),
 		City:      "Paris",
-		Enjoy: model.Enjoy{
+		Enjoy: &[]model.Enjoy{{
 			Name:     "Hôtel de Ville",
 			Rating:   4.4,
 			Vicinity: "Place de l'Hôtel de Ville, Paris",
-		},
-		Sleep: model.Sleep{
+		}},
+		Sleep: &[]model.Sleep{{
 			Name:     "Britannique Hotel - Paris Centre",
 			Rating:   4.7,
 			Vicinity: "20 Avenue Victoria, Paris",
-		},
-		Eat: model.Eat{
+		}},
+		Eat: &[]model.Eat{{
 			Name:     "L'Art Brut Bistrot",
 			Rating:   4.6,
 			Vicinity: "78 Rue Quincampoix, Paris",
-		},
-		Drink: model.Drink{
+		}},
+		Drink: &[]model.Drink{{
 			Name:     "Hôtel Duo",
 			Rating:   4.2,
 			Vicinity: "11 Rue du Temple, Paris",
-		},
+		}},
 	}
 
 	id, err := suite.repo.CreateTripStep(&tripStep)
@@ -268,7 +268,6 @@ func (suite *tripStepRepositorySuite) TestDeleteTripStep_Positive() {
 }
 
 func TestTripStepRepository(t *testing.T) {
-	cfg := config.GetConfig()
-	cfg.App.Env = config.Test
+	cfg := config.GetConfig(string(config.Test))
 	suite.Run(t, &tripStepRepositorySuite{cfg: cfg})
 }

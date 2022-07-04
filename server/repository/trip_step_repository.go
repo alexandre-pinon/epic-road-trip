@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"time"
 
 	"github.com/alexandre-pinon/epic-road-trip/model"
 	"go.mongodb.org/mongo-driver/bson"
@@ -54,6 +55,15 @@ func (repo *tripStepRepository) GetTripStepByID(id primitive.ObjectID) (*model.T
 	return &tripStep, nil
 }
 func (repo *tripStepRepository) CreateTripStep(tripStep *model.TripStep) (*mongo.InsertOneResult, error) {
+	if tripStep.Travel != nil {
+		duration, err := time.ParseDuration(tripStep.Travel.DurationString)
+		if err != nil {
+			return nil, err
+		}
+
+		tripStep.Travel.Duration = duration
+	}
+
 	return repo.coll.InsertOne(context.Background(), tripStep)
 }
 func (repo *tripStepRepository) DeleteTripStep(id primitive.ObjectID) (*mongo.DeleteResult, error) {

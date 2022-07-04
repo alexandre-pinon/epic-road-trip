@@ -7,19 +7,24 @@ import (
 
 	"github.com/alexandre-pinon/epic-road-trip/config"
 	"github.com/alexandre-pinon/epic-road-trip/model"
+	"github.com/alexandre-pinon/epic-road-trip/repository"
 	"github.com/alexandre-pinon/epic-road-trip/service"
 	"github.com/alexandre-pinon/epic-road-trip/utils"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type roadtripController struct {
 	cfg                *config.Config
+	userService        service.UserService
 	googleService      service.GoogleService
 	amadeusService     service.AmadeusService
 	amadeusAccessToken model.AccessToken
+	tripStepRepository repository.TripStepRepository
 }
 
 type RoadtripController interface {
+	CreateRoadtrip(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	Travel(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	TravelAir(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	TravelGround(ctx *gin.Context) (*model.AppResult, *model.AppError)
@@ -29,9 +34,56 @@ type RoadtripController interface {
 	Drink(c *gin.Context) (*model.AppResult, *model.AppError)
 }
 
-func NewRoadtripController(cfg *config.Config, googleService service.GoogleService, amadeusService service.AmadeusService) RoadtripController {
+func NewRoadtripController(cfg *config.Config, userService service.UserService, googleService service.GoogleService, amadeusService service.AmadeusService, tripStepRepository repository.TripStepRepository) RoadtripController {
 	amadeusAccessToken := model.AccessToken{}
-	return &roadtripController{cfg, googleService, amadeusService, amadeusAccessToken}
+	return &roadtripController{cfg, userService, googleService, amadeusService, amadeusAccessToken, tripStepRepository}
+}
+
+func (ctrl *roadtripController) CreateRoadtrip(ctx *gin.Context) (*model.AppResult, *model.AppError) {
+	var tripSteps []model.TripStep
+
+	id, _ := ctx.Get("id")
+	if err := ctx.ShouldBindJSON(&tripSteps); err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+	}
+
+	user, err := ctrl.userService.GetUserByID(id.(primitive.ObjectID))
+	if err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	var insertedIDs []primitive.ObjectID
+	for _, tripStep := range tripSteps {
+		res, err := ctrl.tripStepRepository.CreateTripStep(&tripStep)
+		if err != nil {
+			return nil, &model.AppError{
+				StatusCode: http.StatusInternalServerError,
+				Err:        err,
+			}
+		}
+
+		insertedIDs = append(insertedIDs, res.InsertedID.(primitive.ObjectID))
+	}
+
+	user.Trips = append(user.Trips, &model.Roadtrip{
+		ID:          primitive.NewObjectID(),
+		Startdate:   tripSteps[0].Startdate,
+		Enddate:     tripSteps[len(tripSteps)-1].Enddate,
+		TripStepsID: insertedIDs,
+	})
+
+	if err := ctrl.userService.UpdateUser(id.(primitive.ObjectID), user); err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	return &model.AppResult{
+		StatusCode: http.StatusOK,
+		Message:    "Added roadtrip to user successfully",
+		Data:       struct{}{},
+	}, nil
 }
 
 // Enjoy godoc

@@ -198,7 +198,6 @@ func (suite *userRepositorySuite) TestDeleteUser_Positive() {
 }
 
 func TestUserRepository(t *testing.T) {
-	cfg := config.GetConfig()
-	cfg.App.Env = config.Test
+	cfg := config.GetConfig(string(config.Test))
 	suite.Run(t, &userRepositorySuite{cfg: cfg})
 }

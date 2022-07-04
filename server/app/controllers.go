@@ -12,11 +12,11 @@ type Controllers struct {
 	RoadtripController controller.RoadtripController
 }
 
-func SetupControllers(cfg *config.Config, services *Services) *Controllers {
+func SetupControllers(cfg *config.Config, services *Services, repositories *Repositories) *Controllers {
 	return &Controllers{
 		RootController:     controller.NewRootController(),
 		UserController:     controller.NewUserController(services.UserService),
 		AuthController:     controller.NewAuthController(cfg, services.AuthService),
-		RoadtripController: controller.NewRoadtripController(cfg, services.GoogleService, services.AmadeusService),
+		RoadtripController: controller.NewRoadtripController(cfg, services.UserService, services.GoogleService, services.AmadeusService, repositories.TripStepRepository),
 	}
 }

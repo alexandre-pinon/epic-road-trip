@@ -52,7 +52,7 @@ const (
 	AMADEUS_SECRET   = "AMADEUS_SECRET"
 )
 
-func GetConfig() *Config {
+func GetConfig(env string) *Config {
 	rootPath := utils.GetRootPath()
 	envPath := rootPath + "/.env"
 
@@ -77,6 +77,10 @@ func GetConfig() *Config {
 		AMADEUS_BASE_URL: os.Getenv(AMADEUS_BASE_URL),
 		AMADEUS_KEY:      os.Getenv(AMADEUS_KEY),
 		AMADEUS_SECRET:   os.Getenv(AMADEUS_SECRET),
+	}
+
+	if env == string(Test) {
+		envVariables[APP_ENV] = env
 	}
 
 	for k, v := range envVariables {

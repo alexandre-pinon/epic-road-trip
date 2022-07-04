@@ -6,11 +6,13 @@ import (
 )
 
 type Repositories struct {
-	UserRepository repository.UserRepository
+	UserRepository     repository.UserRepository
+	TripStepRepository repository.TripStepRepository
 }
 
 func SetupRepositories(db *mongo.Database) *Repositories {
 	return &Repositories{
-		UserRepository: repository.NewUserRepository(db),
+		UserRepository:     repository.NewUserRepository(db),
+		TripStepRepository: repository.NewTripStepRepository(db),
 	}
 }

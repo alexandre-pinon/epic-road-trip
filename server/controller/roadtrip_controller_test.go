@@ -29,9 +29,11 @@ type roadtripControllerSuite struct {
 }
 
 func (suite *roadtripControllerSuite) SetupTest() {
+	userService := new(mocks.UserService)
 	googleService := new(mocks.GoogleService)
 	amadeusService := new(mocks.AmadeusService)
-	crtl := NewRoadtripController(suite.cfg, googleService, amadeusService)
+	tripStepRepository := new(mocks.TripStepRepository)
+	crtl := NewRoadtripController(suite.cfg, userService, googleService, amadeusService, tripStepRepository)
 
 	router := gin.New()
 	apiRoutes := router.Group("/api/v1")
@@ -886,7 +888,6 @@ func (suite *roadtripControllerSuite) TestTravelGround_NoResults_Negative() {
 
 func TestRoadtripController(t *testing.T) {
 	gin.SetMode(gin.TestMode)
-	cfg := config.GetConfig()
-	cfg.App.Env = config.Test
+	cfg := config.GetConfig(string(config.Test))
 	suite.Run(t, &roadtripControllerSuite{cfg: cfg})
 }
