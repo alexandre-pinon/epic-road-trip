@@ -77,21 +77,21 @@ func (suite *userControllerSuite) TestGetAllUsers_FilledSlice_Positive() {
 			Lastname:  "naganohara",
 			Email:     "yoimiya.naganohara@gmail.com",
 			Phone:     "+33612345678",
-			Trips:     []*model.RoadTrip{},
+			Trips:     []*model.Roadtrip{},
 		},
 		{
 			Firstname: "hu",
 			Lastname:  "tao",
 			Email:     "hu.tao@gmail.com",
 			Phone:     "+33623456789",
-			Trips:     []*model.RoadTrip{},
+			Trips:     []*model.Roadtrip{},
 		},
 		{
 			Firstname: "kokomi",
 			Lastname:  "sangonomiya",
 			Email:     "kokomi.sangonomiya@gmail.com",
 			Phone:     "+33687654321",
-			Trips:     []*model.RoadTrip{},
+			Trips:     []*model.Roadtrip{},
 		},
 	}
 
@@ -117,7 +117,7 @@ func (suite *userControllerSuite) TestGetUserByID_Exists_Positive() {
 		Lastname:  "naganohara",
 		Email:     "yoimiya.naganohara@gmail.com",
 		Phone:     "+33612345678",
-		Trips:     []*model.RoadTrip{},
+		Trips:     []*model.Roadtrip{},
 	}
 
 	suite.svc.On("GetUserByID", id).Return(&user, nil)
@@ -207,7 +207,7 @@ func (suite *userControllerSuite) TestCreateUser_InvalidJSON_Negative() {
 			Lastname:  "naganoharanaganoharanaganoharanaganoharanaganoharanaganoharanaganoharanaganoharanaganohara",
 			Email:     "bademail.com",
 			Phone:     "-336123456789",
-			Trips:     []*model.RoadTrip{},
+			Trips:     []*model.Roadtrip{},
 		},
 		Password: "root",
 	}

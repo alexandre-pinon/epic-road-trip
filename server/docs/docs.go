@@ -1493,7 +1493,7 @@ const docTemplate = `{
                 }
             }
         },
-        "model.RoadTrip": {
+        "model.Roadtrip": {
             "type": "object",
             "properties": {
                 "enddate": {
@@ -1695,7 +1695,7 @@ const docTemplate = `{
                 "trips": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/model.RoadTrip"
+                        "$ref": "#/definitions/model.Roadtrip"
                     }
                 }
             }

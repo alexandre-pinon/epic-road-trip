@@ -19,7 +19,7 @@ type roadtripController struct {
 	amadeusAccessToken model.AccessToken
 }
 
-type RoadTripController interface {
+type RoadtripController interface {
 	Travel(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	TravelAir(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	TravelGround(ctx *gin.Context) (*model.AppResult, *model.AppError)
@@ -29,7 +29,7 @@ type RoadTripController interface {
 	Drink(c *gin.Context) (*model.AppResult, *model.AppError)
 }
 
-func NewRoadTripController(cfg *config.Config, googleService service.GoogleService, amadeusService service.AmadeusService) RoadTripController {
+func NewRoadtripController(cfg *config.Config, googleService service.GoogleService, amadeusService service.AmadeusService) RoadtripController {
 	amadeusAccessToken := model.AccessToken{}
 	return &roadtripController{cfg, googleService, amadeusService, amadeusAccessToken}
 }

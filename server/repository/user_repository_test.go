@@ -47,7 +47,7 @@ func (suite *userRepositorySuite) TestGetAllUsers_FilledRecords_Positive() {
 			Email:          "yoimiya.naganohara@gmail.com",
 			HashedPassword: "12345678",
 			Phone:          "+33612345678",
-			Trips:          []*model.RoadTrip{},
+			Trips:          []*model.Roadtrip{},
 		},
 		{
 			Firstname:      "hu",
@@ -55,7 +55,7 @@ func (suite *userRepositorySuite) TestGetAllUsers_FilledRecords_Positive() {
 			Email:          "hu.tao@gmail.com",
 			HashedPassword: "23456789",
 			Phone:          "+33623456789",
-			Trips:          []*model.RoadTrip{},
+			Trips:          []*model.Roadtrip{},
 		},
 		{
 			Firstname:      "kokomi",
@@ -63,7 +63,7 @@ func (suite *userRepositorySuite) TestGetAllUsers_FilledRecords_Positive() {
 			Email:          "kokomi.sangonomiya@gmail.com",
 			HashedPassword: "87654321",
 			Phone:          "+33687654321",
-			Trips:          []*model.RoadTrip{},
+			Trips:          []*model.Roadtrip{},
 		},
 	}
 
@@ -92,7 +92,7 @@ func (suite *userRepositorySuite) TestGetUserByID_Exists_Positive() {
 		Email:          "yoimiya.naganohara@gmail.com",
 		HashedPassword: "12345678",
 		Phone:          "+33612345678",
-		Trips:          []*model.RoadTrip{},
+		Trips:          []*model.Roadtrip{},
 	}
 
 	id, err := suite.repo.CreateUser(&user)
@@ -118,7 +118,7 @@ func (suite *userRepositorySuite) TestGetUserByEmail_Exists_Positive() {
 		Email:          email,
 		HashedPassword: "12345678",
 		Phone:          "+33612345678",
-		Trips:          []*model.RoadTrip{},
+		Trips:          []*model.Roadtrip{},
 	}
 
 	_, err := suite.repo.CreateUser(&user)
@@ -137,7 +137,7 @@ func (suite *userRepositorySuite) TestCreateUser_Positive() {
 		Email:          "yoimiya.naganohara@gmail.com",
 		HashedPassword: "12345678",
 		Phone:          "+33612345678",
-		Trips:          []*model.RoadTrip{},
+		Trips:          []*model.Roadtrip{},
 	}
 
 	_, err := suite.repo.CreateUser(&user)
@@ -157,7 +157,7 @@ func (suite *userRepositorySuite) TestUpdateUser_Positive() {
 		Email:          "yoimiya.naganohara@gmail.com",
 		HashedPassword: "12345678",
 		Phone:          "+33612345678",
-		Trips:          []*model.RoadTrip{},
+		Trips:          []*model.Roadtrip{},
 	}
 
 	createResult, err := suite.repo.CreateUser(&user)
@@ -185,7 +185,7 @@ func (suite *userRepositorySuite) TestDeleteUser_Positive() {
 		Email:          "yoimiya.naganohara@gmail.com",
 		HashedPassword: "12345678",
 		Phone:          "+33612345678",
-		Trips:          []*model.RoadTrip{},
+		Trips:          []*model.Roadtrip{},
 	}
 
 	id, err := suite.repo.CreateUser(&user)

@@ -43,7 +43,7 @@ func (suite *userServiceSuite) TestGetAllUsers_FilledSlice_Positive() {
 			Email:          "yoimiya.naganohara@gmail.com",
 			HashedPassword: "12345678",
 			Phone:          "+33612345678",
-			Trips:          []*model.RoadTrip{},
+			Trips:          []*model.Roadtrip{},
 		},
 		{
 			Firstname:      "hu",
@@ -51,7 +51,7 @@ func (suite *userServiceSuite) TestGetAllUsers_FilledSlice_Positive() {
 			Email:          "hu.tao@gmail.com",
 			HashedPassword: "23456789",
 			Phone:          "+33623456789",
-			Trips:          []*model.RoadTrip{},
+			Trips:          []*model.Roadtrip{},
 		},
 		{
 			Firstname:      "kokomi",
@@ -59,7 +59,7 @@ func (suite *userServiceSuite) TestGetAllUsers_FilledSlice_Positive() {
 			Email:          "kokomi.sangonomiya@gmail.com",
 			HashedPassword: "87654321",
 			Phone:          "+33687654321",
-			Trips:          []*model.RoadTrip{},
+			Trips:          []*model.Roadtrip{},
 		},
 	}
 	suite.repo.On("GetAllUsers").Return(&users, nil)
@@ -91,7 +91,7 @@ func (suite *userServiceSuite) TestGetUserByID_Exists_Positive() {
 		Email:          "yoimiya.naganohara@gmail.com",
 		HashedPassword: "12345678",
 		Phone:          "+33612345678",
-		Trips:          []*model.RoadTrip{},
+		Trips:          []*model.Roadtrip{},
 	}
 
 	suite.repo.On("GetUserByID", id).Return(&user, nil)
@@ -110,7 +110,7 @@ func (suite *userServiceSuite) TestCreateUser_Positive() {
 		Email:          "yoimiya.naganohara@gmail.com",
 		HashedPassword: "12345678",
 		Phone:          "+33612345678",
-		Trips:          []*model.RoadTrip{},
+		Trips:          []*model.Roadtrip{},
 	}
 
 	suite.repo.On("CreateUser", &user).Return(id, nil)

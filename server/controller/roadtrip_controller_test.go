@@ -24,14 +24,14 @@ type roadtripControllerSuite struct {
 	cfg            *config.Config
 	googleService  *mocks.GoogleService
 	amadeusService *mocks.AmadeusService
-	crtl           RoadTripController
+	crtl           RoadtripController
 	testServer     *httptest.Server
 }
 
 func (suite *roadtripControllerSuite) SetupTest() {
 	googleService := new(mocks.GoogleService)
 	amadeusService := new(mocks.AmadeusService)
-	crtl := NewRoadTripController(suite.cfg, googleService, amadeusService)
+	crtl := NewRoadtripController(suite.cfg, googleService, amadeusService)
 
 	router := gin.New()
 	apiRoutes := router.Group("/api/v1")
@@ -57,10 +57,10 @@ func (suite *roadtripControllerSuite) TestEnjoyWithGoodAnswer() {
 	request := model.CityFormData{
 		City: "Paris",
 		Constraints: model.Constraints{
-				Radius:   0,
-				MaxPrice: 500,
-				MinPrice: 0,
-				OpenNow:  false,
+			Radius:   0,
+			MaxPrice: 500,
+			MinPrice: 0,
+			OpenNow:  false,
 		},
 	}
 	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
@@ -138,7 +138,7 @@ func (suite *roadtripControllerSuite) TestEnjoyWithGoodAnswer() {
 	}
 
 	suite.googleService.On("GeoCoding", suite.cfg.Google.BaseUrl, request.City).Return(&location, nil)
-	suite.googleService.On("Enjoy", suite.cfg.Google.BaseUrl, location , request.Constraints).Return(&activities, nil)
+	suite.googleService.On("Enjoy", suite.cfg.Google.BaseUrl, location, request.Constraints).Return(&activities, nil)
 
 	requestBody, err := json.Marshal(request)
 	if err != nil {
@@ -167,10 +167,10 @@ func (suite *roadtripControllerSuite) TestEnjoyWithZeroResult() {
 	request := model.CityFormData{
 		City: "Paris",
 		Constraints: model.Constraints{
-				Radius:   0,
-				MaxPrice: 500,
-				MinPrice: 0,
-				OpenNow:  false,
+			Radius:   0,
+			MaxPrice: 500,
+			MinPrice: 0,
+			OpenNow:  false,
 		},
 	}
 	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
@@ -209,10 +209,10 @@ func (suite *roadtripControllerSuite) TestSleepWithGoodAnswer() {
 	request := model.CityFormData{
 		City: "Paris",
 		Constraints: model.Constraints{
-				Radius:   0,
-				MaxPrice: 500,
-				MinPrice: 0,
-				OpenNow:  false,
+			Radius:   0,
+			MaxPrice: 500,
+			MinPrice: 0,
+			OpenNow:  false,
 		},
 	}
 	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
@@ -290,7 +290,7 @@ func (suite *roadtripControllerSuite) TestSleepWithGoodAnswer() {
 	}
 
 	suite.googleService.On("GeoCoding", suite.cfg.Google.BaseUrl, request.City).Return(&location, nil)
-	suite.googleService.On("Sleep", suite.cfg.Google.BaseUrl, location , request.Constraints).Return(&activities, nil)
+	suite.googleService.On("Sleep", suite.cfg.Google.BaseUrl, location, request.Constraints).Return(&activities, nil)
 
 	requestBody, err := json.Marshal(request)
 	if err != nil {
@@ -319,10 +319,10 @@ func (suite *roadtripControllerSuite) TestSleepWithZeroResult() {
 	request := model.CityFormData{
 		City: "Paris",
 		Constraints: model.Constraints{
-				Radius:   0,
-				MaxPrice: 500,
-				MinPrice: 0,
-				OpenNow:  false,
+			Radius:   0,
+			MaxPrice: 500,
+			MinPrice: 0,
+			OpenNow:  false,
 		},
 	}
 	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
@@ -332,7 +332,7 @@ func (suite *roadtripControllerSuite) TestSleepWithZeroResult() {
 	}
 
 	suite.googleService.On("GeoCoding", suite.cfg.Google.BaseUrl, request.City).Return(&location, nil)
-	suite.googleService.On("Sleep", suite.cfg.Google.BaseUrl, location , request.Constraints).Return(nil, &noResult)
+	suite.googleService.On("Sleep", suite.cfg.Google.BaseUrl, location, request.Constraints).Return(nil, &noResult)
 
 	requestBody, err := json.Marshal(request)
 	if err != nil {
@@ -361,10 +361,10 @@ func (suite *roadtripControllerSuite) TestEatWithGoodAnswer() {
 	request := model.CityFormData{
 		City: "Paris",
 		Constraints: model.Constraints{
-				Radius:   0,
-				MaxPrice: 500,
-				MinPrice: 0,
-				OpenNow:  false,
+			Radius:   0,
+			MaxPrice: 500,
+			MinPrice: 0,
+			OpenNow:  false,
 		},
 	}
 	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
@@ -442,7 +442,7 @@ func (suite *roadtripControllerSuite) TestEatWithGoodAnswer() {
 	}
 
 	suite.googleService.On("GeoCoding", suite.cfg.Google.BaseUrl, request.City).Return(&location, nil)
-	suite.googleService.On("Eat", suite.cfg.Google.BaseUrl, location , request.Constraints).Return(&restaurant, nil)
+	suite.googleService.On("Eat", suite.cfg.Google.BaseUrl, location, request.Constraints).Return(&restaurant, nil)
 
 	requestBody, err := json.Marshal(request)
 	if err != nil {
@@ -471,10 +471,10 @@ func (suite *roadtripControllerSuite) TestEatWithZeroResult() {
 	request := model.CityFormData{
 		City: "Paris",
 		Constraints: model.Constraints{
-				Radius:   0,
-				MaxPrice: 500,
-				MinPrice: 0,
-				OpenNow:  false,
+			Radius:   0,
+			MaxPrice: 500,
+			MinPrice: 0,
+			OpenNow:  false,
 		},
 	}
 	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
@@ -484,7 +484,7 @@ func (suite *roadtripControllerSuite) TestEatWithZeroResult() {
 	}
 
 	suite.googleService.On("GeoCoding", suite.cfg.Google.BaseUrl, request.City).Return(&location, nil)
-	suite.googleService.On("Eat", suite.cfg.Google.BaseUrl, location , request.Constraints).Return(nil, &noResult)
+	suite.googleService.On("Eat", suite.cfg.Google.BaseUrl, location, request.Constraints).Return(nil, &noResult)
 
 	requestBody, err := json.Marshal(request)
 	if err != nil {
@@ -513,10 +513,10 @@ func (suite *roadtripControllerSuite) TestDrinkWithZeroResult() {
 	request := model.CityFormData{
 		City: "Paris",
 		Constraints: model.Constraints{
-				Radius:   0,
-				MaxPrice: 500,
-				MinPrice: 0,
-				OpenNow:  false,
+			Radius:   0,
+			MaxPrice: 500,
+			MinPrice: 0,
+			OpenNow:  false,
 		},
 	}
 	location := model.Location{Lat: 48.856614, Lng: 2.3522219}
@@ -526,7 +526,7 @@ func (suite *roadtripControllerSuite) TestDrinkWithZeroResult() {
 	}
 
 	suite.googleService.On("GeoCoding", suite.cfg.Google.BaseUrl, request.City).Return(&location, nil)
-	suite.googleService.On("Drink", suite.cfg.Google.BaseUrl, location , request.Constraints).Return(nil, &noResult)
+	suite.googleService.On("Drink", suite.cfg.Google.BaseUrl, location, request.Constraints).Return(nil, &noResult)
 
 	requestBody, err := json.Marshal(request)
 	if err != nil {
@@ -555,10 +555,10 @@ func (suite *roadtripControllerSuite) TestDrinkWithGoodAnswer() {
 	request := model.CityFormData{
 		City: "Paris",
 		Constraints: model.Constraints{
-				Radius:   0,
-				MaxPrice: 500,
-				MinPrice: 0,
-				OpenNow:  false,
+			Radius:   0,
+			MaxPrice: 500,
+			MinPrice: 0,
+			OpenNow:  false,
 		},
 	}
 	location := model.Location{Lat: 48.856614, Lng: 2.3522219}

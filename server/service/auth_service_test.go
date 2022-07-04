@@ -66,7 +66,7 @@ func (suite *authServiceSuite) TestIdentityHandler_Positive() {
 		Email:          "yoimiya.naganohara@gmail.com",
 		HashedPassword: "12345678",
 		Phone:          "+33612345678",
-		Trips:          []*model.RoadTrip{},
+		Trips:          []*model.Roadtrip{},
 	}
 
 	suite.repo.On("GetUserByID", ID).Return(&user, nil)
@@ -170,7 +170,7 @@ func (suite *authServiceSuite) TestAuthenticator_IncorrectPassword_Negative() {
 		Email:          "yoimiya.naganohara@gmail.com",
 		HashedPassword: string(hashedPassword),
 		Phone:          "+33612345678",
-		Trips:          []*model.RoadTrip{},
+		Trips:          []*model.Roadtrip{},
 	}
 	userLogin := model.UserLogin{
 		Email:    "yoimiya.naganohara@gmail.com",
@@ -216,7 +216,7 @@ func (suite *authServiceSuite) TestAuthenticator_Positive() {
 		Email:          "yoimiya.naganohara@gmail.com",
 		HashedPassword: string(hashedPassword),
 		Phone:          "+33612345678",
-		Trips:          []*model.RoadTrip{},
+		Trips:          []*model.Roadtrip{},
 	}
 	userLogin := model.UserLogin{
 		Email:    "yoimiya.naganohara@gmail.com",

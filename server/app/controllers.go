@@ -9,7 +9,7 @@ type Controllers struct {
 	RootController     controller.RootController
 	UserController     controller.UserController
 	AuthController     controller.AuthController
-	RoadtripController controller.RoadTripController
+	RoadtripController controller.RoadtripController
 }
 
 func SetupControllers(cfg *config.Config, services *Services) *Controllers {
@@ -17,6 +17,6 @@ func SetupControllers(cfg *config.Config, services *Services) *Controllers {
 		RootController:     controller.NewRootController(),
 		UserController:     controller.NewUserController(services.UserService),
 		AuthController:     controller.NewAuthController(cfg, services.AuthService),
-		RoadtripController: controller.NewRoadTripController(cfg, services.GoogleService, services.AmadeusService),
+		RoadtripController: controller.NewRoadtripController(cfg, services.GoogleService, services.AmadeusService),
 	}
 }
