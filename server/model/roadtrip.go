@@ -19,7 +19,7 @@ type TripStep struct {
 	City      string             `json:"city"`
 	Startdate time.Time          `json:"startdate"`
 	Enddate   time.Time          `json:"enddate"`
-	Travel    Itinerary          `json:"travel"`
+	Travel    Itinerary          `json:"travel,omitempty" bson:"travel,omitempty"`
 	Enjoy     Enjoy              `json:"enjoy"`
 	Sleep     Sleep              `json:"sleep"`
 	Eat       Eat                `json:"eat"`
