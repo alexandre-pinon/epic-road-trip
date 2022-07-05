@@ -2,6 +2,7 @@ package repository
 
 import (
 	"testing"
+	"time"
 
 	"github.com/alexandre-pinon/epic-road-trip/config"
 	"github.com/alexandre-pinon/epic-road-trip/model"
@@ -14,15 +15,18 @@ import (
 type userRepositorySuite struct {
 	suite.Suite
 	cfg             *config.Config
-	repo            UserRepository
+	userRepo        UserRepository
+	tripStepRepo    TripStepRepository
 	cleanupExecutor utils.DropCollectionExecutor
 }
 
 func (suite *userRepositorySuite) SetupTest() {
 	db := config.ConnectDB(suite.cfg)
-	repo := NewUserRepository(db)
+	userRepo := NewUserRepository(db)
+	tripStepRepo := NewTripStepRepository(db)
 
-	suite.repo = repo
+	suite.userRepo = userRepo
+	suite.tripStepRepo = tripStepRepo
 
 	suite.cleanupExecutor = utils.NewDropCollectionExecutor(db)
 }
@@ -33,7 +37,7 @@ func (suite *userRepositorySuite) TearDownTest() {
 }
 
 func (suite *userRepositorySuite) TestGetAllUsers_EmptySlice_Positive() {
-	users, err := suite.repo.GetAllUsers()
+	users, err := suite.userRepo.GetAllUsers()
 	suite.NoError(err, "no error when get all users when the table is empty")
 	suite.Equal(0, len(*users), "length of users should be 0, since it is empty slice")
 	suite.Equal([]model.User(nil), *users, "users is an empty slice")
@@ -68,11 +72,11 @@ func (suite *userRepositorySuite) TestGetAllUsers_FilledRecords_Positive() {
 	}
 
 	for _, user := range insertUsers {
-		_, err := suite.repo.CreateUser(&user)
+		_, err := suite.userRepo.CreateUser(&user)
 		suite.NoError(err, "no error when create user with valid input")
 	}
 
-	users, err := suite.repo.GetAllUsers()
+	users, err := suite.userRepo.GetAllUsers()
 	suite.NoError(err, "no error when get all users when the table is empty")
 	suite.Equal(3, len(*users), "insert 3 records before the all data, so it should contain three users")
 }
@@ -80,7 +84,7 @@ func (suite *userRepositorySuite) TestGetAllUsers_FilledRecords_Positive() {
 func (suite *userRepositorySuite) TestGetUserByID_NotFound_Negative() {
 	id := primitive.NewObjectID()
 
-	_, err := suite.repo.GetUserByID(id, false)
+	_, err := suite.userRepo.GetUserByID(id, false)
 	suite.Error(err, "error not found")
 	suite.Equal(mongo.ErrNoDocuments, err)
 }
@@ -95,17 +99,69 @@ func (suite *userRepositorySuite) TestGetUserByID_Exists_Positive() {
 		Trips:          []*model.Roadtrip{},
 	}
 
-	id, err := suite.repo.CreateUser(&user)
+	id, err := suite.userRepo.CreateUser(&user)
 	suite.NoError(err, "no error when create user with valid input")
 
-	result, err := suite.repo.GetUserByID(id.InsertedID.(primitive.ObjectID), false)
+	result, err := suite.userRepo.GetUserByID(id.InsertedID.(primitive.ObjectID), false)
 	suite.NoError(err, "no error because user is found")
 	suite.Equal(user.Firstname, (*result).Firstname, "should be equal between result and user")
 	suite.Equal(user.Email, (*result).Email, "should be equal between result and user")
 }
 
+func (suite *userRepositorySuite) TestGetUserByID_Populate_Exists_Positive() {
+	tripStep := model.TripStep{
+		Startdate: time.Date(2022, 8, 5, 0, 0, 0, 0, time.UTC),
+		Enddate:   time.Date(2022, 8, 21, 0, 0, 0, 0, time.UTC),
+		City:      "Paris",
+		Enjoy: &[]model.Enjoy{{
+			Name:     "Hôtel de Ville",
+			Rating:   4.4,
+			Vicinity: "Place de l'Hôtel de Ville, Paris",
+		}},
+		Sleep: &[]model.Sleep{{
+			Name:     "Britannique Hotel - Paris Centre",
+			Rating:   4.7,
+			Vicinity: "20 Avenue Victoria, Paris",
+		}},
+		Eat: &[]model.Eat{{
+			Name:     "L'Art Brut Bistrot",
+			Rating:   4.6,
+			Vicinity: "78 Rue Quincampoix, Paris",
+		}},
+		Drink: &[]model.Drink{{
+			Name:     "Hôtel Duo",
+			Rating:   4.2,
+			Vicinity: "11 Rue du Temple, Paris",
+		}},
+	}
+	res, err := suite.tripStepRepo.CreateTripStep(&tripStep)
+	suite.Require().NoError(err, "no error when create tripstep with valid input")
+
+	user := model.User{
+		Firstname:      "yoimiya",
+		Lastname:       "naganohara",
+		Email:          "yoimiya.naganohara@gmail.com",
+		HashedPassword: "12345678",
+		Phone:          "+33612345678",
+		Trips: []*model.Roadtrip{{
+			Startdate:   time.Date(2022, 12, 12, 0, 0, 0, 0, time.UTC),
+			Enddate:     time.Date(2022, 12, 22, 0, 0, 0, 0, time.UTC),
+			TripStepsID: []primitive.ObjectID{res.InsertedID.(primitive.ObjectID)},
+		}},
+	}
+
+	id, err := suite.userRepo.CreateUser(&user)
+	suite.Require().NoError(err, "no error when create user with valid input")
+
+	result, err := suite.userRepo.GetUserByID(id.InsertedID.(primitive.ObjectID), true)
+	suite.NoError(err, "no error because user is found")
+	suite.Equal(user.Firstname, (*result).Firstname, "should be equal between result and user")
+	suite.Equal(user.Email, (*result).Email, "should be equal between result and user")
+	suite.NotEmpty((*result).Trips[0].TripSteps)
+}
+
 func (suite *userRepositorySuite) TestGetUserByEmail_NotFound_Negative() {
-	_, err := suite.repo.GetUserByEmail("")
+	_, err := suite.userRepo.GetUserByEmail("")
 	suite.Error(err, "error not found")
 	suite.Equal(mongo.ErrNoDocuments, err)
 }
@@ -121,10 +177,10 @@ func (suite *userRepositorySuite) TestGetUserByEmail_Exists_Positive() {
 		Trips:          []*model.Roadtrip{},
 	}
 
-	_, err := suite.repo.CreateUser(&user)
+	_, err := suite.userRepo.CreateUser(&user)
 	suite.NoError(err, "no error when create user with valid input")
 
-	result, err := suite.repo.GetUserByEmail(email)
+	result, err := suite.userRepo.GetUserByEmail(email)
 	suite.NoError(err, "no error because user is found")
 	suite.Equal(user.Phone, (*result).Phone, "should be equal between result and user")
 	suite.Equal(user.Lastname, (*result).Lastname, "should be equal between result and user")
@@ -140,13 +196,13 @@ func (suite *userRepositorySuite) TestCreateUser_Positive() {
 		Trips:          []*model.Roadtrip{},
 	}
 
-	_, err := suite.repo.CreateUser(&user)
+	_, err := suite.userRepo.CreateUser(&user)
 	suite.NoError(err, "no error when create user with valid input")
 }
 
 func (suite *userRepositorySuite) TestCreateUser_EmptyFields_Positive() {
 	var user model.User
-	_, err := suite.repo.CreateUser(&user)
+	_, err := suite.userRepo.CreateUser(&user)
 	suite.NoError(err, "no error when create user with empty fields")
 }
 
@@ -160,19 +216,19 @@ func (suite *userRepositorySuite) TestUpdateUser_Positive() {
 		Trips:          []*model.Roadtrip{},
 	}
 
-	createResult, err := suite.repo.CreateUser(&user)
+	createResult, err := suite.userRepo.CreateUser(&user)
 	suite.NoError(err, "no error when create user with valid input")
 
 	id := createResult.InsertedID.(primitive.ObjectID)
 	user.Firstname = "yoiyoiyoimiya"
 	user.Phone = "+33712345678"
 
-	updateResult, err := suite.repo.UpdateUser(id, &user)
+	updateResult, err := suite.userRepo.UpdateUser(id, &user)
 	suite.Require().NoError(err, "no error when update user with valid input")
 
 	suite.Equal(int64(1), updateResult.ModifiedCount)
 
-	userResult, err := suite.repo.GetUserByID(id, false)
+	userResult, err := suite.userRepo.GetUserByID(id, false)
 	suite.NoError(err, "no error because user is found")
 	suite.Equal("yoiyoiyoimiya", (*userResult).Firstname, "should be equal between result and user")
 	suite.Equal("+33712345678", (*userResult).Phone, "should be equal between result and user")
@@ -188,10 +244,10 @@ func (suite *userRepositorySuite) TestDeleteUser_Positive() {
 		Trips:          []*model.Roadtrip{},
 	}
 
-	id, err := suite.repo.CreateUser(&user)
+	id, err := suite.userRepo.CreateUser(&user)
 	suite.NoError(err, "no error when create user with valid input")
 
-	result, err := suite.repo.DeleteUser(id.InsertedID.(primitive.ObjectID))
+	result, err := suite.userRepo.DeleteUser(id.InsertedID.(primitive.ObjectID))
 	suite.NoError(err, "no error because user is found")
 	suite.Require().NotNil(result)
 	suite.Equal(int64(1), result.DeletedCount)

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -17,15 +18,19 @@ import (
 	"github.com/alexandre-pinon/epic-road-trip/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/suite"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type roadtripControllerSuite struct {
 	suite.Suite
-	cfg            *config.Config
-	googleService  *mocks.GoogleService
-	amadeusService *mocks.AmadeusService
-	crtl           RoadtripController
-	testServer     *httptest.Server
+	cfg                *config.Config
+	userService        *mocks.UserService
+	googleService      *mocks.GoogleService
+	amadeusService     *mocks.AmadeusService
+	tripStepRepository *mocks.TripStepRepository
+	ctrl               RoadtripController
+	testServer         *httptest.Server
 }
 
 func (suite *roadtripControllerSuite) SetupTest() {
@@ -33,26 +38,179 @@ func (suite *roadtripControllerSuite) SetupTest() {
 	googleService := new(mocks.GoogleService)
 	amadeusService := new(mocks.AmadeusService)
 	tripStepRepository := new(mocks.TripStepRepository)
-	crtl := NewRoadtripController(suite.cfg, userService, googleService, amadeusService, tripStepRepository)
+	ctrl := NewRoadtripController(suite.cfg, userService, googleService, amadeusService, tripStepRepository)
 
 	router := gin.New()
 	apiRoutes := router.Group("/api/v1")
 	{
 		roadtripRoutes := apiRoutes.Group("/roadtrip")
 		{
-			roadtripRoutes.POST("/enjoy", utils.ServeHTTP(crtl.Enjoy))
-			roadtripRoutes.POST("/sleep", utils.ServeHTTP(crtl.Sleep))
-			roadtripRoutes.POST("/eat", utils.ServeHTTP(crtl.Eat))
-			roadtripRoutes.POST("/drink", utils.ServeHTTP(crtl.Drink))
-			roadtripRoutes.POST("/travel/:mode", middleware.CheckTravelMode(), utils.ServeHTTP(crtl.Travel))
+			roadtripRoutes.POST("/:id", middleware.CheckID(), utils.ServeHTTP(ctrl.CreateRoadtrip))
+			roadtripRoutes.POST("/enjoy", utils.ServeHTTP(ctrl.Enjoy))
+			roadtripRoutes.POST("/sleep", utils.ServeHTTP(ctrl.Sleep))
+			roadtripRoutes.POST("/eat", utils.ServeHTTP(ctrl.Eat))
+			roadtripRoutes.POST("/drink", utils.ServeHTTP(ctrl.Drink))
+			roadtripRoutes.POST("/travel/:mode", middleware.CheckTravelMode(), utils.ServeHTTP(ctrl.Travel))
 		}
 	}
 	server := httptest.NewServer(router)
 
 	suite.testServer = server
+	suite.userService = userService
 	suite.googleService = googleService
 	suite.amadeusService = amadeusService
-	suite.crtl = crtl
+	suite.tripStepRepository = tripStepRepository
+	suite.ctrl = ctrl
+}
+
+func (suite *roadtripControllerSuite) TestCreateRoadTrip_Positive() {
+	userID := primitive.NewObjectID()
+	res1 := mongo.InsertOneResult{InsertedID: primitive.NewObjectID()}
+	id1 := res1.InsertedID.(primitive.ObjectID)
+	res2 := mongo.InsertOneResult{InsertedID: primitive.NewObjectID()}
+	id2 := res2.InsertedID.(primitive.ObjectID)
+	res3 := mongo.InsertOneResult{InsertedID: primitive.NewObjectID()}
+	id3 := res3.InsertedID.(primitive.ObjectID)
+
+	tripSteps := []model.TripStep{
+		{
+			ID:        id1,
+			Startdate: time.Date(2022, 8, 5, 0, 0, 0, 0, time.UTC),
+			Enddate:   time.Date(2022, 8, 21, 0, 0, 0, 0, time.UTC),
+			City:      "Paris",
+			Enjoy: &[]model.Enjoy{{
+				Name:     "Hôtel de Ville",
+				Rating:   4.4,
+				Vicinity: "Place de l'Hôtel de Ville, Paris",
+			}},
+			Sleep: &[]model.Sleep{{
+				Name:     "Britannique Hotel - Paris Centre",
+				Rating:   4.7,
+				Vicinity: "20 Avenue Victoria, Paris",
+			}},
+			Eat: &[]model.Eat{{
+				Name:     "L'Art Brut Bistrot",
+				Rating:   4.6,
+				Vicinity: "78 Rue Quincampoix, Paris",
+			}},
+			Drink: &[]model.Drink{{
+				Name:     "Hôtel Duo",
+				Rating:   4.2,
+				Vicinity: "11 Rue du Temple, Paris",
+			}},
+		},
+		{
+			ID:        id2,
+			Startdate: time.Date(2022, 8, 5, 0, 0, 0, 0, time.UTC),
+			Enddate:   time.Date(2022, 8, 21, 0, 0, 0, 0, time.UTC),
+			City:      "London",
+			Travel: &model.Itinerary{
+				Type: model.Ground,
+				Departure: model.Station{
+					Name:    "Paris, France",
+					City:    "Paris",
+					Country: "France",
+				},
+				Arrival: model.Station{
+					Name:    "London, England",
+					City:    "London",
+					Country: "England",
+				},
+				DurationString: (9 * time.Hour).String(),
+				Startdate:      time.Date(2022, 12, 12, 12, 0, 0, 0, time.UTC),
+				Enddate:        time.Date(2022, 12, 13, 2, 0, 0, 0, time.UTC),
+				Steps: []model.ItineraryStep{{
+					Type:           "Train",
+					Departure:      "Montparnasse",
+					Arrival:        "Gare de Hendaye",
+					DurationString: (4*time.Hour + 36*time.Hour).String(),
+					Startdate:      time.Date(2022, 12, 12, 12, 23, 0, 0, time.UTC),
+					Enddate:        time.Date(2022, 12, 12, 16, 59, 0, 0, time.UTC),
+				}, {
+					Type:           "Bus",
+					Departure:      "Hendaye",
+					Arrival:        "Bilbao (Bus Station)",
+					DurationString: (2 * time.Hour).String(),
+					Startdate:      time.Date(2022, 12, 12, 17, 14, 0, 0, time.UTC),
+					Enddate:        time.Date(2022, 12, 12, 19, 14, 0, 0, time.UTC),
+				}},
+			},
+			Enjoy: &[]model.Enjoy{},
+			Sleep: &[]model.Sleep{},
+			Eat:   &[]model.Eat{},
+			Drink: &[]model.Drink{},
+		},
+		{
+			ID:        id3,
+			Startdate: time.Date(2022, 8, 5, 0, 0, 0, 0, time.UTC),
+			Enddate:   time.Date(2022, 8, 21, 0, 0, 0, 0, time.UTC),
+			City:      "Tokyo",
+			Travel: &model.Itinerary{
+				Type: model.Air,
+				Departure: model.Station{
+					Name:    "LHR",
+					City:    "London",
+					Country: "EN",
+				},
+				Arrival: model.Station{
+					Name:    "HND",
+					City:    "Tokyo",
+					Country: "JP",
+				},
+				DurationString: (10 * time.Hour).String(),
+				Startdate:      time.Date(2022, 12, 12, 14, 0, 0, 0, time.UTC),
+				Enddate:        time.Date(2022, 12, 13, 8, 0, 0, 0, time.UTC),
+				Price:          999.99,
+			},
+			Enjoy: &[]model.Enjoy{},
+			Sleep: &[]model.Sleep{},
+			Eat:   &[]model.Eat{},
+			Drink: &[]model.Drink{},
+		},
+	}
+
+	user := model.User{
+		ID:        userID,
+		Firstname: "yoiyoi",
+		Lastname:  "miya",
+		Email:     "yoiyoi.miya@gmail.com",
+		Phone:     "+33612345678",
+	}
+
+	suite.userService.On("GetUserByID", userID, false).Return(&user, nil)
+	suite.tripStepRepository.On("CreateTripStep", &tripSteps[2]).Return(&res3, nil)
+	suite.tripStepRepository.On("CreateTripStep", &tripSteps[1]).Return(&res2, nil)
+	suite.tripStepRepository.On("CreateTripStep", &tripSteps[0]).Return(&res1, nil)
+
+	user.Trips = []*model.Roadtrip{{
+		Startdate:   time.Date(2022, 8, 5, 0, 0, 0, 0, time.UTC),
+		Enddate:     time.Date(2022, 8, 21, 0, 0, 0, 0, time.UTC),
+		TripStepsID: []primitive.ObjectID{id1, id2, id3},
+		TripSteps:   &tripSteps,
+	}}
+
+	log.Print(user)
+
+	suite.userService.On("UpdateUser", userID, &user).Return(nil)
+
+	requestBody, err := json.Marshal(&tripSteps)
+	suite.NoError(err, "can not marshal struct to json")
+
+	response, err := http.Post(
+		fmt.Sprintf("%s/api/v1/roadtrip/%s", suite.testServer.URL, userID.Hex()),
+		gin.MIMEJSON,
+		bytes.NewBuffer(requestBody),
+	)
+	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
+
+	responseBody := model.AppResponse{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusOK, response.StatusCode)
+	suite.Equal("Added roadtrip to user successfully", responseBody.Message)
+	suite.userService.AssertExpectations(suite.T())
+	suite.tripStepRepository.AssertExpectations(suite.T())
 }
 
 func (suite *roadtripControllerSuite) TestEnjoyWithGoodAnswer() {
