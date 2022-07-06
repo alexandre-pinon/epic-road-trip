@@ -12,11 +12,11 @@ import {
   Paper,
   Grid, Center
 } from "@mantine/core";
-import {ArrowForwardUp, Bike, Car, PlaneInflight, Search, Train, Walk} from 'tabler-icons-react';
+import { ArrowBackUp, ArrowForwardUp, Bike, Car, MoodSmile, PlaneInflight, Search, Train, Trash, Walk } from 'tabler-icons-react';
 import axios from "axios";
-import React, {SetStateAction, useEffect, useState} from "react";
-import {use} from "msw/lib/types/utils/internal/requestHandlerUtils";
-import {useNavigate} from "react-router-dom";
+import React, { SetStateAction, useEffect, useState } from "react";
+import { use } from "msw/lib/types/utils/internal/requestHandlerUtils";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   button: {
@@ -39,8 +39,8 @@ const useStyles = createStyles((theme) => ({
 }));
 
 
-export function Travel({fulTrip} : any) {
-  const {classes} = useStyles();
+export function Travel({ fulTrip }: any) {
+  const { classes } = useStyles();
   const navigate = useNavigate();
 
   const goStartAndEnd = async () => {
@@ -113,7 +113,7 @@ export function Travel({fulTrip} : any) {
     }).then(res => {
       let id = 0
       let myList2: any = [];
-      res.data.data.forEach((data: any ) => {
+      res.data.data.forEach((data: any) => {
         let travelInfo = {
           id: id,
           cityDeparture: data.departure.city,
@@ -123,7 +123,7 @@ export function Travel({fulTrip} : any) {
           endDate: data.enddate
         }
         myList2.push(travelInfo)
-        id ++
+        id++
       })
       setPlane(myList2)
       console.log(myList2)
@@ -143,7 +143,7 @@ export function Travel({fulTrip} : any) {
     }).then(res => {
       let id = 0
       let myList2: any = [];
-      res.data.data.forEach((data: any ) => {
+      res.data.data.forEach((data: any) => {
         let travelInfo = {
           id: id,
           cityDeparture: data.departure.city,
@@ -153,7 +153,7 @@ export function Travel({fulTrip} : any) {
           endDate: data.enddate,
         }
         myList2.push(travelInfo)
-        id ++;
+        id++;
       })
       setTrain(myList2)
       console.log(myList2)
@@ -193,100 +193,100 @@ export function Travel({fulTrip} : any) {
   }
 
   return (
-      <Container size={600}>
-        <Group grow spacing={0} position="apart">
-            <SimpleGrid cols={1}>
-              <>
-                <Button onClick={showPlane} variant="default" className={classes.button}>
-                  <PlaneInflight />
-                </Button>
+    <Container size={600}>
+      <Group grow spacing={0} position="apart">
+        <SimpleGrid cols={1}>
+          <>
+            <Button onClick={showPlane} variant="default" className={classes.button}>
+              <PlaneInflight />
+            </Button>
 
-                <ul>
-                  {
-                    togglePlane ? (
-                            plane.map((item) => (
-                                  <Paper shadow="xl" p="md" withBorder key={item.id}>
-                                    <Grid><Text weight={700}>Travel : PLANE number  {item.id}</Text> </Grid>
-                                    <Grid><Text weight={700}>Departure :  </Text> <Text>&nbsp;{item.cityDeparture}</Text></Grid>
-                                    <Grid><Text weight={700}>Arrival :  </Text> <Text> &nbsp;{item.cityArrival}</Text></Grid>
-                                    <Grid><Text weight={700}>Start Date :  </Text> <Text>&nbsp;{item.startDate}</Text></Grid>
-                                    <Grid><Text weight={700}>End Date :  </Text> <Text>&nbsp;{item.endDate}</Text></Grid>
-                                    <Grid><Text weight={700}>Duration :  </Text> <Text>&nbsp;{item.duration}</Text></Grid>
-                                    <Center><Button onClick={()=>SelectTravel(item.id, 'Plane')} >Select this travel </Button></Center>
-                                  </Paper>
-                            ))
-                        )
-                        : null
-                  }
-                </ul>
-              </>
-            </SimpleGrid>
-
-          </Group>
-
-          <Group grow spacing={0} position="apart">
-            <SimpleGrid cols={1}>
-              <>
-                <Button onClick={showTrain} variant="default" className={classes.button}>
-                  <Train />
-                </Button>
-                <ul>
-                  {
-                    toggleTrain ? (
-                            train.map((item) => (
-                                <Paper shadow="xl" p="md" withBorder key={item.id}>
-                                  <Grid><Text weight={700}>Travel : TRAIN number {item.id} </Text> </Grid>
-                                  <Grid><Text weight={700}>Departure :  </Text> <Text>&nbsp;{item.cityDeparture}</Text></Grid>
-                                  <Grid><Text weight={700}>Arrival :  </Text> <Text>&nbsp;{item.cityArrival}</Text></Grid>
-                                  <Grid><Text weight={700}>Start Date :  </Text> <Text>&nbsp;{item.startDate}</Text></Grid>
-                                  <Grid><Text weight={700}>End Date :  </Text> <Text>&nbsp;{item.endDate}</Text></Grid>
-                                  <Grid><Text weight={700}>Duration :  </Text> <Text>&nbsp;{item.duration}</Text></Grid>
-                                  <Center><Button onClick={()=>SelectTravel(item.id, 'Train')} >Select this travel </Button></Center>
-                                </Paper>
-                            ))
-                        )
-                        : null
-                  }
-                </ul>
-              </>
-            </SimpleGrid>
-        </Group>
-
-        <div>
-          {
-            selectedTravel==="Plane" ? (
-                <>
-                  <Center><h3>SELECTED TRAVEL : </h3></Center>
-                  <Paper shadow="xl" p="md" withBorder >
-                    <Grid><Text weight={700}>Travel : PLANE number  {plane[id].id}</Text> </Grid>
-                    <Grid><Text weight={700}>Departure :  </Text> <Text>&nbsp;{plane[id].cityDeparture}</Text></Grid>
-                    <Grid><Text weight={700}>Arrival :  </Text> <Text>&nbsp;{plane[id].cityArrival}</Text></Grid>
-                    <Grid><Text weight={700}>Start Date :  </Text> <Text>&nbsp;{plane[id].startDate}</Text></Grid>
-                    <Grid><Text weight={700}>End Date :  </Text> <Text>&nbsp;{plane[id].endDate}</Text></Grid>
-                    <Grid><Text weight={700}>Duration :  </Text> <Text>&nbsp;{plane[id].duration}</Text></Grid>
-                  </Paper>
-                </>
+            <ul>
+              {
+                togglePlane ? (
+                  plane.map((item) => (
+                    <Paper shadow="xl" p="md" withBorder key={item.id}>
+                      <Grid><Text weight={700}>Travel : PLANE number  {item.id}</Text> </Grid>
+                      <Grid><Text weight={700}>Departure :  </Text> <Text>&nbsp;{item.cityDeparture}</Text></Grid>
+                      <Grid><Text weight={700}>Arrival :  </Text> <Text> &nbsp;{item.cityArrival}</Text></Grid>
+                      <Grid><Text weight={700}>Start Date :  </Text> <Text>&nbsp;{item.startDate}</Text></Grid>
+                      <Grid><Text weight={700}>End Date :  </Text> <Text>&nbsp;{item.endDate}</Text></Grid>
+                      <Grid><Text weight={700}>Duration :  </Text> <Text>&nbsp;{item.duration}</Text></Grid>
+                      <Center><Button onClick={() => SelectTravel(item.id, 'Plane')} >Select this travel </Button></Center>
+                    </Paper>
+                  ))
                 )
-                : null
-          }
-          {
-            selectedTravel==="Train" ? (
-                <>
-                  <Center><h3>SELECTED TRAVEL : </h3></Center>
-                  <Paper shadow="xl" p="md" withBorder >
-                  <Grid><Text weight={700}>Travel : TRAIN number  {train[id].id}</Text> </Grid>
-                  <Grid><Text weight={700}>Departure :  </Text> <Text>&nbsp;{train[id].cityDeparture}</Text></Grid>
-                  <Grid><Text weight={700}>Arrival :  </Text> <Text>&nbsp;{train[id].cityArrival}</Text></Grid>
-                  <Grid><Text weight={700}>Start Date :  </Text> <Text>&nbsp;{train[id].startDate}</Text></Grid>
-                  <Grid><Text weight={700}>End Date :  </Text> <Text>&nbsp;{train[id].endDate}</Text></Grid>
-                  <Grid><Text weight={700}>Duration :  </Text> <Text>&nbsp;{train[id].duration}</Text></Grid>
-                </Paper>
-                </>
+                  : null
+              }
+            </ul>
+          </>
+        </SimpleGrid>
 
+      </Group>
+
+      <Group grow spacing={0} position="apart">
+        <SimpleGrid cols={1}>
+          <>
+            <Button onClick={showTrain} variant="default" className={classes.button}>
+              <Train />
+            </Button>
+            <ul>
+              {
+                toggleTrain ? (
+                  train.map((item) => (
+                    <Paper shadow="xl" p="md" withBorder key={item.id}>
+                      <Grid><Text weight={700}>Travel : TRAIN number {item.id} </Text> </Grid>
+                      <Grid><Text weight={700}>Departure :  </Text> <Text>&nbsp;{item.cityDeparture}</Text></Grid>
+                      <Grid><Text weight={700}>Arrival :  </Text> <Text>&nbsp;{item.cityArrival}</Text></Grid>
+                      <Grid><Text weight={700}>Start Date :  </Text> <Text>&nbsp;{item.startDate}</Text></Grid>
+                      <Grid><Text weight={700}>End Date :  </Text> <Text>&nbsp;{item.endDate}</Text></Grid>
+                      <Grid><Text weight={700}>Duration :  </Text> <Text>&nbsp;{item.duration}</Text></Grid>
+                      <Center><Button onClick={() => SelectTravel(item.id, 'Train')} >Select this travel </Button></Center>
+                    </Paper>
+                  ))
                 )
-                : null
-          }
-        </div>
+                  : null
+              }
+            </ul>
+          </>
+        </SimpleGrid>
+      </Group>
+
+      <div>
+        {
+          selectedTravel === "Plane" ? (
+            <>
+              <Center><h3>SELECTED TRAVEL : </h3></Center>
+              <Paper shadow="xl" p="md" withBorder >
+                <Grid><Text weight={700}>Travel : PLANE number  {plane[id].id}</Text> </Grid>
+                <Grid><Text weight={700}>Departure :  </Text> <Text>&nbsp;{plane[id].cityDeparture}</Text></Grid>
+                <Grid><Text weight={700}>Arrival :  </Text> <Text>&nbsp;{plane[id].cityArrival}</Text></Grid>
+                <Grid><Text weight={700}>Start Date :  </Text> <Text>&nbsp;{plane[id].startDate}</Text></Grid>
+                <Grid><Text weight={700}>End Date :  </Text> <Text>&nbsp;{plane[id].endDate}</Text></Grid>
+                <Grid><Text weight={700}>Duration :  </Text> <Text>&nbsp;{plane[id].duration}</Text></Grid>
+              </Paper>
+            </>
+          )
+            : null
+        }
+        {
+          selectedTravel === "Train" ? (
+            <>
+              <Center><h3>SELECTED TRAVEL : </h3></Center>
+              <Paper shadow="xl" p="md" withBorder >
+                <Grid><Text weight={700}>Travel : TRAIN number  {train[id].id}</Text> </Grid>
+                <Grid><Text weight={700}>Departure :  </Text> <Text>&nbsp;{train[id].cityDeparture}</Text></Grid>
+                <Grid><Text weight={700}>Arrival :  </Text> <Text>&nbsp;{train[id].cityArrival}</Text></Grid>
+                <Grid><Text weight={700}>Start Date :  </Text> <Text>&nbsp;{train[id].startDate}</Text></Grid>
+                <Grid><Text weight={700}>End Date :  </Text> <Text>&nbsp;{train[id].endDate}</Text></Grid>
+                <Grid><Text weight={700}>Duration :  </Text> <Text>&nbsp;{train[id].duration}</Text></Grid>
+              </Paper>
+            </>
+
+          )
+            : null
+        }
+      </div>
 
 
 
@@ -294,20 +294,21 @@ export function Travel({fulTrip} : any) {
 
 
 
-        <Space h="xl" />
+      <Space h="xl" />
 
 
-        <Center>
-          <Button onClick={goStartAndEnd} rightIcon={<Search size={18} />} variant="light" radius="xl">
-            Go back
-          </Button>
-          <Button onClick={goEnjoy} rightIcon={<Search size={18} />} variant="light" radius="xl">
-            Search for Activities
-          </Button>
-          <Button onClick={goResumeTrip} rightIcon={<Search size={18} />} variant="light" radius="xl">
-            Delete après
-          </Button>
-        </Center>
+      <Center>
+        <Button onClick={goStartAndEnd} rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
+          Go back
+        </Button>
+        <Button onClick={goEnjoy} rightIcon={<MoodSmile size={18} />} compact variant="subtle" radius="xs">
+          Search for Activities
+        </Button>
+        <Button onClick={goResumeTrip} rightIcon={<Trash size={18} />} compact variant="subtle" radius="xs">
+          Delete après
+        </Button>
+      </Center>
+
 
       {/*
       <AspectRatio ratio={16 / 9}>

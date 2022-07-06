@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 import React, { useState } from "react";
 import { ActionIcon, Button, Center, Container, createStyles, Modal, Space, TextInput, Title, Autocomplete } from "@mantine/core";
-import { BuildingSkyscraper, CalendarEvent, Search, BuildingCommunity, CalendarMinus } from "tabler-icons-react";
+import { BuildingSkyscraper, CalendarEvent, Search, BuildingCommunity, CalendarMinus, ArrowBackUp, Plane } from "tabler-icons-react";
 import { Calendar, DatePicker } from "@mantine/dates";
 import { props } from "kea";
 import cityObjects from '../../data/iata_codes.json';
@@ -98,10 +98,10 @@ export function StartEndTrip({ fulTrip }: any) {
                 <Space h="xl" />
 
                 <Center>
-                    <Button onClick={goToHome} rightIcon={<Search size={18} />} variant="light" radius="xl">
+                    <Button onClick={goToHome} rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
                         Go back
                     </Button>
-                    <Button onClick={goTravel} rightIcon={<Search size={18} />} variant="light" radius="xl">
+                    <Button onClick={goTravel} rightIcon={<Plane size={18} />} compact variant="subtle" radius="xs">
                         Search for itineraries
                     </Button>
                 </Center>
