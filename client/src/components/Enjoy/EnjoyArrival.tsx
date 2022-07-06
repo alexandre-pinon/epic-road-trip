@@ -57,7 +57,7 @@ export function EnjoyArrival({ fulTrip }: any) {
 
   const goSleep = async () => {
     console.log("Go to sleep page!")
-    navigate('/sleep');
+    navigate('/sleepArrival');
   };
 
   const [id, setId] = useState(0)
