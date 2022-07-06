@@ -98,7 +98,7 @@ func (ctrl *roadtripController) CreateRoadtrip(ctx *gin.Context) (*model.AppResu
 
 	return &model.AppResult{
 		StatusCode: http.StatusOK,
-		Message:    "Added roadtrip to user successfully",
+		Message:    fmt.Sprintf("Added roadtrip to user %s successfully", userID.Hex()),
 		Data:       struct{}{},
 	}, nil
 }

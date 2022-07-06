@@ -207,7 +207,7 @@ func (suite *roadtripControllerSuite) TestCreateRoadTrip_Positive() {
 	json.NewDecoder(response.Body).Decode(&responseBody)
 
 	suite.Equal(http.StatusOK, response.StatusCode)
-	suite.Equal("Added roadtrip to user successfully", responseBody.Message)
+	suite.Equal(fmt.Sprintf("Added roadtrip to user %s successfully", userID.Hex()), responseBody.Message)
 	suite.userService.AssertExpectations(suite.T())
 	suite.tripStepRepository.AssertExpectations(suite.T())
 }
