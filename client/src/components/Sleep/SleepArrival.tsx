@@ -53,12 +53,12 @@ export function SleepArrival({ fulTrip }: any) {
 
   const goEnjoy = async () => {
     console.log("Go to enjoy page!")
-    navigate('/enjoy');
+    navigate('/enjoyArrival');
   };
 
   const goEat = async () => {
     console.log("Go to eat page!")
-    navigate('/eat');
+    navigate('/eatArrival');
   };
 
   const [id, setId] = useState(0)
