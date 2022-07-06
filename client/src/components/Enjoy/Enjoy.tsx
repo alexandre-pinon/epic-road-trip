@@ -273,10 +273,10 @@ export function Enjoy({ fulTrip }: any) {
         <Space h="xl" />
 
         <Center>
-          <Button onClick={goTravel} rightIcon={<ArrowBackUp size={18} />} variant="light" radius="xl">
+          <Button onClick={goTravel} rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
             Go back
           </Button>
-          <Button onClick={goSleep} rightIcon={<Bed size={18} />} variant="light" radius="xl">
+          <Button onClick={goSleep} rightIcon={<Bed size={18} />} compact variant="subtle" radius="xs">
             Search for Hotels
           </Button>
         </Center>
