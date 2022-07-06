@@ -127,7 +127,7 @@ func (ctrl *roadtripController) DeleteRoadtrip(ctx *gin.Context) (*model.AppResu
 		return nil, err.(*model.AppError)
 	}
 
-	for _, roadtrip := range user.Trips {
+	for idx, roadtrip := range user.Trips {
 		if roadtrip.ID == id.(primitive.ObjectID) {
 			for _, tripStepID := range roadtrip.TripStepsID {
 				_, err := ctrl.tripStepRepository.DeleteTripStep(tripStepID)
@@ -138,10 +138,10 @@ func (ctrl *roadtripController) DeleteRoadtrip(ctx *gin.Context) (*model.AppResu
 					}
 				}
 			}
+			user.Trips = append(user.Trips[:idx], user.Trips[idx+1:]...)
 		}
 	}
 
-	user.Trips = []*model.Roadtrip{}
 	if err := ctrl.userService.UpdateUser(userID, user); err != nil {
 		return nil, err.(*model.AppError)
 	}
