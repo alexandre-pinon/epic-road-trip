@@ -198,6 +198,131 @@ const docTemplate = `{
                 }
             }
         },
+        "/roadtrip": {
+            "post": {
+                "description": "Add roadtrip to the user given userID \u0026 trip steps",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Roadtrip"
+                ],
+                "summary": "Create roadtrip",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "userID",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "city \u0026 start/end date \u0026 activities",
+                        "name": "tripSteps",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.TripStep"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateRoadtripSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request params/body",
+                        "schema": {
+                            "$ref": "#/definitions/model.InvalidJsonBody"
+                        }
+                    },
+                    "401": {
+                        "description": "Missing/Expired token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Unauthorized"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/model.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/roadtrip/:id": {
+            "delete": {
+                "description": "Remove roadtrip from the user given userID \u0026 roadtrip ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Roadtrip"
+                ],
+                "summary": "Delete roadtrip",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "userID",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Roadtrip ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/model.DeleteRoadtripSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID/params",
+                        "schema": {
+                            "$ref": "#/definitions/model.InvalidID"
+                        }
+                    },
+                    "401": {
+                        "description": "Missing/Expired token",
+                        "schema": {
+                            "$ref": "#/definitions/model.Unauthorized"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/model.UserNotFound"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/model.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
         "/roadtrip/drink": {
             "post": {
                 "description": "Search for bars around the given city \u0026 constraints",
@@ -640,6 +765,12 @@ const docTemplate = `{
                 "summary": "Get user by ID",
                 "parameters": [
                     {
+                        "type": "boolean",
+                        "description": "Populate the user's roadtrips or not",
+                        "name": "populate",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "User ID",
                         "name": "id",
@@ -916,6 +1047,50 @@ const docTemplate = `{
                 }
             }
         },
+        "model.CreateRoadtripSuccess": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Added roadtrip to user {id} successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "model.DeleteRoadtripSuccess": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Removed roadtrip from user {id} successfully"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "valErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
         "model.DeleteUserSuccess": {
             "type": "object",
             "properties": {
@@ -955,6 +1130,23 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Drink": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "number"
+                },
+                "vicinity": {
+                    "type": "string"
+                }
+            }
+        },
         "model.DrinkSuccess": {
             "type": "object",
             "properties": {
@@ -980,6 +1172,23 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Eat": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "number"
+                },
+                "vicinity": {
+                    "type": "string"
+                }
+            }
+        },
         "model.EatSuccess": {
             "type": "object",
             "properties": {
@@ -1002,6 +1211,23 @@ const docTemplate = `{
                     "items": {
                         "type": "object"
                     }
+                }
+            }
+        },
+        "model.Enjoy": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "number"
+                },
+                "vicinity": {
+                    "type": "string"
                 }
             }
         },
@@ -1502,23 +1728,31 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
-                "itineraries": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "name": {
-                    "type": "string"
-                },
                 "startdate": {
                     "type": "string"
                 },
                 "tripSteps": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/model.TripStep"
                     }
+                }
+            }
+        },
+        "model.Sleep": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "number"
+                },
+                "vicinity": {
+                    "type": "string"
                 }
             }
         },
@@ -1583,6 +1817,52 @@ const docTemplate = `{
                     "items": {
                         "type": "object"
                     }
+                }
+            }
+        },
+        "model.TripStep": {
+            "type": "object",
+            "required": [
+                "city",
+                "enddate",
+                "startdate"
+            ],
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "drink": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Drink"
+                    }
+                },
+                "eat": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Eat"
+                    }
+                },
+                "enddate": {
+                    "type": "string"
+                },
+                "enjoy": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Enjoy"
+                    }
+                },
+                "sleep": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Sleep"
+                    }
+                },
+                "startdate": {
+                    "type": "string"
+                },
+                "travel": {
+                    "$ref": "#/definitions/model.Itinerary"
                 }
             }
         },
