@@ -1,8 +1,8 @@
-import { AspectRatio, Button, Center, Container, createStyles, Grid, Group, Paper, Space, Tooltip, Text } from "@mantine/core";
+import { AspectRatio, Image, Button, Center, Container, createStyles, Grid, Group, Paper, Space, Tooltip, Text, Card, Title, SimpleGrid, ActionIcon } from "@mantine/core";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowForwardUp, Bike, Car, PlaneInflight, Search, Train, Walk } from 'tabler-icons-react';
+import { ArrowBackUp, ArrowForwardUp, Beer, Bike, Car, PlaneInflight, Search, Train, Walk } from 'tabler-icons-react';
 
 const useStyles = createStyles((theme) => ({
   button: {
@@ -22,9 +22,32 @@ const useStyles = createStyles((theme) => ({
       borderBottomRightRadius: theme.radius.sm,
     },
   },
+
+  cardEnjoy: {
+    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
+  },
+
+  sectionEnjoy: {
+    borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
+      }`,
+    paddingLeft: theme.spacing.md,
+    paddingRight: theme.spacing.md,
+    paddingBottom: theme.spacing.md,
+  },
+
+  likeEnjoy: {
+    color: theme.colors.red[6],
+  },
+
+  labelEnjoy: {
+    textTransform: 'uppercase',
+    fontSize: theme.fontSizes.xs,
+    fontWeight: 700,
+  },
 }));
 
 export function Eat({ fulTrip }: any) {
+  const { classes } = useStyles();
 
   const navigate = useNavigate();
 
@@ -44,12 +67,14 @@ export function Eat({ fulTrip }: any) {
   const [name, setName] = useState('')
   const [rating, setRating] = useState('')
   const [vicinity, setVicinity] = useState('')
+  const [icon, setIcon] = useState('')
 
   const [eat, setEat] = useState([{
     id,
     name,
     rating,
-    vicinity
+    vicinity,
+    icon
   }])
 
   let [selectedEat, setSelectedEat] = useState('')
@@ -60,7 +85,7 @@ export function Eat({ fulTrip }: any) {
     axios.defaults.withCredentials = true
     event.preventDefault()
     let params = {
-      city: city,
+      city: fulTrip.startCity,
       constraints: {
         radius: 10000,
       }
@@ -82,6 +107,7 @@ export function Eat({ fulTrip }: any) {
             name: data.name,
             rating: data.rating,
             vicinity: data.vicinity,
+            icon: data.icon
           }
           eatActivities.push(activities)
           id++;
@@ -91,6 +117,8 @@ export function Eat({ fulTrip }: any) {
       .catch(function (error) {
         console.log(error);
       });
+    setToggleEat(!toggleEat)
+
   };
 
   const showEat = () => {
@@ -108,75 +136,150 @@ export function Eat({ fulTrip }: any) {
     }
 
     console.log("fulTrip content: ", fulTrip)
+
+    console.log("fulTrip content: ", fulTrip)
+    console.log("scroll to bottom: ", document.body.offsetHeight)
+    window.scroll({
+      top: document.body.offsetHeight,
+      left: 0,
+      behavior: 'smooth',
+    });
   }
 
   return (
     <Container>
-      <form onSubmit={retrieveEat}>
-        <h1 className="h3 mb-3 fw-normal">Eat Activities</h1>
 
-        <input type="text" className="form-control" placeholder="City" required
-          onChange={e => setCity(e.target.value)}
-        />
+      <Card withBorder radius="md" p="md" className={classes.cardEnjoy}>
 
-        <input type="text" className="form-control" placeholder="Radius" required
-          onChange={e => setRadius(e.target.value)}
-        />
+        {/* <form onSubmit={retrieveEnjoy}>
+          <h1 className="h3 mb-3 fw-normal">Enjoy Activities</h1>
 
-        <button className="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
+          <input type="text" className="form-control" placeholder="City" required
+            onChange={e => setCity(e.target.value)}
+          />
 
+          <input type="text" className="form-control" placeholder="Radius" required
+            onChange={e => setRadius(e.target.value)}
+          />
 
-      </form>
-
-      <Button onClick={showEat} variant="default">
-        <PlaneInflight />
-      </Button>
-
-
-      <ul>
-        {
-          toggleEat ? (
-            eat.map((item) => (
-              <Paper shadow="xl" p="md" withBorder key={item.id}>
-                <Grid><Text weight={700}>Name :  </Text> <Text> -  {item.name}</Text></Grid>
-                <Grid><Text weight={700}>Rating :  </Text> <Text> -  {item.rating}</Text></Grid>
-                <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {item.vicinity}</Text></Grid>
-                <Center><Button onClick={() => selectEat(item.id, 'Eat')} >Select this eat </Button></Center>
-              </Paper>
-            ))
-          )
-            : null
-        }
-      </ul>
+          <button className="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
+        </form> */}
+        <Title
+          align="center"
+          sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
+        >
+          Eat Activities
 
 
-      <div>
-        {
-          selectedEat === "Eat" ? (
-            <>
-              <Center><h3>SELECTED TRAVEL : </h3></Center>
-              <Paper shadow="xl" p="md" withBorder >
-                <Grid><Text weight={700}>Enjoy ID  {eat[id].id}</Text> </Grid>
-                <Grid><Text weight={700}>Name :  </Text> <Text> -  {eat[id].name}</Text></Grid>
-                <Grid><Text weight={700}>Rating :  </Text> <Text> -  {eat[id].rating}</Text></Grid>
-                <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {eat[id].vicinity}</Text></Grid>
-                <Center><Button onClick={() => selectEat(eat[id].id, 'Eat')} >Confirm this Eat </Button></Center>
-              </Paper>
-            </>
-          )
-            : null
-        }
-      </div>
+        </Title>
+        <Space h="xl" />
+
+        <Center>
+          <Button size="xl" onClick={retrieveEat} compact variant="subtle">
+            🍔
+          </Button>
+        </Center>
+        <Space h="xs" />
 
 
-      <Center>
-        <Button onClick={goSleep} rightIcon={<Search size={18} />} variant="light" radius="xl">
-          Go back
-        </Button>
-        <Button onClick={goDrink} rightIcon={<Search size={18} />} variant="light" radius="xl">
-          Search for Activities
-        </Button>
-      </Center>
+        <SimpleGrid cols={2} spacing="md" breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+          {
+            toggleEat ? (
+              eat.map((item) => (
+                <Paper shadow="xl" p="md" withBorder key={item.id}>
+                  <Center>
+                    <Grid>
+                      <Image
+                        width={30}
+                        height={60}
+                        fit="contain"
+                        radius="sm"
+                        src={item.icon}
+                      />
+                    </Grid>
+                  </Center>
+                  <Space h="xs" />
+                  <Grid><Text weight={700}>Name :  </Text> <Text> &nbsp; {item.name}</Text></Grid>
+                  <Grid><Text weight={700}>Rating :  </Text> <Text> &nbsp; {item.rating} / 5</Text></Grid>
+                  <Grid><Text weight={700}>Vicinity :  </Text> <Text> &nbsp; {item.vicinity}</Text></Grid>
+                  <Space h="xl" />
+                  <Center>
+                    <ActionIcon onClick={() => selectEat(item.id, 'Eat')} variant="outline">👆</ActionIcon>
+                  </Center>
+                </Paper>
+              ))
+            )
+              : null
+          }
+        </SimpleGrid>
+
+        <div>
+          {
+            selectedEat === "Eat" ? (
+              <>
+                <Space h="xl" />
+
+                <Title
+                  order={2}
+                  align="center"
+                  sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
+                >
+                  Eat Activities
+
+
+                </Title>
+                <Space h="xl" />                <Paper shadow="xl" p="md" withBorder >
+                  {/* <Grid><Text weight={700}>Enjoy ID  {enjoy[id].id}</Text> </Grid> */}
+                  <Center>
+                    <Grid>
+                      <Image
+                        width={30}
+                        height={60}
+                        fit="contain"
+                        radius="sm"
+                        src={eat[id].icon}
+                      />
+                    </Grid>
+                  </Center>
+                  <Space h="xs" />
+                  <Center>
+                    <Grid><Text weight={700}>Name :  </Text> <Text> -  {eat[id].name}</Text></Grid>
+                  </Center>
+                  <Space h="xs" />
+                  <Center>
+                    <Grid><Text weight={700}>Rating :  </Text> <Text> -  {eat[id].rating}</Text></Grid>
+                  </Center>
+                  <Space h="xs" />
+                  <Center>
+                    <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {eat[id].vicinity}</Text></Grid>
+                  </Center>
+                  <Space h="xl" />
+                  <Center>
+                    <Button size="md" onClick={() => selectEat(eat[id].id, 'Eat')} compact variant="subtle">
+                      Confirm this 🍔
+                    </Button>
+                  </Center>
+                </Paper>
+              </>
+            )
+              : null
+          }
+        </div>
+
+        <Space h="xl" />
+
+        <Center>
+          <Button onClick={goSleep} rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
+            Go back
+          </Button>
+          <Button onClick={goDrink} rightIcon={<Beer size={18} />} compact variant="subtle" radius="xs">
+            Search for Bars
+          </Button>
+        </Center>
+
+      </Card>
+
+
     </Container>
     // <Container size={720}>
     //   <Group grow spacing={0}>
