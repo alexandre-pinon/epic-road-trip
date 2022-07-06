@@ -9,7 +9,7 @@ type User struct {
 	Email          string             `json:"email" binding:"required,email"`
 	HashedPassword string             `json:"-" bson:"hashedpassword,omitempty"`
 	Phone          string             `json:"phone" binding:"required,e164,len=12"`
-	Trips          []*RoadTrip        `json:"trips,omitempty" bson:"omitempty"`
+	Trips          []*Roadtrip        `json:"trips,omitempty" bson:"trips,omitempty"`
 }
 type UserFormData struct {
 	User

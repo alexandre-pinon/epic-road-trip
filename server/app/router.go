@@ -9,7 +9,11 @@ import (
 )
 
 func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
+	rootCtrl := controllers.RootController
 	authMiddleware := controllers.AuthController.JWTMiddleware()
+	authCtrl := controllers.AuthController
+	userCtrl := controllers.UserController
+	roadtripCtrl := controllers.RoadtripController
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
@@ -17,30 +21,33 @@ func RegisterRoutes(router *gin.Engine, controllers *Controllers) {
 	{
 		authRoutes := apiRoutes.Group("/auth")
 		{
-			authRoutes.POST("/register", utils.ServeHTTP(controllers.UserController.CreateUser))
-			authRoutes.POST("/login", controllers.AuthController.HandleLogin)
-			authRoutes.POST("/logout", authMiddleware, controllers.AuthController.HandleLogout)
-			authRoutes.POST("/refresh_token", controllers.AuthController.HandleRefresh)
+			authRoutes.POST("/register", utils.ServeHTTP(userCtrl.CreateUser))
+			authRoutes.POST("/login", authCtrl.HandleLogin)
+			authRoutes.POST("/logout", authMiddleware, authCtrl.HandleLogout)
+			authRoutes.POST("/refresh_token", authCtrl.HandleRefresh)
 		}
 		userRoutes := apiRoutes.Group("/user")
 		{
-			userRoutes.GET("/", utils.ServeHTTP(controllers.UserController.GetAllUsers))
-			userRoutes.GET("/:id", middleware.CheckID(), utils.ServeHTTP(controllers.UserController.GetUserByID))
+			userRoutes.GET("/", utils.ServeHTTP(userCtrl.GetAllUsers))
+			userRoutes.GET("/:id", middleware.CheckID(), utils.ServeHTTP(userCtrl.GetUserByID))
 
 			userRoutes.Use(authMiddleware)
 
-			userRoutes.POST("/", utils.ServeHTTP(controllers.UserController.CreateUser))
-			userRoutes.PUT("/:id", middleware.CheckID(), utils.ServeHTTP(controllers.UserController.UpdateUser))
-			userRoutes.DELETE("/:id", middleware.CheckID(), utils.ServeHTTP(controllers.UserController.DeleteUser))
+			userRoutes.POST("/", utils.ServeHTTP(userCtrl.CreateUser))
+			userRoutes.PUT("/:id", middleware.CheckID(), utils.ServeHTTP(userCtrl.UpdateUser))
+			userRoutes.DELETE("/:id", middleware.CheckID(), utils.ServeHTTP(userCtrl.DeleteUser))
 		}
 		roadtripRoutes := apiRoutes.Group("/roadtrip")
 		{
-			roadtripRoutes.POST("/enjoy", utils.ServeHTTP(controllers.RoadtripController.Enjoy))
-			roadtripRoutes.POST("/sleep", utils.ServeHTTP(controllers.RoadtripController.Sleep))
-			roadtripRoutes.POST("/eat", utils.ServeHTTP(controllers.RoadtripController.Eat))
-			roadtripRoutes.POST("/drink", utils.ServeHTTP(controllers.RoadtripController.Drink))
-			roadtripRoutes.POST("/travel/:mode", middleware.CheckTravelMode(), utils.ServeHTTP(controllers.RoadtripController.Travel))
+			roadtripRoutes.POST("/", utils.ServeHTTP(roadtripCtrl.CreateRoadtrip))
+			roadtripRoutes.DELETE("/:id", middleware.CheckID(), utils.ServeHTTP(roadtripCtrl.DeleteRoadtrip))
+
+			roadtripRoutes.POST("/enjoy", utils.ServeHTTP(roadtripCtrl.Enjoy))
+			roadtripRoutes.POST("/sleep", utils.ServeHTTP(roadtripCtrl.Sleep))
+			roadtripRoutes.POST("/eat", utils.ServeHTTP(roadtripCtrl.Eat))
+			roadtripRoutes.POST("/drink", utils.ServeHTTP(roadtripCtrl.Drink))
+			roadtripRoutes.POST("/travel/:mode", middleware.CheckTravelMode(), utils.ServeHTTP(roadtripCtrl.Travel))
 		}
-		apiRoutes.GET("/", utils.ServeHTTP(controllers.RootController.Healthcheck))
+		apiRoutes.GET("/", utils.ServeHTTP(rootCtrl.Healthcheck))
 	}
 }

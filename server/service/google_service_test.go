@@ -49,7 +49,7 @@ func (suite *googleServiceSuite) TestEnjoyWithZeroResult() {
 	})
 	server := httptest.NewServer(router)
 
-	result, err := suite.svc.Enjoy(server.URL, model.Location{Lat: 48.856614, Lng: 2.3522219} , params)
+	result, err := suite.svc.Enjoy(server.URL, model.Location{Lat: 48.856614, Lng: 2.3522219}, params)
 	suite.Error(err, "error: no results")
 	suite.Equal(http.StatusNotFound, err.(*model.AppError).StatusCode)
 	suite.Equal(noResult.Status, err.Error())
@@ -147,12 +147,12 @@ func (suite *googleServiceSuite) TestEnjoyWithGoodAnswer() {
 		ctx.JSON(http.StatusOK, &withResults)
 	})
 	server := httptest.NewServer(router)
-	result, err := suite.svc.Enjoy(server.URL, location , params)
+	result, err := suite.svc.Enjoy(server.URL, location, params)
 	suite.NoError(err, "no crashed")
 	suite.Equal(activities, *result, "result and error are the same")
 }
 
-func (suite *googleServiceSuite) TestSleepWithGoodAnswer()  {
+func (suite *googleServiceSuite) TestSleepWithGoodAnswer() {
 	params := model.Constraints{
 		Radius:   0,
 		MaxPrice: 500,
@@ -234,7 +234,7 @@ func (suite *googleServiceSuite) TestSleepWithGoodAnswer()  {
 	}
 	withResults := model.Hotel{
 		HTMLAttributions: []interface{}{},
-		NextPageToken: "nvoinrvo",
+		NextPageToken:    "nvoinrvo",
 		Results:          hotels,
 		Status:           "no error",
 	}
@@ -243,7 +243,7 @@ func (suite *googleServiceSuite) TestSleepWithGoodAnswer()  {
 		ctx.JSON(http.StatusOK, &withResults)
 	})
 	server := httptest.NewServer(router)
-	result, err := suite.svc.Sleep(server.URL, location , params)
+	result, err := suite.svc.Sleep(server.URL, location, params)
 	suite.NoError(err, "no crashed")
 	suite.Equal(hotels, *result, "result and error are the same")
 }
@@ -257,7 +257,7 @@ func (suite *googleServiceSuite) TestSleepWithZeroResult() {
 	}
 	noResult := model.Hotel{
 		HTMLAttributions: []interface{}{},
-		NextPageToken: "",
+		NextPageToken:    "",
 		Results:          []model.ActivityResult{},
 		Status:           "ZERO_RESULTS",
 	}
@@ -275,7 +275,7 @@ func (suite *googleServiceSuite) TestSleepWithZeroResult() {
 	suite.Nil(result)
 }
 
-func (suite *googleServiceSuite) TestEatWithGoodAnswer()  {
+func (suite *googleServiceSuite) TestEatWithGoodAnswer() {
 	params := model.Constraints{
 		Radius:   0,
 		MaxPrice: 500,
@@ -396,7 +396,7 @@ func (suite *googleServiceSuite) TestEatWithZeroResult() {
 	suite.Nil(result)
 }
 
-func (suite *googleServiceSuite) TestDrinkWithGoodAnswer()  {
+func (suite *googleServiceSuite) TestDrinkWithGoodAnswer() {
 	params := model.Constraints{
 		Radius:   0,
 		MaxPrice: 500,
@@ -500,7 +500,7 @@ func (suite *googleServiceSuite) TestDrinkWithZeroResult() {
 	}
 	noResult := model.Hotel{
 		HTMLAttributions: []interface{}{},
-		NextPageToken: "",
+		NextPageToken:    "",
 		Results:          []model.ActivityResult{},
 		Status:           "ZERO_RESULTS",
 	}
@@ -519,7 +519,7 @@ func (suite *googleServiceSuite) TestDrinkWithZeroResult() {
 }
 
 func (suite *googleServiceSuite) TestGeocoding_NoResult_Negative() {
-	
+
 	noResults := model.GoogleGeocodingResponse{
 		Results: []model.GoogleGeocodingResult{},
 		Status:  "ZERO RESULTS",
@@ -776,7 +776,6 @@ func (suite *googleServiceSuite) TestGetDirections_NotFound_Negative() {
 }
 
 func TestGoogleService(t *testing.T) {
-	cfg := config.GetConfig()
-	cfg.App.Env = config.Test
+	cfg := config.GetConfig(string(config.Test))
 	suite.Run(t, &googleServiceSuite{cfg: cfg})
 }

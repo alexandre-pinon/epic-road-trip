@@ -2,6 +2,20 @@ import { useNavigate } from 'react-router-dom';
 import { createStyles, AppShell, Button, Container, Group, Header, Title, ActionIcon, Image, Grid, Text } from '@mantine/core';
 import { BrandGithub, BrandInstagram, BrandYoutube } from 'tabler-icons-react';
 import logo from "./assets/one_piece_wiki_logo.png";
+import axios from 'axios';
+
+const logout = (event: any) => {
+  axios.defaults.withCredentials = true
+  event.preventDefault()
+
+  axios({
+    method: 'post',
+    url: 'http://localhost:8000/api/v1/auth/logout',
+  })
+    .catch(function (error) {
+      console.log(error);
+    });
+};
 
 const useStyles = createStyles((theme) => ({
   button: {
@@ -39,6 +53,10 @@ export function AppHeader() {
     navigate('/login');
   };
 
+  const goToHome = async () => {
+    navigate('/');
+  };
+
   return (
     <AppShell
       padding="md"
@@ -53,7 +71,7 @@ export function AppHeader() {
               >
                 <Grid>
                   <Grid.Col span={12}>
-                    <Image height={50} src={logo} />
+                    <Image height={50} src={logo} onClick={goToHome} />
                   </Grid.Col>
 
                 </Grid>
@@ -83,14 +101,24 @@ export function AppHeader() {
                   </a>
                 </ActionIcon>
               </Group>
-              <Button
-                radius={50}
-                className={classes.button}
-                onClick={goToLogin}
-                variant="default"
-              >
-                Sign in
-              </Button>
+              <Group>
+                <Button
+                  radius={50}
+                  className={classes.button}
+                  onClick={goToLogin}
+                  variant="default"
+                >
+                  Sign in
+                </Button>
+                <Button
+                  radius={50}
+                  className={classes.button}
+                  onClick={logout}
+                  variant="default"
+                >
+                  Logout
+                </Button>
+              </Group>
             </Group>
           </Header>
         </ Container>}

@@ -46,7 +46,7 @@ func (svc *authService) IdentityHandler(ctx *gin.Context) interface{} {
 		return nil
 	}
 
-	user, err := svc.userRepository.GetUserByID(ID)
+	user, err := svc.userRepository.GetUserByID(ID, false)
 	if err != nil {
 		return nil
 	}
@@ -54,9 +54,9 @@ func (svc *authService) IdentityHandler(ctx *gin.Context) interface{} {
 	return user
 }
 
-func (svc *authService) Authenticator(c *gin.Context) (interface{}, error) {
+func (svc *authService) Authenticator(ctx *gin.Context) (interface{}, error) {
 	var userLogin model.UserLogin
-	if err := c.ShouldBindJSON(&userLogin); err != nil {
+	if err := ctx.ShouldBindJSON(&userLogin); err != nil {
 		return nil, errors.New("missing email or password")
 	}
 
@@ -68,6 +68,8 @@ func (svc *authService) Authenticator(c *gin.Context) (interface{}, error) {
 	if err := bcrypt.CompareHashAndPassword([]byte(user.HashedPassword), []byte(userLogin.Password)); err != nil {
 		return nil, errors.New("incorrect email or password")
 	}
+
+	ctx.Set("userID", user.ID.Hex())
 
 	return user, nil
 }
@@ -82,10 +84,14 @@ func (svc *authService) Unauthorized(ctx *gin.Context, code int, message string)
 }
 
 func (svc *authService) LoginResponse(ctx *gin.Context, code int, token string, expire time.Time) {
+	userID, _ := ctx.Get("userID")
+	dataID := struct {
+		ID string `json:"id"`
+	}{ID: userID.(string)}
 	ctx.JSON(code, &model.AppResponse{
 		Success:   true,
 		Message:   "Login successfully",
-		Data:      struct{}{},
+		Data:      dataID,
 		ValErrors: []model.ValError{},
 	})
 }

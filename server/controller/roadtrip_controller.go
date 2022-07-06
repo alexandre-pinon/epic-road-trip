@@ -2,24 +2,31 @@ package controller
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/alexandre-pinon/epic-road-trip/config"
 	"github.com/alexandre-pinon/epic-road-trip/model"
+	"github.com/alexandre-pinon/epic-road-trip/repository"
 	"github.com/alexandre-pinon/epic-road-trip/service"
 	"github.com/alexandre-pinon/epic-road-trip/utils"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type roadtripController struct {
 	cfg                *config.Config
+	userService        service.UserService
 	googleService      service.GoogleService
 	amadeusService     service.AmadeusService
 	amadeusAccessToken model.AccessToken
+	tripStepRepository repository.TripStepRepository
 }
 
-type RoadTripController interface {
+type RoadtripController interface {
+	CreateRoadtrip(ctx *gin.Context) (*model.AppResult, *model.AppError)
+	DeleteRoadtrip(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	Travel(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	TravelAir(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	TravelGround(ctx *gin.Context) (*model.AppResult, *model.AppError)
@@ -29,9 +36,121 @@ type RoadTripController interface {
 	Drink(c *gin.Context) (*model.AppResult, *model.AppError)
 }
 
-func NewRoadTripController(cfg *config.Config, googleService service.GoogleService, amadeusService service.AmadeusService) RoadTripController {
+func NewRoadtripController(cfg *config.Config, userService service.UserService, googleService service.GoogleService, amadeusService service.AmadeusService, tripStepRepository repository.TripStepRepository) RoadtripController {
 	amadeusAccessToken := model.AccessToken{}
-	return &roadtripController{cfg, googleService, amadeusService, amadeusAccessToken}
+	return &roadtripController{cfg, userService, googleService, amadeusService, amadeusAccessToken, tripStepRepository}
+}
+
+func (ctrl *roadtripController) CreateRoadtrip(ctx *gin.Context) (*model.AppResult, *model.AppError) {
+	var tripSteps []model.TripStep
+
+	userIDParam, exists := ctx.GetQuery("userID")
+	if !exists {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        errors.New("invalid query parameters: missing userID"),
+		}
+	}
+
+	userID, err := primitive.ObjectIDFromHex(userIDParam)
+	if err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        errors.New("invalid query parameters: invalid userID"),
+		}
+	}
+
+	if err := ctx.ShouldBindJSON(&tripSteps); err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+	}
+
+	user, err := ctrl.userService.GetUserByID(userID, false)
+	if err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	var insertedIDs []primitive.ObjectID
+	for _, tripStep := range tripSteps {
+		res, err := ctrl.tripStepRepository.CreateTripStep(&tripStep)
+		if err != nil {
+			return nil, &model.AppError{
+				StatusCode: http.StatusInternalServerError,
+				Err:        err,
+			}
+		}
+
+		insertedIDs = append(insertedIDs, res.InsertedID.(primitive.ObjectID))
+	}
+
+	user.Trips = append(user.Trips, &model.Roadtrip{
+		ID:          primitive.NewObjectID(),
+		Startdate:   tripSteps[0].Startdate,
+		Enddate:     tripSteps[len(tripSteps)-1].Enddate,
+		TripStepsID: insertedIDs,
+	})
+
+	if err := ctrl.userService.UpdateUser(userID, user); err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	return &model.AppResult{
+		StatusCode: http.StatusOK,
+		Message:    fmt.Sprintf("Added roadtrip to user %s successfully", userID.Hex()),
+		Data:       struct{}{},
+	}, nil
+}
+
+func (ctrl *roadtripController) DeleteRoadtrip(ctx *gin.Context) (*model.AppResult, *model.AppError) {
+	id, _ := ctx.Get("id")
+
+	userIDParam, exists := ctx.GetQuery("userID")
+	if !exists {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        errors.New("invalid query parameters: missing userID"),
+		}
+	}
+
+	userID, err := primitive.ObjectIDFromHex(userIDParam)
+	if err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        errors.New("invalid query parameters: invalid userID"),
+		}
+	}
+
+	user, err := ctrl.userService.GetUserByID(userID, false)
+	if err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	for idx, roadtrip := range user.Trips {
+		if roadtrip.ID == id.(primitive.ObjectID) {
+			for _, tripStepID := range roadtrip.TripStepsID {
+				_, err := ctrl.tripStepRepository.DeleteTripStep(tripStepID)
+				if err != nil {
+					return nil, &model.AppError{
+						StatusCode: http.StatusInternalServerError,
+						Err:        err,
+					}
+				}
+			}
+			user.Trips = append(user.Trips[:idx], user.Trips[idx+1:]...)
+		}
+	}
+
+	if err := ctrl.userService.UpdateUser(userID, user); err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	return &model.AppResult{
+		StatusCode: http.StatusOK,
+		Message:    fmt.Sprintf("Removed roadtrip from user %s successfully", userID.Hex()),
+		Data:       struct{}{},
+	}, nil
 }
 
 // Enjoy godoc

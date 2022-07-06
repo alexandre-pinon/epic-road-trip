@@ -472,7 +472,7 @@ definitions:
           type: object
         type: array
     type: object
-  model.RoadTrip:
+  model.Roadtrip:
     properties:
       enddate:
         type: string
@@ -608,7 +608,7 @@ definitions:
         type: string
       trips:
         items:
-          $ref: '#/definitions/model.RoadTrip'
+          $ref: '#/definitions/model.Roadtrip'
         type: array
     required:
     - email

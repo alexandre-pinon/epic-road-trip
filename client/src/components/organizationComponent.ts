@@ -1,4 +1,8 @@
 // Authentification components
+
+let TKT = "Hello World";
+
+
 export { Register } from "./Auth/Register/Register";
 export { Login } from "./Auth/Login/Login";
 
@@ -9,9 +13,13 @@ export { AppHeader } from "./AppHeader/Header"
 export { Home } from "./Home/Home"
 
 // Trip components
-export { Trip } from "./Trip/Trip"
+export { StartEndTrip } from "./Trip/startEndTrip"
+export { Travel } from "./Trip/Travel"
 export { City } from "./Trip/City"
+export { ResumeTrip } from "./Trip/resumeTrip"
 
 // Mock-Service-Worker components
 export { MockTest } from "./MockTest/MockTest"
 
+export { Enjoy } from "./Enjoy/Enjoy"
+export { Sleep } from "./Sleep/Sleep" 

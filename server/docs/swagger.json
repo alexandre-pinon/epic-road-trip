@@ -1481,7 +1481,7 @@
                 }
             }
         },
-        "model.RoadTrip": {
+        "model.Roadtrip": {
             "type": "object",
             "properties": {
                 "enddate": {
@@ -1683,7 +1683,7 @@
                 "trips": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/model.RoadTrip"
+                        "$ref": "#/definitions/model.Roadtrip"
                     }
                 }
             }
