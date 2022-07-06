@@ -1,7 +1,7 @@
 import { AspectRatio, Avatar, Button, Card, Container, createStyles, Title, Group, Space, Tooltip, Text, Image, Paper, Grid, Center, SimpleGrid, ActionIcon } from "@mantine/core";
 import axios from "axios";
 import { useState } from "react";
-import { ArrowForwardUp, Bike, Car, PlaneInflight, Search, Train, Walk } from 'tabler-icons-react';
+import { ArrowBackUp, ArrowForwardUp, Bike, Car, PlaneInflight, Search, Train, Walk } from 'tabler-icons-react';
 import { useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
@@ -221,13 +221,48 @@ export function Enjoy({ fulTrip }: any) {
           {
             selectedEnjoy === "Enjoy" ? (
               <>
-                <Center><h3>SELECTED TRAVEL : </h3></Center>
-                <Paper shadow="xl" p="md" withBorder >
-                  <Grid><Text weight={700}>Enjoy ID  {enjoy[id].id}</Text> </Grid>
-                  <Grid><Text weight={700}>Name :  </Text> <Text> -  {enjoy[id].name}</Text></Grid>
-                  <Grid><Text weight={700}>Rating :  </Text> <Text> -  {enjoy[id].rating}</Text></Grid>
-                  <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {enjoy[id].vicinity}</Text></Grid>
-                  <Center><Button onClick={() => selectEnjoy(enjoy[id].id, 'Enjoy')} >Confirm this enjoy </Button></Center>
+                <Space h="xl" />
+
+                <Title
+                  order={2}
+                  align="center"
+                  sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
+                >
+                  Enjoy Activities
+
+
+                </Title>
+                <Space h="xl" />                <Paper shadow="xl" p="md" withBorder >
+                  {/* <Grid><Text weight={700}>Enjoy ID  {enjoy[id].id}</Text> </Grid> */}
+                  <Center>
+                    <Grid>
+                      <Image
+                        width={30}
+                        height={60}
+                        fit="contain"
+                        radius="sm"
+                        src={enjoy[id].icon}
+                      />
+                    </Grid>
+                  </Center>
+                  <Space h="xs" />
+                  <Center>
+                    <Grid><Text weight={700}>Name :  </Text> <Text> -  {enjoy[id].name}</Text></Grid>
+                  </Center>
+                  <Space h="xs" />
+                  <Center>
+                    <Grid><Text weight={700}>Rating :  </Text> <Text> -  {enjoy[id].rating}</Text></Grid>
+                  </Center>
+                  <Space h="xs" />
+                  <Center>
+                    <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {enjoy[id].vicinity}</Text></Grid>
+                  </Center>
+                  <Space h="xl" />
+                  <Center>
+                    <Button size="md" onClick={() => selectEnjoy(enjoy[id].id, 'Enjoy')} compact variant="subtle">
+                      Confirm this 🙂
+                    </Button>
+                  </Center>
                 </Paper>
               </>
             )
@@ -238,7 +273,7 @@ export function Enjoy({ fulTrip }: any) {
         <Space h="xl" />
 
         <Center>
-          <Button onClick={goTravel} rightIcon={<Search size={18} />} variant="light" radius="xl">
+          <Button onClick={goTravel} rightIcon={<ArrowBackUp size={18} />} variant="light" radius="xl">
             Go back
           </Button>
           <Button onClick={goSleep} rightIcon={<Search size={18} />} variant="light" radius="xl">
