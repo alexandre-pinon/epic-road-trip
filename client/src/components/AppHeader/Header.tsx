@@ -53,6 +53,8 @@ export function AppHeader({ auth }: any) {
       .catch(function (error) {
         console.log(error);
       });
+
+    navigate('/login');
   };
 
   const goToLogin = async () => {
@@ -117,14 +119,17 @@ export function AppHeader({ auth }: any) {
                 >
                   Sign in
                 </Button>
-                <Button
-                  radius={50}
-                  className={classes.button}
-                  onClick={logout}
-                  variant="default"
-                >
-                  Logout
-                </Button>
+                {auth.setAuthenticated ? (
+                  <Button
+                    radius={50}
+                    className={classes.button}
+                    onClick={logout}
+                    variant="default"
+                  >
+                    Logout
+                  </Button>) : (<div></div>)
+                }
+
               </Group>
             </Group>
           </Header>

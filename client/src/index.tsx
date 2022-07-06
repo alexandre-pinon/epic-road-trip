@@ -27,10 +27,9 @@ function App() {
   const [sleep, setSleep] = useState('');
   const [eat, setEat] = useState('');
   const [drink, setDrink] = useState('');
-  const [setAuthenticated] = useState(false);
 
   let auth = {
-    setAuthenticated
+    setAuthenticated: false
   }
 
   let fulTrip = {

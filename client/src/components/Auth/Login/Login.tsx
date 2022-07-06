@@ -30,7 +30,6 @@ export function Login({ auth }: any) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-
   const submitDataLogin = (event: any) => {
     axios.defaults.withCredentials = true
     event.preventDefault()
@@ -54,6 +53,8 @@ export function Login({ auth }: any) {
       .catch(function (error) {
         console.log(error);
       });
+
+    navigate('/');
   };
 
   // const form = useForm({
