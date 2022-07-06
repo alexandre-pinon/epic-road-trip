@@ -1,52 +1,52 @@
 import { useNavigate } from 'react-router-dom';
-import {Avatar, Button, Center, Title, Card, Image, Text, Paper, Space, Grid} from '@mantine/core';
+import { Avatar, Button, Center, Title, Card, Image, Text, Paper, Space, Grid } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 
 
 
 
-export function ResumeTrip({fulTrip} : any) {
+export function ResumeTrip({ fulTrip }: any) {
     const navigate = useNavigate();
     const [subTrip, setSubTrip] = useState(
         [
             {
-                "startCity":"Montréal",
-                "endCity":"Toronto",
-                "Trajets":"Bus",
+                "startCity": "Montréal",
+                "endCity": "Toronto",
+                "Trajets": "Bus",
                 "Activities": [
                     {
-                        "hotel":"Dans les locaux d'AB Tasty",
-                        "restaurant":"La cafet d'AB Tasty",
-                        "Entertainment1":"Coder des tests Cypress",
-                        "Entertainment2":"Faire des tickets sur JIRA"
+                        "hotel": "Dans les locaux d'AB Tasty",
+                        "restaurant": "La cafet d'AB Tasty",
+                        "Entertainment1": "Coder des tests Cypress",
+                        "Entertainment2": "Faire des tickets sur JIRA"
                     }
                 ]
             },
             {
-                "startCity":"Tokyo",
-                "endCity":"Kyoto",
-                "Trajets":"Trains",
+                "startCity": "Tokyo",
+                "endCity": "Kyoto",
+                "Trajets": "Trains",
                 "Activities": [
                     {
-                        "hotel":"Chez Eichiro Oda",
-                        "restaurant":"Le Baratié",
-                        "Entertainment1":"Trouver le One Piece",
-                        "Entertainment2":"Libérer Wano"
+                        "hotel": "Chez Eichiro Oda",
+                        "restaurant": "Le Baratié",
+                        "Entertainment1": "Trouver le One Piece",
+                        "Entertainment2": "Libérer Wano"
                     }
                 ]
             },
             {
-                "startCity":"Delhi",
-                "endCity":"Bombay",
-                "Trajets":"Avions",
+                "startCity": "Delhi",
+                "endCity": "Bombay",
+                "Trajets": "Avions",
                 "Activities": [
                     {
-                        "hotel":"Chez Tharick",
-                        "restaurant":"Saravanha",
-                        "Entertainment1":"Voir le Taj Mahal",
-                        "Entertainment2":"Rendre visite à la famille de Tharick"
+                        "hotel": "Chez Tharick",
+                        "restaurant": "Saravanha",
+                        "Entertainment1": "Voir le Taj Mahal",
+                        "Entertainment2": "Rendre visite à la famille de Tharick"
                     }
                 ]
             }
@@ -61,6 +61,11 @@ export function ResumeTrip({fulTrip} : any) {
         console.log("Going back home!")
         navigate('/');
     };
+
+    const goToArrival = async () => {
+        navigate('/enjoyArrival');
+    };
+
 
     const addSubTrip = async () => {
         console.log("Add a sub-trip")
@@ -147,6 +152,9 @@ export function ResumeTrip({fulTrip} : any) {
             <Center>
                 <Button onClick={goToHome} variant="light" radius="xl">
                     Go to Home Page
+                </Button>
+                <Button onClick={goToArrival} variant="light" radius="xl">
+                    {fulTrip.endCity}
                 </Button>
                 {/*
                 <Button onClick={addSubTrip} variant="light" radius="xl">

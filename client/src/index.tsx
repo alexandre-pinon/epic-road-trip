@@ -9,6 +9,7 @@ import { Sleep } from './components/Sleep/Sleep';
 import { Eat } from './components/Eat/Eat';
 import { Drink } from './components/Drink/Drink';
 import { EnjoyArrival } from './components/Enjoy/EnjoyArrival';
+import { SleepArrival } from './components/Sleep/SleepArrival';
 
 // if (process.env.NODE_ENV === 'development') {
 //   const { worker } = require('./mocks/browser')
@@ -28,6 +29,12 @@ function App() {
   const [sleep, setSleep] = useState('');
   const [eat, setEat] = useState('');
   const [drink, setDrink] = useState('');
+
+  // Arrival City
+  const [enjoyArrival, setEnjoyArrival] = useState('');
+  const [sleepArrival, setSleepArrival] = useState('');
+  const [eatArrival, setEatArrival] = useState('');
+  const [drinkArrival, setDrinkArrival] = useState('');
 
   let auth = {
     setAuthenticated: false
@@ -51,7 +58,13 @@ function App() {
     eat,
     setEat,
     drink,
-    setDrink
+    setDrink,
+    enjoyArrival,
+    setEnjoyArrival,
+    sleepArrival,
+    setSleepArrival,
+    eatArrival, setEatArrival,
+    drinkArrival, setDrinkArrival,
   }
 
 
@@ -69,6 +82,9 @@ function App() {
         <Route path="/mocking" element={<MockTest />} />
         <Route path="/enjoy" element={<Enjoy fulTrip={fulTrip} />} />
         <Route path="/enjoyArrival" element={<EnjoyArrival fulTrip={fulTrip} />} />
+        <Route path="/sleepArrival" element={<SleepArrival fulTrip={fulTrip} />} />
+        <Route path="/eatArrival" element={<EnjoyArrival fulTrip={fulTrip} />} />
+        <Route path="/drinkArrival" element={<EnjoyArrival fulTrip={fulTrip} />} />
         <Route path="/sleep" element={<Sleep fulTrip={fulTrip} />} />
         <Route path="/eat" element={<Eat fulTrip={fulTrip} />} />
         <Route path="/drink" element={<Drink fulTrip={fulTrip} />} />
