@@ -364,7 +364,7 @@ export function Home({ fulTrip }: any) {
       {/* <Title order={3}>Top experiences on Epic Road Trip</Title> */}
 
       {/* GitHub API Test*/}
-      <div>
+      {/* <div>
         <div>
           <Title style={{ color: "#616161 " }} order={4}>Search for a GitHub user</Title>
           <Input
@@ -406,7 +406,7 @@ export function Home({ fulTrip }: any) {
         ) : (
           <div>{error ? `Error: ${error}` : 'No repositories found'}</div>
         )}
-      </div>
+      </div> */}
     </Container>
   );
 }
