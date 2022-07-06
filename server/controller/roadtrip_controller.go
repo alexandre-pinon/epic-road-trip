@@ -44,7 +44,22 @@ func NewRoadtripController(cfg *config.Config, userService service.UserService, 
 func (ctrl *roadtripController) CreateRoadtrip(ctx *gin.Context) (*model.AppResult, *model.AppError) {
 	var tripSteps []model.TripStep
 
-	id, _ := ctx.Get("id")
+	userIDParam, exists := ctx.GetQuery("userID")
+	if !exists {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        errors.New("invalid query parameters: missing userID"),
+		}
+	}
+
+	userID, err := primitive.ObjectIDFromHex(userIDParam)
+	if err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        errors.New("invalid query parameters: invalid userID"),
+		}
+	}
+
 	if err := ctx.ShouldBindJSON(&tripSteps); err != nil {
 		return nil, &model.AppError{
 			StatusCode: http.StatusBadRequest,
@@ -52,7 +67,7 @@ func (ctrl *roadtripController) CreateRoadtrip(ctx *gin.Context) (*model.AppResu
 		}
 	}
 
-	user, err := ctrl.userService.GetUserByID(id.(primitive.ObjectID), false)
+	user, err := ctrl.userService.GetUserByID(userID, false)
 	if err != nil {
 		return nil, err.(*model.AppError)
 	}
@@ -77,7 +92,7 @@ func (ctrl *roadtripController) CreateRoadtrip(ctx *gin.Context) (*model.AppResu
 		TripStepsID: insertedIDs,
 	})
 
-	if err := ctrl.userService.UpdateUser(id.(primitive.ObjectID), user); err != nil {
+	if err := ctrl.userService.UpdateUser(userID, user); err != nil {
 		return nil, err.(*model.AppError)
 	}
 

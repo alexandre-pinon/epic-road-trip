@@ -44,7 +44,7 @@ func (suite *roadtripControllerSuite) SetupTest() {
 	{
 		roadtripRoutes := apiRoutes.Group("/roadtrip")
 		{
-			roadtripRoutes.POST("/:id", middleware.CheckID(), utils.ServeHTTP(ctrl.CreateRoadtrip))
+			roadtripRoutes.POST("/", utils.ServeHTTP(ctrl.CreateRoadtrip))
 			roadtripRoutes.DELETE("/:id", middleware.CheckID(), utils.ServeHTTP(ctrl.DeleteRoadtrip))
 
 			roadtripRoutes.POST("/enjoy", utils.ServeHTTP(ctrl.Enjoy))
@@ -194,8 +194,9 @@ func (suite *roadtripControllerSuite) TestCreateRoadTrip_Positive() {
 	requestBody, err := json.Marshal(&tripSteps)
 	suite.NoError(err, "can not marshal struct to json")
 
+	query := fmt.Sprintf("userID=%s", userID.Hex())
 	response, err := http.Post(
-		fmt.Sprintf("%s/api/v1/roadtrip/%s", suite.testServer.URL, userID.Hex()),
+		fmt.Sprintf("%s/api/v1/roadtrip?%s", suite.testServer.URL, query),
 		gin.MIMEJSON,
 		bytes.NewBuffer(requestBody),
 	)
