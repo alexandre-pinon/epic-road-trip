@@ -2,6 +2,7 @@ package controller
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -88,10 +89,53 @@ func (ctrl *roadtripController) CreateRoadtrip(ctx *gin.Context) (*model.AppResu
 }
 
 func (ctrl *roadtripController) DeleteRoadtrip(ctx *gin.Context) (*model.AppResult, *model.AppError) {
-	return &model.AppResult{}, &model.AppError{
-		StatusCode: http.StatusNotImplemented,
-		Err:        errors.New("TODO: implement DeleteRoadtrip"),
+	id, _ := ctx.Get("id")
+
+	userIDParam, exists := ctx.GetQuery("userID")
+	if !exists {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        errors.New("invalid query parameters: missing userID"),
+		}
 	}
+
+	userID, err := primitive.ObjectIDFromHex(userIDParam)
+	if err != nil {
+		return nil, &model.AppError{
+			StatusCode: http.StatusBadRequest,
+			Err:        errors.New("invalid query parameters: invalid userID"),
+		}
+	}
+
+	user, err := ctrl.userService.GetUserByID(userID, false)
+	if err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	for _, roadtrip := range user.Trips {
+		if roadtrip.ID == id.(primitive.ObjectID) {
+			for _, tripStepID := range roadtrip.TripStepsID {
+				_, err := ctrl.tripStepRepository.DeleteTripStep(tripStepID)
+				if err != nil {
+					return nil, &model.AppError{
+						StatusCode: http.StatusInternalServerError,
+						Err:        err,
+					}
+				}
+			}
+		}
+	}
+
+	user.Trips = []*model.Roadtrip{}
+	if err := ctrl.userService.UpdateUser(userID, user); err != nil {
+		return nil, err.(*model.AppError)
+	}
+
+	return &model.AppResult{
+		StatusCode: http.StatusOK,
+		Message:    fmt.Sprintf("Removed roadtrip from user %s successfully", userID.Hex()),
+		Data:       struct{}{},
+	}, nil
 }
 
 // Enjoy godoc

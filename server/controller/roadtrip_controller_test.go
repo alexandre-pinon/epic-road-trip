@@ -187,7 +187,6 @@ func (suite *roadtripControllerSuite) TestCreateRoadTrip_Positive() {
 		Startdate:   time.Date(2022, 8, 5, 0, 0, 0, 0, time.UTC),
 		Enddate:     time.Date(2022, 8, 21, 0, 0, 0, 0, time.UTC),
 		TripStepsID: []primitive.ObjectID{id1, id2, id3},
-		TripSteps:   &tripSteps,
 	}}
 
 	suite.userService.On("UpdateUser", userID, &user).Return(nil)
@@ -337,9 +336,10 @@ func (suite *roadtripControllerSuite) TestDeleteRoadTrip_Positive() {
 	suite.tripStepRepository.On("DeleteTripStep", id2).Return(&deleteResult, nil)
 	suite.tripStepRepository.On("DeleteTripStep", id3).Return(&deleteResult, nil)
 
-	user.Trips = []*model.Roadtrip{}
+	userNoTrips := user
+	userNoTrips.Trips = []*model.Roadtrip{}
 
-	suite.userService.On("UpdateUser", userID, &user).Return(nil)
+	suite.userService.On("UpdateUser", userID, &userNoTrips).Return(nil)
 
 	query := fmt.Sprintf("userID=%s", userID.Hex())
 	request, err := http.NewRequest(
