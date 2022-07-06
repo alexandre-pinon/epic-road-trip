@@ -25,6 +25,7 @@ type roadtripController struct {
 
 type RoadtripController interface {
 	CreateRoadtrip(ctx *gin.Context) (*model.AppResult, *model.AppError)
+	DeleteRoadtrip(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	Travel(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	TravelAir(ctx *gin.Context) (*model.AppResult, *model.AppError)
 	TravelGround(ctx *gin.Context) (*model.AppResult, *model.AppError)
@@ -84,6 +85,13 @@ func (ctrl *roadtripController) CreateRoadtrip(ctx *gin.Context) (*model.AppResu
 		Message:    "Added roadtrip to user successfully",
 		Data:       struct{}{},
 	}, nil
+}
+
+func (ctrl *roadtripController) DeleteRoadtrip(ctx *gin.Context) (*model.AppResult, *model.AppError) {
+	return &model.AppResult{}, &model.AppError{
+		StatusCode: http.StatusNotImplemented,
+		Err:        errors.New("TODO: implement DeleteRoadtrip"),
+	}
 }
 
 // Enjoy godoc

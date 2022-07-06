@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -46,6 +45,8 @@ func (suite *roadtripControllerSuite) SetupTest() {
 		roadtripRoutes := apiRoutes.Group("/roadtrip")
 		{
 			roadtripRoutes.POST("/:id", middleware.CheckID(), utils.ServeHTTP(ctrl.CreateRoadtrip))
+			roadtripRoutes.DELETE("/:id", middleware.CheckID(), utils.ServeHTTP(ctrl.DeleteRoadtrip))
+
 			roadtripRoutes.POST("/enjoy", utils.ServeHTTP(ctrl.Enjoy))
 			roadtripRoutes.POST("/sleep", utils.ServeHTTP(ctrl.Sleep))
 			roadtripRoutes.POST("/eat", utils.ServeHTTP(ctrl.Eat))
@@ -189,8 +190,6 @@ func (suite *roadtripControllerSuite) TestCreateRoadTrip_Positive() {
 		TripSteps:   &tripSteps,
 	}}
 
-	log.Print(user)
-
 	suite.userService.On("UpdateUser", userID, &user).Return(nil)
 
 	requestBody, err := json.Marshal(&tripSteps)
@@ -209,6 +208,156 @@ func (suite *roadtripControllerSuite) TestCreateRoadTrip_Positive() {
 
 	suite.Equal(http.StatusOK, response.StatusCode)
 	suite.Equal("Added roadtrip to user successfully", responseBody.Message)
+	suite.userService.AssertExpectations(suite.T())
+	suite.tripStepRepository.AssertExpectations(suite.T())
+}
+
+func (suite *roadtripControllerSuite) TestDeleteRoadTrip_Positive() {
+	userID := primitive.NewObjectID()
+	id := primitive.NewObjectID()
+	id1 := primitive.NewObjectID()
+	id2 := primitive.NewObjectID()
+	id3 := primitive.NewObjectID()
+	deleteResult := mongo.DeleteResult{DeletedCount: 1}
+
+	tripSteps := []model.TripStep{
+		{
+			ID:        id1,
+			Startdate: time.Date(2022, 8, 5, 0, 0, 0, 0, time.UTC),
+			Enddate:   time.Date(2022, 8, 21, 0, 0, 0, 0, time.UTC),
+			City:      "Paris",
+			Enjoy: &[]model.Enjoy{{
+				Name:     "Hôtel de Ville",
+				Rating:   4.4,
+				Vicinity: "Place de l'Hôtel de Ville, Paris",
+			}},
+			Sleep: &[]model.Sleep{{
+				Name:     "Britannique Hotel - Paris Centre",
+				Rating:   4.7,
+				Vicinity: "20 Avenue Victoria, Paris",
+			}},
+			Eat: &[]model.Eat{{
+				Name:     "L'Art Brut Bistrot",
+				Rating:   4.6,
+				Vicinity: "78 Rue Quincampoix, Paris",
+			}},
+			Drink: &[]model.Drink{{
+				Name:     "Hôtel Duo",
+				Rating:   4.2,
+				Vicinity: "11 Rue du Temple, Paris",
+			}},
+		},
+		{
+			ID:        id2,
+			Startdate: time.Date(2022, 8, 5, 0, 0, 0, 0, time.UTC),
+			Enddate:   time.Date(2022, 8, 21, 0, 0, 0, 0, time.UTC),
+			City:      "London",
+			Travel: &model.Itinerary{
+				Type: model.Ground,
+				Departure: model.Station{
+					Name:    "Paris, France",
+					City:    "Paris",
+					Country: "France",
+				},
+				Arrival: model.Station{
+					Name:    "London, England",
+					City:    "London",
+					Country: "England",
+				},
+				DurationString: (9 * time.Hour).String(),
+				Startdate:      time.Date(2022, 12, 12, 12, 0, 0, 0, time.UTC),
+				Enddate:        time.Date(2022, 12, 13, 2, 0, 0, 0, time.UTC),
+				Steps: []model.ItineraryStep{{
+					Type:           "Train",
+					Departure:      "Montparnasse",
+					Arrival:        "Gare de Hendaye",
+					DurationString: (4*time.Hour + 36*time.Hour).String(),
+					Startdate:      time.Date(2022, 12, 12, 12, 23, 0, 0, time.UTC),
+					Enddate:        time.Date(2022, 12, 12, 16, 59, 0, 0, time.UTC),
+				}, {
+					Type:           "Bus",
+					Departure:      "Hendaye",
+					Arrival:        "Bilbao (Bus Station)",
+					DurationString: (2 * time.Hour).String(),
+					Startdate:      time.Date(2022, 12, 12, 17, 14, 0, 0, time.UTC),
+					Enddate:        time.Date(2022, 12, 12, 19, 14, 0, 0, time.UTC),
+				}},
+			},
+			Enjoy: &[]model.Enjoy{},
+			Sleep: &[]model.Sleep{},
+			Eat:   &[]model.Eat{},
+			Drink: &[]model.Drink{},
+		},
+		{
+			ID:        id3,
+			Startdate: time.Date(2022, 8, 5, 0, 0, 0, 0, time.UTC),
+			Enddate:   time.Date(2022, 8, 21, 0, 0, 0, 0, time.UTC),
+			City:      "Tokyo",
+			Travel: &model.Itinerary{
+				Type: model.Air,
+				Departure: model.Station{
+					Name:    "LHR",
+					City:    "London",
+					Country: "EN",
+				},
+				Arrival: model.Station{
+					Name:    "HND",
+					City:    "Tokyo",
+					Country: "JP",
+				},
+				DurationString: (10 * time.Hour).String(),
+				Startdate:      time.Date(2022, 12, 12, 14, 0, 0, 0, time.UTC),
+				Enddate:        time.Date(2022, 12, 13, 8, 0, 0, 0, time.UTC),
+				Price:          999.99,
+			},
+			Enjoy: &[]model.Enjoy{},
+			Sleep: &[]model.Sleep{},
+			Eat:   &[]model.Eat{},
+			Drink: &[]model.Drink{},
+		},
+	}
+
+	user := model.User{
+		ID:        userID,
+		Firstname: "yoiyoi",
+		Lastname:  "miya",
+		Email:     "yoiyoi.miya@gmail.com",
+		Phone:     "+33612345678",
+		Trips: []*model.Roadtrip{{
+			ID:          id,
+			Startdate:   time.Date(2022, 8, 5, 0, 0, 0, 0, time.UTC),
+			Enddate:     time.Date(2022, 8, 21, 0, 0, 0, 0, time.UTC),
+			TripStepsID: []primitive.ObjectID{id1, id2, id3},
+			TripSteps:   &tripSteps,
+		}},
+	}
+
+	suite.userService.On("GetUserByID", userID, false).Return(&user, nil)
+	suite.tripStepRepository.On("DeleteTripStep", id1).Return(&deleteResult, nil)
+	suite.tripStepRepository.On("DeleteTripStep", id2).Return(&deleteResult, nil)
+	suite.tripStepRepository.On("DeleteTripStep", id3).Return(&deleteResult, nil)
+
+	user.Trips = []*model.Roadtrip{}
+
+	suite.userService.On("UpdateUser", userID, &user).Return(nil)
+
+	query := fmt.Sprintf("userID=%s", userID.Hex())
+	request, err := http.NewRequest(
+		http.MethodDelete,
+		fmt.Sprintf("%s/api/v1/roadtrip/%s?%s", suite.testServer.URL, id.Hex(), query),
+		bytes.NewBuffer(nil),
+	)
+	suite.NoError(err, "no error when creating the request")
+
+	response, err := http.DefaultClient.Do(request)
+	suite.NoError(err, "no error when calling the endpoint")
+	defer response.Body.Close()
+
+	responseBody := model.AppResponse{}
+	json.NewDecoder(response.Body).Decode(&responseBody)
+
+	suite.Equal(http.StatusOK, response.StatusCode)
+	suite.Equal(fmt.Sprintf("Removed roadtrip from user %s successfully", userID.Hex()), responseBody.Message)
 	suite.userService.AssertExpectations(suite.T())
 	suite.tripStepRepository.AssertExpectations(suite.T())
 }
