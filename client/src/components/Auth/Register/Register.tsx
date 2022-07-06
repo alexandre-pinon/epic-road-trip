@@ -1,33 +1,43 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { NumberInput, TextInput, Checkbox, Button, Group, Box, PasswordInput, Avatar, Center } from '@mantine/core';
+import { NumberInput, Text, TextInput, Checkbox, Button, Group, Box, PasswordInput, Avatar, Center, Paper, Container, Title, Anchor } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { SyntheticEvent, useState } from 'react';
 
 export function Register() {
+
   const navigate = useNavigate();
 
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
+  const goLogin = async () => {
+    navigate('/login');
+  };
+
+  const [firstname, setFirstName] = useState('')
+  const [lastname, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [phone, setPhone] = useState('')
 
-  const submitData = (data: any) => {
+  const submitData = (event: any) => {
+    axios.defaults.withCredentials = true
+    event.preventDefault()
+
     let params = {
-      firstname: data.firstname,
-      lastname: data.lastname,
-      email: data.email,
-      password: data.password,
-      confirmpassword: data.cpassword,
+      firstName: firstname,
+      lastName: lastname,
+      email: email,
+      password: password,
+      phone: phone,
     };
-    console.log(data);
+    console.log(params);
     axios({
       method: 'post',
       url: 'http://localhost:8000/api/v1/auth/register',
       data: params
     });
+
+    navigate('/login');
   };
 
 
@@ -73,30 +83,60 @@ export function Register() {
   // };
 
   return (
-    <form onSubmit={submitData}>
-      <h1 className="h3 mb-3 fw-normal">Please register</h1>
 
-      <input className="form-control" placeholder="Name" required
-        onChange={e => setFirstName(e.target.value)}
-      />
+    <Container size={420} my={40}>
+      <Title
+        align="center"
+        sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
+      >
+        Welcome 🍩!
+      </Title>
 
-      <input className="form-control" placeholder="Name" required
-        onChange={e => setLastName(e.target.value)}
-      />
+      <Text color="dimmed" size="sm" align="center" mt={5}>
+        Do not have an account yet?{' '}
+        <Anchor<'a'> href="#" size="sm" onClick={goLogin}>
+          Log to your account
+        </Anchor>
+      </Text>
 
-      <input type="email" className="form-control" placeholder="Email address" required
-        onChange={e => setEmail(e.target.value)}
-      />
+      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+        <form onSubmit={submitData}>
 
-      <input type="password" className="form-control" placeholder="Password" required
-        onChange={e => setPassword(e.target.value)}
-      />
-
-      <input className="form-control" placeholder="Phone" required
-        onChange={e => setPhone(e.target.value)}
-      />
-
-      <button className="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
-    </form>
+          <TextInput
+            label="Firstname"
+            placeholder="Your firstname"
+            required
+            onChange={e => setFirstName(e.target.value)}
+          />
+          <TextInput
+            label="Lastname"
+            placeholder="Your lastname"
+            required
+            onChange={e => setLastName(e.target.value)}
+          />
+          <TextInput
+            label="Email"
+            placeholder="Your email"
+            required
+            onChange={e => setEmail(e.target.value)}
+          />
+          <PasswordInput
+            label="Password"
+            placeholder="Your password"
+            required mt="md"
+            onChange={e => setPassword(e.target.value)}
+          />
+          <TextInput
+            label="Phone"
+            placeholder="Your phone"
+            required
+            onChange={e => setPhone(e.target.value)}
+          />
+          <Button fullWidth mt="xl" type="submit">
+            Sign up
+          </Button>
+        </form>
+      </Paper>
+    </Container >
   );
 }

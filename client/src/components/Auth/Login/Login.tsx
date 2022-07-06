@@ -27,6 +27,10 @@ export function Login({ auth }: any) {
   const [type, toggle] = useToggle('login', ['login', 'register']);
   const navigate = useNavigate();
 
+  const goRegister = async () => {
+    navigate('/register');
+  };
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -128,7 +132,7 @@ export function Login({ auth }: any) {
 
       <Text color="dimmed" size="sm" align="center" mt={5}>
         Do not have an account yet?{' '}
-        <Anchor<'a'> href="#" size="sm" onClick={(event) => event.preventDefault()}>
+        <Anchor<'a'> href="#" size="sm" onClick={goRegister}>
           Create account
         </Anchor>
       </Text>
