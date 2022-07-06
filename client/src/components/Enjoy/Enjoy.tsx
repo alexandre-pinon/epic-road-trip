@@ -1,4 +1,4 @@
-import { AspectRatio, Avatar, Button, Card, Container, createStyles, Group, Space, Tooltip, Text, Image, Paper, Grid, Center } from "@mantine/core";
+import { AspectRatio, Avatar, Button, Card, Container, createStyles, Title, Group, Space, Tooltip, Text, Image, Paper, Grid, Center, SimpleGrid, ActionIcon } from "@mantine/core";
 import axios from "axios";
 import { useState } from "react";
 import { ArrowForwardUp, Bike, Car, PlaneInflight, Search, Train, Walk } from 'tabler-icons-react';
@@ -22,10 +22,32 @@ const useStyles = createStyles((theme) => ({
       borderBottomRightRadius: theme.radius.sm,
     },
   },
+
+  cardEnjoy: {
+    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
+  },
+
+  sectionEnjoy: {
+    borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
+      }`,
+    paddingLeft: theme.spacing.md,
+    paddingRight: theme.spacing.md,
+    paddingBottom: theme.spacing.md,
+  },
+
+  likeEnjoy: {
+    color: theme.colors.red[6],
+  },
+
+  labelEnjoy: {
+    textTransform: 'uppercase',
+    fontSize: theme.fontSizes.xs,
+    fontWeight: 700,
+  },
 }));
 
-
 export function Enjoy({ fulTrip }: any) {
+  const { classes } = useStyles();
   const navigate = useNavigate();
 
   const goTravel = async () => {
@@ -44,13 +66,17 @@ export function Enjoy({ fulTrip }: any) {
   const [name, setName] = useState('')
   const [rating, setRating] = useState('')
   const [vicinity, setVicinity] = useState('')
+  const [icon, setIcon] = useState('')
 
   const [enjoy, setEnjoy] = useState([{
     id,
     name,
     rating,
-    vicinity
+    vicinity,
+    icon
   }])
+
+  console.log(fulTrip)
 
   let [selectedEnjoy, setSelectedEnjoy] = useState('')
 
@@ -61,7 +87,7 @@ export function Enjoy({ fulTrip }: any) {
     axios.defaults.withCredentials = true
     event.preventDefault()
     let params = {
-      city: city,
+      city: fulTrip.startCity,
       constraints: {
         radius: 10000,
       }
@@ -83,6 +109,7 @@ export function Enjoy({ fulTrip }: any) {
             name: data.name,
             rating: data.rating,
             vicinity: data.vicinity,
+            icon: data.icon,
           }
           enjoyActivities.push(activities)
           id++;
@@ -92,6 +119,9 @@ export function Enjoy({ fulTrip }: any) {
       .catch(function (error) {
         console.log(error);
       });
+
+    setToggleEnjoy(!toggleEnjoy)
+
   };
 
   const showEnjoy = () => {
@@ -113,71 +143,111 @@ export function Enjoy({ fulTrip }: any) {
     }
 
     console.log("fulTrip content: ", fulTrip)
+    console.log("scroll to bottom: ", document.body.offsetHeight)
+    window.scroll({
+      top: document.body.offsetHeight,
+      left: 0,
+      behavior: 'smooth',
+    });
   }
 
   return (
     <Container>
-      <form onSubmit={retrieveEnjoy}>
-        <h1 className="h3 mb-3 fw-normal">Enjoy Activities</h1>
+      <Card withBorder radius="md" p="md" className={classes.cardEnjoy}>
 
-        <input type="text" className="form-control" placeholder="City" required
-          onChange={e => setCity(e.target.value)}
-        />
+        {/* <form onSubmit={retrieveEnjoy}>
+          <h1 className="h3 mb-3 fw-normal">Enjoy Activities</h1>
 
-        <input type="text" className="form-control" placeholder="Radius" required
-          onChange={e => setRadius(e.target.value)}
-        />
+          <input type="text" className="form-control" placeholder="City" required
+            onChange={e => setCity(e.target.value)}
+          />
 
-        <button className="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
-      </form>
+          <input type="text" className="form-control" placeholder="Radius" required
+            onChange={e => setRadius(e.target.value)}
+          />
 
-      <Button onClick={showEnjoy} variant="default">
-        <PlaneInflight />
-      </Button>
+          <button className="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
+        </form> */}
+        <Title
+          align="center"
+          sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
+        >
+          Enjoy Activities
 
-      <ul>
-        {
-          toggleEnjoy ? (
-            enjoy.map((item) => (
-              <Paper shadow="xl" p="md" withBorder key={item.id}>
-                <Grid><Text weight={700}>Name :  </Text> <Text> -  {item.name}</Text></Grid>
-                <Grid><Text weight={700}>Rating :  </Text> <Text> -  {item.rating}</Text></Grid>
-                <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {item.vicinity}</Text></Grid>
-                <Center><Button onClick={() => selectEnjoy(item.id, 'Enjoy')} >Select this enjoy </Button></Center>
-              </Paper>
-            ))
-          )
-            : null
-        }
-      </ul>
 
-      <div>
-        {
-          selectedEnjoy === "Enjoy" ? (
-            <>
-              <Center><h3>SELECTED TRAVEL : </h3></Center>
-              <Paper shadow="xl" p="md" withBorder >
-                <Grid><Text weight={700}>Enjoy ID  {enjoy[id].id}</Text> </Grid>
-                <Grid><Text weight={700}>Name :  </Text> <Text> -  {enjoy[id].name}</Text></Grid>
-                <Grid><Text weight={700}>Rating :  </Text> <Text> -  {enjoy[id].rating}</Text></Grid>
-                <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {enjoy[id].vicinity}</Text></Grid>
-                <Center><Button onClick={() => selectEnjoy(enjoy[id].id, 'Enjoy')} >Confirm this enjoy </Button></Center>
-              </Paper>
-            </>
-          )
-            : null
-        }
-      </div>
+        </Title>
+        <Space h="xl" />
 
-      <Center>
-        <Button onClick={goTravel} rightIcon={<Search size={18} />} variant="light" radius="xl">
-          Go back
-        </Button>
-        <Button onClick={goSleep} rightIcon={<Search size={18} />} variant="light" radius="xl">
-          Search for Activities
-        </Button>
-      </Center>
-    </Container>
+        <Center>
+          <Button size="xl" onClick={retrieveEnjoy} compact variant="subtle">
+            🙂
+          </Button>
+        </Center>
+        <Space h="xs" />
+
+
+        <SimpleGrid cols={2} spacing="md" breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+          {
+            toggleEnjoy ? (
+              enjoy.map((item) => (
+                <Paper shadow="xl" p="md" withBorder key={item.id}>
+                  <Center>
+                    <Grid>
+                      <Image
+                        width={30}
+                        height={60}
+                        fit="contain"
+                        radius="sm"
+                        src={item.icon}
+                      />
+                    </Grid>
+                  </Center>
+                  <Space h="xs" />
+                  <Grid><Text weight={700}>Name :  </Text> <Text> &nbsp; {item.name}</Text></Grid>
+                  <Grid><Text weight={700}>Rating :  </Text> <Text> &nbsp; {item.rating} / 5</Text></Grid>
+                  <Grid><Text weight={700}>Vicinity :  </Text> <Text> &nbsp; {item.vicinity}</Text></Grid>
+                  <Space h="xl" />
+                  <Center>
+                    <ActionIcon onClick={() => selectEnjoy(item.id, 'Enjoy')} variant="outline">👆</ActionIcon>
+                  </Center>
+                </Paper>
+              ))
+            )
+              : null
+          }
+        </SimpleGrid>
+
+        <div>
+          {
+            selectedEnjoy === "Enjoy" ? (
+              <>
+                <Center><h3>SELECTED TRAVEL : </h3></Center>
+                <Paper shadow="xl" p="md" withBorder >
+                  <Grid><Text weight={700}>Enjoy ID  {enjoy[id].id}</Text> </Grid>
+                  <Grid><Text weight={700}>Name :  </Text> <Text> -  {enjoy[id].name}</Text></Grid>
+                  <Grid><Text weight={700}>Rating :  </Text> <Text> -  {enjoy[id].rating}</Text></Grid>
+                  <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {enjoy[id].vicinity}</Text></Grid>
+                  <Center><Button onClick={() => selectEnjoy(enjoy[id].id, 'Enjoy')} >Confirm this enjoy </Button></Center>
+                </Paper>
+              </>
+            )
+              : null
+          }
+        </div>
+
+        <Space h="xl" />
+
+        <Center>
+          <Button onClick={goTravel} rightIcon={<Search size={18} />} variant="light" radius="xl">
+            Go back
+          </Button>
+          <Button onClick={goSleep} rightIcon={<Search size={18} />} variant="light" radius="xl">
+            Search for Activities
+          </Button>
+        </Center>
+      </Card>
+
+    </Container >
 
 
     // <Container size={720}>
