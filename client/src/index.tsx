@@ -27,6 +27,11 @@ function App() {
   const [sleep, setSleep] = useState('');
   const [eat, setEat] = useState('');
   const [drink, setDrink] = useState('');
+  const [setAuthenticated] = useState(false);
+
+  let auth = {
+    setAuthenticated
+  }
 
   let fulTrip = {
     startCity,
@@ -52,11 +57,11 @@ function App() {
 
   return (
     <BrowserRouter>
-      <AppHeader />
+      <AppHeader auth={auth} />
       <Routes>
         <Route path="/" element={<Home fulTrip={fulTrip} />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login auth={auth} />} />
         <Route path="/startEndTrip" element={<StartEndTrip fulTrip={fulTrip} />} />
         <Route path="/travel" element={<Travel fulTrip={fulTrip} />} />
         <Route path="/city" element={<City />} />

@@ -4,19 +4,6 @@ import { BrandGithub, BrandInstagram, BrandYoutube } from 'tabler-icons-react';
 import logo from "./assets/one_piece_wiki_logo.png";
 import axios from 'axios';
 
-const logout = (event: any) => {
-  axios.defaults.withCredentials = true
-  event.preventDefault()
-
-  axios({
-    method: 'post',
-    url: 'http://localhost:8000/api/v1/auth/logout',
-  })
-    .catch(function (error) {
-      console.log(error);
-    });
-};
-
 const useStyles = createStyles((theme) => ({
   button: {
     // backgroundColor: '#424242',
@@ -44,9 +31,29 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function AppHeader() {
+export function AppHeader({ auth }: any) {
   const { classes } = useStyles();
   const navigate = useNavigate();
+
+
+  const logout = (event: any) => {
+    axios.defaults.withCredentials = true
+    event.preventDefault()
+
+    axios({
+      method: 'post',
+      url: 'http://localhost:8000/api/v1/auth/logout',
+    })
+      .then((response) => {
+        console.log(response.data);
+        console.log("[LOGOUT] auth.setAuthenticated current: ", auth.setAuthenticated);
+        auth.setAuthenticated = false;
+        console.log("[LOGOUT] auth.setAuthenticated after: ", auth.setAuthenticated);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   const goToLogin = async () => {
     console.log("Dummy register!")

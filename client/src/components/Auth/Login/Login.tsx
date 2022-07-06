@@ -23,7 +23,7 @@ import axios from 'axios';
 import { useState } from 'react';
 
 
-export function Login() {
+export function Login({ auth }: any) {
   const [type, toggle] = useToggle('login', ['login', 'register']);
   const navigate = useNavigate();
 
@@ -45,6 +45,12 @@ export function Login() {
       url: 'http://localhost:8000/api/v1/auth/login',
       data: params,
     })
+      .then((response) => {
+        console.log(response.data);
+        console.log("[LOGIN] auth.setAuthenticated current: ", auth.setAuthenticated);
+        auth.setAuthenticated = true;
+        console.log("[LOGIN] auth.setAuthenticated after: ", auth.setAuthenticated);
+      })
       .catch(function (error) {
         console.log(error);
       });
