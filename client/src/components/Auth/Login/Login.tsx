@@ -1,10 +1,30 @@
 import { useNavigate } from 'react-router-dom';
-import { TextInput, Button, Group, Box, PasswordInput, Avatar, Center } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import {
+  Text,
+  TextInput,
+  Button,
+  Group,
+  Box,
+  PasswordInput,
+  Avatar,
+  Center,
+  Paper,
+  PaperProps,
+  Divider,
+  Checkbox,
+  Anchor,
+  Container,
+  Title,
+} from '@mantine/core';
+// import { useForm } from '@mantine/form';
+import { useForm, useToggle, upperFirst } from '@mantine/hooks';
+
 import axios from 'axios';
 import { useState } from 'react';
 
+
 export function Login() {
+  const [type, toggle] = useToggle('login', ['login', 'register']);
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('')
@@ -91,19 +111,45 @@ export function Login() {
     //   </form>
     // </Box>
 
-    <form onSubmit={submitDataLogin}>
-      <h1 className="h3 mb-3 fw-normal">Please login</h1>
+    <Container size={420} my={40}>
+      <Title
+        align="center"
+        sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
+      >
+        Welcome 👋!
+      </Title>
 
-      <input type="email" className="form-control" placeholder="Email address" required
-        onChange={e => setEmail(e.target.value)}
-      />
+      <Text color="dimmed" size="sm" align="center" mt={5}>
+        Do not have an account yet?{' '}
+        <Anchor<'a'> href="#" size="sm" onClick={(event) => event.preventDefault()}>
+          Create account
+        </Anchor>
+      </Text>
 
-      <input type="password" className="form-control" placeholder="Password" required
-        onChange={e => setPassword(e.target.value)}
-      />
+      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+        <form onSubmit={submitDataLogin}>
 
-      <button className="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
-    </form>
+          <TextInput
+            label="Email"
+            placeholder="Your email"
+            required
+            onChange={e => setEmail(e.target.value)}
+          />
+          <PasswordInput
+            label="Password"
+            placeholder="Your password"
+            required mt="md"
+            onChange={e => setPassword(e.target.value)}
+          />
+          <Button fullWidth mt="xl" type="submit">
+            Sign in
+          </Button>
+        </form>
+
+      </Paper>
+    </Container>
+
+
   );
 }
 
