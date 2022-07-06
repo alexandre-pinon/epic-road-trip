@@ -1,8 +1,8 @@
-import { AspectRatio, Button, Center, Container, createStyles, Grid, Group, Paper, Space, Tooltip, Text } from "@mantine/core";
+import { AspectRatio, Image, Button, Center, Container, createStyles, Grid, Group, Paper, Space, Tooltip, Text, Card, Title, SimpleGrid, ActionIcon } from "@mantine/core";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowForwardUp, Bike, Car, PlaneInflight, Search, Train, Walk } from 'tabler-icons-react';
+import { ArrowBackUp, ArrowForwardUp, Beer, Bike, Car, PlaneInflight, Search, Train, Walk } from 'tabler-icons-react';
 
 const useStyles = createStyles((theme) => ({
   button: {
@@ -22,9 +22,32 @@ const useStyles = createStyles((theme) => ({
       borderBottomRightRadius: theme.radius.sm,
     },
   },
+
+  cardEnjoy: {
+    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
+  },
+
+  sectionEnjoy: {
+    borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
+      }`,
+    paddingLeft: theme.spacing.md,
+    paddingRight: theme.spacing.md,
+    paddingBottom: theme.spacing.md,
+  },
+
+  likeEnjoy: {
+    color: theme.colors.red[6],
+  },
+
+  labelEnjoy: {
+    textTransform: 'uppercase',
+    fontSize: theme.fontSizes.xs,
+    fontWeight: 700,
+  },
 }));
 
 export function Drink({ fulTrip }: any) {
+  const { classes } = useStyles();
 
   const navigate = useNavigate();
 
@@ -44,12 +67,15 @@ export function Drink({ fulTrip }: any) {
   const [name, setName] = useState('')
   const [rating, setRating] = useState('')
   const [vicinity, setVicinity] = useState('')
+  const [icon, setIcon] = useState('')
+
 
   const [drink, setDrink] = useState([{
     id,
     name,
     rating,
-    vicinity
+    vicinity,
+    icon
   }])
 
   let [selectedDrink, setSelectedDrink] = useState('')
@@ -61,7 +87,7 @@ export function Drink({ fulTrip }: any) {
     axios.defaults.withCredentials = true
     event.preventDefault()
     let params = {
-      city: city,
+      city: fulTrip.startCity,
       constraints: {
         radius: 10000,
       }
@@ -83,6 +109,7 @@ export function Drink({ fulTrip }: any) {
             name: data.name,
             rating: data.rating,
             vicinity: data.vicinity,
+            icon: data.icon
           }
           drinkActivities.push(activities)
           id++;
@@ -92,6 +119,8 @@ export function Drink({ fulTrip }: any) {
       .catch(function (error) {
         console.log(error);
       });
+    setToggleDrink(!toggleDrink)
+
   };
 
   const showDrink = () => {
@@ -109,75 +138,153 @@ export function Drink({ fulTrip }: any) {
     }
 
     console.log("fulTrip content: ", fulTrip)
+    console.log("fulTrip content: ", fulTrip)
+    console.log("scroll to bottom: ", document.body.offsetHeight)
+    window.scroll({
+      top: document.body.offsetHeight,
+      left: 0,
+      behavior: 'smooth',
+    });
   }
 
 
   return (
     <Container>
-      <form onSubmit={retrieveDrink}>
-        <h1 className="h3 mb-3 fw-normal">Drink Activities</h1>
-
-        <input type="text" className="form-control" placeholder="City" required
-          onChange={e => setCity(e.target.value)}
-        />
-
-        <input type="text" className="form-control" placeholder="Radius" required
-          onChange={e => setRadius(e.target.value)}
-        />
-
-        <button className="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
-      </form>
-
-      <Button onClick={showDrink} variant="default">
-        <PlaneInflight />
-      </Button>
-
-
-      <ul>
-        {
-          toggleDrink ? (
-            drink.map((item) => (
-              <Paper shadow="xl" p="md" withBorder key={item.id}>
-                <Grid><Text weight={700}>Name :  </Text> <Text> -  {item.name}</Text></Grid>
-                <Grid><Text weight={700}>Rating :  </Text> <Text> -  {item.rating}</Text></Grid>
-                <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {item.vicinity}</Text></Grid>
-                <Center><Button onClick={() => selectDrink(item.id, 'Drink')} >Select this drink </Button></Center>
-              </Paper>
-            ))
-          )
-            : null
-        }
-      </ul>
-
-      <div>
-        {
-          selectedDrink === "Drink" ? (
-            <>
-              <Center><h3>SELECTED TRAVEL : </h3></Center>
-              <Paper shadow="xl" p="md" withBorder >
-                <Grid><Text weight={700}>Enjoy ID  {drink[id].id}</Text> </Grid>
-                <Grid><Text weight={700}>Name :  </Text> <Text> -  {drink[id].name}</Text></Grid>
-                <Grid><Text weight={700}>Rating :  </Text> <Text> -  {drink[id].rating}</Text></Grid>
-                <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {drink[id].vicinity}</Text></Grid>
-                <Center><Button onClick={() => selectDrink(drink[id].id, 'Drink')} >Confirm this drink </Button></Center>
-              </Paper>
-            </>
-          )
-            : null
-        }
-      </div>
 
 
 
 
-      <Center>
-        <Button onClick={goEat} rightIcon={<Search size={18} />} variant="light" radius="xl">
-          Go back
-        </Button>
-        <Button onClick={goResumeTrip} rightIcon={<Search size={18} />} variant="light" radius="xl">
-          Search for Activities
-        </Button>
-      </Center>
+      <Card withBorder radius="md" p="md" className={classes.cardEnjoy}>
+
+        {/* <form onSubmit={retrieveEnjoy}>
+          <h1 className="h3 mb-3 fw-normal">Enjoy Activities</h1>
+
+          <input type="text" className="form-control" placeholder="City" required
+            onChange={e => setCity(e.target.value)}
+          />
+
+          <input type="text" className="form-control" placeholder="Radius" required
+            onChange={e => setRadius(e.target.value)}
+          />
+
+          <button className="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
+        </form> */}
+        <Title
+          align="center"
+          sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
+        >
+          Drink Activities
+
+
+        </Title>
+        <Space h="xl" />
+
+        <Center>
+          <Button size="xl" onClick={retrieveDrink} compact variant="subtle">
+            🍺
+          </Button>
+        </Center>
+        <Space h="xs" />
+
+
+        <SimpleGrid cols={2} spacing="md" breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+          {
+            toggleDrink ? (
+              drink.map((item) => (
+                <Paper shadow="xl" p="md" withBorder key={item.id}>
+                  <Center>
+                    <Grid>
+                      <Image
+                        width={30}
+                        height={60}
+                        fit="contain"
+                        radius="sm"
+                        src={item.icon}
+                      />
+                    </Grid>
+                  </Center>
+                  <Space h="xs" />
+                  <Grid><Text weight={700}>Name :  </Text> <Text> &nbsp; {item.name}</Text></Grid>
+                  <Grid><Text weight={700}>Rating :  </Text> <Text> &nbsp; {item.rating} / 5</Text></Grid>
+                  <Grid><Text weight={700}>Vicinity :  </Text> <Text> &nbsp; {item.vicinity}</Text></Grid>
+                  <Space h="xl" />
+                  <Center>
+                    <ActionIcon onClick={() => selectDrink(item.id, 'Drink')} variant="outline">👆</ActionIcon>
+                  </Center>
+                </Paper>
+              ))
+            )
+              : null
+          }
+        </SimpleGrid>
+
+        <div>
+          {
+            selectedDrink === "Drink" ? (
+              <>
+                <Space h="xl" />
+
+                <Title
+                  order={2}
+                  align="center"
+                  sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
+                >
+                  Drink Activities
+
+
+                </Title>
+                <Space h="xl" />                <Paper shadow="xl" p="md" withBorder >
+                  {/* <Grid><Text weight={700}>Enjoy ID  {enjoy[id].id}</Text> </Grid> */}
+                  <Center>
+                    <Grid>
+                      <Image
+                        width={30}
+                        height={60}
+                        fit="contain"
+                        radius="sm"
+                        src={drink[id].icon}
+                      />
+                    </Grid>
+                  </Center>
+                  <Space h="xs" />
+                  <Center>
+                    <Grid><Text weight={700}>Name :  </Text> <Text> -  {drink[id].name}</Text></Grid>
+                  </Center>
+                  <Space h="xs" />
+                  <Center>
+                    <Grid><Text weight={700}>Rating :  </Text> <Text> -  {drink[id].rating}</Text></Grid>
+                  </Center>
+                  <Space h="xs" />
+                  <Center>
+                    <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {drink[id].vicinity}</Text></Grid>
+                  </Center>
+                  <Space h="xl" />
+                  <Center>
+                    <Button size="md" onClick={() => selectDrink(drink[id].id, 'Enjoy')} compact variant="subtle">
+                      Confirm this 🍺
+                    </Button>
+                  </Center>
+                </Paper>
+              </>
+            )
+              : null
+          }
+        </div>
+
+
+
+        <Space h="xl" />
+
+        <Center>
+          <Button onClick={goEat} rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
+            Go back
+          </Button>
+          <Button onClick={goResumeTrip} rightIcon={<Beer size={18} />} compact variant="subtle" radius="xs">
+            Resume trip
+          </Button>
+        </Center>
+      </Card>
+
 
     </Container>
     // <Container size={720}>
@@ -218,6 +325,3 @@ export function Drink({ fulTrip }: any) {
 function enjoyActivities(enjoyActivities: any) {
   throw new Error("Function not implemented.");
 }
-
-
-
