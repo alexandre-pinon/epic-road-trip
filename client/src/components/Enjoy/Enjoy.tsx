@@ -1,7 +1,7 @@
 import { AspectRatio, Avatar, Button, Card, Container, createStyles, Title, Group, Space, Tooltip, Text, Image, Paper, Grid, Center, SimpleGrid, ActionIcon } from "@mantine/core";
 import axios from "axios";
 import { useState } from "react";
-import { ArrowBackUp, ArrowForwardUp, Bike, Car, PlaneInflight, Search, Train, Walk } from 'tabler-icons-react';
+import { ArrowBackUp, ArrowForwardUp, Bed, Bike, Car, PlaneInflight, Search, Train, Walk } from 'tabler-icons-react';
 import { useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
@@ -276,8 +276,8 @@ export function Enjoy({ fulTrip }: any) {
           <Button onClick={goTravel} rightIcon={<ArrowBackUp size={18} />} variant="light" radius="xl">
             Go back
           </Button>
-          <Button onClick={goSleep} rightIcon={<Search size={18} />} variant="light" radius="xl">
-            Search for Activities
+          <Button onClick={goSleep} rightIcon={<Bed size={18} />} variant="light" radius="xl">
+            Search for Hotels
           </Button>
         </Center>
       </Card>
