@@ -3,7 +3,7 @@ import { Avatar, Button, Center, Title, Card, Image, Text, Paper, Space, Grid, c
 import { useForm } from '@mantine/form';
 import React, { useState } from "react";
 import axios from "axios";
-import { ArrowBackUp, Building } from 'tabler-icons-react';
+import { ArrowBackUp, Building, Home} from 'tabler-icons-react';
 
 
 const useStyles = createStyles((theme) => ({
@@ -165,10 +165,14 @@ export function ResumeTrip({ fulTrip, auth }: any) {
     console.log(fulTrip.startDateValue.toDateString())
 
 
+    const goBack = async () => {
+        console.log("Going back!")
+        navigate('/drinkArrival');
+    };
 
     const goToHome = async () => {
         console.log("Going back home!")
-        navigate('/resumeTrip');
+        navigate('/');
     };
 
     const goToArrival = async () => {
@@ -342,14 +346,14 @@ export function ResumeTrip({ fulTrip, auth }: any) {
                 <Space h="xl" />
 
                 <Center>
-                    <Button onClick={goToHome} rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
-                        Go to Home Page
+                    <Button onClick={goBack} rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" data-testid="goBack" radius="xs">
+                        Go back
                     </Button>
-                    <Button onClick={confirmTripPost} compact variant="subtle" radius="xs">
+                    <Button onClick={confirmTripPost} compact variant="subtle" data-testid="confirm" radius="xs">
                         Confirm your trip 🤩 !
                     </Button>
-                    <Button onClick={goToArrival} rightIcon={<Building size={18} />} compact variant="subtle" radius="xs">
-                        {fulTrip.endCity}
+                    <Button onClick={goToHome} rightIcon={<Home size={18} />} compact variant="subtle" data-testid="homePage" radius="xs">
+                        Go to Home Page
                     </Button>
                     {/*
                 <Button onClick={addSubTrip} variant="light" radius="xl">

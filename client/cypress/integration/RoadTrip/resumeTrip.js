@@ -1,7 +1,6 @@
 describe('The resume trip', () => {
 
     it('Check text on the ResumeTrip page', () => {
-
         cy.visit('http://localhost:3000/resumeTrip/')
 
         cy.get('[data-testid="Big-title"]')
@@ -57,5 +56,19 @@ describe('The resume trip', () => {
         cy.get(':nth-child(70) > .mantine-dj2qqh').contains('Hotel :')
         cy.get(':nth-child(71) > .mantine-dj2qqh').contains('Address :')
         cy.get(':nth-child(72) > .mantine-dj2qqh').contains('Rating :')
+    })
+
+
+
+    it('check the buttons on the resumeTrip page', () => {
+        cy.visit('http://localhost:3000/resumeTrip/')
+
+        cy.get('[data-testid="goBack"]').click()
+        cy.location('href').should('include', '/drinkArrival')
+
+        cy.visit('http://localhost:3000/resumeTrip/')
+
+        cy.get('[data-testid="homePage"]').click()
+        cy.location('href').should('include', '/')
     })
 })
