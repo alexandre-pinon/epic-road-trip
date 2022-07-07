@@ -306,9 +306,9 @@ export function Travel({ fulTrip }: any) {
         <Button onClick={goEnjoy} rightIcon={<MoodSmile size={18} />} compact variant="subtle" radius="xs">
           Search for Activities
         </Button>
-        <Button onClick={goResumeTrip} rightIcon={<Trash size={18} />} compact variant="subtle" radius="xs">
+        {/* <Button onClick={goResumeTrip} rightIcon={<Trash size={18} />} compact variant="subtle" radius="xs">
           Delete après
-        </Button>
+        </Button> */}
       </Center>
 
 
