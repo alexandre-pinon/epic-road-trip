@@ -169,3 +169,17 @@ type TravelSuccess struct {
 	Data      []Itinerary `json:"data"`
 	ValErrors []struct{}  `json:"valErrors"`
 }
+
+type CreateRoadtripSuccess struct {
+	Success   bool       `json:"success" example:"true"`
+	Message   string     `json:"message" example:"Added roadtrip to user {id} successfully"`
+	Data      struct{}   `json:"data"`
+	ValErrors []struct{} `json:"valErrors"`
+}
+
+type DeleteRoadtripSuccess struct {
+	Success   bool       `json:"success" example:"true"`
+	Message   string     `json:"message" example:"Removed roadtrip from user {id} successfully"`
+	Data      struct{}   `json:"data"`
+	ValErrors []struct{} `json:"valErrors"`
+}

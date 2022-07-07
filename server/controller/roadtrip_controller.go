@@ -41,6 +41,19 @@ func NewRoadtripController(cfg *config.Config, userService service.UserService, 
 	return &roadtripController{cfg, userService, googleService, amadeusService, amadeusAccessToken, tripStepRepository}
 }
 
+// Create roadtrip godoc
+// @Summary Create roadtrip
+// @Description Add roadtrip to the user given userID & trip steps
+// @Tags Roadtrip
+// @Accept json
+// @Produce json
+// @Param userID query string true "User ID"
+// @Param tripSteps body []model.TripStep true "city & start/end date & activities"
+// @Success 200 {object} model.CreateRoadtripSuccess "Success"
+// @Failure 400 {object} model.InvalidJsonBody "Invalid request params/body"
+// @Failure 401 {object} model.Unauthorized "Missing/Expired token"
+// @Failure 500 {object} model.InternalServerError "Internal server error"
+// @Router /roadtrip [post]
 func (ctrl *roadtripController) CreateRoadtrip(ctx *gin.Context) (*model.AppResult, *model.AppError) {
 	var tripSteps []model.TripStep
 
@@ -48,7 +61,7 @@ func (ctrl *roadtripController) CreateRoadtrip(ctx *gin.Context) (*model.AppResu
 	if !exists {
 		return nil, &model.AppError{
 			StatusCode: http.StatusBadRequest,
-			Err:        errors.New("invalid query parameters: missing userID"),
+			Err:        errors.New("invalid request parameters: missing userID"),
 		}
 	}
 
@@ -56,7 +69,7 @@ func (ctrl *roadtripController) CreateRoadtrip(ctx *gin.Context) (*model.AppResu
 	if err != nil {
 		return nil, &model.AppError{
 			StatusCode: http.StatusBadRequest,
-			Err:        errors.New("invalid query parameters: invalid userID"),
+			Err:        errors.New("invalid request parameters: invalid userID"),
 		}
 	}
 
@@ -103,6 +116,20 @@ func (ctrl *roadtripController) CreateRoadtrip(ctx *gin.Context) (*model.AppResu
 	}, nil
 }
 
+// Delete roadtrip godoc
+// @Summary Delete roadtrip
+// @Description Remove roadtrip from the user given userID & roadtrip ID
+// @Tags Roadtrip
+// @Accept json
+// @Produce json
+// @Param userID query string true "User ID"
+// @Param id path string true "Roadtrip ID"
+// @Success 200 {object} model.DeleteRoadtripSuccess "Success"
+// @Failure 400 {object} model.InvalidID "Invalid ID/params"
+// @Failure 401 {object} model.Unauthorized "Missing/Expired token"
+// @Failure 404 {object} model.UserNotFound "User not found"
+// @Failure 500 {object} model.InternalServerError "Internal server error"
+// @Router /roadtrip/:id [delete]
 func (ctrl *roadtripController) DeleteRoadtrip(ctx *gin.Context) (*model.AppResult, *model.AppError) {
 	id, _ := ctx.Get("id")
 

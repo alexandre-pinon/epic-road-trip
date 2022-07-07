@@ -66,6 +66,7 @@ func (ctrl *userController) GetAllUsers(ctx *gin.Context) (*model.AppResult, *mo
 // @Tags User
 // @Accept json
 // @Produce json
+// @Param populate query bool false "Populate the user's roadtrips or not"
 // @Param id path string true "User ID"
 // @Success 200 {object} model.GetUserByIDSuccess "Success"
 // @Failure 400 {object} model.InvalidID "Invalid ID"

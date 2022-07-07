@@ -75,7 +75,6 @@ func (suite *roadtripControllerSuite) TestCreateRoadTrip_Positive() {
 
 	tripSteps := []model.TripStep{
 		{
-			ID:        id1,
 			Startdate: time.Date(2022, 8, 5, 0, 0, 0, 0, time.UTC),
 			Enddate:   time.Date(2022, 8, 21, 0, 0, 0, 0, time.UTC),
 			City:      "Paris",
@@ -101,7 +100,6 @@ func (suite *roadtripControllerSuite) TestCreateRoadTrip_Positive() {
 			}},
 		},
 		{
-			ID:        id2,
 			Startdate: time.Date(2022, 8, 5, 0, 0, 0, 0, time.UTC),
 			Enddate:   time.Date(2022, 8, 21, 0, 0, 0, 0, time.UTC),
 			City:      "London",
@@ -142,7 +140,6 @@ func (suite *roadtripControllerSuite) TestCreateRoadTrip_Positive() {
 			Drink: &[]model.Drink{},
 		},
 		{
-			ID:        id3,
 			Startdate: time.Date(2022, 8, 5, 0, 0, 0, 0, time.UTC),
 			Enddate:   time.Date(2022, 8, 21, 0, 0, 0, 0, time.UTC),
 			City:      "Tokyo",

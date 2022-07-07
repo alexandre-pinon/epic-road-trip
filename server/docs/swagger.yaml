@@ -79,6 +79,36 @@ definitions:
       radius:
         type: integer
     type: object
+  model.CreateRoadtripSuccess:
+    properties:
+      data:
+        type: object
+      message:
+        example: Added roadtrip to user {id} successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
+  model.DeleteRoadtripSuccess:
+    properties:
+      data:
+        type: object
+      message:
+        example: Removed roadtrip from user {id} successfully
+        type: string
+      success:
+        example: true
+        type: boolean
+      valErrors:
+        items:
+          type: object
+        type: array
+    type: object
   model.DeleteUserSuccess:
     properties:
       data:
@@ -105,6 +135,17 @@ definitions:
       origin:
         type: string
     type: object
+  model.Drink:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      rating:
+        type: number
+      vicinity:
+        type: string
+    type: object
   model.DrinkSuccess:
     properties:
       data:
@@ -122,6 +163,17 @@ definitions:
           type: object
         type: array
     type: object
+  model.Eat:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      rating:
+        type: number
+      vicinity:
+        type: string
+    type: object
   model.EatSuccess:
     properties:
       data:
@@ -138,6 +190,17 @@ definitions:
         items:
           type: object
         type: array
+    type: object
+  model.Enjoy:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      rating:
+        type: number
+      vicinity:
+        type: string
     type: object
   model.EnjoySuccess:
     properties:
@@ -478,18 +541,23 @@ definitions:
         type: string
       id:
         type: string
-      itineraries:
-        items:
-          type: string
-        type: array
-      name:
-        type: string
       startdate:
         type: string
       tripSteps:
         items:
-          type: string
+          $ref: '#/definitions/model.TripStep'
         type: array
+    type: object
+  model.Sleep:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      rating:
+        type: number
+      vicinity:
+        type: string
     type: object
   model.SleepSuccess:
     properties:
@@ -533,6 +601,37 @@ definitions:
         items:
           type: object
         type: array
+    type: object
+  model.TripStep:
+    properties:
+      city:
+        type: string
+      drink:
+        items:
+          $ref: '#/definitions/model.Drink'
+        type: array
+      eat:
+        items:
+          $ref: '#/definitions/model.Eat'
+        type: array
+      enddate:
+        type: string
+      enjoy:
+        items:
+          $ref: '#/definitions/model.Enjoy'
+        type: array
+      sleep:
+        items:
+          $ref: '#/definitions/model.Sleep'
+        type: array
+      startdate:
+        type: string
+      travel:
+        $ref: '#/definitions/model.Itinerary'
+    required:
+    - city
+    - enddate
+    - startdate
     type: object
   model.Unauthorized:
     properties:
@@ -761,6 +860,89 @@ paths:
       summary: Register
       tags:
       - Auth
+  /roadtrip:
+    post:
+      consumes:
+      - application/json
+      description: Add roadtrip to the user given userID & trip steps
+      parameters:
+      - description: User ID
+        in: query
+        name: userID
+        required: true
+        type: string
+      - description: city & start/end date & activities
+        in: body
+        name: tripSteps
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/model.TripStep'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/model.CreateRoadtripSuccess'
+        "400":
+          description: Invalid request params/body
+          schema:
+            $ref: '#/definitions/model.InvalidJsonBody'
+        "401":
+          description: Missing/Expired token
+          schema:
+            $ref: '#/definitions/model.Unauthorized'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.InternalServerError'
+      summary: Create roadtrip
+      tags:
+      - Roadtrip
+  /roadtrip/:id:
+    delete:
+      consumes:
+      - application/json
+      description: Remove roadtrip from the user given userID & roadtrip ID
+      parameters:
+      - description: User ID
+        in: query
+        name: userID
+        required: true
+        type: string
+      - description: Roadtrip ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/model.DeleteRoadtripSuccess'
+        "400":
+          description: Invalid ID/params
+          schema:
+            $ref: '#/definitions/model.InvalidID'
+        "401":
+          description: Missing/Expired token
+          schema:
+            $ref: '#/definitions/model.Unauthorized'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/model.UserNotFound'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.InternalServerError'
+      summary: Delete roadtrip
+      tags:
+      - Roadtrip
   /roadtrip/drink:
     post:
       consumes:
@@ -1084,6 +1266,10 @@ paths:
       - application/json
       description: Get user given a valid ID
       parameters:
+      - description: Populate the user's roadtrips or not
+        in: query
+        name: populate
+        type: boolean
       - description: User ID
         in: path
         name: id

@@ -15,7 +15,7 @@ type Roadtrip struct {
 }
 
 type TripStep struct {
-	ID        primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
+	ID        primitive.ObjectID `json:"-" bson:"_id,omitempty"`
 	City      string             `json:"city" binding:"required"`
 	Startdate time.Time          `json:"startdate" binding:"required"`
 	Enddate   time.Time          `json:"enddate" binding:"required"`
