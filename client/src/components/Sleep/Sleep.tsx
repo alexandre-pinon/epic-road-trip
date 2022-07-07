@@ -168,6 +168,7 @@ export function Sleep({ fulTrip }: any) {
         </form> */}
         <Title
           align="center"
+          data-testid="title"
           sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
         >
           Sleep Activities
@@ -272,10 +273,10 @@ export function Sleep({ fulTrip }: any) {
 
 
         <Center>
-          <Button onClick={goEnjoy} rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
+          <Button onClick={goEnjoy} data-testid="goBack" rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
             Go back
           </Button>
-          <Button onClick={goEat} rightIcon={<Meat size={18} />} compact variant="subtle" radius="xs">
+          <Button onClick={goEat} data-testid="goEat" rightIcon={<Meat size={18} />} compact variant="subtle" radius="xs">
             Search for Restaurants
           </Button>
         </Center>
