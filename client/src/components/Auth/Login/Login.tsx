@@ -51,14 +51,14 @@ export function Login({ auth }: any) {
       .then((response) => {
         console.log(response.data);
         console.log("[LOGIN] auth.setAuthenticated current: ", auth.setAuthenticated);
-        auth.setAuthenticated = true;
+        auth.setIsAuthenticated(true);
         console.log("[LOGIN] auth.setAuthenticated after: ", auth.setAuthenticated);
+        navigate('/');
       })
       .catch(function (error) {
         console.log(error);
       });
 
-    navigate('/');
   };
 
   // const form = useForm({
