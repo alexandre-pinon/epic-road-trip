@@ -171,6 +171,7 @@ export function Drink({ fulTrip }: any) {
         </form> */}
         <Title
           align="center"
+          data-testid="title"
           sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
         >
           Drink Activities
@@ -276,10 +277,10 @@ export function Drink({ fulTrip }: any) {
         <Space h="xl" />
 
         <Center>
-          <Button onClick={goEat} rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
+          <Button onClick={goEat} data-testid="goBack" rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
             Go back
           </Button>
-          <Button onClick={goEnjoyEndCity} rightIcon={<Building size={18} />} compact variant="subtle" radius="xs">
+          <Button onClick={goEnjoyEndCity} data-testid="enjoyArrival" rightIcon={<Building size={18} />} compact variant="subtle" radius="xs">
             Enjoy at {fulTrip.endCity}
           </Button>
         </Center>

@@ -170,6 +170,7 @@ export function EnjoyArrival({ fulTrip }: any) {
         </form> */}
         <Title
           align="center"
+          data-testid="title"
           sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
         >
           Enjoy Activities
@@ -276,7 +277,7 @@ export function EnjoyArrival({ fulTrip }: any) {
           <Button onClick={goTravel} rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
             Go back
           </Button>
-          <Button onClick={goSleep} rightIcon={<Bed size={18} />} compact variant="subtle" radius="xs">
+          <Button onClick={goSleep} data-testid="sleepArrival" rightIcon={<Bed size={18} />} compact variant="subtle" radius="xs">
             Search for Hotels
           </Button>
         </Center>
