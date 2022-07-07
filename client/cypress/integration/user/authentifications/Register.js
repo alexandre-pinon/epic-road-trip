@@ -1,143 +1,72 @@
-describe('The Register page', () => {
+describe('Register page', () => {
 
-    it('check creation of a account', () => {
-        cy.visit('http://localhost:3000/register') // change URL to match your dev URL
-        cy.wait(500)
-        //enter the information in the inputs
-        cy.fixture('userInformations').then((userInformationsForRegister) => {
-            cy.get('input[data-attr="firstname"]').type(userInformationsForRegister.firstname)
-            cy.get('input[data-attr="lastname"]').type(userInformationsForRegister.lastname)
-            cy.get('input[data-attr="email"]').type(userInformationsForRegister.email)
-            cy.get('input[data-attr="Phone"]').type(userInformationsForRegister.mobile)
-            cy.get('input[data-attr="password"]').type(userInformationsForRegister.password)
-            // test if it's the same password
-            cy.get('input[data-attr="passwordCheck"]').type(userInformationsForRegister.password)
+    it('Check attributes Register page', () => {
+        cy.visit('http://localhost:3000/register')
 
-            cy.log(userInformationsForRegister.firstname)
-        })
-        cy.wait(500)
-        //click on register button for confirm the creation of the account
-        cy.get('button[data-attr="register-confirm"]').click()
-        cy.wait(1000)
-        //check if we are redirected to the home page
-        cy.location('pathname').should('eq', '/login')
+        //Firstname
+        cy.get('[data-testid="Firstname"]')
+            .should('have.attr', 'required')
+
+        cy.get('[data-testid="Firstname"]')
+            .should('have.attr', 'placeholder')
+            .and('equal', 'Your firstname')
+
+        //Lastname
+        cy.get('[data-testid="Lastname"]')
+            .should('have.attr', 'required')
+
+        cy.get('[data-testid="Lastname"]')
+            .should('have.attr', 'placeholder')
+            .and('equal', 'Your lastname')
+
+        //email
+        cy.get('[data-testid="email"]')
+            .should('have.attr', 'required')
+
+        cy.get('[data-testid="email"]')
+            .should('have.attr', 'placeholder')
+            .and('equal', 'Your email')
+
+        //password
+        cy.get('[data-testid="password"]')
+            .should('have.attr', 'required')
+
+        cy.get('[data-testid="password"]')
+            .should('have.attr', 'placeholder')
+            .and('equal', 'Your password')
+
+        //phone
+        cy.get('[data-testid="phone"]')
+            .should('have.attr', 'required')
+
+        cy.get('[data-testid="phone"]')
+            .should('have.attr', 'placeholder')
+            .and('equal', 'Your phone')
     })
 
-
-
-
-
-    it('check Register button is disable if all informations have not been entered', () => {
+    it('check text on the Register page', () => {
         cy.visit('http://localhost:3000/register')
-        cy.wait(500)
-        //register button is disable because the input are empty
-        cy.get('#registerButton').should('be.disabled')
-        cy.wait(500)
-        //enter information to test if the register button is able now
-        cy.fixture('userInformations').then((userInformationsForRegister) => {
-            cy.get('#firstname').type(userInformationsForRegister.firstname)
-            cy.wait(500)
-            cy.get('#registerButton').should('be.disabled')
-            cy.get('#lastname').type(userInformationsForRegister.lastname)
-            cy.wait(500)
-            cy.get('#registerButton').should('be.disabled')
-            cy.get('#email').type(userInformationsForRegister.email)
-            cy.wait(500)
-            cy.get('#registerButton').should('be.disabled')
-            cy.get('#mobile').type(userInformationsForRegister.mobile)
-            cy.wait(500)
-            cy.get('#registerButton').should('be.disabled')
-            cy.get('#password').type(userInformationsForRegister.password)
-            cy.wait(500)
-            cy.get('#registerButton').should('be.disabled')
-            // test if it's the same password
-            cy.get('#passwordCheck').type(userInformationsForRegister.password)
 
-            cy.wait(1000)
-            cy.get('#registerButton').should('not.be.disabled') //all input are good
-        })
+        cy.get('[data-testid="welcome"]').contains('Welcome 🍩!')
+
+        cy.get('[data-testid="loginPage"]')
+            .contains('Do you already have an account : Log to your account')
+
+
+        cy.get('form > :nth-child(1) > :nth-child(1)').contains('Firstname')
+        cy.get('form > :nth-child(2) > :nth-child(1)').contains('Lastname')
+        cy.get('form > :nth-child(3) > :nth-child(1)').contains('Email')
+        cy.get('form > :nth-child(4) > :nth-child(1)').contains('Password')
+        cy.get('form > :nth-child(5) > :nth-child(1)').contains('Phone')
+
+        cy.get('[data-testid="signUp"]').contains('Sign up')
     })
 
-
-
-
-
-    it('firstname and lastname are less than 128 characters', () => {
+    it('check Login button Page from Register page', () => {
         cy.visit('http://localhost:3000/register')
-        cy.wait(500)
-        cy.fixture('userInformations').then((userInformationsForRegister) => {
-            cy.get('#firstname').type(userInformationsForRegister.fakeName_128)
-            cy.wait(1000)
-            cy.get('#bodyOfThePage').click()
-            cy.get('#errorMessageLengthFirstName').contains('Le prénom est trop long')
 
-            cy.wait(1000)
-            cy.get('#lastname').type(userInformationsForRegister.fakeName_128)
-            cy.wait(1000)
-            cy.get('#bodyOfThePage').click()
-            cy.get('#errorMessageLengthLastName').contains('Le nom est trop long')
-        })
-    })
+        cy.get('[data-testid="loginPage"] > .mantine-Text-root').click()
 
 
-
-
-
-    it('email input only takes email', () => {
-        cy.visit('http://localhost:3000/register')
-        cy.wait(500)
-        cy.fixture('userInformations').then((userInformationsForRegister) => {
-            cy.get('#email').type(userInformationsForRegister.fakeEmail)
-            cy.wait(500)
-            cy.get('#password').type("password")
-        })
-        cy.wait(1000)
-        cy.get('#errorMessageIncorrectEmail').contains('The email is not valid')
-    })
-
-
-
-
-
-    it('mobile take only numbers value', () => {
-        cy.visit('http://localhost:3000/register')
-        cy.wait(500)
-        cy.fixture('userInformations').then((userInformationsForRegister) => {
-            cy.get('#mobile').type(userInformationsForRegister.fakePhone)
-        })
-        cy.wait(1000)
-        cy.get('#bodyOfThePage').click()
-        cy.get('#errorMessageIncorrectMobile').contains('The mobile is not valid')
-    })
-
-
-
-
-
-    it('2 inputs for passward have the same value', () => {
-        cy.visit('http://localhost:3000/register')
-        cy.wait(500)
-        cy.fixture('userInformations').then((userInformationsForRegister) => {
-            cy.get('#password').type(userInformationsForRegister.password)
-            cy.get('#passwordCheck').type(userInformationsForRegister.otherPassword)
-            cy.wait(1000)
-            cy.get('#bodyOfThePage').click()
-            cy.get('#errorMessageIncorrectMobile').contains('The password is not the same for the inputs')
-        })
-    })
-
-
-
-
-
-    it('password is longer than 8 characters', () => {
-        cy.visit('http://localhost:3000/register')
-        cy.wait(500)
-        cy.fixture('userInformations').then((userInformationsForRegister) => {
-            cy.get('#password').type(userInformationsForRegister.otherPassword)
-            cy.wait(1000)
-            cy.get('#bodyOfThePage').click()
-            cy.get('#errorMessageIncorrectMobile').contains('the password must be at least 8 characters long')
-        })
     })
 })

@@ -88,12 +88,13 @@ export function Register() {
       <Title
         align="center"
         sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
+        data-testid="welcome"
       >
         Welcome 🍩!
       </Title>
 
-      <Text color="dimmed" size="sm" align="center" mt={5}>
-        Do not have an account yet?{' '}
+      <Text color="dimmed" size="sm" align="center" data-testid="loginPage" mt={5}>
+        Do you already have an account :{' '}
         <Anchor<'a'> href="#" size="sm" onClick={goLogin}>
           Log to your account
         </Anchor>
@@ -107,32 +108,37 @@ export function Register() {
             placeholder="Your firstname"
             required
             onChange={e => setFirstName(e.target.value)}
+            data-testid="Firstname"
           />
           <TextInput
             label="Lastname"
             placeholder="Your lastname"
             required
             onChange={e => setLastName(e.target.value)}
+            data-testid="Lastname"
           />
           <TextInput
             label="Email"
             placeholder="Your email"
             required
             onChange={e => setEmail(e.target.value)}
+            data-testid="email"
           />
           <PasswordInput
             label="Password"
             placeholder="Your password"
             required mt="md"
             onChange={e => setPassword(e.target.value)}
+            data-testid="password"
           />
           <TextInput
             label="Phone"
             placeholder="Your phone"
             required
             onChange={e => setPhone(e.target.value)}
+            data-testid="phone"
           />
-          <Button fullWidth mt="xl" type="submit">
+          <Button fullWidth mt="xl" type="submit" data-testid="signUp">
             Sign up
           </Button>
         </form>
