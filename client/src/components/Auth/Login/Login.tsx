@@ -49,10 +49,14 @@ export function Login({ auth }: any) {
       data: params,
     })
       .then((response) => {
+        auth.setUserID(response.data.data.id)
         console.log(response.data);
         console.log("[LOGIN] auth.setAuthenticated current: ", auth.setAuthenticated);
         auth.setIsAuthenticated(true);
         console.log("[LOGIN] auth.setAuthenticated after: ", auth.setAuthenticated);
+        console.log(response.data.data.id)
+        console.log(auth.userID)
+          console.log(auth)
         navigate('/');
       })
       .catch(function (error) {
@@ -155,6 +159,8 @@ export function Login({ auth }: any) {
           <Button fullWidth mt="xl" type="submit">
             Sign in
           </Button>
+
+
         </form>
 
       </Paper>

@@ -39,10 +39,13 @@ function App() {
   const [drinkArrival, setDrinkArrival] = useState('');
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userID, setUserID] = useState('');
 
   const auth = {
     isAuthenticated,
-    setIsAuthenticated
+    setIsAuthenticated,
+    userID,
+    setUserID
   }
 
   let fulTrip = {
@@ -83,7 +86,7 @@ function App() {
         <Route path="/startEndTrip" element={<StartEndTrip fulTrip={fulTrip} />} />
         <Route path="/travel" element={<Travel fulTrip={fulTrip} />} />
         <Route path="/city" element={<City />} />
-        <Route path="/resumeTrip" element={<ResumeTrip fulTrip={fulTrip} />} />
+        <Route path="/resumeTrip" element={<ResumeTrip fulTrip={fulTrip} auth={auth} />} />
         <Route path="/mocking" element={<MockTest />} />
         <Route path="/enjoy" element={<Enjoy fulTrip={fulTrip} />} />
         <Route path="/enjoyArrival" element={<EnjoyArrival fulTrip={fulTrip} />} />

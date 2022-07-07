@@ -61,12 +61,15 @@ const useStyles = createStyles((theme) => ({
 
 
 
-export function ResumeTrip({ fulTrip }: any) {
+export function ResumeTrip({ fulTrip, auth }: any) {
     const navigate = useNavigate();
     const { classes } = useStyles();
 
-    const [subTrip, setSubTrip] = useState(
-        [
+    const [subTrip, setSubTrip] = useState([])
+
+    const confirmTripPost = () => {
+        console.log(auth)
+        let params = [
             {
                 city: fulTrip.startCity,
                 startdate: fulTrip.startDateValue,
@@ -149,7 +152,7 @@ export function ResumeTrip({ fulTrip }: any) {
         axios({
             method: 'post',
             url: 'http://localhost:8000/api/v1/roadtrip/',
-            params: {userID: '62c32834bdd39d78b24f4a70'},
+            params: {userID: auth.userID},
             data: params
         }).then(res => {
             console.log(res)
@@ -165,7 +168,7 @@ export function ResumeTrip({ fulTrip }: any) {
 
     const goToHome = async () => {
         console.log("Going back home!")
-        navigate('/');
+        navigate('/resumeTrip');
     };
 
     const goToArrival = async () => {
