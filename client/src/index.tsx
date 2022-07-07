@@ -10,6 +10,8 @@ import { Eat } from './components/Eat/Eat';
 import { Drink } from './components/Drink/Drink';
 import { EnjoyArrival } from './components/Enjoy/EnjoyArrival';
 import { SleepArrival } from './components/Sleep/SleepArrival';
+import { EatArrival } from './components/Eat/EatArrival';
+import { DrinkArrival } from "./components/Drink/DrinkArrival"
 
 // if (process.env.NODE_ENV === 'development') {
 //   const { worker } = require('./mocks/browser')
@@ -83,8 +85,8 @@ function App() {
         <Route path="/enjoy" element={<Enjoy fulTrip={fulTrip} />} />
         <Route path="/enjoyArrival" element={<EnjoyArrival fulTrip={fulTrip} />} />
         <Route path="/sleepArrival" element={<SleepArrival fulTrip={fulTrip} />} />
-        <Route path="/eatArrival" element={<EnjoyArrival fulTrip={fulTrip} />} />
-        <Route path="/drinkArrival" element={<EnjoyArrival fulTrip={fulTrip} />} />
+        <Route path="/eatArrival" element={<EatArrival fulTrip={fulTrip} />} />
+        <Route path="/drinkArrival" element={<DrinkArrival fulTrip={fulTrip} />} />
         <Route path="/sleep" element={<Sleep fulTrip={fulTrip} />} />
         <Route path="/eat" element={<Eat fulTrip={fulTrip} />} />
         <Route path="/drink" element={<Drink fulTrip={fulTrip} />} />
