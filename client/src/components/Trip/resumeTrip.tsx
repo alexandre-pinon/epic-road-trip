@@ -340,6 +340,9 @@ export function ResumeTrip({ fulTrip }: any) {
                     <Button onClick={goToHome} rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
                         Go to Home Page
                     </Button>
+                    <Button onClick={confirmTripPost} compact variant="subtle" radius="xs">
+                        Confirm your trip 🤩 !
+                    </Button>
                     <Button onClick={goToArrival} rightIcon={<Building size={18} />} compact variant="subtle" radius="xs">
                         {fulTrip.endCity}
                     </Button>

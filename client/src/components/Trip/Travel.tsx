@@ -64,9 +64,11 @@ export function Travel({ fulTrip }: any) {
   const [cityDeparture, setCityDeparture] = useState('')
   const [cityArrival, setCityArrival] = useState('')
   const [duration, setDuration] = useState('')
+  const [type, setType] = useState('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
   const [price, setPrice] = useState('')
+
 
   let [selectedTravel, setSelectedTravel] = useState('')
 
@@ -76,8 +78,8 @@ export function Travel({ fulTrip }: any) {
 
 
   const [plane, setPlane] = useState([{
-    type: "AIR",
     id,
+    type,
     cityDeparture,
     cityArrival,
     duration,
@@ -87,8 +89,8 @@ export function Travel({ fulTrip }: any) {
   ])
 
   const [train, setTrain] = useState([{
-    type: "GROUND",
     id,
+    type,
     cityDeparture,
     cityArrival,
     duration,
@@ -118,6 +120,7 @@ export function Travel({ fulTrip }: any) {
       res.data.data.forEach((data: any) => {
         let travelInfo = {
           id: id,
+          type: "AIR",
           cityDeparture: data.departure.city,
           cityArrival: data.arrival.city,
           duration: data.duration,
@@ -148,6 +151,7 @@ export function Travel({ fulTrip }: any) {
       res.data.data.forEach((data: any) => {
         let travelInfo = {
           id: id,
+          type: "GROUND",
           cityDeparture: data.departure.city,
           cityArrival: data.arrival.city,
           duration: data.duration,
