@@ -2,7 +2,7 @@ import { AspectRatio, Image, Button, Center, Container, createStyles, Grid, Grou
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowBackUp, ArrowForwardUp, Beer, Bike, Car, PlaneInflight, Search, Train, Walk } from 'tabler-icons-react';
+import { ArrowBackUp, ArrowForwardUp, Beer, Bike, Car, Plane, PlaneInflight, Search, Train, Walk } from 'tabler-icons-react';
 
 const useStyles = createStyles((theme) => ({
   button: {
@@ -279,7 +279,7 @@ export function DrinkArrival({ fulTrip }: any) {
           <Button onClick={goEat} rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
             Go back
           </Button>
-          <Button onClick={goResumeTrip} rightIcon={<Beer size={18} />} compact variant="subtle" radius="xs">
+          <Button onClick={goResumeTrip} rightIcon={<Plane size={18} />} compact variant="subtle" radius="xs">
             Resume trip
           </Button>
         </Center>

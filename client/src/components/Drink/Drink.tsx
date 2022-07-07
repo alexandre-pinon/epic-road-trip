@@ -2,7 +2,7 @@ import { AspectRatio, Image, Button, Center, Container, createStyles, Grid, Grou
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowBackUp, ArrowForwardUp, Beer, Bike, Car, PlaneInflight, Search, Train, Walk } from 'tabler-icons-react';
+import { ArrowBackUp, ArrowForwardUp, Beer, Bike, Building, Car, PlaneInflight, Search, Train, Walk } from 'tabler-icons-react';
 
 const useStyles = createStyles((theme) => ({
   button: {
@@ -56,9 +56,9 @@ export function Drink({ fulTrip }: any) {
     navigate('/eat');
   };
 
-  const goResumeTrip = async () => {
+  const goEnjoyEndCity = async () => {
     console.log("Go to sleep page!")
-    navigate('/resumeTrip');
+    navigate('/enjoyArrival');
   };
 
   const [id, setId] = useState(0)
@@ -279,8 +279,8 @@ export function Drink({ fulTrip }: any) {
           <Button onClick={goEat} rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
             Go back
           </Button>
-          <Button onClick={goResumeTrip} rightIcon={<Beer size={18} />} compact variant="subtle" radius="xs">
-            Resume trip
+          <Button onClick={goEnjoyEndCity} rightIcon={<Building size={18} />} compact variant="subtle" radius="xs">
+            Enjoy at {fulTrip.endCity}
           </Button>
         </Center>
       </Card>
