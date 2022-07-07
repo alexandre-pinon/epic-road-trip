@@ -150,16 +150,16 @@ export function Login({ auth }: any) {
             placeholder="Your email"
             required
             onChange={e => setEmail(e.target.value)}
-            data-testid="welcome"
+            data-testid="input"
           />
           <PasswordInput
             label="Password"
             placeholder="Your password"
             required mt="md"
             onChange={e => setPassword(e.target.value)}
-            data-testid="welcome"
+            data-testid="password"
           />
-          <Button fullWidth mt="xl" type="submit">
+          <Button fullWidth mt="xl" type="submit" data-testid="signup">
             Sign in
           </Button>
 

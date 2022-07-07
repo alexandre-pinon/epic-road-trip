@@ -8,7 +8,7 @@ describe('Login page', () => {
         cy.get('[data-testid="registerPage"]')
             .contains('Do not have an account yet? Create account')
 
-
+        cy.get('[data-testid="signup"]').contains('Sign in')
     })
 
 
