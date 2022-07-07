@@ -45,6 +45,53 @@ describe('The cities and dates of the trip', () => {
 
 
 
+    it('Check the button in the StarEndTrip page', () => {
+        cy.visit('http://localhost:3000/startEndTrip')
+
+        cy.get('[data-testid="goBack"]').click()
+        cy.wait(250)
+        cy.location('href').should('include', '/')
+    })
+
+
+
+    it('Check the input in the StarEndTrip page', () => {
+        cy.visit('http://localhost:3000/startEndTrip')
+
+        cy.fixture('tripInformations').then((tripInformations) => {
+            cy.get('[data-testid="StartCity"]')
+                .type(tripInformations.startCity + '{enter}')
+                .type('{enter}')
+
+            cy.get('[data-testid="StartCity"]').should('have.value', tripInformations.startCity)
+
+            cy.get('[data-testid="endCity"]')
+                .type(tripInformations.endCity + '{enter}')
+                .type('{enter}')
+
+            cy.get('[data-testid="endCity"]').should('have.value', tripInformations.endCity)
+
+
+            cy.get('[data-testid="startDate"]').click()
+            cy.wait(250)
+            cy.get(':nth-child(4) > :nth-child(3) > .mantine-388pmv').click()
+
+            cy.get('[data-testid="startDate"]').should('have.value', 'July 20, 2022')
+
+
+            cy.get('[data-testid="endDate"]').click()
+            cy.wait(250)
+            cy.get(':nth-child(5) > :nth-child(6) > .mantine-DatePicker-day').click()
+
+            cy.get('[data-testid="endDate"]').should('have.value', 'July 30, 2022')
+        })
+
+
+
+    })
+
+
+
 
 
 
