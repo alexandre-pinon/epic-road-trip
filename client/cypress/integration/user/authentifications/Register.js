@@ -80,10 +80,16 @@ describe('Register page', () => {
         cy.visit('http://localhost:3000/register')
 
         cy.get('[data-testid="Firstname"]').type('Oran')
+        cy.get('[data-testid="Firstname"]').should('have.value', 'Oran')
         cy.get('[data-testid="Lastname"]').type('Gina')
+        cy.get('[data-testid="Lastname"]').should('have.value', 'Gina')
         cy.get('[data-testid="email"]').type('orangina@mail.fr')
+        cy.get('[data-testid="email"]').should('have.value', 'orangina@mail.fr')
         cy.get('[data-testid="password"]').type('password')
+        cy.get('[data-testid="password"]').should('have.value', 'password')
         cy.get('[data-testid="phone"]').type('0632437596')
+        cy.get('[data-testid="phone"]').should('have.value', '0632437596')
+
     })
 
 
