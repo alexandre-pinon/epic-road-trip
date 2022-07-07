@@ -67,16 +67,47 @@ describe('Activities pages', () => {
 
 
 
+
     it('sleepArrival activities', () => {
-        cy.visit('http://localhost:3000/drink')
+        cy.visit('http://localhost:3000/sleepArrival')
+
+        cy.get('[data-testid="title"]').contains("Sleep Activities")
+
+        cy.get('[data-testid="goEat"]').click()
+        cy.location('href').should('include', '/eatArrival')
+
+        cy.visit('http://localhost:3000/sleepArrival')
+        cy.get('[data-testid="goBack"]').click()
+        cy.location('href').should('include', '/enjoyArrival')
+    })
+
+
+
+    it('eatArrival activities', () => {
+        cy.visit('http://localhost:3000/eatArrival')
+
+        cy.get('[data-testid="title"]').contains("Eat Activities")
+
+        cy.get('[data-testid="drinkArrival"]').click()
+        cy.location('href').should('include', '/drinkArrival')
+
+        cy.visit('http://localhost:3000/eatArrival')
+        cy.get('[data-testid="goBack"]').click()
+        cy.location('href').should('include', '/sleepArrival')
+    })
+
+
+
+    it('drinkArrival activities', () => {
+        cy.visit('http://localhost:3000/drinkArrival')
 
         cy.get('[data-testid="title"]').contains("Drink Activities")
 
-        cy.get('[data-testid="enjoyArrival"]').click()
-        cy.location('href').should('include', '/enjoyArrival')
+        cy.get('[data-testid="ResumeTrip"]').click()
+        cy.location('href').should('include', '/resumeTrip')
 
-        cy.visit('http://localhost:3000/drink')
+        cy.visit('http://localhost:3000/drinkArrival')
         cy.get('[data-testid="goBack"]').click()
-        cy.location('href').should('include', '/eat')
+        cy.location('href').should('include', '/eatArrival')
     })
 })
