@@ -80,7 +80,7 @@ function App() {
     <BrowserRouter>
       <AppHeader auth={auth} />
       <Routes>
-        <Route path="/" element={<Home fulTrip={fulTrip} />} />
+        <Route path="/" element={<Home fulTrip={fulTrip} auth={auth} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login auth={auth} />} />
         <Route path="/startEndTrip" element={<StartEndTrip fulTrip={fulTrip} />} />
