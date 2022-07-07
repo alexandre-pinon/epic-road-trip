@@ -27,13 +27,13 @@ export function StartEndTrip({ fulTrip }: any) {
     return (
         <>
             <Center>
-                <Title style={{ color: "#616161 " }} order={2}> Start & End of your sub-trip </Title>
+                <Title style={{ color: "#616161 " }} order={2} data-testid="title"> Start & End of your sub-trip </Title>
             </Center>
 
             <Space h="xl" />
 
             <Center>
-                <Title style={{ color: "#616161 " }} order={4}>Choose the city of departure & arrival of your sub-trip </Title>
+                <Title style={{ color: "#616161 " }} order={4} data-testid="cityTitle">Choose the city of departure & arrival of your sub-trip </Title>
             </Center>
 
             <Space h="lg" />
@@ -73,7 +73,7 @@ export function StartEndTrip({ fulTrip }: any) {
             <Space h="xl" />
 
             <Center>
-                <Title style={{ color: "#616161 " }} order={4}>Choose the date of departure & arrival of your sub-trip </Title>
+                <Title style={{ color: "#616161 " }} order={4} data-testid="dateTitle">Choose the date of departure & arrival of your sub-trip </Title>
             </Center>
 
             <Space h="xl" />
@@ -99,10 +99,10 @@ export function StartEndTrip({ fulTrip }: any) {
                 <Space h="xl" />
 
                 <Center>
-                    <Button onClick={goToHome} rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
+                    <Button onClick={goToHome} rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs" data-testid="goBack">
                         Go back
                     </Button>
-                    <Button onClick={goTravel} rightIcon={<Plane size={18} />} compact variant="subtle" radius="xs">
+                    <Button onClick={goTravel} rightIcon={<Plane size={18} />} compact variant="subtle" radius="xs" data-testid="nextStep">
                         Search for itineraries
                     </Button>
                 </Center>

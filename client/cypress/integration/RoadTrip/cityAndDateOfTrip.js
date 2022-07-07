@@ -1,6 +1,6 @@
 describe('The cities and dates of the trip', () => {
 
-    it('the start city is the same on the startEnd Page', () => {
+    it('Check the start city is the same on the startEnd Page', () => {
         cy.visit('http://localhost:3000/')
         cy.fixture('tripInformations').then((tripInformations) => {
             //cy.log(tripInformations.startCity)
@@ -13,6 +13,14 @@ describe('The cities and dates of the trip', () => {
 
             cy.get('[data-testid="StartCity"]').should('have.value', tripInformations.startCity)
         })
+    })
+
+    it('Check the text in the StarEndTrip page', () => {
+        cy.visit('http://localhost:3000/startEndTrip')
+
+        cy.get('[data-testid="title"]').contains('Start & End of your sub-trip')
+        cy.get('[data-testid="cityTitle"]').contains('Choose the city of departure & arrival of your sub-trip')
+        cy.get('[data-testid="dateTitle"]').contains('Choose the date of departure & arrival of your sub-trip')
     })
 
 
