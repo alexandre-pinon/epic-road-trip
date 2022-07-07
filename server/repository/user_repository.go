@@ -70,14 +70,13 @@ func (repo *userRepository) GetUserByID(id primitive.ObjectID, populate bool) (*
 	}
 
 	aggSearch := bson.M{"$match": filter}
-	aggUnwind1 := bson.M{"$unwind": bson.M{"path": "$trips"}}
+	aggUnwind1 := bson.M{"$unwind": bson.M{"path": "$trips", "preserveNullAndEmptyArrays": true}}
 	aggPopulate := bson.M{"$lookup": bson.M{
 		"from":         "tripStep",           // the collection name
 		"localField":   "trips.tripSteps_id", // the field on the child struct
 		"foreignField": "_id",                // the field on the parent struct
 		"as":           "trips.tripSteps",    // the field to populate into
 	}}
-	// aggUnwind2 := bson.M{"$unwind": bson.M{"path": "$trips.tripSteps_id"}}
 	aggGroup := bson.M{"$group": bson.M{
 		"_id":            "$_id",
 		"firstname":      bson.M{"$first": "$firstname"},
@@ -98,6 +97,13 @@ func (repo *userRepository) GetUserByID(id primitive.ObjectID, populate bool) (*
 		err := cursor.Decode(&user)
 		if err != nil {
 			return nil, err
+		}
+
+		roadtrips := user.Trips
+		if len(roadtrips) == 1 {
+			if len(*roadtrips[0].TripSteps) == 0 {
+				user.Trips = nil
+			}
 		}
 	}
 
