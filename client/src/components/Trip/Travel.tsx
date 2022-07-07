@@ -10,7 +10,7 @@ import {
   Text,
   SimpleGrid,
   Paper,
-  Grid, Center, ActionIcon
+  Grid, Center, ActionIcon, Title
 } from "@mantine/core";
 import { ArrowBackUp, ArrowForwardUp, Bike, Car, MoodSmile, PlaneInflight, Search, Train, Trash, Walk } from 'tabler-icons-react';
 import axios from "axios";
@@ -192,6 +192,12 @@ export function Travel({ fulTrip }: any) {
     else {
       fulTrip.setSelectedTravel(train[id])
     }
+    console.log("scroll to bottom: ", document.body.offsetHeight)
+    window.scroll({
+      top: document.body.offsetHeight,
+      left: 0,
+      behavior: 'smooth',
+    });
   }
 
   return (
@@ -284,13 +290,33 @@ export function Travel({ fulTrip }: any) {
         {
           selectedTravel === "Plane" ? (
             <>
-              <Center><h3>SELECTED TRAVEL : </h3></Center>
+              <Space h="xs" />
+
+              <Title
+                order={2}
+                align="center"
+                sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
+              >
+                Selected Travel
+
+
+              </Title>
               <Paper shadow="xl" p="md" withBorder >
                 <Grid><Text weight={700}>Travel : PLANE number  {plane[id].id}</Text> </Grid>
+                <Space h="xs" />
+
                 <Grid><Text weight={700}>Departure :  </Text> <Text>&nbsp;{plane[id].cityDeparture}</Text></Grid>
+                <Space h="xs" />
+
                 <Grid><Text weight={700}>Arrival :  </Text> <Text>&nbsp;{plane[id].cityArrival}</Text></Grid>
+                <Space h="xs" />
+
                 <Grid><Text weight={700}>Start Date :  </Text> <Text>&nbsp;{plane[id].startDate}</Text></Grid>
+                <Space h="xs" />
+
                 <Grid><Text weight={700}>End Date :  </Text> <Text>&nbsp;{plane[id].endDate}</Text></Grid>
+                <Space h="xs" />
+
                 <Grid><Text weight={700}>Duration :  </Text> <Text>&nbsp;{plane[id].duration}</Text></Grid>
               </Paper>
             </>
@@ -300,7 +326,17 @@ export function Travel({ fulTrip }: any) {
         {
           selectedTravel === "Train" ? (
             <>
-              <Center><h3>SELECTED TRAVEL : </h3></Center>
+              <Space h="xs" />
+
+              <Title
+                order={2}
+                align="center"
+                sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
+              >
+                Selected Travel
+
+
+              </Title>
               <Paper shadow="xl" p="md" withBorder >
                 <Grid><Text weight={700}>Travel : TRAIN number  {train[id].id}</Text> </Grid>
                 <Grid><Text weight={700}>Departure :  </Text> <Text>&nbsp;{train[id].cityDeparture}</Text></Grid>
@@ -315,10 +351,6 @@ export function Travel({ fulTrip }: any) {
             : null
         }
       </div>
-
-
-
-
 
 
 
