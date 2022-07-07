@@ -3,6 +3,7 @@ import { Avatar, Button, Center, Title, Card, Image, Text, Paper, Space, Grid, c
 import { useForm } from '@mantine/form';
 import React, { useState } from "react";
 import axios from "axios";
+import { ArrowBackUp, Building } from 'tabler-icons-react';
 
 
 const useStyles = createStyles((theme) => ({
@@ -336,10 +337,10 @@ export function ResumeTrip({ fulTrip }: any) {
                 <Space h="xl" />
 
                 <Center>
-                    <Button onClick={goToHome} variant="light" radius="xl">
+                    <Button onClick={goToHome} rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
                         Go to Home Page
                     </Button>
-                    <Button onClick={goToArrival} variant="light" radius="xl">
+                    <Button onClick={goToArrival} rightIcon={<Building size={18} />} compact variant="subtle" radius="xs">
                         {fulTrip.endCity}
                     </Button>
                     {/*
