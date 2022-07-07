@@ -15,6 +15,8 @@ describe('The cities and dates of the trip', () => {
         })
     })
 
+
+
     it('Check the text in the StarEndTrip page', () => {
         cy.visit('http://localhost:3000/startEndTrip')
 
@@ -22,6 +24,8 @@ describe('The cities and dates of the trip', () => {
         cy.get('[data-testid="cityTitle"]').contains('Choose the city of departure & arrival of your sub-trip')
         cy.get('[data-testid="dateTitle"]').contains('Choose the date of departure & arrival of your sub-trip')
     })
+
+
 
     it('Check the attribute in the StarEndTrip page', () => {
         cy.visit('http://localhost:3000/startEndTrip')
@@ -85,17 +89,5 @@ describe('The cities and dates of the trip', () => {
 
             cy.get('[data-testid="endDate"]').should('have.value', 'July 30, 2022')
         })
-
-
-
     })
-
-
-
-
-
-
-
-
-
 })

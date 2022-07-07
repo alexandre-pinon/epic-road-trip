@@ -187,6 +187,7 @@ export function ResumeTrip({ fulTrip, auth }: any) {
                 <Center>
                     <Title
                         align="center"
+                        data-testid="Big-title"
                         sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
                     >
                         This is your resume trip 🚌
@@ -201,6 +202,7 @@ export function ResumeTrip({ fulTrip, auth }: any) {
                     <Center><Title
                         order={2}
                         align="center"
+                        data-testid="yourTrip"
                         sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
                     >
                         Your trip
