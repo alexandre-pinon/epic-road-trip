@@ -210,7 +210,7 @@ export function Travel({ fulTrip }: any) {
 
         <SimpleGrid cols={1} spacing="sm" breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
           <>
-            <Button onClick={showPlane} variant="default" className={classes.button}>
+            <Button onClick={showPlane}data-testid="plane" variant="default" className={classes.button}>
               <PlaneInflight />
             </Button>
 
@@ -252,7 +252,7 @@ export function Travel({ fulTrip }: any) {
       <Group grow spacing={0} position="apart">
         <SimpleGrid cols={1} spacing="sm" breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
           <>
-            <Button onClick={showTrain} variant="default" className={classes.button}>
+            <Button onClick={showTrain} data-testid="train" variant="default" className={classes.button}>
               <Train />
             </Button>
 
@@ -365,7 +365,7 @@ export function Travel({ fulTrip }: any) {
         <Button onClick={goStartAndEnd} rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
           Go back
         </Button>
-        <Button onClick={goEnjoy} rightIcon={<MoodSmile size={18} />} compact variant="subtle" radius="xs">
+        <Button onClick={goEnjoy} data-testid="goEnjoy" rightIcon={<MoodSmile size={18} />} compact variant="subtle" radius="xs">
           Search for Activities
         </Button>
         {/* <Button onClick={goResumeTrip} rightIcon={<Trash size={18} />} compact variant="subtle" radius="xs">
