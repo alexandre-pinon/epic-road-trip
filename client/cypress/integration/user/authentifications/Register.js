@@ -44,6 +44,8 @@ describe('Register page', () => {
             .and('equal', 'Your phone')
     })
 
+
+
     it('check text on the Register page', () => {
         cy.visit('http://localhost:3000/register')
 
@@ -62,11 +64,27 @@ describe('Register page', () => {
         cy.get('[data-testid="signUp"]').contains('Sign up')
     })
 
+
+
     it('check Login button Page from Register page', () => {
         cy.visit('http://localhost:3000/register')
 
         cy.get('[data-testid="loginPage"] > .mantine-Text-root').click()
-        cy.wait(2000)
+        cy.wait(500)
         cy.location('href').should('include', '/login#')
     })
+
+
+
+    it('check creation account Register page', () => {
+        cy.visit('http://localhost:3000/register')
+
+        cy.get('[data-testid="Firstname"]').type('Oran')
+        cy.get('[data-testid="Lastname"]').type('Gina')
+        cy.get('[data-testid="email"]').type('orangina@mail.fr')
+        cy.get('[data-testid="password"]').type('password')
+        cy.get('[data-testid="phone"]').type('0632437596')
+    })
+
+
 })
