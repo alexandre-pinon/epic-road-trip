@@ -47,14 +47,14 @@ export function AppHeader({ auth }: any) {
       .then((response) => {
         console.log(response.data);
         console.log("[LOGOUT] auth.setAuthenticated current: ", auth.setAuthenticated);
-        auth.setAuthenticated = false;
+        auth.setIsAuthenticated(false);
         console.log("[LOGOUT] auth.setAuthenticated after: ", auth.setAuthenticated);
+        navigate('/login');
       })
       .catch(function (error) {
         console.log(error);
       });
 
-    navigate('/login');
   };
 
   const goToLogin = async () => {
@@ -111,15 +111,7 @@ export function AppHeader({ auth }: any) {
                 </ActionIcon>
               </Group>
               <Group>
-                <Button
-                  radius={50}
-                  className={classes.button}
-                  onClick={goToLogin}
-                  variant="default"
-                >
-                  Sign in
-                </Button>
-                {auth.setAuthenticated ? (
+                {auth.isAuthenticated ? (
                   <Button
                     radius={50}
                     className={classes.button}
@@ -127,7 +119,14 @@ export function AppHeader({ auth }: any) {
                     variant="default"
                   >
                     Logout
-                  </Button>) : (<div></div>)
+                  </Button>) : (<Button
+                    radius={50}
+                    className={classes.button}
+                    onClick={goToLogin}
+                    variant="default"
+                  >
+                    Sign in
+                  </Button>)
                 }
 
               </Group>
