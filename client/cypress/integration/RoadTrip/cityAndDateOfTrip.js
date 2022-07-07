@@ -23,6 +23,26 @@ describe('The cities and dates of the trip', () => {
         cy.get('[data-testid="dateTitle"]').contains('Choose the date of departure & arrival of your sub-trip')
     })
 
+    it('Check the attribute in the StarEndTrip page', () => {
+        cy.visit('http://localhost:3000/startEndTrip')
+
+        cy.get('[data-testid="StartCity"]')
+            .should('have.attr', 'placeholder')
+            .and('equal', 'Start city of your Trip')
+
+        cy.get('[data-testid="endCity"]')
+            .should('have.attr', 'placeholder')
+            .and('equal', 'End city of your Trip')
+
+        cy.get('[data-testid="startDate"]')
+            .should('have.attr', 'placeholder')
+            .and('equal', 'Start date of your Trip')
+
+        cy.get('[data-testid="endDate"]')
+            .should('have.attr', 'placeholder')
+            .and('equal', 'End date of your Trip')
+    })
+
 
 
 

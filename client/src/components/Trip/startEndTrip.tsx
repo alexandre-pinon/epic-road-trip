@@ -45,7 +45,7 @@ export function StartEndTrip({ fulTrip }: any) {
                     icon={<BuildingCommunity size={18} />}
                     radius="xl"
                     size="md"
-                    placeholder="Ville de départ"
+                    placeholder="Start city of your Trip"
                     rightSectionWidth={42}
                     {...props}
                     data={city}
@@ -62,11 +62,12 @@ export function StartEndTrip({ fulTrip }: any) {
                     icon={<BuildingCommunity size={18} />}
                     radius="xl"
                     size="md"
-                    placeholder="Ville d'arrivée"
+                    placeholder="End city of your Trip"
                     rightSectionWidth={42}
                     {...props}
                     data={city}
                     onChange={(event) => fulTrip.setEndCity(event)}
+                    data-testid="endCity"
                 />
 
             </Container>
@@ -85,6 +86,7 @@ export function StartEndTrip({ fulTrip }: any) {
                     placeholder="Start date of your Trip"
                     radius="xl"
                     onChange={fulTrip.setStartDate}
+                    data-testid="startDate"
                 />
 
                 <Space h="xl" />
@@ -94,6 +96,7 @@ export function StartEndTrip({ fulTrip }: any) {
                     placeholder="End date of your Trip"
                     radius="xl"
                     onChange={fulTrip.setEndDate}
+                    data-testid="endDate"
                 />
 
                 <Space h="xl" />
