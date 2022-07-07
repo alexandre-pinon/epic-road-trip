@@ -74,12 +74,28 @@ export function ResumeTrip({ fulTrip }: any) {
 
     return (
         <>
-            <Center><Title order={1}>This is the summary of your Trip</Title></Center>
+            <Center>
+                <Title
+                    align="center"
+                    sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
+                >
+                    This is your resume trip 🚌
+
+                </Title>
+                <Space h="xl" />
+            </Center>
 
             <Space h="xl" />
 
             <Paper shadow="xs" radius="lg" p="lg" withBorder>
-                <Center><h2>Your TRIP</h2></Center>
+                <Center><Title
+                    order={2}
+                    align="center"
+                    sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
+                >
+                    Your trip
+
+                </Title></Center>
                 <h3>Cities</h3>
                 <Grid><Text weight={700}>Start City :  </Text><Text> &nbsp;{fulTrip.startCity}</Text></Grid>
                 <Grid><Text weight={700}>End City :  </Text><Text> &nbsp;{fulTrip.endCity}</Text></Grid>
@@ -114,6 +130,31 @@ export function ResumeTrip({ fulTrip }: any) {
                 <Grid><Text weight={700}>Hotel :  </Text><Text> &nbsp;{fulTrip.sleep.nameSleep}</Text></Grid>
                 <Grid><Text weight={700}>Address :  </Text><Text> &nbsp;{fulTrip.sleep.vicinitySleep}</Text></Grid>
                 <Grid><Text weight={700}>Rating :  </Text><Text> &nbsp;{fulTrip.sleep.ratingSleep}</Text></Grid>
+
+
+
+
+
+                {/* Arrival City */}
+                <h3>Arrival Enjoy</h3>
+                <Grid><Text weight={700}>Name :  </Text><Text> &nbsp;{fulTrip.enjoyArrival.name}</Text></Grid>
+                <Grid><Text weight={700}>Vicinity :  </Text><Text> &nbsp;{fulTrip.enjoyArrival.vicinity}</Text></Grid>
+                <Grid><Text weight={700}>Rating :  </Text><Text> &nbsp;{fulTrip.enjoyArrival.rating}</Text></Grid>
+                <Space h="md" />
+                <h3>Arrival Eat</h3>
+                <Grid><Text weight={700}>Restaurant name :  </Text><Text> &nbsp;{fulTrip.eatArrival.name}</Text></Grid>
+                <Grid><Text weight={700}>Address :  </Text><Text> &nbsp;{fulTrip.eatArrival.vicinity}</Text></Grid>
+                <Grid><Text weight={700}>Rating :  </Text><Text> &nbsp;{fulTrip.eatArrival.rating}</Text></Grid>
+                <Space h="md" />
+                <h3>Arrival Drink</h3>
+                <Grid><Text weight={700}>Restaurant name :  </Text><Text> &nbsp;{fulTrip.drinkArrival.name}</Text></Grid>
+                <Grid><Text weight={700}>Address :  </Text><Text> &nbsp;{fulTrip.drinkArrival.vicinity}</Text></Grid>
+                <Grid><Text weight={700}>Rating :  </Text><Text> &nbsp;{fulTrip.drinkArrival.rating}</Text></Grid>
+                <Space h="md" />
+                <h3>Arrival Hotel</h3>
+                <Grid><Text weight={700}>Hotel :  </Text><Text> &nbsp;{fulTrip.sleepArrival.nameSleep}</Text></Grid>
+                <Grid><Text weight={700}>Address :  </Text><Text> &nbsp;{fulTrip.sleepArrival.vicinitySleep}</Text></Grid>
+                <Grid><Text weight={700}>Rating :  </Text><Text> &nbsp;{fulTrip.sleepArrival.ratingSleep}</Text></Grid>
             </Paper>
 
             {/*
