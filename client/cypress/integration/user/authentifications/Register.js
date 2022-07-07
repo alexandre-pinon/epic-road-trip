@@ -66,7 +66,7 @@ describe('Register page', () => {
         cy.visit('http://localhost:3000/register')
 
         cy.get('[data-testid="loginPage"] > .mantine-Text-root').click()
-
-
+        cy.wait(2000)
+        cy.location('href').should('include', '/login#')
     })
 })
