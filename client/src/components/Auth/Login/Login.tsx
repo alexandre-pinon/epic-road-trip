@@ -130,11 +130,12 @@ export function Login({ auth }: any) {
       <Title
         align="center"
         sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
+        data-testid="welcome"
       >
         Welcome 👋!
       </Title>
 
-      <Text color="dimmed" size="sm" align="center" mt={5}>
+      <Text color="dimmed" size="sm" align="center" mt={5} data-testid="registerPage">
         Do not have an account yet?{' '}
         <Anchor<'a'> href="#" size="sm" onClick={goRegister}>
           Create account
@@ -149,12 +150,14 @@ export function Login({ auth }: any) {
             placeholder="Your email"
             required
             onChange={e => setEmail(e.target.value)}
+            data-testid="welcome"
           />
           <PasswordInput
             label="Password"
             placeholder="Your password"
             required mt="md"
             onChange={e => setPassword(e.target.value)}
+            data-testid="welcome"
           />
           <Button fullWidth mt="xl" type="submit">
             Sign in
