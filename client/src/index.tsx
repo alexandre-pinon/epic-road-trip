@@ -38,8 +38,11 @@ function App() {
   const [eatArrival, setEatArrival] = useState('');
   const [drinkArrival, setDrinkArrival] = useState('');
 
-  let auth = {
-    setAuthenticated: false
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const auth = {
+    isAuthenticated,
+    setIsAuthenticated
   }
 
   let fulTrip = {
