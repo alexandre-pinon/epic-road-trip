@@ -51,6 +51,7 @@ export function StartEndTrip({ fulTrip }: any) {
                     data={city}
                     value={fulTrip.startCity}
                     onChange={(event) => fulTrip.setStartCity(event)}
+                    data-testid="StartCity"
                 />
 
                 <Space h="xl" />

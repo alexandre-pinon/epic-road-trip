@@ -372,7 +372,9 @@ export function Home({ fulTrip, auth }: any) {
               radius="xl"
               size="md"
               onKeyPress={(e: any) => validStartCity(e)}
-              data={city} />
+              data={city}
+              data-testid="searchBar"
+            />
           </Container>
         </div>
       </div>
