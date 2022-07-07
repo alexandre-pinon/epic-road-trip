@@ -76,6 +76,7 @@ export function Travel({ fulTrip }: any) {
 
 
   const [plane, setPlane] = useState([{
+    type: "AIR",
     id,
     cityDeparture,
     cityArrival,
@@ -86,6 +87,7 @@ export function Travel({ fulTrip }: any) {
   ])
 
   const [train, setTrain] = useState([{
+    type: "GROUND",
     id,
     cityDeparture,
     cityArrival,

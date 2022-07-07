@@ -19,7 +19,8 @@ import {
   Loader,
   List,
   ThemeIcon,
-  Autocomplete
+  Autocomplete,
+  Group
 } from '@mantine/core';
 import { Calendar } from '@mantine/dates';
 
@@ -360,6 +361,35 @@ export function Home({ fulTrip }: any) {
         </Center> */}
 
       </Container>
+
+
+
+      <Container size={400}>
+
+        <Card shadow="sm" p="lg">
+          <Group position="apart" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
+            <Text weight={500}>Norway Fjord Adventures</Text>
+          </Group>
+          <Button variant="light" color="blue" fullWidth style={{ marginTop: 14 }}>
+            Book classic tour now
+          </Button>
+        </Card>
+
+      </Container>
+
+      <Container size={400}>
+
+        <Card shadow="sm" p="lg">
+          <Group position="apart" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
+            <Text weight={500}>Norway Fjord Adventures</Text>
+          </Group>
+          <Button variant="light" color="blue" fullWidth style={{ marginTop: 14 }}>
+            Book classic tour now
+          </Button>
+        </Card>
+
+      </Container>
+
 
       {/* <Title order={3}>Top experiences on Epic Road Trip</Title> */}
 

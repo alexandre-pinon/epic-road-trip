@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Avatar, Button, Center, Title, Card, Image, Text, Paper, Space, Grid } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import React, { useState } from "react";
+import axios from "axios";
 
 
 
@@ -9,48 +10,99 @@ import React, { useState } from "react";
 
 export function ResumeTrip({ fulTrip }: any) {
     const navigate = useNavigate();
-    const [subTrip, setSubTrip] = useState(
-        [
+
+    const confirmTripPost = () => {
+        let params = [
             {
-                "startCity": "Montréal",
-                "endCity": "Toronto",
-                "Trajets": "Bus",
-                "Activities": [
+                city: fulTrip.startCity,
+                startdate: fulTrip.startDateValue,
+                enddate: fulTrip.endDateValue,
+                enjoy: [
                     {
-                        "hotel": "Dans les locaux d'AB Tasty",
-                        "restaurant": "La cafet d'AB Tasty",
-                        "Entertainment1": "Coder des tests Cypress",
-                        "Entertainment2": "Faire des tickets sur JIRA"
+                        name: fulTrip.enjoyName.name,
+                        rating: fulTrip.enjoyName.rating,
+                        vicinity: fulTrip.enjoyName.vicinity
                     }
-                ]
+                ],
+                sleep: [
+                    {
+                        name: fulTrip.sleep.nameSleep,
+                        rating: fulTrip.sleep.ratingSleep,
+                        vicinity: fulTrip.sleep.vicinitySleep
+                    }
+                ],
+                eat: [
+                    {
+                        name: fulTrip.eat.name,
+                        rating: fulTrip.eat.rating,
+                        vicinity: fulTrip.eat.vicinity
+                    }
+                ],
+                drink: [
+                    {
+                        name: fulTrip.drink.name,
+                        rating: fulTrip.drink.rating,
+                        vicinity: fulTrip.drink.vicinity
+                    }
+                ],
             },
             {
-                "startCity": "Tokyo",
-                "endCity": "Kyoto",
-                "Trajets": "Trains",
-                "Activities": [
+                city: fulTrip.endCity,
+                startdate: fulTrip.startDateValue,
+                enddate: fulTrip.endDateValue,
+                travel: {
+                    type: fulTrip.selectedTravel.type,
+                    departure: {
+                        city: fulTrip.selectedTravel.cityDeparture
+                    },
+                    arrival: {
+                        city: fulTrip.selectedTravel.cityArrival
+                    },
+                    duration: fulTrip.selectedTravel.duration,
+                    startdate: fulTrip.selectedTravel.startDate,
+                    enddate: fulTrip.selectedTravel.endDate,
+                },
+                enjoy: [
                     {
-                        "hotel": "Chez Eichiro Oda",
-                        "restaurant": "Le Baratié",
-                        "Entertainment1": "Trouver le One Piece",
-                        "Entertainment2": "Libérer Wano"
+                        name: fulTrip.enjoyArrival.name,
+                        rating: fulTrip.enjoyArrival.rating,
+                        vicinity: fulTrip.enjoyArrival.vicinity
                     }
-                ]
-            },
-            {
-                "startCity": "Delhi",
-                "endCity": "Bombay",
-                "Trajets": "Avions",
-                "Activities": [
+                ],
+                sleep: [
                     {
-                        "hotel": "Chez Tharick",
-                        "restaurant": "Saravanha",
-                        "Entertainment1": "Voir le Taj Mahal",
-                        "Entertainment2": "Rendre visite à la famille de Tharick"
+                        name: fulTrip.sleepArrival.nameSleep,
+                        rating: fulTrip.sleepArrival.ratingSleep,
+                        vicinity: fulTrip.sleepArrival.vicinitySleep
                     }
-                ]
+                ],
+                eat: [
+                    {
+                        name: fulTrip.eatArrival.name,
+                        rating: fulTrip.eatArrival.rating,
+                        vicinity: fulTrip.eatArrival.vicinity
+                    }
+                ],
+                drink: [
+                    {
+                        name: fulTrip.drinkArrival.name,
+                        rating: fulTrip.drinkArrival.rating,
+                        vicinity: fulTrip.drinkArrival.vicinity
+                    }
+                ],
             }
-        ])
+        ];
+        axios({
+            method: 'post',
+            url: 'http://localhost:8000/api/v1/roadtrip/',
+            params: {userID: '62c32834bdd39d78b24f4a70'},
+            data: params
+        }).then(res => {
+            console.log(res)
+        });
+    };
+
+
 
     console.log(fulTrip)
     console.log(fulTrip.startDateValue.toDateString())
@@ -130,31 +182,7 @@ export function ResumeTrip({ fulTrip }: any) {
                 <Grid><Text weight={700}>Hotel :  </Text><Text> &nbsp;{fulTrip.sleep.nameSleep}</Text></Grid>
                 <Grid><Text weight={700}>Address :  </Text><Text> &nbsp;{fulTrip.sleep.vicinitySleep}</Text></Grid>
                 <Grid><Text weight={700}>Rating :  </Text><Text> &nbsp;{fulTrip.sleep.ratingSleep}</Text></Grid>
-
-
-
-
-
-                {/* Arrival City */}
-                <h3>Arrival Enjoy</h3>
-                <Grid><Text weight={700}>Name :  </Text><Text> &nbsp;{fulTrip.enjoyArrival.name}</Text></Grid>
-                <Grid><Text weight={700}>Vicinity :  </Text><Text> &nbsp;{fulTrip.enjoyArrival.vicinity}</Text></Grid>
-                <Grid><Text weight={700}>Rating :  </Text><Text> &nbsp;{fulTrip.enjoyArrival.rating}</Text></Grid>
-                <Space h="md" />
-                <h3>Arrival Eat</h3>
-                <Grid><Text weight={700}>Restaurant name :  </Text><Text> &nbsp;{fulTrip.eatArrival.name}</Text></Grid>
-                <Grid><Text weight={700}>Address :  </Text><Text> &nbsp;{fulTrip.eatArrival.vicinity}</Text></Grid>
-                <Grid><Text weight={700}>Rating :  </Text><Text> &nbsp;{fulTrip.eatArrival.rating}</Text></Grid>
-                <Space h="md" />
-                <h3>Arrival Drink</h3>
-                <Grid><Text weight={700}>Restaurant name :  </Text><Text> &nbsp;{fulTrip.drinkArrival.name}</Text></Grid>
-                <Grid><Text weight={700}>Address :  </Text><Text> &nbsp;{fulTrip.drinkArrival.vicinity}</Text></Grid>
-                <Grid><Text weight={700}>Rating :  </Text><Text> &nbsp;{fulTrip.drinkArrival.rating}</Text></Grid>
-                <Space h="md" />
-                <h3>Arrival Hotel</h3>
-                <Grid><Text weight={700}>Hotel :  </Text><Text> &nbsp;{fulTrip.sleepArrival.nameSleep}</Text></Grid>
-                <Grid><Text weight={700}>Address :  </Text><Text> &nbsp;{fulTrip.sleepArrival.vicinitySleep}</Text></Grid>
-                <Grid><Text weight={700}>Rating :  </Text><Text> &nbsp;{fulTrip.sleepArrival.ratingSleep}</Text></Grid>
+                <Center><Button onClick={confirmTripPost}>Confirm your trip !</Button></Center>
             </Paper>
 
             {/*
