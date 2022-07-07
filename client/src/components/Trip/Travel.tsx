@@ -10,7 +10,7 @@ import {
   Text,
   SimpleGrid,
   Paper,
-  Grid, Center
+  Grid, Center, ActionIcon
 } from "@mantine/core";
 import { ArrowBackUp, ArrowForwardUp, Bike, Car, MoodSmile, PlaneInflight, Search, Train, Trash, Walk } from 'tabler-icons-react';
 import axios from "axios";
@@ -196,63 +196,93 @@ export function Travel({ fulTrip }: any) {
 
   return (
     <Container size={600}>
-      <Group grow spacing={0} position="apart">
-        <SimpleGrid cols={1}>
-          <>
-            <Button onClick={showPlane} variant="default" className={classes.button}>
-              <PlaneInflight />
-            </Button>
+      <Center>
+        <Group grow spacing={0} position="apart">
 
-            <ul>
-              {
-                togglePlane ? (
-                  plane.map((item) => (
-                    <Paper shadow="xl" p="md" withBorder key={item.id}>
-                      <Grid><Text weight={700}>Travel : PLANE number  {item.id}</Text> </Grid>
-                      <Grid><Text weight={700}>Departure :  </Text> <Text>&nbsp;{item.cityDeparture}</Text></Grid>
-                      <Grid><Text weight={700}>Arrival :  </Text> <Text> &nbsp;{item.cityArrival}</Text></Grid>
-                      <Grid><Text weight={700}>Start Date :  </Text> <Text>&nbsp;{item.startDate}</Text></Grid>
-                      <Grid><Text weight={700}>End Date :  </Text> <Text>&nbsp;{item.endDate}</Text></Grid>
-                      <Grid><Text weight={700}>Duration :  </Text> <Text>&nbsp;{item.duration}</Text></Grid>
-                      <Center><Button onClick={() => SelectTravel(item.id, 'Plane')} >Select this travel </Button></Center>
-                    </Paper>
-                  ))
-                )
-                  : null
-              }
-            </ul>
-          </>
-        </SimpleGrid>
+          <SimpleGrid cols={2} spacing="md" breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+            <>
+              <Button onClick={showPlane} variant="default" className={classes.button}>
+                <PlaneInflight />
+              </Button>
 
-      </Group>
+              <ul>
+                {
+                  togglePlane ? (
+                    plane.map((item) => (
+                      <Paper shadow="xl" p="md" withBorder key={item.id}>
+                        <Grid><Text weight={700}>Departure :  </Text> <Text>&nbsp;{item.cityDeparture}</Text></Grid>                      <Space h="md" />
+                        <Space h="md" />
+                        <Grid><Text weight={700}>Arrival :  </Text> <Text> &nbsp;{item.cityArrival}</Text></Grid>
+                        <Space h="md" />
 
-      <Group grow spacing={0} position="apart">
-        <SimpleGrid cols={1}>
-          <>
-            <Button onClick={showTrain} variant="default" className={classes.button}>
-              <Train />
-            </Button>
-            <ul>
-              {
-                toggleTrain ? (
-                  train.map((item) => (
-                    <Paper shadow="xl" p="md" withBorder key={item.id}>
-                      <Grid><Text weight={700}>Travel : TRAIN number {item.id} </Text> </Grid>
-                      <Grid><Text weight={700}>Departure :  </Text> <Text>&nbsp;{item.cityDeparture}</Text></Grid>
-                      <Grid><Text weight={700}>Arrival :  </Text> <Text>&nbsp;{item.cityArrival}</Text></Grid>
-                      <Grid><Text weight={700}>Start Date :  </Text> <Text>&nbsp;{item.startDate}</Text></Grid>
-                      <Grid><Text weight={700}>End Date :  </Text> <Text>&nbsp;{item.endDate}</Text></Grid>
-                      <Grid><Text weight={700}>Duration :  </Text> <Text>&nbsp;{item.duration}</Text></Grid>
-                      <Center><Button onClick={() => SelectTravel(item.id, 'Train')} >Select this travel </Button></Center>
-                    </Paper>
-                  ))
-                )
-                  : null
-              }
-            </ul>
-          </>
-        </SimpleGrid>
-      </Group>
+                        <Grid><Text weight={700}>Start Date :  </Text> <Text>&nbsp;{item.startDate}</Text></Grid>
+                        <Space h="md" />
+
+                        <Grid><Text weight={700}>End Date :  </Text> <Text>&nbsp;{item.endDate}</Text></Grid>
+                        <Space h="md" />
+
+                        <Grid><Text weight={700}>Duration :  </Text> <Text>&nbsp;{item.duration}</Text></Grid>
+                        <Space h="xl" />
+
+                        <Center>
+                          <ActionIcon onClick={() => SelectTravel(item.id, 'Plane')} variant="outline">👆</ActionIcon>
+
+                        </Center>
+                      </Paper>
+                    ))
+                  )
+                    : null
+                }
+              </ul>
+            </>
+          </SimpleGrid>
+
+        </Group>
+      </Center>
+
+      <Space h="xl" />
+
+      <Center>
+        <Group grow spacing={0} position="apart">
+          <SimpleGrid cols={2} spacing="md" breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+            <>
+              <Button onClick={showTrain} variant="default" className={classes.button}>
+                <Train />
+              </Button>
+              <ul>
+                {
+                  toggleTrain ? (
+                    train.map((item) => (
+                      <Paper shadow="xl" p="md" withBorder key={item.id}>
+                        <Grid><Text weight={700}>Departure :  </Text> <Text>&nbsp;{item.cityDeparture}</Text></Grid>
+                        <Space h="md" />
+
+                        <Grid><Text weight={700}>Arrival :  </Text> <Text>&nbsp;{item.cityArrival}</Text></Grid>
+                        <Space h="md" />
+
+                        <Grid><Text weight={700}>Start Date :  </Text> <Text>&nbsp;{item.startDate}</Text></Grid>
+                        <Space h="md" />
+
+                        <Grid><Text weight={700}>End Date :  </Text> <Text>&nbsp;{item.endDate}</Text></Grid>
+                        <Space h="md" />
+
+                        <Grid><Text weight={700}>Duration :  </Text> <Text>&nbsp;{item.duration}</Text></Grid>
+                        <Space h="xl" />
+                        <Center>
+                          <ActionIcon onClick={() => SelectTravel(item.id, 'Train')} variant="outline">👆</ActionIcon>
+
+                        </Center>
+                      </Paper>
+                    ))
+                  )
+                    : null
+                }
+              </ul>
+            </>
+          </SimpleGrid>
+        </Group>
+      </Center>
+
 
       <div>
         {
