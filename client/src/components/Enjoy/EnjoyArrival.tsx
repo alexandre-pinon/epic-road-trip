@@ -259,11 +259,6 @@ export function EnjoyArrival({ fulTrip }: any) {
                     <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {enjoy[id].vicinity}</Text></Grid>
                   </Center>
                   <Space h="xl" />
-                  <Center>
-                    <Button size="md" onClick={() => selectEnjoy(enjoy[id].id, 'Enjoy')} compact variant="subtle">
-                      Confirm this 🙂
-                    </Button>
-                  </Center>
                 </Paper>
               </>
             )

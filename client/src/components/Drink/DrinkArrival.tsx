@@ -260,11 +260,6 @@ export function DrinkArrival({ fulTrip }: any) {
                     <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {drink[id].vicinity}</Text></Grid>
                   </Center>
                   <Space h="xl" />
-                  <Center>
-                    <Button size="md" onClick={() => selectDrink(drink[id].id, 'Enjoy')} compact variant="subtle">
-                      Confirm this 🍺
-                    </Button>
-                  </Center>
                 </Paper>
               </>
             )

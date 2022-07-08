@@ -257,11 +257,6 @@ export function SleepArrival({ fulTrip }: any) {
                     <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {sleep[id].vicinitySleep}</Text></Grid>
                   </Center>
                   <Space h="xl" />
-                  <Center>
-                    <Button size="md" onClick={() => selectSleep(sleep[id].id, 'Sleep')} compact variant="subtle">
-                      Confirm this 😴
-                    </Button>
-                  </Center>
                 </Paper>
               </>
             )

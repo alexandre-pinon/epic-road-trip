@@ -255,11 +255,6 @@ export function Eat({ fulTrip }: any) {
                     <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {eat[id].vicinity}</Text></Grid>
                   </Center>
                   <Space h="xl" />
-                  <Center>
-                    <Button size="md" onClick={() => selectEat(eat[id].id, 'Eat')} compact variant="subtle">
-                      Confirm this 🍔
-                    </Button>
-                  </Center>
                 </Paper>
               </>
             )
