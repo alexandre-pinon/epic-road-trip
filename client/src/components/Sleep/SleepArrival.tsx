@@ -1,8 +1,8 @@
-import { AspectRatio, Image, Button, Center, Container, createStyles, Grid, Group, Paper, Space, Tooltip, Text, Card, Title, SimpleGrid, ActionIcon } from "@mantine/core";
+import { AspectRatio, Image, Button, Container, createStyles, Grid, Group, Paper, Space, Tooltip, Text, Center, Card, Title, SimpleGrid, ActionIcon } from "@mantine/core";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowBackUp, ArrowForwardUp, Beer, Bike, Car, PlaneInflight, Search, Train, Walk } from 'tabler-icons-react';
+import { ArrowForwardUp, Bike, Car, PlaneInflight, Search, Train, Walk, Meat, ArrowBackUp } from 'tabler-icons-react';
 
 const useStyles = createStyles((theme) => ({
   button: {
@@ -46,46 +46,47 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function Eat({ fulTrip }: any) {
+export function SleepArrival({ fulTrip }: any) {
   const { classes } = useStyles();
 
   const navigate = useNavigate();
 
-  const goSleep = async () => {
-    console.log("Go to travel page!")
-    navigate('/sleep');
+  const goEnjoy = async () => {
+    console.log("Go to enjoy page!")
+    navigate('/enjoyArrival');
   };
 
-  const goDrink = async () => {
-    console.log("Go to sleep page!")
-    navigate('/drink');
+  const goEat = async () => {
+    console.log("Go to eat page!")
+    navigate('/eatArrival');
   };
 
   const [id, setId] = useState(0)
   const [city, setCity] = useState('')
   const [radius, setRadius] = useState('')
-  const [name, setName] = useState('')
-  const [rating, setRating] = useState('')
-  const [vicinity, setVicinity] = useState('')
+  const [nameSleep, setNameSleep] = useState('')
+  const [ratingSleep, setRatingSleep] = useState('')
+  const [vicinitySleep, setVicinitySleep] = useState('')
   const [icon, setIcon] = useState('')
 
-  const [eat, setEat] = useState([{
+  const [sleep, setSleep] = useState([{
     id,
-    name,
-    rating,
-    vicinity,
+    nameSleep,
+    ratingSleep,
+    vicinitySleep,
     icon
   }])
 
-  let [selectedEat, setSelectedEat] = useState('')
+  let [selectedSleep, setSelectedSleep] = useState('')
 
-  const [toggleEat, setToggleEat] = useState(false)
 
-  const retrieveEat = (event: any) => {
+  const [toggleSleep, setToggleSleep] = useState(false)
+
+  const retrieveSleep = (event: any) => {
     axios.defaults.withCredentials = true
     event.preventDefault()
     let params = {
-      city: fulTrip.startCity,
+      city: fulTrip.endCity,
       constraints: {
         radius: 10000,
       }
@@ -94,49 +95,49 @@ export function Eat({ fulTrip }: any) {
 
     axios({
       method: 'post',
-      url: 'http://localhost:8000/api/v1/roadtrip/eat',
+      url: 'http://localhost:8000/api/v1/roadtrip/sleep',
       data: params,
     })
       .then((response) => {
         console.log(response.data);
-        let id = 0
-        let eatActivities: any = [];
+        let id = 0;
+        let sleepActivities: any = [];
         response.data.data.forEach((data: any) => {
           let activities = {
             id: id,
-            name: data.name,
-            rating: data.rating,
-            vicinity: data.vicinity,
+            nameSleep: data.name,
+            ratingSleep: data.rating,
+            vicinitySleep: data.vicinity,
             icon: data.icon
           }
-          eatActivities.push(activities)
+          sleepActivities.push(activities)
           id++;
         })
-        setEat(eatActivities)
+        setSleep(sleepActivities)
       })
       .catch(function (error) {
         console.log(error);
       });
-    setToggleEat(!toggleEat)
+
+    setToggleSleep(!toggleSleep)
 
   };
 
-  const showEat = () => {
-    setToggleEat(!toggleEat)
+  const showSleep = () => {
+    setToggleSleep(!toggleSleep)
   }
 
-  const selectEat = (id: number, type: string) => {
+  const selectSleep = (id: number, type: string) => {
 
-    setSelectedEat(type)
+    setSelectedSleep(type)
     console.log(id)
     setId(id)
 
-    if (type == "Eat") {
-      fulTrip.setEat(eat[id])
+    if (type == "Sleep") {
+      fulTrip.setSleepArrival(sleep[id])
     }
 
     console.log("fulTrip content: ", fulTrip)
-
     console.log("fulTrip content: ", fulTrip)
     console.log("scroll to bottom: ", document.body.offsetHeight)
     window.scroll({
@@ -148,6 +149,7 @@ export function Eat({ fulTrip }: any) {
 
   return (
     <Container>
+
 
       <Card withBorder radius="md" p="md" className={classes.cardEnjoy}>
 
@@ -169,15 +171,15 @@ export function Eat({ fulTrip }: any) {
           data-testid="title"
           sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
         >
-          Eat Activities
+          {fulTrip.endCity} Sleep Activities
 
 
         </Title>
         <Space h="xl" />
 
         <Center>
-          <Button size="xl" onClick={retrieveEat} compact variant="subtle">
-            🍔
+          <Button size="xl" onClick={retrieveSleep} compact variant="subtle">
+            😴
           </Button>
         </Center>
         <Space h="xs" />
@@ -185,8 +187,8 @@ export function Eat({ fulTrip }: any) {
 
         <SimpleGrid cols={2} spacing="md" breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
           {
-            toggleEat ? (
-              eat.map((item) => (
+            toggleSleep ? (
+              sleep.map((item) => (
                 <Paper shadow="xl" p="md" withBorder key={item.id}>
                   <Center>
                     <Grid>
@@ -200,12 +202,12 @@ export function Eat({ fulTrip }: any) {
                     </Grid>
                   </Center>
                   <Space h="xs" />
-                  <Grid><Text weight={700}>Name :  </Text> <Text> &nbsp; {item.name}</Text></Grid>
-                  <Grid><Text weight={700}>Rating :  </Text> <Text> &nbsp; {item.rating} / 5</Text></Grid>
-                  <Grid><Text weight={700}>Vicinity :  </Text> <Text> &nbsp; {item.vicinity}</Text></Grid>
+                  <Grid><Text weight={700}>Name :  </Text> <Text> &nbsp; {item.nameSleep}</Text></Grid>
+                  <Grid><Text weight={700}>Rating :  </Text> <Text> &nbsp; {item.ratingSleep} / 5</Text></Grid>
+                  <Grid><Text weight={700}>Vicinity :  </Text> <Text> &nbsp; {item.vicinitySleep}</Text></Grid>
                   <Space h="xl" />
                   <Center>
-                    <ActionIcon onClick={() => selectEat(item.id, 'Eat')} variant="outline">👆</ActionIcon>
+                    <ActionIcon onClick={() => selectSleep(item.id, 'Sleep')} variant="outline">👆</ActionIcon>
                   </Center>
                 </Paper>
               ))
@@ -216,7 +218,7 @@ export function Eat({ fulTrip }: any) {
 
         <div>
           {
-            selectedEat === "Eat" ? (
+            selectedSleep === "Sleep" ? (
               <>
                 <Space h="xl" />
 
@@ -225,7 +227,7 @@ export function Eat({ fulTrip }: any) {
                   align="center"
                   sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
                 >
-                  Eat Activities
+                  Enjoy Activities
 
 
                 </Title>
@@ -238,21 +240,21 @@ export function Eat({ fulTrip }: any) {
                         height={60}
                         fit="contain"
                         radius="sm"
-                        src={eat[id].icon}
+                        src={sleep[id].icon}
                       />
                     </Grid>
                   </Center>
                   <Space h="xs" />
                   <Center>
-                    <Grid><Text weight={700}>Name :  </Text> <Text> -  {eat[id].name}</Text></Grid>
+                    <Grid><Text weight={700}>Name :  </Text> <Text> -  {sleep[id].nameSleep}</Text></Grid>
                   </Center>
                   <Space h="xs" />
                   <Center>
-                    <Grid><Text weight={700}>Rating :  </Text> <Text> -  {eat[id].rating}</Text></Grid>
+                    <Grid><Text weight={700}>Rating :  </Text> <Text> -  {sleep[id].ratingSleep}</Text></Grid>
                   </Center>
                   <Space h="xs" />
                   <Center>
-                    <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {eat[id].vicinity}</Text></Grid>
+                    <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {sleep[id].vicinitySleep}</Text></Grid>
                   </Center>
                   <Space h="xl" />
                 </Paper>
@@ -264,17 +266,17 @@ export function Eat({ fulTrip }: any) {
 
         <Space h="xl" />
 
+
         <Center>
-          <Button onClick={goSleep} data-testid="goBack" rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
+          <Button onClick={goEnjoy} data-testid="goBack" rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
             Go back
           </Button>
-          <Button onClick={goDrink} data-testid="goDrink" rightIcon={<Beer size={18} />} compact variant="subtle" radius="xs">
-            Search for Bars
+          <Button onClick={goEat} data-testid="goEat" rightIcon={<Meat size={18} />} compact variant="subtle" radius="xs">
+            Search for Restaurants
           </Button>
         </Center>
 
       </Card>
-
 
     </Container>
     // <Container size={720}>
@@ -311,8 +313,3 @@ export function Eat({ fulTrip }: any) {
     // </Container>
   )
 }
-
-function enjoyActivities(enjoyActivities: any) {
-  throw new Error("Function not implemented.");
-}
-

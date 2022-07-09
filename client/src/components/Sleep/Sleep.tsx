@@ -1,8 +1,8 @@
-import { AspectRatio, Button, Container, createStyles, Grid, Group, Paper, Space, Tooltip, Text, Center } from "@mantine/core";
+import { AspectRatio, Image, Button, Container, createStyles, Grid, Group, Paper, Space, Tooltip, Text, Center, Card, Title, SimpleGrid, ActionIcon } from "@mantine/core";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowForwardUp, Bike, Car, PlaneInflight, Search, Train, Walk } from 'tabler-icons-react';
+import { ArrowForwardUp, Bike, Car, PlaneInflight, Search, Train, Walk, Meat, ArrowBackUp } from 'tabler-icons-react';
 
 const useStyles = createStyles((theme) => ({
   button: {
@@ -22,9 +22,32 @@ const useStyles = createStyles((theme) => ({
       borderBottomRightRadius: theme.radius.sm,
     },
   },
+
+  cardEnjoy: {
+    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
+  },
+
+  sectionEnjoy: {
+    borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
+      }`,
+    paddingLeft: theme.spacing.md,
+    paddingRight: theme.spacing.md,
+    paddingBottom: theme.spacing.md,
+  },
+
+  likeEnjoy: {
+    color: theme.colors.red[6],
+  },
+
+  labelEnjoy: {
+    textTransform: 'uppercase',
+    fontSize: theme.fontSizes.xs,
+    fontWeight: 700,
+  },
 }));
 
 export function Sleep({ fulTrip }: any) {
+  const { classes } = useStyles();
 
   const navigate = useNavigate();
 
@@ -44,12 +67,14 @@ export function Sleep({ fulTrip }: any) {
   const [nameSleep, setNameSleep] = useState('')
   const [ratingSleep, setRatingSleep] = useState('')
   const [vicinitySleep, setVicinitySleep] = useState('')
+  const [icon, setIcon] = useState('')
 
   const [sleep, setSleep] = useState([{
     id,
     nameSleep,
     ratingSleep,
-    vicinitySleep
+    vicinitySleep,
+    icon
   }])
 
   let [selectedSleep, setSelectedSleep] = useState('')
@@ -61,7 +86,7 @@ export function Sleep({ fulTrip }: any) {
     axios.defaults.withCredentials = true
     event.preventDefault()
     let params = {
-      city: city,
+      city: fulTrip.startCity,
       constraints: {
         radius: 10000,
       }
@@ -83,6 +108,7 @@ export function Sleep({ fulTrip }: any) {
             nameSleep: data.name,
             ratingSleep: data.rating,
             vicinitySleep: data.vicinity,
+            icon: data.icon
           }
           sleepActivities.push(activities)
           id++;
@@ -92,6 +118,9 @@ export function Sleep({ fulTrip }: any) {
       .catch(function (error) {
         console.log(error);
       });
+
+    setToggleSleep(!toggleSleep)
+
   };
 
   const showSleep = () => {
@@ -109,73 +138,145 @@ export function Sleep({ fulTrip }: any) {
     }
 
     console.log("fulTrip content: ", fulTrip)
+    console.log("fulTrip content: ", fulTrip)
+    console.log("scroll to bottom: ", document.body.offsetHeight)
+    window.scroll({
+      top: document.body.offsetHeight,
+      left: 0,
+      behavior: 'smooth',
+    });
   }
 
   return (
     <Container>
-      <form onSubmit={retrieveSleep}>
-        <h1 className="h3 mb-3 fw-normal">Sleep Activities</h1>
-
-        <input type="text" className="form-control" placeholder="City" required
-          onChange={e => setCity(e.target.value)}
-        />
-
-        <input type="text" className="form-control" placeholder="Radius" required
-          onChange={e => setRadius(e.target.value)}
-        />
-
-        <button className="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
-      </form>
-
-      <Button onClick={showSleep} variant="default">
-        <PlaneInflight />
-      </Button>
-
-      <ul>
-        {
-          toggleSleep ? (
-            sleep.map((item, index) => (
-              <Paper shadow="xl" p="md" withBorder key={item.id}>
-                <Grid><Text weight={700}>Name :  </Text> <Text> -  {item.nameSleep}</Text></Grid>
-                <Grid><Text weight={700}>Rating :  </Text> <Text> -  {item.ratingSleep}</Text></Grid>
-                <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {item.vicinitySleep}</Text></Grid>
-                <Center><Button onClick={() => selectSleep(item.id, 'Sleep')} >Select this enjoy </Button></Center>
-              </Paper>
-            ))
-          )
-            : null
-        }
-      </ul>
-
-      <div>
-        {
-          selectedSleep === "Sleep" ? (
-            <>
-              <Center><h3>SELECTED TRAVEL : </h3></Center>
-              <Paper shadow="xl" p="md" withBorder >
-                <Grid><Text weight={700}>Enjoy ID  {sleep[id].id}</Text> </Grid>
-                <Grid><Text weight={700}>Name :  </Text> <Text> -  {sleep[id].nameSleep}</Text></Grid>
-                <Grid><Text weight={700}>Rating :  </Text> <Text> -  {sleep[id].ratingSleep}</Text></Grid>
-                <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {sleep[id].vicinitySleep}</Text></Grid>
-                <Center><Button onClick={() => selectSleep(sleep[id].id, 'Sleep')} >Confirm this sleep</Button></Center>
-              </Paper>
-            </>
-          )
-            : null
-        }
-      </div>
-
-      <Space h="xl" />
 
 
-      <Center>
-        <Button onClick={goEnjoy} rightIcon={<Search size={18} />} variant="light" radius="xl">
-          Go back
-        </Button>
-        <Button onClick={goEat} rightIcon={<Search size={18} />} variant="light" radius="xl">
-          Search for Activities
-        </Button>
-      </Center>
+      <Card withBorder radius="md" p="md" className={classes.cardEnjoy}>
+
+        {/* <form onSubmit={retrieveEnjoy}>
+          <h1 className="h3 mb-3 fw-normal">Enjoy Activities</h1>
+
+          <input type="text" className="form-control" placeholder="City" required
+            onChange={e => setCity(e.target.value)}
+          />
+
+          <input type="text" className="form-control" placeholder="Radius" required
+            onChange={e => setRadius(e.target.value)}
+          />
+
+          <button className="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
+        </form> */}
+        <Title
+          align="center"
+          data-testid="title"
+          sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
+        >
+          Sleep Activities
+
+
+        </Title>
+        <Space h="xl" />
+
+        <Center>
+          <Button size="xl" onClick={retrieveSleep} compact variant="subtle">
+            😴
+          </Button>
+        </Center>
+        <Space h="xs" />
+
+
+        <SimpleGrid cols={2} spacing="md" breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+          {
+            toggleSleep ? (
+              sleep.map((item) => (
+                <Paper shadow="xl" p="md" withBorder key={item.id}>
+                  <Center>
+                    <Grid>
+                      <Image
+                        width={30}
+                        height={60}
+                        fit="contain"
+                        radius="sm"
+                        src={item.icon}
+                      />
+                    </Grid>
+                  </Center>
+                  <Space h="xs" />
+                  <Grid><Text weight={700}>Name :  </Text> <Text> &nbsp; {item.nameSleep}</Text></Grid>
+                  <Grid><Text weight={700}>Rating :  </Text> <Text> &nbsp; {item.ratingSleep} / 5</Text></Grid>
+                  <Grid><Text weight={700}>Vicinity :  </Text> <Text> &nbsp; {item.vicinitySleep}</Text></Grid>
+                  <Space h="xl" />
+                  <Center>
+                    <ActionIcon onClick={() => selectSleep(item.id, 'Sleep')} variant="outline">👆</ActionIcon>
+                  </Center>
+                </Paper>
+              ))
+            )
+              : null
+          }
+        </SimpleGrid>
+
+        <div>
+          {
+            selectedSleep === "Sleep" ? (
+              <>
+                <Space h="xl" />
+
+                <Title
+                  order={2}
+                  align="center"
+                  sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
+                >
+                  Enjoy Activities
+
+
+                </Title>
+                <Space h="xl" />                <Paper shadow="xl" p="md" withBorder >
+                  {/* <Grid><Text weight={700}>Enjoy ID  {enjoy[id].id}</Text> </Grid> */}
+                  <Center>
+                    <Grid>
+                      <Image
+                        width={30}
+                        height={60}
+                        fit="contain"
+                        radius="sm"
+                        src={sleep[id].icon}
+                      />
+                    </Grid>
+                  </Center>
+                  <Space h="xs" />
+                  <Center>
+                    <Grid><Text weight={700}>Name :  </Text> <Text> -  {sleep[id].nameSleep}</Text></Grid>
+                  </Center>
+                  <Space h="xs" />
+                  <Center>
+                    <Grid><Text weight={700}>Rating :  </Text> <Text> -  {sleep[id].ratingSleep}</Text></Grid>
+                  </Center>
+                  <Space h="xs" />
+                  <Center>
+                    <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {sleep[id].vicinitySleep}</Text></Grid>
+                  </Center>
+                  <Space h="xl" />
+                </Paper>
+              </>
+            )
+              : null
+          }
+        </div>
+
+        <Space h="xl" />
+
+
+        <Center>
+          <Button onClick={goEnjoy} data-testid="goBack" rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
+            Go back
+          </Button>
+          <Button onClick={goEat} data-testid="goEat" rightIcon={<Meat size={18} />} compact variant="subtle" radius="xs">
+            Search for Restaurants
+          </Button>
+        </Center>
+
+      </Card>
 
     </Container>
     // <Container size={720}>

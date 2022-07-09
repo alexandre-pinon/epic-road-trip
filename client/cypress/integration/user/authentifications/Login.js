@@ -1,80 +1,101 @@
-describe('The Register page', () => {
+describe('Login page', () => {
 
-    it('login with an account', () => {
-        cy.visit('http://localhost:3000/login') // change URL to match your dev URL
-        cy.wait(500)
-
-        //Login
-        cy.fixture('userInformations').then((userInformationsForLogin) => {
-            cy.get('#email').type(userInformationsForLogin.email)
-            cy.get('#password').type(userInformationsForLogin.password)
-
-            cy.wait(1000)
-            cy.get('[data-attr=login-confirm]').click()
-            cy.location('pathname').should('eq', '/')
-        })
-    })
-
-
-
-
-
-    it('email input only takes email', () => {
+    it('check text on the Login page', () => {
         cy.visit('http://localhost:3000/login')
-        cy.wait(500)
-        cy.fixture('userInformations').then((userInformationsForLogin) => {
-            //fakeEmail
-            cy.get('#email').type(userInformationsForLogin.fakeEmail)
-            cy.wait(500)
-            cy.get('#password').type("password")
-        })
-        cy.wait(1000)
-        cy.get('#errorMessageIncorrectEmail').contains('The email is not valid')
+
+        cy.get('[data-testid="welcome"]').contains('Welcome 👋!')
+
+        cy.get('[data-testid="registerPage"]')
+            .contains('Do not have an account yet? Create account')
+
+        cy.get('[data-testid="signup"]').contains('Sign in')
     })
 
 
 
-
-    it('check Login button is disable if all informations have not been entered', () => {
+    it('Check attributes Login page', () => {
         cy.visit('http://localhost:3000/login')
-        cy.wait(500)
-        //login button is disable because the input are empty
-        cy.get('#loginButton').should('be.disabled')
-        cy.wait(500)
+        //Input
+        cy.get('[data-testid="input"]')
+            .should('have.attr', 'required')
 
-        //enter information to test if the login button is able now
-        cy.fixture('userInformations').then((userInformationsForLogin) => {
-            cy.get('#email').type(userInformationsForLogin.email)
-            cy.wait(500)
-            cy.get('#loginButton').should('be.disabled')
-            cy.get('#password').type(userInformationsForLogin.password)
-            cy.wait(500)
-            cy.get('#loginButton').should('not.be.disabled') //all input are good
-        })
+        cy.get('[data-testid="input"]')
+            .should('have.attr', 'placeholder')
+            .and('equal', 'Your email')
+
+        //Password
+        cy.get('[data-testid="password"]')
+            .should('have.attr', 'required')
+
+        cy.get('[data-testid="password"]')
+            .should('have.attr', 'placeholder')
+            .and('equal', 'Your password')
     })
 
 
 
-
-
-    it('check the error message if wrong credentials and clear password input', () => {
+    it('check Register button Page from Login page', () => {
         cy.visit('http://localhost:3000/login')
-        cy.wait(500)
-        //login
-        cy.fixture('userInformations').then((userInformationsForLogin) => {
-            cy.get('#email').type(userInformationsForLogin.email)
-            //wrong password
-            cy.get('#passwword').type(userInformationsForLogin.wrongPassword)
-            cy.wait(500)
-            cy.get('#loginButton').click()
-            cy.wait(1000)
 
-            //check error message
-            cy.get('#errorMessageWrongCredentials').contains('Vos identifiants ne sont pas bon, veuillez réessayer.')
-            cy.wait(500)
-            //check if password input are cleaned
-            cy.get('#passwword').should('have.value', '');
-        })
+        cy.get('[data-testid="registerPage"] > .mantine-Text-root').click()
+        cy.wait(500)
+        cy.location('href').should('include', '/register#')
     })
 
+
+
+    it('check input Login page', () => {
+        cy.visit('http://localhost:3000/login')
+
+        cy.get('[data-testid="input"]').type('tharick@gmail.com')
+        cy.get('[data-testid="input"]').should('have.value', 'tharick@gmail.com')
+
+        cy.get('[data-testid="password"]').type('12345678')
+        cy.get('[data-testid="password"]').should('have.value', '12345678')
+    })
+
+
+
+    it('check Login Valid', () => {
+        cy.visit('http://localhost:3000/login')
+
+        cy.get('[data-testid="input"]').type('tharick@gmail.com')
+        cy.get('[data-testid="password"]').type('12345678')
+        cy.wait(500)
+        cy.get('[data-testid="signup"]').click()
+        cy.location('href').should('include', '/')
+    })
 })
+
+
+/*
+describe('Auth', () => {
+
+  it('Login', () => {
+    cy.visit('http://localhost:3000/login')
+
+    cy.get('[data-attr=login-email]').type('hansohee@gmail.com').should('have.value', 'hansohee@gmail.com').blur()
+    cy.get('[data-attr=login-email]', { timeout: 5000 }).should('be.visible')
+
+    cy.get('[data-attr=login-password]').type('password').should('have.value', 'password')
+    cy.get('[data-attr=login-confirm]').click()
+
+    cy.location('pathname').should('eq', '/')
+  })
+
+  it('Redirect to appropriate place after register', () => {
+    cy.visit('http://localhost:3000/register')
+    cy.location('pathname').should('include', '/register')
+
+    cy.wait(1000)
+
+    cy.get('[data-attr=register-confirm]').click()
+    cy.location('pathname').should('include', '/login')
+
+    cy.wait(1000)
+
+    cy.get('[data-attr=login-confirm]').click()
+    cy.location('pathname').should('eq', '/')
+  })
+})
+ */

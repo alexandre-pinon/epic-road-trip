@@ -1,15 +1,38 @@
 import { useNavigate } from 'react-router-dom';
-import { TextInput, Button, Group, Box, PasswordInput, Avatar, Center } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import {
+  Text,
+  TextInput,
+  Button,
+  Group,
+  Box,
+  PasswordInput,
+  Avatar,
+  Center,
+  Paper,
+  PaperProps,
+  Divider,
+  Checkbox,
+  Anchor,
+  Container,
+  Title,
+} from '@mantine/core';
+// import { useForm } from '@mantine/form';
+import { useForm, useToggle, upperFirst } from '@mantine/hooks';
+
 import axios from 'axios';
 import { useState } from 'react';
 
-export function Login() {
+
+export function Login({ auth }: any) {
+  const [type, toggle] = useToggle('login', ['login', 'register']);
   const navigate = useNavigate();
+
+  const goRegister = async () => {
+    navigate('/register');
+  };
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
 
   const submitDataLogin = (event: any) => {
     axios.defaults.withCredentials = true
@@ -25,9 +48,21 @@ export function Login() {
       url: 'http://localhost:8000/api/v1/auth/login',
       data: params,
     })
+      .then((response) => {
+        auth.setUserID(response.data.data.id)
+        console.log(response.data);
+        console.log("[LOGIN] auth.setAuthenticated current: ", auth.setAuthenticated);
+        auth.setIsAuthenticated(true);
+        console.log("[LOGIN] auth.setAuthenticated after: ", auth.setAuthenticated);
+        console.log(response.data.data.id)
+        console.log(auth.userID)
+          console.log(auth)
+        navigate('/');
+      })
       .catch(function (error) {
         console.log(error);
       });
+
   };
 
   // const form = useForm({
@@ -91,19 +126,50 @@ export function Login() {
     //   </form>
     // </Box>
 
-    <form onSubmit={submitDataLogin}>
-      <h1 className="h3 mb-3 fw-normal">Please login</h1>
+    <Container size={420} my={40}>
+      <Title
+        align="center"
+        sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
+        data-testid="welcome"
+      >
+        Welcome 👋!
+      </Title>
 
-      <input type="email" className="form-control" placeholder="Email address" required
-        onChange={e => setEmail(e.target.value)}
-      />
+      <Text color="dimmed" size="sm" align="center" mt={5} data-testid="registerPage">
+        Do not have an account yet?{' '}
+        <Anchor<'a'> href="#" size="sm" onClick={goRegister}>
+          Create account
+        </Anchor>
+      </Text>
 
-      <input type="password" className="form-control" placeholder="Password" required
-        onChange={e => setPassword(e.target.value)}
-      />
+      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+        <form onSubmit={submitDataLogin}>
 
-      <button className="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
-    </form>
+          <TextInput
+            label="Email"
+            placeholder="Your email"
+            required
+            onChange={e => setEmail(e.target.value)}
+            data-testid="input"
+          />
+          <PasswordInput
+            label="Password"
+            placeholder="Your password"
+            required mt="md"
+            onChange={e => setPassword(e.target.value)}
+            data-testid="password"
+          />
+          <Button fullWidth mt="xl" type="submit" data-testid="signup">
+            Sign in
+          </Button>
+
+
+        </form>
+
+      </Paper>
+    </Container>
+
+
   );
 }
 

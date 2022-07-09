@@ -1,190 +1,93 @@
 describe('The cities and dates of the trip', () => {
 
-    it('the start city is taken from the previous page', () => {
-        cy.visit('http://localhost:3000') // change URL to match your dev URL
-        cy.wait(500)
+    it('Check the start city is the same on the startEnd Page', () => {
+        cy.visit('http://localhost:3000/')
         cy.fixture('tripInformations').then((tripInformations) => {
-            cy.get('#enterStartCitySearchBar').type(tripInformations.startCity)
+            //cy.log(tripInformations.startCity)
+            cy.get('[data-testid="searchBar"]')
+                .type(tripInformations.startCity+'{enter}')
+                .type('{enter}')
+            cy.wait(250)
 
-            //SÉLECTIONNER LA PREMIÈRE VALEUR DANS LA LISTE DÉROULANTE
-            cy.get('#first-choice').click()
-            cy.wait(2000)
-            //check if it's the good page
-            cy.location('pathname').should('include', '/cities')
+            cy.location('href').should('include', '/startEndTrip')
 
-            //check the input of the start city
-            cy.get('#startCity').contains(tripInformations.startCity)
+            cy.get('[data-testid="StartCity"]').should('have.value', tripInformations.startCity)
         })
     })
 
 
 
+    it('Check the text in the StarEndTrip page', () => {
+        cy.visit('http://localhost:3000/startEndTrip')
+
+        cy.get('[data-testid="title"]').contains('Start & End of your sub-trip')
+        cy.get('[data-testid="cityTitle"]').contains('Choose the city of departure & arrival of your sub-trip')
+        cy.get('[data-testid="dateTitle"]').contains('Choose the date of departure & arrival of your sub-trip')
+    })
 
 
-    it('check if the next button is disable if all information is not present enter', () => {
-        cy.visit('http://localhost:3000/cities') // change URL to match your dev URL
-        cy.wait(500)
 
-        cy.get('#nextButton').should('be.disabled')
+    it('Check the attribute in the StarEndTrip page', () => {
+        cy.visit('http://localhost:3000/startEndTrip')
+
+        cy.get('[data-testid="StartCity"]')
+            .should('have.attr', 'placeholder')
+            .and('equal', 'Start city of your Trip')
+
+        cy.get('[data-testid="endCity"]')
+            .should('have.attr', 'placeholder')
+            .and('equal', 'End city of your Trip')
+
+        cy.get('[data-testid="startDate"]')
+            .should('have.attr', 'placeholder')
+            .and('equal', 'Start date of your Trip')
+
+        cy.get('[data-testid="endDate"]')
+            .should('have.attr', 'placeholder')
+            .and('equal', 'End date of your Trip')
+    })
+
+
+
+    it('Check the button in the StarEndTrip page', () => {
+        cy.visit('http://localhost:3000/startEndTrip')
+
+        cy.get('[data-testid="goBack"]').click()
+        cy.wait(250)
+        cy.location('href').should('include', '/')
+    })
+
+
+
+    it('Check the input in the StarEndTrip page', () => {
+        cy.visit('http://localhost:3000/startEndTrip')
 
         cy.fixture('tripInformations').then((tripInformations) => {
-            //Start city
-            //clear beacause this field is already filled in normally
-            cy.get('#startCity').clear()
-            cy.get('#startCity').type(tripInformations.startCity)
-            cy.get('#saveButton').should('be.disabled')
+            cy.get('[data-testid="StartCity"]')
+                .type(tripInformations.startCity + '{enter}')
+                .type('{enter}')
 
-            //End city
-            cy.get('#endCity').type(tripInformations.endCity)
-            cy.get('#saveButton').should('be.disabled')
+            cy.get('[data-testid="StartCity"]').should('have.value', tripInformations.startCity)
 
-            //Date
-            cy.get('#startDate').type(tripInformations.startDate)
-            cy.get('#saveButton').should('be.disabled')
-            cy.get('#EndDate').type(tripInformations.endDate)
+            cy.get('[data-testid="endCity"]')
+                .type(tripInformations.endCity + '{enter}')
+                .type('{enter}')
+
+            cy.get('[data-testid="endCity"]').should('have.value', tripInformations.endCity)
 
 
-            cy.get('#saveButton').should('not.be.disabled') //all information are here
+            cy.get('[data-testid="startDate"]').click()
+            cy.wait(250)
+            cy.get(':nth-child(4) > :nth-child(3) > .mantine-388pmv').click()
 
-            cy.wait(1000)
-            cy.get('#saveButton').click()
-            cy.location('pathname').should('include', '/travels')
+            cy.get('[data-testid="startDate"]').should('have.value', 'July 20, 2022')
+
+
+            cy.get('[data-testid="endDate"]').click()
+            cy.wait(250)
+            cy.get(':nth-child(5) > :nth-child(6) > .mantine-DatePicker-day').click()
+
+            cy.get('[data-testid="endDate"]').should('have.value', 'July 30, 2022')
         })
     })
-
-
-
-    it('select travel', () => {
-        cy.visit('http://localhost:3000/travels') // change URL to match your dev URL
-        cy.wait(500)
-
-        //check button return
-        cy.get('#returnButton').click()
-        cy.wait(1000)
-        cy.location('pathname').should('include', '/cities')
-        cy.get('#saveButton').click()
-        cy.wait(1000)
-        cy.location('pathname').should('include', '/travels')
-
-        //check Save button is disable because we don't choice travel
-        cy.get('#saveButton').should('be.disabled')
-
-        //check different travels button
-        cy.get('#Marche').click()
-        cy.wait(500)
-        cy.get('#Vélo').click()
-        cy.wait(500)
-        cy.get('#Voiture').click()
-        cy.wait(500)
-        cy.get('#Avion').click()
-        cy.wait(500)
-
-        //Select a travel and Save
-        cy.get('#travel1').click()
-        cy.wait(500)
-
-        cy.get('#saveButton').should('not.be.disabled')
-        cy.wait(500)
-        cy.get('#saveButton').click()
-        cy.wait(1000)
-
-        cy.location('pathname').should('include', '/activities')
-    })
-
-
-
-
-
-    it('select activities Start city', () => {
-        cy.visit('http://localhost:3000/activities/Start') // change URL to match your dev URL
-        cy.wait(500)
-
-        //user can go to the next page without save an activities
-        cy.get('SaveButton').should('not.be.disable')
-
-        //check button return
-        cy.get('#returnButton').click()
-        cy.wait(1000)
-        cy.location('pathname').should('include', '/travels')
-        cy.get('#saveButton').click()
-        cy.wait(1000)
-        cy.location('pathname').should('include', '/activities/Start')
-
-        //check the name of the city on this page
-        cy.fixture('tripInformations').then((tripInformations) => {
-            cy.get('#HeaderPage').contains(tripInformations.startCity)
-        })
-
-        //check different activities button
-        cy.get('#Hôtels').click()
-        cy.wait(500)
-        cy.get('#LocationVoitures').click()
-        cy.wait(500)
-        cy.get('#Activités').click()
-        cy.wait(500)
-        cy.get('#Restaurants').click()
-        cy.wait(500)
-        cy.get('#Croisières').click()
-        cy.wait(500)
-
-        //Add an activity for each type of activity
-
-
-        //Delete one activities
-
-
-        //go to the next page
-        cy.get('SaveButton').click()
-    })
-
-
-
-
-    it('select activities End city', () => {
-        cy.visit('http://localhost:3000/activities/End') // change URL to match your dev URL
-        cy.wait(500)
-
-        //user can go to the next page without save an activities
-        cy.get('SaveButton').should('not.be.disable')
-
-        //check button return
-        cy.get('#returnButton').click()
-        cy.wait(1000)
-        cy.location('pathname').should('include', '/activities/Start')
-        cy.get('#saveButton').click()
-        cy.wait(1000)
-        cy.location('pathname').should('include', '/activities/End')
-
-        //check the name of the city on this page
-        cy.fixture('tripInformations').then((tripInformations) => {
-            cy.get('#HeaderPage').contains(tripInformations.endCity)
-        })
-
-        //check different activities button
-        cy.get('#Hôtels').click()
-        cy.wait(500)
-        cy.get('#LocationVoitures').click()
-        cy.wait(500)
-        cy.get('#Activités').click()
-        cy.wait(500)
-        cy.get('#Restaurants').click()
-        cy.wait(500)
-        cy.get('#Croisières').click()
-        cy.wait(500)
-
-        //Add an activity for each type of activity
-
-
-        //Delete one activities
-
-
-        //go to the next page
-        cy.get('SaveButton').click()
-    })
-
-
-
-
-
-
 })

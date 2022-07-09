@@ -46,19 +46,19 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function Eat({ fulTrip }: any) {
+export function EatArrival({ fulTrip }: any) {
   const { classes } = useStyles();
 
   const navigate = useNavigate();
 
   const goSleep = async () => {
     console.log("Go to travel page!")
-    navigate('/sleep');
+    navigate('/sleepArrival');
   };
 
   const goDrink = async () => {
     console.log("Go to sleep page!")
-    navigate('/drink');
+    navigate('/drinkArrival');
   };
 
   const [id, setId] = useState(0)
@@ -85,7 +85,7 @@ export function Eat({ fulTrip }: any) {
     axios.defaults.withCredentials = true
     event.preventDefault()
     let params = {
-      city: fulTrip.startCity,
+      city: fulTrip.endCity,
       constraints: {
         radius: 10000,
       }
@@ -132,7 +132,7 @@ export function Eat({ fulTrip }: any) {
     setId(id)
 
     if (type == "Eat") {
-      fulTrip.setEat(eat[id])
+      fulTrip.setEatArrival(eat[id])
     }
 
     console.log("fulTrip content: ", fulTrip)
@@ -169,7 +169,7 @@ export function Eat({ fulTrip }: any) {
           data-testid="title"
           sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
         >
-          Eat Activities
+          {fulTrip.endCity} Eat Activities
 
 
         </Title>
@@ -268,7 +268,7 @@ export function Eat({ fulTrip }: any) {
           <Button onClick={goSleep} data-testid="goBack" rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
             Go back
           </Button>
-          <Button onClick={goDrink} data-testid="goDrink" rightIcon={<Beer size={18} />} compact variant="subtle" radius="xs">
+          <Button onClick={goDrink} data-testid="drinkArrival" rightIcon={<Beer size={18} />} compact variant="subtle" radius="xs">
             Search for Bars
           </Button>
         </Center>

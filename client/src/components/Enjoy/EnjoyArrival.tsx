@@ -1,8 +1,8 @@
-import { AspectRatio, Image, Button, Center, Container, createStyles, Grid, Group, Paper, Space, Tooltip, Text, Card, Title, SimpleGrid, ActionIcon } from "@mantine/core";
+import { AspectRatio, Avatar, Button, Card, Container, createStyles, Title, Group, Space, Tooltip, Text, Image, Paper, Grid, Center, SimpleGrid, ActionIcon } from "@mantine/core";
 import axios from "axios";
 import { useState } from "react";
+import { ArrowBackUp, ArrowForwardUp, Bed, Bike, Car, PlaneInflight, Search, Train, Walk } from 'tabler-icons-react';
 import { useNavigate } from "react-router-dom";
-import { ArrowBackUp, ArrowForwardUp, Beer, Bike, Car, PlaneInflight, Search, Train, Walk } from 'tabler-icons-react';
 
 const useStyles = createStyles((theme) => ({
   button: {
@@ -46,19 +46,18 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function Eat({ fulTrip }: any) {
+export function EnjoyArrival({ fulTrip }: any) {
   const { classes } = useStyles();
-
   const navigate = useNavigate();
 
-  const goSleep = async () => {
+  const goTravel = async () => {
     console.log("Go to travel page!")
-    navigate('/sleep');
+    navigate('/travel');
   };
 
-  const goDrink = async () => {
+  const goSleep = async () => {
     console.log("Go to sleep page!")
-    navigate('/drink');
+    navigate('/sleepArrival');
   };
 
   const [id, setId] = useState(0)
@@ -69,7 +68,7 @@ export function Eat({ fulTrip }: any) {
   const [vicinity, setVicinity] = useState('')
   const [icon, setIcon] = useState('')
 
-  const [eat, setEat] = useState([{
+  const [enjoy, setEnjoy] = useState([{
     id,
     name,
     rating,
@@ -77,15 +76,18 @@ export function Eat({ fulTrip }: any) {
     icon
   }])
 
-  let [selectedEat, setSelectedEat] = useState('')
+  console.log(fulTrip)
 
-  const [toggleEat, setToggleEat] = useState(false)
+  let [selectedEnjoy, setSelectedEnjoy] = useState('')
 
-  const retrieveEat = (event: any) => {
+
+  const [toggleEnjoy, setToggleEnjoy] = useState(false)
+
+  const retrieveEnjoy = (event: any) => {
     axios.defaults.withCredentials = true
     event.preventDefault()
     let params = {
-      city: fulTrip.startCity,
+      city: fulTrip.endCity,
       constraints: {
         radius: 10000,
       }
@@ -94,48 +96,51 @@ export function Eat({ fulTrip }: any) {
 
     axios({
       method: 'post',
-      url: 'http://localhost:8000/api/v1/roadtrip/eat',
+      url: 'http://localhost:8000/api/v1/roadtrip/enjoy',
       data: params,
     })
       .then((response) => {
         console.log(response.data);
         let id = 0
-        let eatActivities: any = [];
+        let enjoyActivities: any = [];
         response.data.data.forEach((data: any) => {
           let activities = {
             id: id,
             name: data.name,
             rating: data.rating,
             vicinity: data.vicinity,
-            icon: data.icon
+            icon: data.icon,
           }
-          eatActivities.push(activities)
+          enjoyActivities.push(activities)
           id++;
         })
-        setEat(eatActivities)
+        setEnjoy(enjoyActivities)
       })
       .catch(function (error) {
         console.log(error);
       });
-    setToggleEat(!toggleEat)
+
+    setToggleEnjoy(!toggleEnjoy)
 
   };
 
-  const showEat = () => {
-    setToggleEat(!toggleEat)
+  const showEnjoy = () => {
+    setToggleEnjoy(!toggleEnjoy)
   }
 
-  const selectEat = (id: number, type: string) => {
+  const saveEnjoy = () => {
+    console.log(fulTrip)
+  }
 
-    setSelectedEat(type)
+  const selectEnjoy = (id: number, type: string) => {
+
+    setSelectedEnjoy(type)
     console.log(id)
     setId(id)
 
-    if (type == "Eat") {
-      fulTrip.setEat(eat[id])
+    if (type == "Enjoy") {
+      fulTrip.setEnjoyArrival(enjoy[id])
     }
-
-    console.log("fulTrip content: ", fulTrip)
 
     console.log("fulTrip content: ", fulTrip)
     console.log("scroll to bottom: ", document.body.offsetHeight)
@@ -148,7 +153,6 @@ export function Eat({ fulTrip }: any) {
 
   return (
     <Container>
-
       <Card withBorder radius="md" p="md" className={classes.cardEnjoy}>
 
         {/* <form onSubmit={retrieveEnjoy}>
@@ -169,15 +173,15 @@ export function Eat({ fulTrip }: any) {
           data-testid="title"
           sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
         >
-          Eat Activities
+          Enjoy Activities
 
 
         </Title>
         <Space h="xl" />
 
         <Center>
-          <Button size="xl" onClick={retrieveEat} compact variant="subtle">
-            🍔
+          <Button size="xl" onClick={retrieveEnjoy} compact variant="subtle">
+            🙂
           </Button>
         </Center>
         <Space h="xs" />
@@ -185,8 +189,8 @@ export function Eat({ fulTrip }: any) {
 
         <SimpleGrid cols={2} spacing="md" breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
           {
-            toggleEat ? (
-              eat.map((item) => (
+            toggleEnjoy ? (
+              enjoy.map((item) => (
                 <Paper shadow="xl" p="md" withBorder key={item.id}>
                   <Center>
                     <Grid>
@@ -205,7 +209,7 @@ export function Eat({ fulTrip }: any) {
                   <Grid><Text weight={700}>Vicinity :  </Text> <Text> &nbsp; {item.vicinity}</Text></Grid>
                   <Space h="xl" />
                   <Center>
-                    <ActionIcon onClick={() => selectEat(item.id, 'Eat')} variant="outline">👆</ActionIcon>
+                    <ActionIcon onClick={() => selectEnjoy(item.id, 'Enjoy')} variant="outline">👆</ActionIcon>
                   </Center>
                 </Paper>
               ))
@@ -216,7 +220,7 @@ export function Eat({ fulTrip }: any) {
 
         <div>
           {
-            selectedEat === "Eat" ? (
+            selectedEnjoy === "Enjoy" ? (
               <>
                 <Space h="xl" />
 
@@ -225,7 +229,7 @@ export function Eat({ fulTrip }: any) {
                   align="center"
                   sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 100 })}
                 >
-                  Eat Activities
+                  Enjoy Activities
 
 
                 </Title>
@@ -238,21 +242,21 @@ export function Eat({ fulTrip }: any) {
                         height={60}
                         fit="contain"
                         radius="sm"
-                        src={eat[id].icon}
+                        src={enjoy[id].icon}
                       />
                     </Grid>
                   </Center>
                   <Space h="xs" />
                   <Center>
-                    <Grid><Text weight={700}>Name :  </Text> <Text> -  {eat[id].name}</Text></Grid>
+                    <Grid><Text weight={700}>Name :  </Text> <Text> -  {enjoy[id].name}</Text></Grid>
                   </Center>
                   <Space h="xs" />
                   <Center>
-                    <Grid><Text weight={700}>Rating :  </Text> <Text> -  {eat[id].rating}</Text></Grid>
+                    <Grid><Text weight={700}>Rating :  </Text> <Text> -  {enjoy[id].rating}</Text></Grid>
                   </Center>
                   <Space h="xs" />
                   <Center>
-                    <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {eat[id].vicinity}</Text></Grid>
+                    <Grid><Text weight={700}>Vicinity :  </Text> <Text> -  {enjoy[id].vicinity}</Text></Grid>
                   </Center>
                   <Space h="xl" />
                 </Paper>
@@ -265,18 +269,18 @@ export function Eat({ fulTrip }: any) {
         <Space h="xl" />
 
         <Center>
-          <Button onClick={goSleep} data-testid="goBack" rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
+          <Button onClick={goTravel} rightIcon={<ArrowBackUp size={18} />} compact variant="subtle" radius="xs">
             Go back
           </Button>
-          <Button onClick={goDrink} data-testid="goDrink" rightIcon={<Beer size={18} />} compact variant="subtle" radius="xs">
-            Search for Bars
+          <Button onClick={goSleep} data-testid="sleepArrival" rightIcon={<Bed size={18} />} compact variant="subtle" radius="xs">
+            Search for Hotels
           </Button>
         </Center>
-
       </Card>
 
+    </Container >
 
-    </Container>
+
     // <Container size={720}>
     //   <Group grow spacing={0}>
     //     <Button variant="default" className={classes.button}>
